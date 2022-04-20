@@ -5,6 +5,6 @@ import Card from '../components/Card.vue'
 
 <template>
 	<div>
-		<h1>Hjem</h1>
+		<h1>Innstillinger</h1>
 	</div>
 </template>

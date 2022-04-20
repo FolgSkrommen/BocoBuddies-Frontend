@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 </script>
 
 <template>
-	<div>
-		<h1>Hjem</h1>
-	</div>
+	<div><h1>Logg inn</h1></div>
 </template>
