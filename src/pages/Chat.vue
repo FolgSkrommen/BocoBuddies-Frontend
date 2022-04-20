@@ -2,7 +2,23 @@
 import Card from '../components/Card.vue'
 import {ref} from "vue";
 import MessageContainer from "../components/chat/MessageContainer.vue";
-
+const messages = ref([
+  {
+    message: "Kan jeg låne?",
+    date: new Date(),
+    receive: false
+  },
+  {
+    message: "Yes sir!",
+    date: new Date(),
+    receive: true
+  },
+  {
+    message: "GGWP",
+    date: new Date(),
+    receive: false
+  }
+])
 const username = ref("Brukernavn til motpart");
 const item = ref("Gjenstand");
 </script>
@@ -11,7 +27,7 @@ const item = ref("Gjenstand");
     <h1>{{ username }}</h1>
     <h2>{{ item }}</h2>
 
-    <MessageContainer>
+    <MessageContainer :messages="messages">
 
     </MessageContainer>
   </div>

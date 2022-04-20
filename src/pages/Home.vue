@@ -9,7 +9,6 @@ let testArray:Array<string> = ['hei','på','deg']
 <template>
 	<div>
 		<h1>Hjem</h1>
-    <Chat></Chat>
 	</div>
 
   <div>
