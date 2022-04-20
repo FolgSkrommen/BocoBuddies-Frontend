@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
+import Chat from "./Chat.vue";
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 let testArray:Array<string> = ['hei','på','deg']
@@ -8,6 +9,7 @@ let testArray:Array<string> = ['hei','på','deg']
 <template>
 	<div>
 		<h1>Hjem</h1>
+    <Chat></Chat>
 	</div>
 
   <div>
