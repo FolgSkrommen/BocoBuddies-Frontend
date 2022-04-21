@@ -14,7 +14,6 @@ interface User {
 }
 
 export interface State {
-	count: number
 	user?: User
 }
 
@@ -22,7 +21,6 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
 	state: {
-		count: 0,
 		user: undefined,
 	},
 
@@ -45,11 +43,11 @@ export const store = createStore<State>({
 		},
 	},
 	actions:{
-		login({ commit }, credentials:{email:String, password:String}){
+		login({ commit }, parameters){
 			return axios.post("/user/login", null, {
 				params:{
-					email: credentials.email,
-					password: credentials.password,
+					email: parameters.email,
+					password: parameters.password,
 				}})
 				.then((response) => {
 					commit("SET_USER_DATA", response.data);

@@ -33,7 +33,7 @@ const colorClass = computed(() => {
 	</router-link>
 	<button
 		v-else
-		class="w-fit py-1 px-2 rounded-lg self-end place-self-end shadow-lg"
+		class="w-fit py-1 px-2 rounded-lg self-end place-self-end shadow-lg disabled:bg-gray-500 opacity-50"
 		:class="colorClass"
 		:type="type ?? 'button'"
 	>

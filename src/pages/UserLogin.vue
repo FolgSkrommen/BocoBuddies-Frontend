@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
 import { store } from '../store'
@@ -7,11 +6,11 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import axios from 'axios'
 import BaseButton from '../components/Base/BaseBtn.vue'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 const schema = yup.object({
-  email: yup.string().required().email(),
-  password: yup.string().required().min(8),
+  email: yup.string().required("Epost er påkrevd").email("Ikke gyldig"),
+  password: yup.string().required("Passord er påkrevd").min(8, "Minimum 8 tegn"),
 })
 // Create a form context with the validation schema
 const { errors } = useForm({
@@ -21,12 +20,19 @@ const { errors } = useForm({
 let { value: email } = useField('email')
 let { value: password } = useField('password')
 
+interface Parameters {
+  email: String,
+  password: String,
+}
+
+let params: Parameters = {
+ email:  email.value,
+  password: password.value
+}
+
 function submit() {
   alert(email.value + ' ' + password.value)
-  store.dispatch('login', {
-    email: email.value,
-    password: password.value,
-  })
+  store.dispatch('login', params)
 }
 
 const notValid = computed(
@@ -39,16 +45,20 @@ const notValid = computed(
 </script>
 
 <template>
-  <div class="">
-    <h1>Logg inn</h1>
+  <div class="text-center">
+    <h1 class="font-bold">Logg inn</h1>
 
     <form @submit.prevent="submit()">
-      <BaseInput v-model="email" label="Email" />
+      <BaseInput v-model="email" label="Email" :error="errors.email"/>
 
-      <BaseInput v-model="password" label="Password" type="password" />
+      <BaseInput v-model="password" label="Password" type="password" :error="errors.password" />
 
-      <BaseButton type="submit" :disabled="notValid">Submit</BaseButton>
+      <BaseButton class="m-4" type="submit" :disabled="notValid">Submit</BaseButton>
     </form>
+
+    <router-link class="text-s" to="user-register">
+      Har du ikke bruker? Klikk her!
+    </router-link>
   </div>
 </template>
 

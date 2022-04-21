@@ -78,7 +78,7 @@ const notValid = computed(
       <BaseInput v-model="postalCode" label="Postnummer" :error="errors.postalCode" />
       <h2>Passord</h2>
       <BaseInput v-model="password" label="Passord" type="password" :error="errors.password"/>
-      <BaseInput v-model="passwordCheck" label="Gjenta passord" type="password" :error="passwordCheckError"/>
+      <BaseInput v-model="passwordCheck" label="Gjenta passord" type="password" />
 
       <BaseButton class="m-4" type="submit" :disabled="notValid">Submit</BaseButton>
     </form>
