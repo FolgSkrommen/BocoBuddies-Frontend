@@ -1,38 +1,66 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
 import {PropType, ref} from "vue";
+import BaseBtn from "../Base/BaseBtn.vue";
 
 interface IReceipt{
   username: String,
   itemName: String,
-  loanStart: Date,
-  loanStop: Date,
+  loanStart: String,
+  loanStop: String,
   itemPrice: Number,
   itemUnit: String,
+  address: String,
 }
 
-const props = defineProps({
-  receipt: {
-    type: Object as () => IReceipt,
-    required: true
-  },
-  receive: Boolean,
-})
+interface Props {
+  receipt: IReceipt,
+  receive: boolean,
+  modelValue: boolean
+}
+
+const emit = defineEmits(['update:modelValue'])
+
+const updateValue = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
+}
+
+const confirm = () => {
+  emit('update:modelValue', true)
+}
+
+const decline = () => {
+  emit('update:modelValue', false)
+}
+
+const { receipt, receive, modelValue } = defineProps<Props>()
 
 </script>
 <template>
-  <div class="grid border-blue rounded">
-    <div class="bg-blue-800 border border-blue-900 text-white px-4 py-3 rounded-full my-5 w-fit place-self-end" v-if="receive">
-      <h3> {{ props.receipt.username }} </h3>
-      <h3> {{ props.receipt.itemName }} </h3>
-      <h3> {{ props.receipt.loanStart }} - {{ props.receipt.loanStop }} </h3>
-      <h3> {{ props.receipt.itemPrice }} per {{ props.receipt.itemUnit }} </h3>
+  <div class="grid" v-if="modelValue !== false">
+    <div class="bg-blue-800 border border-blue-900 text-white px-4 py-3 rounded-lg my-5 w-fit place-self-end text-center" v-if="receive">
+      <h2 class="text-xl">Kvittering</h2>
+      <h3> {{ receipt.username }} </h3>
+      <h3> {{ receipt.itemName }} </h3>
+      <h3> {{ receipt.loanStart }} - {{ receipt.loanStop }} </h3>
+      <h3> {{ receipt.itemPrice }} per {{ receipt.itemUnit }} </h3>
+      <h3> {{ receipt.address }} </h3>
+      <div v-if="modelValue === undefined" class="grid gap-4 grid-cols-2">
+        <div>
+          <BaseBtn @click="decline">Avslå</BaseBtn>
+        </div>
+        <div>
+          <BaseBtn @click="confirm">Bekreft</BaseBtn>
+        </div>
+      </div>
     </div>
-    <div class="bg-gray-200 border border-black text-black px-4 py-3 rounded-full my-5 w-fit self-auto" v-else>
-      <h3> {{ props.receipt.username }} </h3>
-      <h3> {{ props.receipt.itemName }} </h3>
-      <h3> {{ props.receipt.loanStart }} - {{ props.receipt.loanStop }} </h3>
-      <h3> {{ props.receipt.itemPrice }} per {{ props.receipt.itemUnit }} </h3>
+    <div class="bg-gray-200 border border-black text-black px-4 py-3 rounded-lg my-5 w-fit self-auto text-center" v-else>
+      <h2 class="text-xl">Kvittering</h2>
+      <h3> {{ receipt.username }} </h3>
+      <h3> {{ receipt.itemName }} </h3>
+      <h3> {{ receipt.loanStart }} - {{ receipt.loanStop }} </h3>
+      <h3> {{ receipt.itemPrice }} per {{ receipt.itemUnit }} </h3>
+      <h3> {{ receipt.address }} </h3>
     </div>
   </div>
 
