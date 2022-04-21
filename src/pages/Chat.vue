@@ -31,7 +31,15 @@ function onSubmit(){
   alert(currentMessage.value);
   currentMessage.value = "";
 }
+interface DateAndTime{
+  fromDate: String,
+  fromTime: String,
+  toDate: String,
+  toTime: String,
 
+}
+
+const dateAndTime = ref<DateAndTime>()
 const showLoanModal = ref(false)
 const username = ref("Brukernavn");
 const item = ref("Gjenstand");
@@ -60,18 +68,22 @@ const loanStatus = ref(undefined)
     <!-- Popup or modal for when requesting loan -->
     <BaseModal v-model="showLoanModal" title="Title">
       <template v-slot:header>
-        This is  a title
+        Når vil du leie gjenstanden?
       </template>
       <template v-slot:body>
-        Body. Here is the body :P
+        <form>
+          <BaseInput type="date" label="Fra (dato)" ></BaseInput>
+          <BaseInput type="time" label="Fra (tidspunkt)"></BaseInput>
+
+          <BaseInput type="date" label="Til"></BaseInput>
+          <BaseInput type="time" label="Til (tidspunkt)"></BaseInput>
+        </form>
       </template>
       <template v-slot:footer>
-        <button class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleLoan">
-          Close
-        </button>
-        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleLoan">
-          Save Changes
-        </button>
+        <div class="grid gap-4 grid-cols-2">
+          <BaseBtn @click="toggleLoan">Avbryt</BaseBtn>
+          <BaseBtn @click="toggleLoan">Send</BaseBtn>
+        </div>
       </template>
     </BaseModal>
 
