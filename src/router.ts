@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './pages/Home.vue'
 import Chat from './pages/Chat.vue'
-import Chats from './pages/Chats.vue'
+import Chats from './pages/Chat.vue'
 import Item from './pages/Item.vue'
 import ItemRegister from './pages/ItemRegister.vue'
 import MyItems from './pages/MyItems.vue'
