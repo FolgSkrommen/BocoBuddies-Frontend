@@ -28,7 +28,7 @@ function toggleLoan(){
 }
 
 function onSubmit(){
-  alert(currentMessage.value + ", " + loanStatus.value);
+  alert(currentMessage.value);
   currentMessage.value = "";
 }
 
@@ -54,13 +54,8 @@ const loanStatus = ref(undefined)
       </div>
     </form>
 
-    <button class="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleLoan">
-      Open large modal
-    </button>
-
-
     <div class="grid">
-      <BaseBtn class="place-self-center m-4" @click="toggleLoan">Lån</BaseBtn>
+      <BaseBtn class="place-self-center m-4" @click="toggleLoan" v-if="loanStatus===undefined">Lån</BaseBtn>
     </div>
     <!-- Popup or modal for when requesting loan -->
     <BaseModal v-model="showLoanModal" title="Title">
