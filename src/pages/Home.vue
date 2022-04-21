@@ -58,7 +58,9 @@ function getAllSuperTags() {
 function gotClicked() {
   console.log("Clicked")
 }
+function getNextItems() {
 
+}
 interface ItemListing {
   id: number,
   ownerId: number,
@@ -82,11 +84,12 @@ let sortAlts:Array<object> = [{id:1, alt:'Pris lav-høy'}, {id:2, alt:'Pris høy
   {id:3, alt:'Eldste først'}, {id:4, alt:'Nyeste først'}, {id:5, alt:'Nærmest'}, {id:6, alt:'Ingen sortering'}]
 
 let searchWord = ref<string>("")
-let tagAlts = ref<Array<Category>>([{id: 1, superCategoryId: 0, name:'some'}, {id: 2, superCategoryId: 0, name:'dummy'}, {id: 3, superCategoryId: 0, name:'values'}])
+let tagAlts = ref<Array<Category>>([{id: 1, superCategoryId: 0, name:'some'}, {id: 2, superCategoryId: 0, name:'dummy'}, {id: 3, superCategoryId: 0, name:'values'}, {id: 6, superCategoryId: 0, name:'values'}, {id: 7, superCategoryId: 0, name:'values'}, {id: 8, superCategoryId: 0, name:'values'}])
 let chosenTags = ref<Array<Category>>([{id: 4, superCategoryId: 0, name:'hola'}])
 let items = ref<Array<ItemListing>>([])
 
 let testArray:Array<string> = ['hei','på','deg']
+let currentPage = 0
 </script>
 
 <template>
