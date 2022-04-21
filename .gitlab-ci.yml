@@ -1,5 +1,5 @@
 stages: # List of stages for jobs, and their order of execution*
-    - lint
+#    - lint
     - test
     - build
 
@@ -33,9 +33,9 @@ unit-test-job:
         - npm install
         - npm run test:unit
 
-lint-job:
-    stage: lint
-    script:
-        - apk add --update npm
-        - npm install
-        - npm run prettier
+#lint-job:
+#    stage: lint
+#    script:
+#        - apk add --update npm
+#        - npm install
+#        - npm run prettier
