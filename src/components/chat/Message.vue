@@ -8,13 +8,14 @@ const props = defineProps({
 
 </script>
 <template>
-  <div class="bg-blue-800 border border-blue-900 text-white px-4 py-3 rounded-full my-5 w-fit float-left" v-if="receive">
-    <slot></slot>
-  </div>
-
-    <div class="bg-gray-200 border border-black text-black px-4 py-3 rounded-full my-5 w-fit float-right" v-else>
+  <div class="grid">
+    <div class="bg-blue-800 border border-blue-900 text-white px-4 py-3 rounded-full my-5 w-fit place-self-end" v-if="receive">
       <slot></slot>
     </div>
+    <div class="bg-gray-200 border border-black text-black px-4 py-3 rounded-full my-5 w-fit self-auto" v-else>
+      <slot></slot>
+    </div>
+  </div>
 
 
 </template>
