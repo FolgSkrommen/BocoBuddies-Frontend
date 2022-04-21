@@ -6,7 +6,7 @@ import Tag from "../components/TagList.vue";
 import BaseBtn from "../components/Base/BaseBtn.vue";
 import BaseDropdown from "../components/Base/BaseDropdown.vue";
 import Card from "../components/Card.vue";
-import {ChevronRight}  from '@heroicons/vue/outline'
+import {ChevronRightIcon, ChevronLeftIcon}  from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -54,6 +54,9 @@ function getAllSuperTags() {
       .then(response => {
         tagAlts = response.data
       })
+}
+function gotClicked() {
+  console.log("Clicked")
 }
 
 interface ItemListing {
@@ -111,7 +114,10 @@ let testArray:Array<string> = ['hei','på','deg']
         <Card>{{t}}</Card>
       </div>
     </div>
-    <ChevronRight></ChevronRight>
+    <div class="flex justify-center">
+      <ChevronLeftIcon class="h-7 w-7" @click="gotClicked"></ChevronLeftIcon>
+      <ChevronRightIcon class="h-7 w-7" @click="gotClicked"></ChevronRightIcon>
+    </div>
   </div>
 
   <div>
