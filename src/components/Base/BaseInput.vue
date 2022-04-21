@@ -16,7 +16,7 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="flex flex-col">
-		<label class="text-slate-500 p-2">{{ label }}</label>
+		<label class="text-slate-500 p-2 text-left">{{ label }}</label>
 		<input
 			class="bg-slate-100 rounded-xl py-2 px-2 shadow-lg"
 			:class="disabled ? 'bg-gray-300' : ''"

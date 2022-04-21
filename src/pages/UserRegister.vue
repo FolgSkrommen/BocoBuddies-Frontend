@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
 import { store } from '../store'
@@ -10,6 +9,7 @@ import BaseButton from '../components/Base/BaseBtn.vue'
 import { ref, computed } from 'vue'
 
 const schema = yup.object({
+  username: yup.string().required("Brukernavn er påkrevd"),
   firstName: yup.string().required("Fornavn er påkrevd"),
   lastName: yup.string().required("Etternavn er påkrevd"),
   email: yup.string().required("Epost er påkrevd").email("Ikke gyldig"),
@@ -23,6 +23,7 @@ const { errors } = useForm({
   validationSchema: schema,
 })
 // No need to define rules for fields
+let { value: username } = useField('username')
 let { value: firstName } = useField('firstName')
 let { value: lastName } = useField('lastName')
 let { value: email } = useField('email')
@@ -60,21 +61,26 @@ const notValid = computed(
 </script>
 
 <template>
-  <div class="">
-    <h1>Registrer deg</h1>
+  <div class="text-center">
+    <h1 class="font-bold text-2xl">Registrer deg</h1>
 
     <form @submit.prevent="submit()">
 
+      <h2>Personalia</h2>
+      <BaseInput v-model.lazy="username" label="Brukernavn" :error="errors.username"/>
       <BaseInput v-model.lazy="firstName" label="Fornavn" :error="errors.firstName"/>
       <BaseInput v-model.lazy="lastName" label="Etternavn" :error="errors.lastName" />
+      <h2>Kontakt</h2>
       <BaseInput v-model.lazy="email" label="E-post" :error="errors.email" />
       <BaseInput v-model="phoneNumber" label="Telefon" :error="errors.phoneNumber"/>
-      <BaseInput v-model="address" label="Address" :error="errors.address"/>
+      <h2>Adresse</h2>
+      <BaseInput v-model="address" label="Addresse" :error="errors.address"/>
       <BaseInput v-model="postalCode" label="Postnummer" :error="errors.postalCode" />
+      <h2>Passord</h2>
       <BaseInput v-model="password" label="Passord" type="password" :error="errors.password"/>
       <BaseInput v-model="passwordCheck" label="Gjenta passord" type="password" :error="passwordCheckError"/>
 
-      <BaseButton type="submit" :disabled="notValid">Submit</BaseButton>
+      <BaseButton class="m-4" type="submit" :disabled="notValid">Submit</BaseButton>
     </form>
   </div>
 </template>
