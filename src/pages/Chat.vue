@@ -35,11 +35,16 @@ interface DateAndTime{
   fromDate: String,
   fromTime: String,
   toDate: String,
-  toTime: String,
+  toTime: String
 
 }
+const dateAndTime: DateAndTime = {
+  fromDate: "",
+  fromTime: "",
+  toDate: "",
+  toTime: ""
+}
 
-const dateAndTime = ref<DateAndTime>()
 const showLoanModal = ref(false)
 const username = ref("Brukernavn");
 const item = ref("Gjenstand");
@@ -71,13 +76,13 @@ const loanStatus = ref(undefined)
         Når vil du leie gjenstanden?
       </template>
       <template v-slot:body>
-        <form>
-          <BaseInput type="date" label="Fra (dato)" ></BaseInput>
-          <BaseInput type="time" label="Fra (tidspunkt)"></BaseInput>
 
-          <BaseInput type="date" label="Til"></BaseInput>
-          <BaseInput type="time" label="Til (tidspunkt)"></BaseInput>
-        </form>
+        <BaseInput type="date" label="Fra (dato)" v-model="dateAndTime.fromDate"></BaseInput>
+        <BaseInput type="time" label="Fra (tidspunkt)" v-model="dateAndTime.fromTime"></BaseInput>
+
+        <BaseInput type="date" label="Til" v-model="dateAndTime.toDate"></BaseInput>
+        <BaseInput type="time" label="Til (tidspunkt)" v-model="dateAndTime.toTime"></BaseInput>
+
       </template>
       <template v-slot:footer>
         <div class="grid gap-4 grid-cols-2">
