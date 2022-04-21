@@ -24,6 +24,7 @@ const updateValue = (event: Event) => {
 			:value="modelValue"
 			@input="updateValue"
 			:type="type ?? 'text'"
+			data-testid="input"
 		/>
 
 		<p class="text-red text-xs">{{ error }}</p>

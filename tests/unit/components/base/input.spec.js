@@ -1,27 +1,27 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import BaseModal from '@/components/Base/BaseModal.vue'
+import BaseInput from '@/components/Base/BaseInput.vue'
 
 describe('BaseModal', () => {
 	describe('when loaded', () => {
 		it('with show popup exists', () => {
-			let showModal = true
-			const wrapper = mount(BaseModal, {
+			let inputText = 'Test text'
+			const wrapper = mount(BaseInput, {
 				props: {
-					modelValue: showModal,
+					modelValue: inputText,
 				},
 			})
-			expect(wrapper.find('[data-testid="modal-frame"]').exists())
 			expect(wrapper.props().modelValue).toBe(true)
 		})
 		it('with dont show popup doesnt exist', () => {
-			let showModal = false
-			const wrapper = mount(BaseModal, {
+			let inputText = 'Test text'
+			const wrapper = mount(BaseInput, {
 				props: {
-					modelValue: showModal,
+					label: 'Label',
+					modelValue: inputText,
 				},
 			})
 			expect(wrapper.props().modelValue).toBe(false)
-			expect(!wrapper.find('[data-testid="modal-frame"]').exists())
+			expect(wrapper.find('[data-testid="input"]').exists())
 		})
 	})
 })

@@ -57,10 +57,10 @@ function onSubmit() {
 	currentMessage.value = ''
 }
 interface DateAndTime {
-	fromDate: String
-	fromTime: String
-	toDate: String
-	toTime: String
+	fromDate: string
+	fromTime: string
+	toDate: string
+	toTime: string
 }
 /*
 let dateAndTime: DateAndTime = {
