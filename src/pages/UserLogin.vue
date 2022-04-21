@@ -46,7 +46,7 @@ const notValid = computed(
 
 <template>
   <div class="text-center">
-    <h1 class="font-bold">Logg inn</h1>
+    <h1 class="font-bold text-4xl">Logg inn</h1>
 
     <form @submit.prevent="submit()">
       <BaseInput v-model="email" label="Email" :error="errors.email"/>
@@ -56,7 +56,7 @@ const notValid = computed(
       <BaseButton class="m-4" type="submit" :disabled="notValid">Submit</BaseButton>
     </form>
 
-    <router-link class="text-s" to="user-register">
+    <router-link class="text-purple-500" to="user-register">
       Har du ikke bruker? Klikk her!
     </router-link>
   </div>

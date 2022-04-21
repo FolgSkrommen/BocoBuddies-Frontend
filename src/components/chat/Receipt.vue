@@ -34,7 +34,7 @@ const { receipt, receive, modelValue } = defineProps<Props>()
 </script>
 <template>
   <div class="grid" v-if="modelValue !== false">
-    <div class="bg-blue-800 border border-blue-900 text-white px-4 py-3 rounded-lg my-5 w-fit place-self-end text-center" v-if="receive">
+    <div class="bg-blue border text-white px-4 py-3 rounded-lg my-5 w-fit place-self-end text-center" v-if="receive">
       <h2 class="text-xl">Kvittering</h2>
       <h3> {{ receipt.username }} </h3>
       <h3> {{ receipt.itemName }} </h3>
@@ -50,7 +50,7 @@ const { receipt, receive, modelValue } = defineProps<Props>()
         </div>
       </div>
     </div>
-    <div class="bg-gray-200 border border-black text-black px-4 py-3 rounded-lg my-5 w-fit self-auto text-center" v-else>
+    <div class="bg-gray-200 border text-black px-4 py-3 rounded-lg my-5 w-fit self-auto text-center" v-else>
       <h2 class="text-xl">Kvittering</h2>
       <h3> {{ receipt.username }} </h3>
       <h3> {{ receipt.itemName }} </h3>

@@ -30,7 +30,7 @@ const { messages, modelValue } = defineProps<Props>()
 </script>
 <template>
 	<div
-		class="bg-F7F9FC-100 border border-black-400 px-4 py-3 rounded md:container mx-auto h-full min-h-screen"
+		class="bg-F7F9FC-100 border px-4 py-3 rounded md:container mx-auto h-full min-h-screen"
 	>
 		<Message
 			v-for="(message, i) in messages"

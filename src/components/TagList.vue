@@ -10,7 +10,7 @@ const emit = defineEmits(['remove-tag-event','add-tag-event'])
 
 <template>
   <div class="overflow-x-auto flex gap-3">
-    <div v-for="tag in props.modelValue" :key="tag.id" class="bg-blue-500 rounded overflow-x-auto flex gap-1 items-center">
+    <div v-for="tag in props.modelValue" :key="tag.id" class="bg-blue rounded overflow-x-auto flex gap-1 items-center">
       <XCircleIcon v-if="props.removable" @click="$emit('remove-tag-event', tag)" class="h-5 w-5"></XCircleIcon>
       <span @click="$emit('add-tag-event', tag)" class="">{{ tag.name }}</span>
     </div>

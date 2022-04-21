@@ -3,7 +3,7 @@ import { HomeIcon, ChatIcon, UserIcon, PlusIcon } from '@heroicons/vue/solid'
 </script>
 
 <template>
-	<nav class="bg-slate-900 w-full">
+	<nav class="bg-gray-800 w-full">
 		<div class="flex justify-between px-4 py-2 container mx-auto">
 			<router-link to="/">
 				<HomeIcon class="w-10 h-10 text-white" />
