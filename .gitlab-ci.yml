@@ -1,7 +1,8 @@
 stages:          # List of stages for jobs, and their order of execution*
-    - build
     - test
-    - deploy
+    - build
+
+
 
 cache:
   paths:
@@ -9,22 +10,24 @@ cache:
 
 build-job:    
     stage: build
-    image: ubuntu:latest
+    image: alpine:latest
     only:
         refs:
             - main
     script:
+        - apk add --update npm
         - npm install
         - npm run build
         - echo "Compile complete."
 
 unit-test-job:  
     stage: test
-    image: ubuntu:latest
+    image: alpine:latest
     only:
         refs:
             - main
     script:
+        - apk add --update npm
         - npm install
         - npm run test:unit
 
