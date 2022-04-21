@@ -27,6 +27,26 @@ function toggleLoan(){
   showLoanModal.value = !showLoanModal.value;
 }
 
+function sendLoanRequest(){
+  if(dateAndTime.toDate !== "" && dateAndTime.fromDate !== "" && dateAndTime.toTime !== "" && dateAndTime.fromTime !== ""){
+    console.log(dateAndTime)
+    //TODO add checks if from date is later than to etc
+    toggleLoan();
+  }else{
+    alert("Add exception handling")
+  }
+}
+
+function cancelLoanRequest(){
+  dateAndTime = {
+    fromDate: "",
+    fromTime: "",
+    toDate: "",
+    toTime: ""
+  }
+  toggleLoan();
+}
+
 function onSubmit(){
   alert(currentMessage.value);
   currentMessage.value = "";
@@ -35,11 +55,25 @@ interface DateAndTime{
   fromDate: String,
   fromTime: String,
   toDate: String,
-  toTime: String,
+  toTime: String
 
 }
+/*
+let dateAndTime: DateAndTime = {
+  fromDate: new Date().toISOString().split('T')[0],
+  fromTime: "12:00",
+  toDate: new Date().toISOString().split('T')[0],
+  toTime: "13:00"
+}
+* */
 
-const dateAndTime = ref<DateAndTime>()
+let dateAndTime: DateAndTime = {
+  fromDate: "",
+  fromTime: "",
+  toDate: "",
+  toTime: ""
+}
+
 const showLoanModal = ref(false)
 const username = ref("Brukernavn");
 const item = ref("Gjenstand");
@@ -71,18 +105,18 @@ const loanStatus = ref(undefined)
         Når vil du leie gjenstanden?
       </template>
       <template v-slot:body>
-        <form>
-          <BaseInput type="date" label="Fra (dato)" ></BaseInput>
-          <BaseInput type="time" label="Fra (tidspunkt)"></BaseInput>
 
-          <BaseInput type="date" label="Til"></BaseInput>
-          <BaseInput type="time" label="Til (tidspunkt)"></BaseInput>
-        </form>
+        <BaseInput type="date" label="Fra (dato)" v-model="dateAndTime.fromDate"></BaseInput>
+        <BaseInput type="time" label="Fra (tidspunkt)" v-model="dateAndTime.fromTime"></BaseInput>
+
+        <BaseInput type="date" label="Til" v-model="dateAndTime.toDate"></BaseInput>
+        <BaseInput type="time" label="Til (tidspunkt)" v-model="dateAndTime.toTime"></BaseInput>
+
       </template>
       <template v-slot:footer>
         <div class="grid gap-4 grid-cols-2">
-          <BaseBtn @click="toggleLoan">Avbryt</BaseBtn>
-          <BaseBtn @click="toggleLoan">Send</BaseBtn>
+          <BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
+          <BaseBtn @click="sendLoanRequest">Send</BaseBtn>
         </div>
       </template>
     </BaseModal>
