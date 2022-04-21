@@ -12,7 +12,7 @@ build-job:
     image: alpine:latest
     only:
         refs:
-            - master
+            - main
     script:
         - npm install
         - npm run build
@@ -23,7 +23,7 @@ unit-test-job:
     image: alpine:latest
     only:
         refs:
-            - master
+            - main
     script:
         - npm install
         - npm run test:unit
