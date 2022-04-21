@@ -26,7 +26,7 @@ interface Parameters {
 }
 
 let params: Parameters = {
- email:  email.value,
+  email:  email.value,
   password: password.value
 }
 

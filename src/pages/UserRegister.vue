@@ -62,25 +62,25 @@ const notValid = computed(
 
 <template>
   <div class="text-center">
-    <h1 class="font-bold text-2xl">Registrer deg</h1>
+    <h1 class="font-bold text-4xl">Registrer deg</h1>
 
     <form @submit.prevent="submit()">
 
-      <h2>Personalia</h2>
+
       <BaseInput v-model.lazy="username" label="Brukernavn" :error="errors.username"/>
       <BaseInput v-model.lazy="firstName" label="Fornavn" :error="errors.firstName"/>
       <BaseInput v-model.lazy="lastName" label="Etternavn" :error="errors.lastName" />
-      <h2>Kontakt</h2>
+
       <BaseInput v-model.lazy="email" label="E-post" :error="errors.email" />
       <BaseInput v-model="phoneNumber" label="Telefon" :error="errors.phoneNumber"/>
-      <h2>Adresse</h2>
+
       <BaseInput v-model="address" label="Addresse" :error="errors.address"/>
       <BaseInput v-model="postalCode" label="Postnummer" :error="errors.postalCode" />
-      <h2>Passord</h2>
+
       <BaseInput v-model="password" label="Passord" type="password" :error="errors.password"/>
       <BaseInput v-model="passwordCheck" label="Gjenta passord" type="password" />
 
-      <BaseButton class="m-4" type="submit" :disabled="notValid">Submit</BaseButton>
+      <BaseButton class="m-4" type="submit" :disabled="notValid">Registrer</BaseButton>
     </form>
   </div>
 </template>
