@@ -36,4 +36,6 @@ unit-test-job:
 lint-job:
     stage: lint
     script:
+        - apk add --update npm
+        - npm install
         - npm run prettier
