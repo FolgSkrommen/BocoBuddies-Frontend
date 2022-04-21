@@ -5,6 +5,8 @@ import {ref} from 'vue'
 import Tag from "../components/TagList.vue";
 import BaseBtn from "../components/Base/BaseBtn.vue";
 import BaseDropdown from "../components/Base/BaseDropdown.vue";
+import Card from "../components/Card.vue";
+import {ChevronRight}  from '@heroicons/vue/outline'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -104,9 +106,12 @@ let testArray:Array<string> = ['hei','på','deg']
 
   <div>
     <!--List component-->
-    <div class="overflow-y-auto grid gap-4">
-      <div v-for="t in testArray">{{t}}</div>
+    <div class="overflow-y-auto grid gap-4 hei">
+      <div v-for="t in testArray">
+        <Card>{{t}}</Card>
+      </div>
     </div>
+    <ChevronRight></ChevronRight>
   </div>
 
   <div>
