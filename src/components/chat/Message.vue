@@ -2,9 +2,11 @@
 import Card from '../components/Card.vue'
 import {ref} from "vue";
 
-const props = defineProps({
-  receive: Boolean,
-})
+interface Props{
+  receive: boolean
+}
+
+const { receive } = defineProps<Props>()
 
 </script>
 <template>

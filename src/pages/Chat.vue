@@ -31,6 +31,7 @@ function onSubmit(){
 const username = ref("Brukernavn");
 const item = ref("Gjenstand");
 const currentMessage = ref("");
+
 </script>
 <template>
   <div>
