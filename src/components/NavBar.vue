@@ -10,13 +10,13 @@ import { HomeIcon, ChatIcon, UserIcon, PlusIcon } from '@heroicons/vue/solid'
 			<router-link to="/">
 				<HomeIcon class="w-16 h-16 text-white" />
 			</router-link>
-			<router-link to="/">
+			<router-link to="/item-register">
 				<PlusIcon class="w-16 h-16 text-white" />
 			</router-link>
-			<router-link to="/">
+			<router-link to="/chats">
 				<ChatIcon class="w-16 h-16 text-white" />
 			</router-link>
-			<router-link to="/">
+			<router-link to="/settings">
 				<UserIcon class="w-16 h-16 text-white" />
 			</router-link>
 		</div>
