@@ -90,6 +90,16 @@ let items = ref<Array<ItemListing>>([])
 
 let testArray:Array<string> = ['hei','på','deg']
 let currentPage = 0
+
+//Intersection observer for later if we have time to implement
+/*const observer:IntersectionObserver = new IntersectionObserver(entries => {
+  const lastItem = entries[0]
+  if(!lastItem.isIntersecting) return
+  loadMoreItems() //Last item is shown, load more
+  observer.unobserve(lastItem.target)
+  observer.observe(items.value[items.value.length-1])
+}, {})
+observer.observe(items[items.length-1])*/
 </script>
 
 <template>
@@ -103,7 +113,7 @@ let currentPage = 0
     <BaseBtn @click="search">Søk</BaseBtn>
   </div>
 
-  <div>
+  <div class="my-5">
     <!--Tag input component-->
     <div>categories goes here</div>
     <Tag v-model="chosenTags" :removable="true" @remove-tag-event="categoryRemoved"></Tag>
@@ -118,8 +128,8 @@ let currentPage = 0
       </div>
     </div>
     <div class="flex justify-center">
-      <ChevronLeftIcon class="h-7 w-7" @click="gotClicked"></ChevronLeftIcon>
-      <ChevronRightIcon class="h-7 w-7" @click="gotClicked"></ChevronRightIcon>
+      <ChevronLeftIcon class="h-10 w-10" @click="gotClicked"></ChevronLeftIcon>
+      <ChevronRightIcon class="h-10 w-10" @click="gotClicked"></ChevronRightIcon>
     </div>
   </div>
 
