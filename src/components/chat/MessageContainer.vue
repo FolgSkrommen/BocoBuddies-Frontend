@@ -23,6 +23,7 @@ const receipt = ref({
 	loanStop: new Date().toDateString(),
 	itemPrice: 1000,
 	itemUnit: 'dag',
+	address: 'Adresse',
 })
 
 const { messages, modelValue } = defineProps<Props>()
