@@ -3,21 +3,19 @@ import { HomeIcon, ChatIcon, UserIcon, PlusIcon } from '@heroicons/vue/solid'
 </script>
 
 <template>
-	<!-- TODO: Finish, add router link -->
-
-	<nav class="bg-black w-full">
+	<nav class="bg-slate-900 w-full">
 		<div class="flex justify-between px-4 py-2 container mx-auto">
 			<router-link to="/">
-				<HomeIcon class="w-16 h-16 text-white" />
+				<HomeIcon class="w-10 h-10 text-white" />
 			</router-link>
 			<router-link to="/item-register">
-				<PlusIcon class="w-16 h-16 text-white" />
+				<PlusIcon class="w-10 h-10 text-white" />
 			</router-link>
 			<router-link to="/chats">
-				<ChatIcon class="w-16 h-16 text-white" />
+				<ChatIcon class="w-10 h-10 text-white" />
 			</router-link>
 			<router-link to="/settings">
-				<UserIcon class="w-16 h-16 text-white" />
+				<UserIcon class="w-10 h-10 text-white" />
 			</router-link>
 		</div>
 	</nav>
