@@ -9,7 +9,7 @@ cache:
 
 build-job:    
     stage: build
-    image: alpine:latest
+    image: ubuntu-latest
     only:
         refs:
             - main
@@ -20,7 +20,7 @@ build-job:
 
 unit-test-job:  
     stage: test
-    image: alpine:latest
+    image: ubuntu-latest
     only:
         refs:
             - main
