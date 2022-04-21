@@ -26,6 +26,6 @@ const updateValue = (event: Event) => {
 			:type="type ?? 'text'"
 		/>
 
-    <p class=" text-red text-xs"> {{error}} </p>
+		<p class="text-red text-xs">{{ error }}</p>
 	</div>
 </template>

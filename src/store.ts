@@ -29,7 +29,7 @@ export const store = createStore<State>({
 
 	getters: {
 		loggedIn(state) {
-			return !!state.user;
+			return !!state.user
 		},
 	},
 
@@ -46,16 +46,18 @@ export const store = createStore<State>({
 			location.reload()
 		},
 	},
-	actions:{
-		login({ commit }, parameters){
-			return axios.post("/user/login", null, {
-				params:{
-					email: parameters.email,
-					password: parameters.password,
-				}})
-				.then((response) => {
-					commit("SET_USER_DATA", response.data);
-			})
+	actions: {
+		login({ commit }, parameters) {
+			return axios
+				.post('/user/login', null, {
+					params: {
+						email: parameters.email,
+						password: parameters.password,
+					},
+				})
+				.then(response => {
+					commit('SET_USER_DATA', response.data)
+				})
 		},
 		logout({ commit }) {
 			commit('CLEAR_USER_DATA')

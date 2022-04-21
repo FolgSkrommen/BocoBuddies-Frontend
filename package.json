@@ -1,36 +1,42 @@
 {
-  "name": "idatt2106-v22-01-frontend",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "build": "vue-tsc --noEmit && vite build",
-    "test:unit": "vue-cli-service test:unit",
-    "dev": "vite",
-    "prettier": "prettier --write . --ignore-path .gitignore",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@heroicons/vue": "^1.0.6",
-    "axios": "^0.26.1",
-    "vee-validate": "^4.5.11",
-    "vue": "^3.2.25",
-    "vue-router": "^4.0.14",
-    "vuex": "^4.0.2",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.1",
-    "@vue/cli-plugin-unit-jest": "~5.0.0",
-    "@vue/test-utils": "^2.0.0-rc.21",
-    "@vue/vue3-jest": "^27.0.0-alpha.1",
-    "autoprefixer": "^10.4.4",
-    "babel-jest": "^27.0.6",
-    "jest": "^27.0.5",
-    "postcss": "^8.4.12",
-    "prettier": "^2.6.2",
-    "tailwindcss": "^3.0.24",
-    "typescript": "^4.5.4",
-    "vite": "^2.9.2",
-    "vue-tsc": "^0.29.8"
-  }
+	"name": "idatt2106-v22-01-frontend",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build": "vue-tsc --noEmit && vite build",
+		"test:unit": "vue-cli-service test:unit",
+		"dev": "vite",
+		"prettier": "prettier --write . --ignore-path .gitignore",
+		"preview": "vite preview",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"@heroicons/vue": "^1.0.6",
+		"axios": "^0.26.1",
+		"vee-validate": "^4.5.11",
+		"vue": "^3.2.25",
+		"vue-router": "^4.0.14",
+		"vuex": "^4.0.2",
+		"yup": "^0.32.11"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^2.3.1",
+		"@vue/cli-plugin-unit-jest": "~5.0.0",
+		"@vue/test-utils": "^2.0.0-rc.21",
+		"@vue/vue3-jest": "^27.0.0-alpha.1",
+		"autoprefixer": "^10.4.4",
+		"babel-jest": "^27.0.6",
+		"husky": "^7.0.4",
+		"jest": "^27.0.5",
+		"lint-staged": "^12.4.0",
+		"postcss": "^8.4.12",
+		"prettier": "^2.6.2",
+		"tailwindcss": "^3.0.24",
+		"typescript": "^4.5.4",
+		"vite": "^2.9.2",
+		"vue-tsc": "^0.29.8"
+	},
+	"lint-staged": {
+		"*.{js,css,md,json,vue,ts}": "prettier --write"
+	}
 }

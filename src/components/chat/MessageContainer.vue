@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import {computed, onMounted, PropType, ref} from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
 import Message from './Message.vue'
 import Receipt from './Receipt.vue'
-import BaseBtn from "../Base/BaseBtn.vue";
+import BaseBtn from '../Base/BaseBtn.vue'
 
 interface IMessage {
 	message: String
@@ -12,8 +12,8 @@ interface IMessage {
 }
 
 interface Props {
-	messages: IMessage[],
-  modelValue: boolean,
+	messages: IMessage[]
+	modelValue: boolean
 }
 
 const receipt = ref({
@@ -24,7 +24,6 @@ const receipt = ref({
 	itemPrice: 1000,
 	itemUnit: 'dag',
 })
-
 
 const { messages, modelValue } = defineProps<Props>()
 </script>
@@ -40,6 +39,10 @@ const { messages, modelValue } = defineProps<Props>()
 			<div>{{ message.message }}</div>
 		</Message>
 		<receipt :receipt="receipt" v-model="modelValue"></receipt>
-		<receipt :receipt="receipt" :receive="true" v-model="modelValue"></receipt>
+		<receipt
+			:receipt="receipt"
+			:receive="true"
+			v-model="modelValue"
+		></receipt>
 	</div>
 </template>
