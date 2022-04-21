@@ -21,10 +21,6 @@ interface Props {
 
 const emit = defineEmits(['update:modelValue'])
 
-const updateValue = (event: Event) => {
-  emit('update:modelValue', (event.target as HTMLInputElement).value)
-}
-
 const confirm = () => {
   emit('update:modelValue', true)
 }
