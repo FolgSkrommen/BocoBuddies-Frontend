@@ -1,14 +1,13 @@
 module.exports = {
 	content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
-
 		extend: {
-			colors:{
-				'blue': '#004AAD',
-				'white': '#F7F9FC',
-				'red': '#FF4F4F',
-				'black': '#000000',
-				'gray':{
+			colors: {
+				blue: '#004AAD',
+				white: '#F7F9FC',
+				red: '#FF4F4F',
+				black: '#000000',
+				gray: {
 					100: '#ffffff',
 					200: '#f6f6f6',
 					300: '#ededed',
@@ -19,7 +18,6 @@ module.exports = {
 					800: '#353535',
 					900: '#000000',
 				},
-
 			},
 		},
 	},

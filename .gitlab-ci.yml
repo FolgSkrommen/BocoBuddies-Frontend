@@ -1,14 +1,12 @@
-stages:          # List of stages for jobs, and their order of execution*
+stages: # List of stages for jobs, and their order of execution*
     - test
     - build
 
-
-
 cache:
-  paths:
-    - /build
+    paths:
+        - /build
 
-build-job:    
+build-job:
     stage: build
     image: alpine:latest
     only:
@@ -20,7 +18,7 @@ build-job:
         - npm run build
         - echo "Compile complete."
 
-unit-test-job:  
+unit-test-job:
     stage: test
     image: alpine:latest
     only:
@@ -30,8 +28,7 @@ unit-test-job:
         - apk add --update npm
         - npm install
         - npm run test:unit
-
-#deploy-job:     
+#deploy-job:
 #    stage: deploy
 #    script:
 #        - echo "Deploying application..."
