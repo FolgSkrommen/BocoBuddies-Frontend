@@ -24,6 +24,7 @@ const receipt = ref({
 })
 
 const { messages } = defineProps<Props>()
+const loanStatus = ref(undefined)
 </script>
 <template>
 	<div
@@ -36,7 +37,7 @@ const { messages } = defineProps<Props>()
 		>
 			<div>{{ message.message }}</div>
 		</Message>
-		<receipt :receipt="receipt"></receipt>
-		<receipt :receipt="receipt" :receive="true"></receipt>
+		<receipt :receipt="receipt" v-model="loanStatus"></receipt>
+		<receipt :receipt="receipt" :receive="true" v-model="loanStatus"></receipt>
 	</div>
 </template>
