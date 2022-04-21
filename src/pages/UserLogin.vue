@@ -66,8 +66,9 @@ const notValid = computed(
 			>
 		</form>
 
-		<router-link class="text-purple-500" to="user-register">
-			Har du ikke bruker? Klikk her!
-		</router-link>
-	</div>
+    <router-link class="text-blue underline" to="user-register">
+      Har du ikke bruker? Klikk her!
+    </router-link>
+  </div>
 </template>
+
