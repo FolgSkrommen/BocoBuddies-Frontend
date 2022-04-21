@@ -14,6 +14,9 @@ const props =  defineProps({
     type: Array as PropType<Array<IMessage>>,
     default: () => [],
     required: true,
+  },
+  user: {
+
   }
 })
 
