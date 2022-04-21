@@ -12,9 +12,11 @@
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.26.1",
+    "vee-validate": "^4.5.11",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
