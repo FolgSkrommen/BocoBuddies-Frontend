@@ -24,8 +24,8 @@ const messages = ref([
 
 function onSubmit(){
 
-  alert(currentMessage.value)
-
+  alert(currentMessage.value);
+  currentMessage.value = "";
 }
 
 const username = ref("Brukernavn");
