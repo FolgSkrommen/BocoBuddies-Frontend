@@ -1,4 +1,5 @@
 stages: # List of stages for jobs, and their order of execution*
+    - lint
     - test
     - build
 
@@ -6,7 +7,7 @@ cache:
     paths:
         - /build
 
-build-job:
+build-deploy-job:
     stage: build
     image: alpine:latest
     only:
@@ -16,6 +17,9 @@ build-job:
         - apk add --update npm
         - npm install
         - npm run build
+        - mkdir .public
+        - cp -r /builds/eivisha/to-do-list/dist/*
+        - mv .public public
         - echo "Compile complete."
 
 unit-test-job:
@@ -28,8 +32,8 @@ unit-test-job:
         - apk add --update npm
         - npm install
         - npm run test:unit
-#deploy-job:
-#    stage: deploy
-#    script:
-#        - echo "Deploying application..."
-#        - echo "Application successfully deployed."
+
+lint-job:
+    stage: lint
+    script:
+        - npm run prettier
