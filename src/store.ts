@@ -3,14 +3,17 @@ import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import axios from 'axios'
 
 interface User {
+	id: number
 	firstName: string
 	lastName: string
+	username: string
 	email: string
-	password: string
 	address: string
-	postalCode: string
-	phoneNumber: number
+	postalcode: string
+	phonenumber: string
 	pictureUrl: string
+	verified: boolean
+	trusted: boolean
 }
 
 export interface State {
@@ -32,14 +35,15 @@ export const store = createStore<State>({
 
 	mutations: {
 		SET_USER_DATA(state, user) {
-			state.user = user;
-			localStorage.setItem("user", JSON.stringify(user));
-			axios.defaults.headers.common["authorization"] = "Bearer " + user.token;
+			state.user = user
+			localStorage.setItem('user', JSON.stringify(user))
+			axios.defaults.headers.common['authorization'] =
+				'Bearer ' + user.token
 		},
 		async CLEAR_USER_DATA(state) {
-			state.user = undefined;
-			await localStorage.removeItem("user");
-			location.reload();
+			state.user = undefined
+			await localStorage.removeItem('user')
+			location.reload()
 		},
 	},
 	actions:{
@@ -54,9 +58,9 @@ export const store = createStore<State>({
 			})
 		},
 		logout({ commit }) {
-			commit("CLEAR_USER_DATA");
+			commit('CLEAR_USER_DATA')
 		},
-	}
+	},
 })
 
 export function useStore() {

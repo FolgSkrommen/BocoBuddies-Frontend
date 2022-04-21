@@ -4,7 +4,7 @@ const props = defineProps({
 	label: String,
 	disabled: Boolean,
 	type: String,
-  error: String,
+	error: String,
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -15,7 +15,7 @@ const updateValue = (event: Event) => {
 </script>
 
 <template>
-	<div class="flex flex-col">
+	<div class="grid">
 		<label class="text-dark-gray p-2 text-left">{{ label }}</label>
 		<input
 			class="bg-gray-200 rounded-xl py-2 px-2 shadow-lg"
