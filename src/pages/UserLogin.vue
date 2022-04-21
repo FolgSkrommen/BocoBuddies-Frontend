@@ -23,9 +23,10 @@ const { errors } = useForm({
 let { value: email } = useField('email')
 let { value: password } = useField('password')
 
+//TODO: fix types
 interface Parameters {
-	email: String
-	password: String
+	email: unknown
+	password: unknown
 }
 
 let params: Parameters = {
@@ -52,9 +53,15 @@ const notValid = computed(
 		<h1 class="font-bold text-4xl">Logg inn</h1>
 
 		<form @submit.prevent="submit()">
-			<BaseInput v-model="email" label="Email" :error="errors.email" />
+			<BaseInput
+				data-testid="email-input"
+				v-model="email"
+				label="Email"
+				:error="errors.email"
+			/>
 
 			<BaseInput
+				data-testid="password-input"
 				v-model="password"
 				label="Password"
 				type="password"
@@ -66,9 +73,8 @@ const notValid = computed(
 			>
 		</form>
 
-    <router-link class="text-blue underline" to="user-register">
-      Har du ikke bruker? Klikk her!
-    </router-link>
-  </div>
+		<router-link class="text-blue underline" to="user-register">
+			Har du ikke bruker? Klikk her!
+		</router-link>
+	</div>
 </template>
-
