@@ -19,13 +19,13 @@ const messages = ref([
     receive: false
   }
 ])
-const username = ref("Brukernavn til motpart");
+const username = ref("Brukernavn");
 const item = ref("Gjenstand");
 </script>
 <template>
   <div>
-    <h1>{{ username }}</h1>
-    <h2>{{ item }}</h2>
+    <h1 class="text-center text-4xl">{{ username }}</h1>
+    <h2 class="text-center text-xl">{{ item }}</h2>
 
     <MessageContainer :messages="messages">
 
