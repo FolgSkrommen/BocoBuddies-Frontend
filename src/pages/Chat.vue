@@ -27,6 +27,26 @@ function toggleLoan(){
   showLoanModal.value = !showLoanModal.value;
 }
 
+function sendLoanRequest(){
+  if(dateAndTime.toDate !== "" && dateAndTime.fromDate !== "" && dateAndTime.toTime !== "" && dateAndTime.fromTime !== ""){
+    console.log(dateAndTime)
+    //TODO add checks if from date is later than to etc
+    toggleLoan();
+  }else{
+    alert("Add exception handling")
+  }
+}
+
+function cancelLoanRequest(){
+  dateAndTime = {
+    fromDate: "",
+    fromTime: "",
+    toDate: "",
+    toTime: ""
+  }
+  toggleLoan();
+}
+
 function onSubmit(){
   alert(currentMessage.value);
   currentMessage.value = "";
@@ -38,7 +58,16 @@ interface DateAndTime{
   toTime: String
 
 }
-const dateAndTime: DateAndTime = {
+/*
+let dateAndTime: DateAndTime = {
+  fromDate: new Date().toISOString().split('T')[0],
+  fromTime: "12:00",
+  toDate: new Date().toISOString().split('T')[0],
+  toTime: "13:00"
+}
+* */
+
+let dateAndTime: DateAndTime = {
   fromDate: "",
   fromTime: "",
   toDate: "",
@@ -86,8 +115,8 @@ const loanStatus = ref(undefined)
       </template>
       <template v-slot:footer>
         <div class="grid gap-4 grid-cols-2">
-          <BaseBtn @click="toggleLoan">Avbryt</BaseBtn>
-          <BaseBtn @click="toggleLoan">Send</BaseBtn>
+          <BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
+          <BaseBtn @click="sendLoanRequest">Send</BaseBtn>
         </div>
       </template>
     </BaseModal>
