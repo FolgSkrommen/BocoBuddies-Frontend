@@ -23,8 +23,8 @@ const messages = ref([
   }
 ])
 
-function toggleModal(){
-  showModal.value = !showModal.value;
+function toggleLoan(){
+  showLoanModal.value = !showLoanModal.value;
 }
 
 function onSubmit(){
@@ -32,7 +32,7 @@ function onSubmit(){
   currentMessage.value = "";
 }
 
-const showModal = ref(false)
+const showLoanModal = ref(false)
 const username = ref("Brukernavn");
 const item = ref("Gjenstand");
 const currentMessage = ref("");
@@ -54,11 +54,16 @@ const loanStatus = ref(undefined)
       </div>
     </form>
 
-    <button class="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleModal">
+    <button class="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleLoan">
       Open large modal
     </button>
 
-    <BaseModal v-model="showModal" title="Title">
+
+    <div class="grid">
+      <BaseBtn class="place-self-center m-4" @click="toggleLoan">Lån</BaseBtn>
+    </div>
+    <!-- Popup or modal for when requesting loan -->
+    <BaseModal v-model="showLoanModal" title="Title">
       <template v-slot:header>
         This is  a title
       </template>
@@ -66,18 +71,14 @@ const loanStatus = ref(undefined)
         Body. Here is the body :P
       </template>
       <template v-slot:footer>
-        <button class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleModal">
+        <button class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="toggleLoan">
           Close
         </button>
-        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleModal">
+        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleLoan">
           Save Changes
         </button>
       </template>
     </BaseModal>
-
-    <div class="grid">
-      <BaseBtn class="place-self-center m-4">Lån</BaseBtn>
-    </div>
 
     <div class="grid" v-if="loanStatus === true">
       <BaseBtn class="place-self-center m-4">Gi tilbakemelding</BaseBtn>
