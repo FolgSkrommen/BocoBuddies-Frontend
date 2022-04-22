@@ -15,6 +15,14 @@ function search() {
 	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
 		let sortChosenString: string
+		/*let sortAlts: Array<object> = [
+	{ id: 0, alt: 'Ingen sortering' },
+	{ id: 1, alt: 'Pris lav-høy' },
+	{ id: 2, alt: 'Pris høy-lav' },
+	{ id: 3, alt: 'Nærmest' },
+	{ id: 4, alt: 'Nyeste først' },
+	{ id: 5, alt: 'Eldste først' },
+]*/
 		switch (sortChosen.value) {
 			case 0: {
 				sortChosenString = 'none'
@@ -127,9 +135,13 @@ interface Category {
 	superCategoryId: number
 	name: string
 }
+interface Alternative {
+	id: number
+	alt: string
+}
 
 let sortChosen = ref(0)
-let sortAlts: Array<object> = [
+let sortAlts: Array<Alternative> = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
@@ -172,8 +184,12 @@ observer.observe(items[items.length-1])*/
 
 	<div class="flex">
 		<!--Text search input component-->
-		<BaseInput @keyup.enter="search" v-model="searchWord"></BaseInput>
-		<BaseBtn @click="search">Søk</BaseBtn>
+		<BaseInput
+			@keyup.enter="search"
+			v-model="searchWord"
+			data-testid="search-field"
+		></BaseInput>
+		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
 	</div>
 
 	<div class="py-10">
@@ -183,27 +199,36 @@ observer.observe(items[items.length-1])*/
 			v-model="chosenTags"
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
+			data-testid="categories-tag-chosen"
 		></TagList>
-		<TagList v-model="tagAlts" @add-tag-event="categoryChosen"></TagList>
+		<TagList
+			v-model="tagAlts"
+			@add-tag-event="categoryChosen"
+			data-testid="categories-tag-alts"
+		></TagList>
 	</div>
 
 	<div>
 		<!--List component-->
 		<div class="grid gap-4">
-			<div v-for="i in items">
+			<div v-for="i in items" data-testid="item-cards">
 				<Card>{{ i.name }}</Card>
 			</div>
 		</div>
 		<div class="flex justify-center my-10">
-			<BaseBtn @click="loadMoreItems">Last inn flere</BaseBtn>
+			<BaseBtn @click="loadMoreItems" data-testid="load-more-items-button"
+				>Last inn flere</BaseBtn
+			>
 		</div>
 	</div>
 
 	<div class="flex items-center justify-center h-0 h-full">
+		<!--Sort dropdown-->
 		<BaseDropdown
 			:alternatives="sortAlts"
 			v-model="sortChosen"
 			class="bottom-5 fixed"
+			data-testid="sort-dropdown"
 		></BaseDropdown>
 	</div>
 </template>

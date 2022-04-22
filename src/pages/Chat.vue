@@ -7,8 +7,6 @@ import BaseInput from '../components/Base/BaseInput.vue'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseModal from '../components/Base/BaseModal.vue'
 import component from '*.vue'
-import { WebSocket } from 'vite'
-import WebSocket = WebSocket.WebSocket
 const messages = ref([
 	{
 		message: 'Kan jeg låne?',
