@@ -12,8 +12,9 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 function search() {
-	if (searchWord.value) {
+	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
+
 		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
 		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosen}})
         .then(response => {
@@ -159,19 +160,21 @@ observer.observe(items[items.length-1])*/
 
 	<div>
 		<!--List component-->
-		<div class="overflow-y-auto grid gap-4 hei">
+		<div class="grid gap-4">
 			<div v-for="i in items">
 				<Card>{{ i.name }}</Card>
 			</div>
 		</div>
-		<div class="flex justify-center">
+		<div class="flex justify-center my-10">
 			<BaseBtn @click="loadMoreItems">Last inn flere</BaseBtn>
 		</div>
 	</div>
 
-	<div class="">
-		<!--Sorting component-->
-		<!--<BaseCombobox class="fixed" v-model="sortChosen" :alternatives="sortAlts"></BaseCombobox>-->
-		hei {{ sortChosen }}
+	<div class="flex items-center justify-center">
+		<BaseDropdown
+			:alternatives="sortAlts"
+			v-model="sortChosen"
+			class="bottom-5 fixed"
+		></BaseDropdown>
 	</div>
 </template>
