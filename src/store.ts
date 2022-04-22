@@ -40,6 +40,8 @@ export const store = createStore<State>({
 			axios.defaults.headers.common['authorization'] =
 				'Bearer ' + user.token
 		},
+
+		//TODO: Fjern asynkron kode i mutations
 		async CLEAR_USER_DATA(state) {
 			state.user = undefined
 			await localStorage.removeItem('user')
