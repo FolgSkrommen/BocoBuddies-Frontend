@@ -31,10 +31,13 @@ let { value: postalCode } = useField('postalCode')
 let { value: phoneNumber } = useField('phoneNumber')
 let { value: password } = useField('password')
 
-let passwordCheck = ''
-let passwordIsSame = computed(() => password.value == passwordCheck)
+const passwordCheck = ref('')
+const passwordIsSame = computed<boolean>(
+	() => password.value === passwordCheck.value
+)
 
 function submit() {
+	console.log(passwordIsSame)
 	axios
 		.post('/user/register', null, {
 			params: {
@@ -68,7 +71,8 @@ const notValid = computed(
 		address.value == undefined ||
 		postalCode.value == undefined ||
 		phoneNumber.value == undefined ||
-		password.value == undefined
+		password.value == undefined ||
+		!passwordIsSame
 )
 </script>
 
@@ -141,6 +145,7 @@ const notValid = computed(
 				type="submit"
 				:disabled="notValid"
 				data-testid="submit-button"
+				@click="submit"
 				>Registrer</BaseButton
 			>
 		</form>

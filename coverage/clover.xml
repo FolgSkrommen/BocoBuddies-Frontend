@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1650610714419" clover="3.2.0">
-  <project timestamp="1650610714419" name="All files">
-    <metrics statements="49" coveredstatements="32" conditionals="30" coveredconditionals="14" methods="7" coveredmethods="1" elements="86" coveredelements="47" complexity="0" loc="49" ncloc="49" packages="2" files="4" classes="4"/>
+<coverage generated="1650615551779" clover="3.2.0">
+  <project timestamp="1650615551779" name="All files">
+    <metrics statements="144" coveredstatements="99" conditionals="82" coveredconditionals="43" methods="24" coveredmethods="9" elements="250" coveredelements="151" complexity="0" loc="144" ncloc="144" packages="3" files="9" classes="9"/>
     <package name="components.Base">
       <metrics statements="18" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="BaseBtn.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/components/Base/BaseBtn.vue">
         <metrics statements="8" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -27,13 +27,82 @@
       <file name="BaseModal.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/components/Base/BaseModal.vue">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.chat">
+      <metrics statements="25" coveredstatements="17" conditionals="12" coveredconditionals="10" methods="3" coveredmethods="2"/>
+      <file name="Message.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/components/chat/Message.vue">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+      </file>
+      <file name="MessageContainer.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/components/chat/MessageContainer.vue">
+        <metrics statements="11" coveredstatements="8" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="2" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+      </file>
+      <file name="Receipt.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/components/chat/Receipt.vue">
+        <metrics statements="11" coveredstatements="6" conditionals="6" coveredconditionals="5" methods="2" coveredmethods="1"/>
+        <line num="2" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
       </file>
     </package>
     <package name="pages">
-      <metrics statements="31" coveredstatements="19" conditionals="30" coveredconditionals="14" methods="6" coveredmethods="1"/>
+      <metrics statements="101" coveredstatements="69" conditionals="70" coveredconditionals="33" methods="20" coveredmethods="7"/>
+      <file name="Chat.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/pages/Chat.vue">
+        <metrics statements="29" coveredstatements="20" conditionals="12" coveredconditionals="5" methods="6" coveredmethods="2"/>
+        <line num="2" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="4" type="cond" truecount="3" falsecount="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+      </file>
       <file name="UserLogin.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/pages/UserLogin.vue">
         <metrics statements="31" coveredstatements="19" conditionals="30" coveredconditionals="14" methods="6" coveredmethods="1"/>
         <line num="1" count="1" type="cond" truecount="3" falsecount="0"/>
@@ -67,6 +136,50 @@
         <line num="44" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
+      </file>
+      <file name="UserRegister.vue" path="/home/ofplarsen/NTNU/DataIng2023/Spring2022/Sys2/idatt2016_v22_01/idatt2106-v22-01-frontend/src/pages/UserRegister.vue">
+        <metrics statements="41" coveredstatements="30" conditionals="28" coveredconditionals="14" methods="8" coveredmethods="4"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="3" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="34" count="6" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="46" count="6" type="stmt"/>
+        <line num="50" count="6" type="stmt"/>
+        <line num="51" count="6" type="stmt"/>
+        <line num="52" count="6" type="stmt"/>
+        <line num="53" count="6" type="stmt"/>
+        <line num="54" count="6" type="stmt"/>
+        <line num="55" count="6" type="stmt"/>
+        <line num="56" count="6" type="stmt"/>
+        <line num="57" count="6" type="stmt"/>
+        <line num="58" count="6" type="stmt"/>
+        <line num="59" count="6" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
       </file>
     </package>
   </project>
