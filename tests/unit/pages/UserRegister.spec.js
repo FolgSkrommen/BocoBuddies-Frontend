@@ -113,7 +113,7 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.passwordCheck).toBe('12345678')
 		expect(wrapper.vm.passwordCheck).not.toBe('Wrong value')
 
-		wrapper.find('[data-testid="submit-button"]').trigger('click')
+		wrapper.find('[data-testid="register-form"]').trigger('submit.prevent')
 
 		expect(axios.post).toHaveBeenCalledTimes(1)
 		expect(axios.post).toHaveBeenCalledWith('/user/register', {
