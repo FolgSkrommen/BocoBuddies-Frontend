@@ -2,7 +2,7 @@ import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import axios from 'axios'
 
-interface User {
+export interface User {
 	id: number
 	firstName: string
 	lastName: string
@@ -11,13 +11,14 @@ interface User {
 	address: string
 	postalcode: string
 	phonenumber: string
-	pictureUrl: string
+	pictureUrl?: string
 	verified: boolean
 	trusted: boolean
 }
 
 export interface State {
 	user?: User
+	token?: string
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -25,6 +26,7 @@ export const key: InjectionKey<Store<State>> = Symbol()
 export const store = createStore<State>({
 	state: {
 		user: undefined,
+		token: undefined,
 	},
 
 	getters: {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
-import { store } from '../store'
+import { store, User } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import BaseButton from '../components/Base/BaseBtn.vue'
 import { computed } from 'vue'
+import axios from 'axios'
 
 const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
@@ -24,20 +25,45 @@ const { errors } = useForm({
 const { value: email } = useField<string>('email')
 const { value: password } = useField<string>('password')
 
-//TODO: fix types
-interface Parameters {
-	email: unknown
-	password: unknown
+interface UserLoginData {
+	email: string
+	password: string
 }
 
-let params: Parameters = {
-	email: email.value,
-	password: password.value,
+interface UserLoginResponse {
+	user: {
+		id: number
+		firstName: string
+		lastName: string
+		username: string
+		email: string
+		address: string
+		postalcode: string
+		phonenumber: string
+		pictureUrl?: string
+		verified: boolean
+		trusted: boolean
+	}
+	token: string
 }
 
-function submit() {
-	alert(email.value + ' ' + password.value)
-	//store.dispatch('login', params)
+async function submit() {
+	const data: UserLoginData = {
+		email: email.value,
+		password: password.value,
+	}
+	try {
+		const res = await axios({
+			method: 'post',
+			url: '/user/login',
+			data,
+		})
+		console.log(res)
+		const user: UserLoginResponse = res.data
+		console.log(user)
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 const notValid = computed(

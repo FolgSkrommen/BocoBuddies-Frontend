@@ -36,7 +36,7 @@ const passwordIsSame = computed<boolean>(
 	() => password.value === passwordCheck.value
 )
 
-interface RegisterUser {
+interface UserRegisterData {
 	firstName: string
 	lastName: string
 	username: string
@@ -49,7 +49,7 @@ interface RegisterUser {
 }
 
 async function submit() {
-	const data: RegisterUser = {
+	const data: UserRegisterData = {
 		firstName: firstName.value,
 		lastName: lastName.value,
 		username: username.value,
