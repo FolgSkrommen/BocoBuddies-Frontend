@@ -2,10 +2,11 @@
 import BaseInput from '../components/Base/BaseInput.vue'
 import axios from 'axios'
 import { ref } from 'vue'
-import Tag from '../components/TagList.vue'
+import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseDropdown from '../components/Base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
+import BaseCombobox from '../components/Base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
@@ -13,7 +14,8 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 function search() {
 	if (searchWord.value) {
 		console.log('Searching for items.... ' + searchWord.value)
-		/*axios.get("/item")
+		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
+		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosen}})
         .then(response => {
           items.value = response.data
         })
@@ -41,13 +43,14 @@ function categoryRemoved(tag: Category) {
 }
 function searchBasedOnCategories(categories: Array<Category>) {
 	console.log('Now searching based on categories...')
-	/*axios.get("/items-by-categories", {params: {categories: categories}})
-      .then(response => {
-        items.value = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })*/
+	axios
+		.get('/items-by-categories', { params: { categories: categories } })
+		.then(response => {
+			items.value = response.data
+		})
+		.catch(error => {
+			console.log(error)
+		})
 }
 function getAllSuperTags() {
 	axios.get('/url-to-get-all-super-tags').then(response => {
@@ -57,7 +60,24 @@ function getAllSuperTags() {
 function gotClicked() {
 	console.log('Clicked')
 }
-function getNextItems() {}
+function loadMoreItems() {
+	console.log('Getting next items...')
+	for (let i = 0; i < 10; i++) {
+		items.value.push({
+			id: 1,
+			ownerId: 1,
+			categoryId: 1,
+			active: true,
+			name: 'asda',
+			price: 100,
+			priceUnit: '10/time',
+			displayPhoneNumber: true,
+			address: 'her',
+			postalCode: '3440',
+			description: 'kul',
+		})
+	}
+}
 interface ItemListing {
 	id: number
 	ownerId: number
@@ -66,9 +86,10 @@ interface ItemListing {
 	name: string
 	price: number
 	priceUnit: string
-	displayPhoneNumber: boolean
+	showPhoneNumber: boolean
 	address: string
 	postalCode: string
+	description: string
 }
 interface Category {
 	id: number
@@ -125,51 +146,31 @@ observer.observe(items[items.length-1])*/
 		<BaseBtn @click="search">Søk</BaseBtn>
 	</div>
 
-	<div>
+	<div class="py-10">
 		<!--Tag input component-->
 		<div>categories goes here</div>
-		<Tag
+		<TagList
 			v-model="chosenTags"
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
-		></Tag>
-		<Tag v-model="tagAlts" @add-tag-event="categoryChosen"></Tag>
+		></TagList>
+		<TagList v-model="tagAlts" @add-tag-event="categoryChosen"></TagList>
 	</div>
 
 	<div>
 		<!--List component-->
 		<div class="overflow-y-auto grid gap-4 hei">
-			<div v-for="t in testArray">
-				<Card>{{ t }}</Card>
+			<div v-for="i in items">
+				<Card>{{ i.name }}</Card>
 			</div>
 		</div>
 		<div class="flex justify-center">
-			<ChevronLeftIcon
-				class="h-7 w-7"
-				@click="gotClicked"
-			></ChevronLeftIcon>
-			<ChevronRightIcon
-				class="h-7 w-7"
-				@click="gotClicked"
-			></ChevronRightIcon>
+			<BaseBtn @click="loadMoreItems">Last inn flere</BaseBtn>
 		</div>
 	</div>
 
-	<div>
+	<div class="">
 		<!--Sorting component-->
-		<BaseDropdown></BaseDropdown>
-		<div class="overflow-y-auto grid gap-4">
-			{{ sortChosen }}
-			<div v-for="alt in sortAlts">
-				<input
-					type="radio"
-					:value="alt.id"
-					:id="alt.id"
-					name="sort"
-					v-model="sortChosen"
-				/>
-				<label :for="alt.id">{{ alt.alt }}</label>
-			</div>
-		</div>
+		<BaseCombobox class="fixed"></BaseCombobox>
 	</div>
 </template>
