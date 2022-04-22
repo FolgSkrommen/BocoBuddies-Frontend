@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { store, User } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/Base/BaseInput.vue'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseModal from '../components/Base/BaseModal.vue'
-import component from '*.vue'
+import SockJS from 'sockjs-client/dist/sockjs'
+import Stomp from 'webstomp-client'
+
 import { WebSocket } from 'vite'
-import WebSocket = WebSocket.WebSocket
+
 const messages = ref([
 	{
 		message: 'Kan jeg låne?',
@@ -27,34 +29,77 @@ const messages = ref([
 	},
 ])
 
-const websock = ref<WebSocket>()
-let message = ref<string>('')
-function initWebSocket() {
-	// WebSocket is different from ordinary requests in terms of protocol, WS is equivalent to http, WSS is equivalent to HTTPS
-	websock.value = new WebSocket('ws://localhost:8081/websocket/DPS007')
-	websock.value.onopen = webSocketOnOpen
-	websock.value.onerror = webSocketOnError
-	websock.value.onmessage = webSocketOnMessage
-	websock.value.onclose = webSocketClose
+enum Type {
+	CHAT = 'CHAT',
+	JOIN = 'JOIN',
 }
 
-function webSocketOnOpen() {
-	console.log('Websocket successful')
+interface Message {
+	sender: string
+	content: string
+	type: Type
 }
 
-function webSocketOnError() {
-	console.log('Websocket connection error')
+//WEBSOCKET
+let stompClient = ref<any>(null)
+let connected = ref<boolean>(false)
+let socket: any
+function connect() {
+	socket = new SockJS('http://localhost:8001/ws')
+	console.log('Created sock')
+	stompClient.value = Stomp.over(socket)
+	console.log('Stomped over sock')
+	stompClient.value.connect({}, onConnected, onError)
 }
 
-function webSocketOnMessage(e: any) {
-	let da = JSON.parse(e.data)
-	console.log(da)
-	message.value = da
+function onConnected() {
+	// Subscribe to the Public Topic
+	stompClient.value.subscribe('/topic/public', onMessageReceived)
+	console.log('Subscribed to public')
+	// Tell your username to the server
+	stompClient.value.send(
+		'/app/chat.addUser',
+		{},
+		JSON.stringify({ sender: username, type: 'JOIN' })
+	)
 }
 
-function webSocketClose(e: any) {
-	console.log('Connection closed (' + e.code + ')')
+function onError() {
+	console.log('Could not connect to Websocket server')
 }
+
+function sendMessage(event: any) {
+	if (stompClient) {
+		let chatMessage: Message = {
+			sender: username.value,
+			content: currentMessage.value,
+			type: Type.CHAT,
+		}
+		stompClient.value.send(
+			'/app/chat.sendMessage',
+			{},
+			JSON.stringify(chatMessage)
+		)
+		currentMessage.value = ''
+	}
+	event.preventDefault()
+}
+
+function onMessageReceived(payload: any) {
+	let message = JSON.parse(payload.body)
+
+	if (message.type === 'JOIN') {
+		alert(message.sender + ' joined')
+	} else if (message.type === 'LEAVE') {
+		alert(message.sender + ' left!')
+	} else {
+		alert(message.content)
+	}
+}
+
+onMounted(() => {
+	connect()
+})
 
 function toggleLoan() {
 	showLoanModal.value = !showLoanModal.value
@@ -86,6 +131,7 @@ function cancelLoanRequest() {
 }
 
 function onSubmit() {
+	connect()
 	alert(currentMessage.value)
 	currentMessage.value = ''
 }
@@ -116,9 +162,9 @@ function getReceive(id: number) {
 }
 
 const showLoanModal = ref(false)
-const username = ref('Brukernavn')
+const username = ref<string>('Brukernavn')
 const item = ref('Gjenstand')
-const currentMessage = ref('')
+const currentMessage = ref<string>('')
 const loanStatus = ref(undefined)
 </script>
 <template>
