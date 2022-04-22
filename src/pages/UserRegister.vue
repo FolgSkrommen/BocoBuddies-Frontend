@@ -59,12 +59,14 @@ async function submit() {
 		postalcode: postalcode.value,
 		phonenumber: phonenumber.value,
 	}
-	try {
-		const res = await axios.post('/user/register', data)
-		console.log(res)
-	} catch (error) {
-		console.log(error)
-	}
+	await axios
+		.post('/user/register', data)
+		.then(response => {
+			console.log(response)
+		})
+		.catch(error => {
+			console.log(error)
+		})
 }
 
 const notValid = computed(
@@ -91,7 +93,7 @@ const notValid = computed(
 	<div class="text-center">
 		<h1 class="font-bold text-4xl">Registrer deg</h1>
 
-		<form @submit.prevent="submit()">
+		<form data-testid="register-form" @submit.prevent="submit()">
 			<BaseInput
 				v-model.lazy="username"
 				label="Brukernavn"
@@ -156,7 +158,6 @@ const notValid = computed(
 				type="submit"
 				:disabled="notValid"
 				data-testid="submit-button"
-				@click="submit"
 				>Registrer</BaseButton
 			>
 		</form>

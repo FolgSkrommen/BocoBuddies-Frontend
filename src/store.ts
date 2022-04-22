@@ -36,32 +36,26 @@ export const store = createStore<State>({
 	},
 
 	mutations: {
-		SET_USER_DATA(state, user) {
-			state.user = user
-			localStorage.setItem('user', JSON.stringify(user))
+		SET_USER_DATA(state, data) {
+			console.log(data)
+			state.user = data.userDTO
+			localStorage.setItem('userData', JSON.stringify(data))
 			axios.defaults.headers.common['authorization'] =
-				'Bearer ' + user.token
+				'Bearer ' + data.token
 		},
 
 		//TODO: Fjern asynkron kode i mutations
 		async CLEAR_USER_DATA(state) {
 			state.user = undefined
-			await localStorage.removeItem('user')
-			location.reload()
+			await localStorage.removeItem('userData')
 		},
 	},
 	actions: {
-		login({ commit }, parameters) {
-			return axios
-				.post('/user/login', null, {
-					params: {
-						email: parameters.email,
-						password: parameters.password,
-					},
-				})
-				.then(response => {
-					commit('SET_USER_DATA', response.data)
-				})
+		login({ commit }, data) {
+			return axios.post('/user/login', data).then(response => {
+				commit('SET_USER_DATA', response.data)
+				console.log(response)
+			})
 		},
 		logout({ commit }) {
 			commit('CLEAR_USER_DATA')
