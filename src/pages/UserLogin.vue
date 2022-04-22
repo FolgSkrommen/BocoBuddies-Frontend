@@ -37,7 +37,7 @@ let params: Parameters = {
 
 function submit() {
 	alert(email.value + ' ' + password.value)
-	store.dispatch('login', params)
+	//store.dispatch('login', params)
 }
 
 const notValid = computed(
