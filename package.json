@@ -17,6 +17,7 @@
 		"axios": "^0.26.1",
 		"sockjs-client": "^1.6.0",
 		"ts-jest": "^27.1.4",
+		"v-calendar": "^3.0.0-alpha.8",
 		"vee-validate": "^4.5.11",
 		"vue": "^3.2.25",
 		"vue-router": "^4.0.14",
