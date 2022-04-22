@@ -2,18 +2,50 @@
 import BaseInput from '../components/Base/BaseInput.vue'
 import axios from 'axios'
 import { ref } from 'vue'
-import Tag from '../components/TagList.vue'
+import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseDropdown from '../components/Base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
+import BaseCombobox from '../components/Base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 function search() {
-	if (searchWord.value) {
+	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
-		/*axios.get("/item")
+		let sortChosenString: string
+		switch (sortChosen.value) {
+			case 0: {
+				sortChosenString = 'none'
+				break
+			}
+			case 1: {
+				sortChosenString = 'price-ascending'
+				break
+			}
+			case 2: {
+				sortChosenString = 'price-descending'
+				break
+			}
+			case 3: {
+				sortChosenString = 'closest'
+				break
+			}
+			case 4: {
+				sortChosenString = 'newest'
+				break
+			}
+			case 5: {
+				sortChosenString = 'oldest'
+				break
+			}
+			default: {
+				sortChosenString = 'none'
+			}
+		}
+		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
+		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosenString}})
         .then(response => {
           items.value = response.data
         })
@@ -41,13 +73,14 @@ function categoryRemoved(tag: Category) {
 }
 function searchBasedOnCategories(categories: Array<Category>) {
 	console.log('Now searching based on categories...')
-	/*axios.get("/items-by-categories", {params: {categories: categories}})
-      .then(response => {
-        items.value = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })*/
+	axios
+		.get('/items-by-categories', { params: { categories: categories } })
+		.then(response => {
+			items.value = response.data
+		})
+		.catch(error => {
+			console.log(error)
+		})
 }
 function getAllSuperTags() {
 	axios.get('/url-to-get-all-super-tags').then(response => {
@@ -57,7 +90,25 @@ function getAllSuperTags() {
 function gotClicked() {
 	console.log('Clicked')
 }
-function getNextItems() {}
+function loadMoreItems() {
+	console.log('Getting next items...')
+	currentPage.value++
+	for (let i = 0; i < 10; i++) {
+		items.value.push({
+			id: 1,
+			ownerId: 1,
+			categoryId: 1,
+			active: true,
+			name: 'asda',
+			price: 100,
+			priceUnit: '10/time',
+			showPhoneNumber: true,
+			address: 'her',
+			postalcode: '3440',
+			description: 'kul',
+		})
+	}
+}
 interface ItemListing {
 	id: number
 	ownerId: number
@@ -66,9 +117,10 @@ interface ItemListing {
 	name: string
 	price: number
 	priceUnit: string
-	displayPhoneNumber: boolean
+	showPhoneNumber: boolean
 	address: string
 	postalcode: string
+	description: string
 }
 interface Category {
 	id: number
@@ -76,14 +128,14 @@ interface Category {
 	name: string
 }
 
-let sortChosen = ref(6)
+let sortChosen = ref(0)
 let sortAlts: Array<object> = [
+	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Eldste først' },
+	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Nærmest' },
-	{ id: 6, alt: 'Ingen sortering' },
+	{ id: 5, alt: 'Eldste først' },
 ]
 
 let searchWord = ref<string>('')
@@ -100,8 +152,7 @@ let chosenTags = ref<Array<Category>>([
 ])
 let items = ref<Array<ItemListing>>([])
 
-let testArray: Array<string> = ['hei', 'på', 'deg']
-let currentPage = 0
+let currentPage = ref(0)
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {
@@ -125,51 +176,34 @@ observer.observe(items[items.length-1])*/
 		<BaseBtn @click="search">Søk</BaseBtn>
 	</div>
 
-	<div>
+	<div class="py-10">
 		<!--Tag input component-->
 		<div>categories goes here</div>
-		<Tag
+		<TagList
 			v-model="chosenTags"
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
-		></Tag>
-		<Tag v-model="tagAlts" @add-tag-event="categoryChosen"></Tag>
+		></TagList>
+		<TagList v-model="tagAlts" @add-tag-event="categoryChosen"></TagList>
 	</div>
 
 	<div>
 		<!--List component-->
-		<div class="overflow-y-auto grid gap-4 hei">
-			<div v-for="t in testArray">
-				<Card>{{ t }}</Card>
+		<div class="grid gap-4">
+			<div v-for="i in items">
+				<Card>{{ i.name }}</Card>
 			</div>
 		</div>
-		<div class="flex justify-center">
-			<ChevronLeftIcon
-				class="h-7 w-7"
-				@click="gotClicked"
-			></ChevronLeftIcon>
-			<ChevronRightIcon
-				class="h-7 w-7"
-				@click="gotClicked"
-			></ChevronRightIcon>
+		<div class="flex justify-center my-10">
+			<BaseBtn @click="loadMoreItems">Last inn flere</BaseBtn>
 		</div>
 	</div>
 
-	<div>
-		<!--Sorting component-->
-		<BaseDropdown></BaseDropdown>
-		<div class="overflow-y-auto grid gap-4">
-			{{ sortChosen }}
-			<div v-for="alt in sortAlts">
-				<input
-					type="radio"
-					:value="alt.id"
-					:id="alt.id"
-					name="sort"
-					v-model="sortChosen"
-				/>
-				<label :for="alt.id">{{ alt.alt }}</label>
-			</div>
-		</div>
+	<div class="flex items-center justify-center h-0 h-full">
+		<BaseDropdown
+			:alternatives="sortAlts"
+			v-model="sortChosen"
+			class="bottom-5 fixed"
+		></BaseDropdown>
 	</div>
 </template>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { store, User } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/Base/BaseInput.vue'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseModal from '../components/Base/BaseModal.vue'
+import component from '*.vue'
+import { WebSocket } from 'vite'
+import WebSocket = WebSocket.WebSocket
 const messages = ref([
 	{
 		message: 'Kan jeg låne?',
@@ -22,6 +26,35 @@ const messages = ref([
 		receive: false,
 	},
 ])
+
+const websock = ref<WebSocket>()
+let message = ref<string>('')
+function initWebSocket() {
+	// WebSocket is different from ordinary requests in terms of protocol, WS is equivalent to http, WSS is equivalent to HTTPS
+	websock.value = new WebSocket('ws://localhost:8081/websocket/DPS007')
+	websock.value.onopen = webSocketOnOpen
+	websock.value.onerror = webSocketOnError
+	websock.value.onmessage = webSocketOnMessage
+	websock.value.onclose = webSocketClose
+}
+
+function webSocketOnOpen() {
+	console.log('Websocket successful')
+}
+
+function webSocketOnError() {
+	console.log('Websocket connection error')
+}
+
+function webSocketOnMessage(e: any) {
+	let da = JSON.parse(e.data)
+	console.log(da)
+	message.value = da
+}
+
+function webSocketClose(e: any) {
+	console.log('Connection closed (' + e.code + ')')
+}
 
 function toggleLoan() {
 	showLoanModal.value = !showLoanModal.value
@@ -76,6 +109,10 @@ let dateAndTime: DateAndTime = {
 	fromTime: '',
 	toDate: '',
 	toTime: '',
+}
+
+function getReceive(id: number) {
+	return id === store?.state?.user?.id
 }
 
 const showLoanModal = ref(false)
