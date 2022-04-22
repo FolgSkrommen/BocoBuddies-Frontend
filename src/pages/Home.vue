@@ -14,9 +14,38 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 function search() {
 	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
-
+		let sortChosenString: string
+		switch (sortChosen.value) {
+			case 0: {
+				sortChosenString = 'none'
+				break
+			}
+			case 1: {
+				sortChosenString = 'price-ascending'
+				break
+			}
+			case 2: {
+				sortChosenString = 'price-descending'
+				break
+			}
+			case 3: {
+				sortChosenString = 'closest'
+				break
+			}
+			case 4: {
+				sortChosenString = 'newest'
+				break
+			}
+			case 5: {
+				sortChosenString = 'oldest'
+				break
+			}
+			default: {
+				sortChosenString = 'none'
+			}
+		}
 		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
-		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosen}})
+		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosenString}})
         .then(response => {
           items.value = response.data
         })
@@ -63,6 +92,7 @@ function gotClicked() {
 }
 function loadMoreItems() {
 	console.log('Getting next items...')
+	currentPage.value++
 	for (let i = 0; i < 10; i++) {
 		items.value.push({
 			id: 1,
@@ -98,14 +128,14 @@ interface Category {
 	name: string
 }
 
-let sortChosen = ref('')
+let sortChosen = ref(0)
 let sortAlts: Array<object> = [
+	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Eldste først' },
+	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Nærmest' },
-	{ id: 6, alt: 'Ingen sortering' },
+	{ id: 5, alt: 'Eldste først' },
 ]
 
 let searchWord = ref<string>('')
@@ -122,8 +152,7 @@ let chosenTags = ref<Array<Category>>([
 ])
 let items = ref<Array<ItemListing>>([])
 
-let testArray: Array<string> = ['hei', 'på', 'deg']
-let currentPage = 0
+let currentPage = ref(0)
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {
@@ -170,7 +199,7 @@ observer.observe(items[items.length-1])*/
 		</div>
 	</div>
 
-	<div class="flex items-center justify-center">
+	<div class="flex items-center justify-center h-0 h-full">
 		<BaseDropdown
 			:alternatives="sortAlts"
 			v-model="sortChosen"
