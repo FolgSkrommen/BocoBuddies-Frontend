@@ -13,8 +13,8 @@ const schema = yup.object({
 	lastName: yup.string().required('Etternavn er påkrevd'),
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
-	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
-	phoneNumber: yup.number().required('Telefon er påkrevd').min(8),
+	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
+	phonenumber: yup.number().required('Telefon er påkrevd').min(8),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
 // Create a form context with the validation schema
@@ -27,8 +27,8 @@ const { value: firstName } = useField<string>('firstName')
 const { value: lastName } = useField<string>('lastName')
 const { value: email } = useField<string>('email')
 const { value: address } = useField<string>('address')
-const { value: postalCode } = useField<string>('postalCode')
-const { value: phoneNumber } = useField<string>('phoneNumber')
+const { value: postalcode } = useField<string>('postalcode')
+const { value: phonenumber } = useField<string>('phonenumber')
 const { value: password } = useField<string>('password')
 
 const passwordCheck = ref('')
@@ -43,8 +43,8 @@ interface UserRegisterData {
 	email: string
 	password: string
 	address: string
-	postalCode: string
-	phoneNumber: string
+	postalcode: string
+	phonenumber: string
 	pictureUrl?: string
 }
 
@@ -56,8 +56,8 @@ async function submit() {
 		email: email.value,
 		password: password.value,
 		address: address.value,
-		postalCode: postalCode.value,
-		phoneNumber: phoneNumber.value,
+		postalcode: postalcode.value,
+		phonenumber: phonenumber.value,
 	}
 	try {
 		const res = await axios.post('/user/register', data)
@@ -73,15 +73,15 @@ const notValid = computed(
 		!!errors.value.lastName ||
 		!!errors.value.email ||
 		!!errors.value.address ||
-		!!errors.value.postalCode ||
-		!!errors.value.phoneNumber ||
+		!!errors.value.postalcode ||
+		!!errors.value.phonenumber ||
 		!!errors.value.password ||
 		firstName.value == undefined ||
 		lastName.value == undefined ||
 		email.value == undefined ||
 		address.value == undefined ||
-		postalCode.value == undefined ||
-		phoneNumber.value == undefined ||
+		postalcode.value == undefined ||
+		phonenumber.value == undefined ||
 		password.value == undefined ||
 		!passwordIsSame
 )
@@ -118,10 +118,10 @@ const notValid = computed(
 				data-testid="email-input"
 			/>
 			<BaseInput
-				v-model="phoneNumber"
+				v-model="phonenumber"
 				label="Telefon"
-				:error="errors.phoneNumber"
-				data-testid="phoneNumber-input"
+				:error="errors.phonenumber"
+				data-testid="phonenumber-input"
 			/>
 
 			<BaseInput
@@ -131,10 +131,10 @@ const notValid = computed(
 				data-testid="address-input"
 			/>
 			<BaseInput
-				v-model="postalCode"
+				v-model="postalcode"
 				label="Postnummer"
-				:error="errors.postalCode"
-				data-testid="postalCode-input"
+				:error="errors.postalcode"
+				data-testid="postalcode-input"
 			/>
 
 			<BaseInput

@@ -68,7 +68,7 @@ interface ItemListing {
 	priceUnit: string
 	displayPhoneNumber: boolean
 	address: string
-	postalCode: string
+	postalcode: string
 }
 interface Category {
 	id: number
