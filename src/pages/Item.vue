@@ -3,8 +3,11 @@ import Card from '../components/Card.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/Base/BaseBtn.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { GoogleMap, Marker, Circle } from 'vue3-google-map'
+import { Calendar, DatePicker } from 'v-calendar'
+import 'v-calendar/dist/style.css'
+
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 interface Filter {
@@ -100,6 +103,11 @@ function randomCenter(position: Position) {
 	}
 	return newPosition
 }
+
+const range = computed(() => ({
+	start: new Date(item.startDate),
+	end: new Date(item.endDate),
+}))
 </script>
 
 <template>
@@ -161,6 +169,12 @@ function randomCenter(position: Position) {
 				{{ new Date(item.endDate).toLocaleString() }}
 			</p>
 		</div>
+		<DatePicker
+			class="place-self-center"
+			v-model="range"
+			is-range
+			:contenteditable="false"
+		/>
 		<div>
 			<p class="font-bold text-lg">Adresse</p>
 			<p>{{ item.address }}</p>
