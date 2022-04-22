@@ -57,10 +57,10 @@ function onSubmit() {
 	currentMessage.value = ''
 }
 interface DateAndTime {
-	fromDate: String
-	fromTime: String
-	toDate: String
-	toTime: String
+	fromDate: string
+	fromTime: string
+	toDate: string
+	toTime: string
 }
 /*
 let dateAndTime: DateAndTime = {
@@ -89,7 +89,11 @@ const loanStatus = ref(undefined)
 		<h1 class="text-center text-4xl">{{ username }}</h1>
 		<h2 class="text-center text-xl">{{ item }}</h2>
 
-		<MessageContainer :messages="messages" v-model="loanStatus">
+		<MessageContainer
+			:messages="messages"
+			v-model="loanStatus"
+			data-testid="message-container"
+		>
 		</MessageContainer>
 		<form v-on:submit.prevent="onSubmit">
 			<div class="grid grid-cols-6">

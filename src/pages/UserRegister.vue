@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
-import { store } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -72,9 +71,19 @@ async function submit() {
 
 const notValid = computed(
 	() =>
+		!!errors.value.firstName ||
+		!!errors.value.lastName ||
 		!!errors.value.email ||
+		!!errors.value.address ||
+		!!errors.value.postalCode ||
+		!!errors.value.phoneNumber ||
 		!!errors.value.password ||
+		firstName.value == undefined ||
+		lastName.value == undefined ||
 		email.value == undefined ||
+		address.value == undefined ||
+		postalCode.value == undefined ||
+		phoneNumber.value == undefined ||
 		password.value == undefined
 )
 </script>
@@ -88,38 +97,45 @@ const notValid = computed(
 				v-model.lazy="username"
 				label="Brukernavn"
 				:error="errors.username"
+				data-testid="username-input"
 			/>
 			<BaseInput
 				v-model.lazy="firstName"
 				label="Fornavn"
 				:error="errors.firstName"
+				data-testid="firstName-input"
 			/>
 			<BaseInput
 				v-model.lazy="lastName"
 				label="Etternavn"
 				:error="errors.lastName"
+				data-testid="lastName-input"
 			/>
 
 			<BaseInput
 				v-model.lazy="email"
 				label="E-post"
 				:error="errors.email"
+				data-testid="email-input"
 			/>
 			<BaseInput
 				v-model="phoneNumber"
 				label="Telefon"
 				:error="errors.phoneNumber"
+				data-testid="phoneNumber-input"
 			/>
 
 			<BaseInput
 				v-model="address"
 				label="Addresse"
 				:error="errors.address"
+				data-testid="address-input"
 			/>
 			<BaseInput
 				v-model="postalCode"
 				label="Postnummer"
 				:error="errors.postalCode"
+				data-testid="postalCode-input"
 			/>
 
 			<BaseInput
@@ -127,14 +143,22 @@ const notValid = computed(
 				label="Passord"
 				type="password"
 				:error="errors.password"
+				data-testid="password-input"
 			/>
 			<BaseInput
 				v-model="passwordCheck"
 				label="Gjenta passord"
 				type="password"
+				data-testid="passwordCheck-input"
 			/>
 
-			<BaseButton class="m-4" type="submit">Registrer</BaseButton>
+			<BaseButton
+				class="m-4"
+				type="submit"
+				:disabled="notValid"
+				data-testid="submit-button"
+				>Registrer</BaseButton
+			>
 		</form>
 	</div>
 </template>

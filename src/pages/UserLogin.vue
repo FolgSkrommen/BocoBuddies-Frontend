@@ -4,7 +4,6 @@ import { store } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import axios from 'axios'
 import BaseButton from '../components/Base/BaseBtn.vue'
 import { computed } from 'vue'
 
@@ -15,6 +14,8 @@ const schema = yup.object({
 		.required('Passord er påkrevd')
 		.min(8, 'Minimum 8 tegn'),
 })
+//test
+//<x<x
 // Create a form context with the validation schema
 const { errors } = useForm({
 	validationSchema: schema,
@@ -36,7 +37,7 @@ let params: Parameters = {
 
 function submit() {
 	alert(email.value + ' ' + password.value)
-	store.dispatch('login', params)
+	//store.dispatch('login', params)
 }
 
 const notValid = computed(
