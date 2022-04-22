@@ -15,13 +15,11 @@ const schema = yup.object({
 		.required('Passord er påkrevd')
 		.min(8, 'Minimum 8 tegn'),
 })
-//test
-//<x<x
-// Create a form context with the validation schema
+
 const { errors } = useForm({
 	validationSchema: schema,
 })
-// No need to define rules for fields
+
 const { value: email } = useField<string>('email')
 const { value: password } = useField<string>('password')
 
@@ -30,40 +28,20 @@ interface UserLoginData {
 	password: string
 }
 
-interface UserLoginResponse {
-	user: {
-		id: number
-		firstName: string
-		lastName: string
-		username: string
-		email: string
-		address: string
-		postalcode: string
-		phonenumber: string
-		pictureUrl?: string
-		verified: boolean
-		trusted: boolean
-	}
-	token: string
-}
-
 async function submit() {
 	const data: UserLoginData = {
 		email: email.value,
 		password: password.value,
 	}
-	try {
-		const res = await axios({
-			method: 'post',
-			url: '/user/login',
-			data,
+
+	await store
+		.dispatch('login', data)
+		.then(() => {
+			console.log('logged in')
 		})
-		console.log(res)
-		const user: UserLoginResponse = res.data
-		console.log(user)
-	} catch (error) {
-		console.log(error)
-	}
+		.catch(err => {
+			alert(err)
+		})
 }
 
 const notValid = computed(
