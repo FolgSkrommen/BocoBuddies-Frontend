@@ -98,9 +98,14 @@ const loanStatus = ref(undefined)
 		<form v-on:submit.prevent="onSubmit">
 			<div class="grid grid-cols-6">
 				<div class="col-span-5">
-					<base-input v-model="currentMessage"></base-input>
+					<base-input
+						v-model="currentMessage"
+						data-testid="message-input"
+					></base-input>
 				</div>
-				<base-btn type="submit">Send</base-btn>
+				<base-btn type="submit" data-testid="submit-button"
+					>Send</base-btn
+				>
 			</div>
 		</form>
 
@@ -109,11 +114,16 @@ const loanStatus = ref(undefined)
 				class="place-self-center m-4"
 				@click="toggleLoan"
 				v-if="loanStatus === undefined"
+				data-testid="rent-button"
 				>Lån</BaseBtn
 			>
 		</div>
 		<!-- Popup or modal for when requesting loan -->
-		<BaseModal v-model="showLoanModal" title="Title">
+		<BaseModal
+			v-model="showLoanModal"
+			title="Title"
+			data-testid="loan-modal"
+		>
 			<template v-slot:header> Når vil du leie gjenstanden? </template>
 			<template v-slot:body>
 				<BaseInput
@@ -146,7 +156,11 @@ const loanStatus = ref(undefined)
 			</template>
 		</BaseModal>
 
-		<div class="grid" v-if="loanStatus === true">
+		<div
+			class="grid"
+			v-if="loanStatus === true"
+			data-testid="feedback-button"
+		>
 			<BaseBtn class="place-self-center m-4">Gi tilbakemelding</BaseBtn>
 		</div>
 	</div>
