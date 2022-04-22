@@ -14,8 +14,8 @@ const schema = yup.object({
 	lastName: yup.string().required('Etternavn er påkrevd'),
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
-	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
-	phoneNumber: yup.number().required('Telefon er påkrevd').min(8),
+	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
+	phonenumber: yup.number().required('Telefon er påkrevd').min(8),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
 // Create a form context with the validation schema
@@ -28,8 +28,8 @@ let { value: firstName } = useField('firstName')
 let { value: lastName } = useField('lastName')
 let { value: email } = useField('email')
 let { value: address } = useField('address')
-let { value: postalCode } = useField('postalCode')
-let { value: phoneNumber } = useField('phoneNumber')
+let { value: postalcode } = useField('postalcode')
+let { value: phonenumber } = useField('phonenumber')
 let { value: password } = useField('password')
 
 let passwordCheck = ''
@@ -43,8 +43,8 @@ function submit() {
 				lastName: lastName.value,
 				email: email.value,
 				address: address.value,
-				postalCode: postalCode.value,
-				phoneNumber: phoneNumber.value,
+				postalcode: postalcode.value,
+				phonenumber: phonenumber.value,
 				password: password.value,
 			},
 		})
@@ -90,9 +90,9 @@ const notValid = computed(
 				:error="errors.email"
 			/>
 			<BaseInput
-				v-model="phoneNumber"
+				v-model="phonenumber"
 				label="Underkategori"
-				:error="errors.phoneNumber"
+				:error="errors.phonenumber"
 			/>
 
 			<BaseInput
@@ -101,9 +101,9 @@ const notValid = computed(
 				:error="errors.address"
 			/>
 			<BaseInput
-				v-model="postalCode"
+				v-model="postalcode"
 				label="Postnummer"
-				:error="errors.postalCode"
+				:error="errors.postalcode"
 			/>
 
 			<BaseInput

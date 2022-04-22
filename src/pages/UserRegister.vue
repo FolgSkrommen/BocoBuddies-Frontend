@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
-import { store } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import BaseButton from '../components/Base/BaseBtn.vue'
 import { ref, computed } from 'vue'
 
@@ -14,8 +13,8 @@ const schema = yup.object({
 	lastName: yup.string().required('Etternavn er påkrevd'),
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
-	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
-	phoneNumber: yup.number().required('Telefon er påkrevd').min(8),
+	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
+	phonenumber: yup.number().required('Telefon er påkrevd').min(8),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
 // Create a form context with the validation schema
@@ -23,43 +22,68 @@ const { errors } = useForm({
 	validationSchema: schema,
 })
 // No need to define rules for fields
-let { value: username } = useField('username')
-let { value: firstName } = useField('firstName')
-let { value: lastName } = useField('lastName')
-let { value: email } = useField('email')
-let { value: address } = useField('address')
-let { value: postalCode } = useField('postalCode')
-let { value: phoneNumber } = useField('phoneNumber')
-let { value: password } = useField('password')
+const { value: username } = useField<string>('username')
+const { value: firstName } = useField<string>('firstName')
+const { value: lastName } = useField<string>('lastName')
+const { value: email } = useField<string>('email')
+const { value: address } = useField<string>('address')
+const { value: postalcode } = useField<string>('postalcode')
+const { value: phonenumber } = useField<string>('phonenumber')
+const { value: password } = useField<string>('password')
 
-let passwordCheck = ''
-let passwordIsSame = computed(() => password.value == passwordCheck)
+const passwordCheck = ref('')
+const passwordIsSame = computed<boolean>(
+	() => password.value === passwordCheck.value
+)
 
-function submit() {
-	axios
-		.post('/user/register', null, {
-			params: {
-				firstName: firstName.value,
-				lastName: lastName.value,
-				email: email.value,
-				address: address.value,
-				postalCode: postalCode.value,
-				phoneNumber: phoneNumber.value,
-				password: password.value,
-			},
-		})
-		.then(response => {
-			store.commit('SET_USER_DATA', response.data)
-		})
-		.catch()
+interface UserRegisterData {
+	firstName: string
+	lastName: string
+	username: string
+	email: string
+	password: string
+	address: string
+	postalcode: string
+	phonenumber: string
+	pictureUrl?: string
+}
+
+async function submit() {
+	const data: UserRegisterData = {
+		firstName: firstName.value,
+		lastName: lastName.value,
+		username: username.value,
+		email: email.value,
+		password: password.value,
+		address: address.value,
+		postalcode: postalcode.value,
+		phonenumber: phonenumber.value,
+	}
+	try {
+		const res = await axios.post('/user/register', data)
+		console.log(res)
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 const notValid = computed(
 	() =>
+		!!errors.value.firstName ||
+		!!errors.value.lastName ||
 		!!errors.value.email ||
+		!!errors.value.address ||
+		!!errors.value.postalcode ||
+		!!errors.value.phonenumber ||
 		!!errors.value.password ||
+		firstName.value == undefined ||
+		lastName.value == undefined ||
 		email.value == undefined ||
-		password.value == undefined
+		address.value == undefined ||
+		postalcode.value == undefined ||
+		phonenumber.value == undefined ||
+		password.value == undefined ||
+		!passwordIsSame
 )
 </script>
 
@@ -72,38 +96,45 @@ const notValid = computed(
 				v-model.lazy="username"
 				label="Brukernavn"
 				:error="errors.username"
+				data-testid="username-input"
 			/>
 			<BaseInput
 				v-model.lazy="firstName"
 				label="Fornavn"
 				:error="errors.firstName"
+				data-testid="firstName-input"
 			/>
 			<BaseInput
 				v-model.lazy="lastName"
 				label="Etternavn"
 				:error="errors.lastName"
+				data-testid="lastName-input"
 			/>
 
 			<BaseInput
 				v-model.lazy="email"
 				label="E-post"
 				:error="errors.email"
+				data-testid="email-input"
 			/>
 			<BaseInput
-				v-model="phoneNumber"
+				v-model="phonenumber"
 				label="Telefon"
-				:error="errors.phoneNumber"
+				:error="errors.phonenumber"
+				data-testid="phonenumber-input"
 			/>
 
 			<BaseInput
 				v-model="address"
 				label="Addresse"
 				:error="errors.address"
+				data-testid="address-input"
 			/>
 			<BaseInput
-				v-model="postalCode"
+				v-model="postalcode"
 				label="Postnummer"
-				:error="errors.postalCode"
+				:error="errors.postalcode"
+				data-testid="postalcode-input"
 			/>
 
 			<BaseInput
@@ -111,14 +142,21 @@ const notValid = computed(
 				label="Passord"
 				type="password"
 				:error="errors.password"
+				data-testid="password-input"
 			/>
 			<BaseInput
 				v-model="passwordCheck"
 				label="Gjenta passord"
 				type="password"
+				data-testid="passwordCheck-input"
 			/>
 
-			<BaseButton class="m-4" type="submit" :disabled="notValid"
+			<BaseButton
+				class="m-4"
+				type="submit"
+				:disabled="notValid"
+				data-testid="submit-button"
+				@click="submit"
 				>Registrer</BaseButton
 			>
 		</form>

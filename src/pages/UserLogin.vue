@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import BaseInput from '../components/Base/BaseInput.vue'
-import { store } from '../store'
+import { store, User } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import axios from 'axios'
 import BaseButton from '../components/Base/BaseBtn.vue'
 import { computed } from 'vue'
+import axios from 'axios'
 
 const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
@@ -15,28 +15,55 @@ const schema = yup.object({
 		.required('Passord er påkrevd')
 		.min(8, 'Minimum 8 tegn'),
 })
+//test
+//<x<x
 // Create a form context with the validation schema
 const { errors } = useForm({
 	validationSchema: schema,
 })
 // No need to define rules for fields
-let { value: email } = useField('email')
-let { value: password } = useField('password')
+const { value: email } = useField<string>('email')
+const { value: password } = useField<string>('password')
 
-//TODO: fix types
-interface Parameters {
-	email: unknown
-	password: unknown
+interface UserLoginData {
+	email: string
+	password: string
 }
 
-let params: Parameters = {
-	email: email.value,
-	password: password.value,
+interface UserLoginResponse {
+	user: {
+		id: number
+		firstName: string
+		lastName: string
+		username: string
+		email: string
+		address: string
+		postalcode: string
+		phonenumber: string
+		pictureUrl?: string
+		verified: boolean
+		trusted: boolean
+	}
+	token: string
 }
 
-function submit() {
-	alert(email.value + ' ' + password.value)
-	store.dispatch('login', params)
+async function submit() {
+	const data: UserLoginData = {
+		email: email.value,
+		password: password.value,
+	}
+	try {
+		const res = await axios({
+			method: 'post',
+			url: '/user/login',
+			data,
+		})
+		console.log(res)
+		const user: UserLoginResponse = res.data
+		console.log(user)
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 const notValid = computed(

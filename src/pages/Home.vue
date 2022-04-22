@@ -73,7 +73,7 @@ function loadMoreItems() {
 			priceUnit: '10/time',
 			showPhoneNumber: true,
 			address: 'her',
-			postalCode: '3440',
+			postalcode: '3440',
 			description: 'kul',
 		})
 	}
@@ -88,7 +88,7 @@ interface ItemListing {
 	priceUnit: string
 	showPhoneNumber: boolean
 	address: string
-	postalCode: string
+	postalcode: string
 	description: string
 }
 interface Category {
