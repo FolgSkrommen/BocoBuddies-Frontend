@@ -70,26 +70,12 @@ describe('UserRegister', () => {
 		).not.toBeDefined()
 	})
 
-	const mockPostList = [
-		{ id: 1, title: 'title1' },
-		{ id: 2, title: 'title2' },
-	]
-
 	// Following lines tell Jest to mock any call to `axios.get`
 	// and to return `mockPostList` instead
-	jest.spyOn(axios, 'post').mockResolvedValue(mockPostList)
+	jest.spyOn(axios, 'post')
 
 	it('register api is called when all fialds are valid and submit is clicked', () => {
 		const wrapper = shallowMount(UserRegister)
-		let username = wrapper.find('[data-testid="username-input"]')
-		let firstName = wrapper.find('[data-testid="firstName-input"]')
-		let lastName = wrapper.find('[data-testid="lastName-input"]')
-		let email = wrapper.find('[data-testid="email-input"]')
-		let phoneNumber = wrapper.find('[data-testid="phoneNumber-input"]')
-		let address = wrapper.find('[data-testid="address-input"]')
-		let postalCode = wrapper.find('[data-testid="postalCode-input"]')
-		let password = wrapper.find('[data-testid="password-input"]')
-		let passwordCheck = wrapper.find('[data-testid="passwordCheck-input"]')
 
 		wrapper.vm.username = 'username'
 		expect(wrapper.vm.username).toBe('username')
@@ -123,19 +109,22 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.password).toBe('12345678')
 		expect(wrapper.vm.password).not.toBe('Wrong value')
 
+		wrapper.vm.passwordCheck = '12345678'
+		expect(wrapper.vm.passwordCheck).toBe('12345678')
+		expect(wrapper.vm.passwordCheck).not.toBe('Wrong value')
+
 		wrapper.find('[data-testid="submit-button"]').trigger('click')
 
 		expect(axios.post).toHaveBeenCalledTimes(1)
-		expect(axios.post).toHaveBeenCalledWith('/user/register', null, {
-			params: {
-				address: 'Address',
-				email: 'email@gmail.com',
-				firstName: 'First',
-				lastName: 'Last',
-				password: '12345678',
-				phoneNumber: 95444369,
-				postalCode: '7003',
-			},
+		expect(axios.post).toHaveBeenCalledWith('/user/register', {
+			address: 'Address',
+			email: 'email@gmail.com',
+			firstName: 'First',
+			lastName: 'Last',
+			password: '12345678',
+			phoneNumber: 95444369,
+			postalCode: '7003',
+			username: 'username',
 		})
 	})
 })

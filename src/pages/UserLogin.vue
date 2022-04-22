@@ -21,8 +21,8 @@ const { errors } = useForm({
 	validationSchema: schema,
 })
 // No need to define rules for fields
-let { value: email } = useField('email')
-let { value: password } = useField('password')
+const { value: email } = useField<string>('email')
+const { value: password } = useField<string>('password')
 
 //TODO: fix types
 interface Parameters {

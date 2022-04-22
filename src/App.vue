@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import NavBar from './components/NavBar.vue'
-import BaseDropdown from './components/Base/BaseDropdown.vue'
-import Card from './components/Card.vue'
-import { ref } from 'vue'
-import { HomeIcon, ChatIcon, UserIcon, PlusIcon } from '@heroicons/vue/solid'
+import axios from 'axios'
+
+axios.defaults.baseURL = 'http://localhost:8001'
+axios.defaults.headers.post = { 'Content-Type': 'application/json' }
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import BaseInput from '../components/Base/BaseInput.vue'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import BaseButton from '../components/Base/BaseBtn.vue'
 import { ref, computed } from 'vue'
 
@@ -22,38 +22,49 @@ const { errors } = useForm({
 	validationSchema: schema,
 })
 // No need to define rules for fields
-let { value: username } = useField('username')
-let { value: firstName } = useField('firstName')
-let { value: lastName } = useField('lastName')
-let { value: email } = useField('email')
-let { value: address } = useField('address')
-let { value: postalCode } = useField('postalCode')
-let { value: phoneNumber } = useField('phoneNumber')
-let { value: password } = useField('password')
+const { value: username } = useField<string>('username')
+const { value: firstName } = useField<string>('firstName')
+const { value: lastName } = useField<string>('lastName')
+const { value: email } = useField<string>('email')
+const { value: address } = useField<string>('address')
+const { value: postalCode } = useField<string>('postalCode')
+const { value: phoneNumber } = useField<string>('phoneNumber')
+const { value: password } = useField<string>('password')
 
 const passwordCheck = ref('')
 const passwordIsSame = computed<boolean>(
 	() => password.value === passwordCheck.value
 )
 
-function submit() {
-	console.log(passwordIsSame)
-	axios
-		.post('/user/register', null, {
-			params: {
-				firstName: firstName.value,
-				lastName: lastName.value,
-				email: email.value,
-				address: address.value,
-				postalCode: postalCode.value,
-				phoneNumber: phoneNumber.value,
-				password: password.value,
-			},
-		})
-		.then(response => {
-			//store.commit('SET_USER_DATA', response.data)
-		})
-		.catch()
+interface RegisterUser {
+	firstName: string
+	lastName: string
+	username: string
+	email: string
+	password: string
+	address: string
+	postalCode: string
+	phoneNumber: string
+	pictureUrl?: string
+}
+
+async function submit() {
+	const data: RegisterUser = {
+		firstName: firstName.value,
+		lastName: lastName.value,
+		username: username.value,
+		email: email.value,
+		password: password.value,
+		address: address.value,
+		postalCode: postalCode.value,
+		phoneNumber: phoneNumber.value,
+	}
+	try {
+		const res = await axios.post('/user/register', data)
+		console.log(res)
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 const notValid = computed(
