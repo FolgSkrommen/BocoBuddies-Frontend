@@ -10,6 +10,16 @@ import {
 } from '@headlessui/vue'
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
 
+interface Props {
+	modelValue: string
+	alternatives: [Alternative]
+}
+let { modelValue, alternatives } = defineProps<Props>()
+const emit = defineEmits(['update:modelValue'])
+const updateValue = (event: Event) => {
+	emit('update:modelValue', (event.target as HTMLInputElement).value)
+}
+
 const people = [
 	{ id: 1, name: 'Wade Cooper' },
 	{ id: 2, name: 'Arlene Mccoy' },
@@ -18,10 +28,24 @@ const people = [
 	{ id: 5, name: 'Tanya Fox' },
 	{ id: 6, name: 'Hellen Schmidt' },
 ]
+interface Alternative {
+	alt: string
+	id: number
+}
+let chosenPerson = ref(people[0])
+let chosenAlternative = ref(alternatives[0])
+let filteredAlternatives = computed(() =>
+	modelValue === ''
+		? alternatives
+		: alternatives.filter(el => {
+				el.alt
+					.toLowerCase()
+					.replace(/\s+/g, '')
+					.includes(modelValue.toLowerCase().replace(/\s+/g, ''))
+		  })
+)
 
-let selected = ref(people[0])
 let query = ref('')
-
 let filteredPeople = computed(() =>
 	query.value === ''
 		? people
@@ -32,23 +56,20 @@ let filteredPeople = computed(() =>
 					.includes(query.value.toLowerCase().replace(/\s+/g, ''))
 		  )
 )
-const props = defineProps({
-	modelValue: [String, Number],
-	alternatives: Array,
-})
 </script>
 
 <template>
 	<div class="w-72 fixed top-16">
-		<Combobox v-model="selected">
+		<!--<Combobox v-model="chosenPerson">-->
+		<Combobox v-model="modelValue">
 			<div class="relative mt-1">
 				<div
 					class="relative w-full text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-teal-300 focus-visible:ring-offset-2 sm:text-sm overflow-hidden"
 				>
 					<ComboboxInput
 						class="w-full border-none focus:ring-0 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900"
-						:displayValue="person => person.name"
-						@change="query = $event.target.value"
+						:displayValue="alternative => alternative.alt"
+						@change="updateValue"
 					/>
 					<ComboboxButton
 						class="absolute inset-y-0 right-0 flex items-center pr-2"
@@ -63,23 +84,25 @@ const props = defineProps({
 					leave="transition ease-in duration-100"
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
-					@after-leave="query = ''"
+					@after-leave="modelValue = ''"
 				>
 					<ComboboxOptions
 						class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
 					>
 						<div
-							v-if="filteredPeople.length === 0 && query !== ''"
+							v-if="
+								alternatives.length === 0 && modelValue !== ''
+							"
 							class="cursor-default select-none relative py-2 px-4 text-gray-700"
 						>
 							Nothing found.
 						</div>
 
 						<ComboboxOption
-							v-for="person in filteredPeople"
+							v-for="alternative in filteredAlternatives"
 							as="template"
-							:key="person.id"
-							:value="person"
+							:key="alternative.id"
+							:value="alternative"
 							v-slot="{ selected, active }"
 						>
 							<li
@@ -96,7 +119,7 @@ const props = defineProps({
 										'font-normal': !selected,
 									}"
 								>
-									{{ person.name }}
+									{{ alternative.alt }}
 								</span>
 								<span
 									v-if="selected"

@@ -71,7 +71,7 @@ function loadMoreItems() {
 			name: 'asda',
 			price: 100,
 			priceUnit: '10/time',
-			displayPhoneNumber: true,
+			showPhoneNumber: true,
 			address: 'her',
 			postalCode: '3440',
 			description: 'kul',
@@ -97,7 +97,7 @@ interface Category {
 	name: string
 }
 
-let sortChosen = ref(6)
+let sortChosen = ref('')
 let sortAlts: Array<object> = [
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
@@ -171,6 +171,7 @@ observer.observe(items[items.length-1])*/
 
 	<div class="">
 		<!--Sorting component-->
-		<BaseCombobox class="fixed"></BaseCombobox>
+		<!--<BaseCombobox class="fixed" v-model="sortChosen" :alternatives="sortAlts"></BaseCombobox>-->
+		hei {{ sortChosen }}
 	</div>
 </template>
