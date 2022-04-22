@@ -2,10 +2,11 @@
 import { stat } from 'fs'
 import Card from '../components/Card.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { useStore } from '../store'
+import { store, useStore } from '../store'
 import BaseBtn from '../components/Base/BaseBtn.vue'
 import BaseInput from '../components/Base/BaseInput.vue'
 import { ref } from 'vue'
+import router from '../router'
 
 const { state } = useStore()
 const newEmail = ref('')
@@ -19,7 +20,8 @@ function updateUser() {
 }
 
 function logout() {
-	//TODO: Implement
+	store.dispatch('logout')
+	router.push('/')
 }
 
 function deleteUser() {
