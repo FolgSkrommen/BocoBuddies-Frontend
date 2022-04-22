@@ -47,8 +47,7 @@ export const store = createStore<State>({
 		//TODO: Fjern asynkron kode i mutations
 		async CLEAR_USER_DATA(state) {
 			state.user = undefined
-			await localStorage.removeItem('user')
-			location.reload()
+			await localStorage.removeItem('userData')
 		},
 	},
 	actions: {

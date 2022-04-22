@@ -216,7 +216,21 @@
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,19 +279,35 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,14 +316,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -469,9 +497,14 @@ const loanStatus = ref(undefined)
 		&lt;form v-on:submit.prevent="onSubmit"&gt;
 			&lt;div class="grid grid-cols-6"&gt;
 				&lt;div class="col-span-5"&gt;
-					&lt;base-input v-model="currentMessage"&gt;&lt;/base-input&gt;
+					&lt;base-input
+						v-model="currentMessage"
+						data-testid="message-input"
+					&gt;&lt;/base-input&gt;
 				&lt;/div&gt;
-				&lt;base-btn type="submit"&gt;Send&lt;/base-btn&gt;
+				&lt;base-btn type="submit" data-testid="submit-button"
+					&gt;Send&lt;/base-btn
+				&gt;
 			&lt;/div&gt;
 		&lt;/form&gt;
 &nbsp;
@@ -480,11 +513,16 @@ const loanStatus = ref(undefined)
 				class="place-self-center m-4"
 				@click="toggleLoan"
 				v-if="loanStatus === undefined"
+				data-testid="rent-button"
 				&gt;Lån&lt;/BaseBtn
 			&gt;
 		&lt;/div&gt;
 		&lt;!-- Popup or modal for when requesting loan --&gt;
-		&lt;BaseModal v-model="showLoanModal" title="Title"&gt;
+		&lt;BaseModal
+			v-model="showLoanModal"
+			title="Title"
+			data-testid="loan-modal"
+		&gt;
 			&lt;template v-slot:header&gt; Når vil du leie gjenstanden? &lt;/template&gt;
 			&lt;template v-slot:body&gt;
 				&lt;BaseInput
@@ -517,7 +555,11 @@ const loanStatus = ref(undefined)
 			&lt;/template&gt;
 		&lt;/BaseModal&gt;
 &nbsp;
-		&lt;div class="grid" v-if="loanStatus === true"&gt;
+		&lt;div
+			class="grid"
+			v-if="loanStatus === true"
+			data-testid="feedback-button"
+		&gt;
 			&lt;BaseBtn class="place-self-center m-4"&gt;Gi tilbakemelding&lt;/BaseBtn&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
@@ -529,7 +571,7 @@ const loanStatus = ref(undefined)
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Fri Apr 22 2022 10:32:38 GMT+0200 (Central European Summer Time)
+                at Fri Apr 22 2022 11:08:19 GMT+0200 (Central European Summer Time)
             </div>
         <script src="../prettify.js"></script>
         <script>
