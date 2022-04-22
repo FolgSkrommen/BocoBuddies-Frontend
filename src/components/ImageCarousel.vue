@@ -7,7 +7,7 @@ const { images } = defineProps<Props>()
 </script>
 
 <template>
-	<div class="flex">
-		<img v-for="url in images" :src="url" />
+	<div class="flex overflow-x-scroll snap-x gap-4 p-4">
+		<img class="rounded-xl snap-center" v-for="url in images" :src="url" />
 	</div>
 </template>

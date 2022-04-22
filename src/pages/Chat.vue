@@ -7,7 +7,7 @@ import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseModal from '../components/base/BaseModal.vue'
 import SockJS from 'sockjs-client/dist/sockjs'
-import Stomp from 'webstomp-client'
+import Stomp, { Client } from 'webstomp-client'
 
 import { WebSocket } from 'vite'
 
@@ -36,12 +36,13 @@ enum Type {
 
 interface Message {
 	sender: string
+	receiver: number
 	content: string
-	type: Type
+	type: String
 }
 
 //WEBSOCKET
-let stompClient = ref<any>(null)
+const stompClient = ref<Client>()
 let connected = ref<boolean>(false)
 let socket: any
 function connect() {
@@ -54,13 +55,17 @@ function connect() {
 
 function onConnected() {
 	// Subscribe to the Public Topic
+	if (stompClient.value === undefined) {
+		return
+	}
+	console.log('Got to on connected')
 	stompClient.value.subscribe('/topic/public', onMessageReceived)
 	console.log('Subscribed to public')
+	console.log(JSON.stringify({ sender: 'Hello' }))
 	// Tell your username to the server
 	stompClient.value.send(
 		'/app/chat.addUser',
-		{},
-		JSON.stringify({ sender: username, type: 'JOIN' })
+		JSON.stringify({ sender: 'Hello' })
 	)
 }
 
@@ -69,17 +74,23 @@ function onError() {
 }
 
 function sendMessage(event: any) {
-	if (stompClient) {
+	if (stompClient.value) {
 		let chatMessage: Message = {
+			receiver: 123,
 			sender: username.value,
 			content: currentMessage.value,
-			type: Type.CHAT,
+			type: 'CHAT',
 		}
+		console.log(JSON.stringify(chatMessage))
 		stompClient.value.send(
 			'/app/chat.sendMessage',
-			{},
 			JSON.stringify(chatMessage)
 		)
+		messages.value.push({
+			message: currentMessage.value,
+			date: new Date(),
+			receive: false,
+		})
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -87,13 +98,17 @@ function sendMessage(event: any) {
 
 function onMessageReceived(payload: any) {
 	let message = JSON.parse(payload.body)
-
+	console.log(payload)
 	if (message.type === 'JOIN') {
-		alert(message.sender + ' joined')
+		//alert(message.sender + ' joined')
 	} else if (message.type === 'LEAVE') {
-		alert(message.sender + ' left!')
+		//alert(message.sender + ' left!')
 	} else {
-		alert(message.content)
+		messages.value.push({
+			message: message.content,
+			date: new Date(),
+			receive: true,
+		})
 	}
 }
 
@@ -132,7 +147,7 @@ function cancelLoanRequest() {
 
 function onSubmit() {
 	connect()
-	alert(currentMessage.value)
+	//alert(currentMessage.value)
 	currentMessage.value = ''
 }
 interface DateAndTime {
@@ -186,7 +201,10 @@ const loanStatus = ref(undefined)
 						data-testid="message-input"
 					></base-input>
 				</div>
-				<base-btn type="submit" data-testid="submit-button"
+				<base-btn
+					type="submit"
+					data-testid="submit-button"
+					@click="sendMessage"
 					>Send</base-btn
 				>
 			</div>
