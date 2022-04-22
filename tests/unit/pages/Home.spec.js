@@ -6,8 +6,6 @@ describe('Home', () => {
 		it('has the required elements initially', () => {
 			const wrapper = shallowMount(Home)
 
-			expect(true).toBe(true)
-
 			expect(wrapper.find('[data-testid="search-field"]').exists()).toBe(
 				true
 			)
@@ -32,6 +30,9 @@ describe('Home', () => {
 			)
 		})
 
-		it('')
+		it('has initial sortChosen value equal to 0', async () => {
+			const wrapper = shallowMount(Home)
+			expect(wrapper.vm.sortChosen).toBe(0)
+		})
 	})
 })

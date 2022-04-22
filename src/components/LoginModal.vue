@@ -11,8 +11,8 @@ const cancel = () => {
 
 const { modelValue } = defineProps<Props>()
 
-import BaseModal from './Base/BaseModal.vue'
-import BaseBtn from './Base/BaseBtn.vue'
+import BaseModal from './base/BaseModal.vue'
+import BaseBtn from './base/BaseBtn.vue'
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 import Card from '../components/Card.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
-import BaseBtn from '../components/Base/BaseBtn.vue'
+import BaseBtn from '../components/base/BaseBtn.vue'
 import { ref } from 'vue'
 import { GoogleMap, Marker, Circle } from 'vue3-google-map'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup

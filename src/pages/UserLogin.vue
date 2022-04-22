@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import BaseInput from '../components/Base/BaseInput.vue'
+import BaseInput from '../components/base/BaseInput.vue'
 import { store, User } from '../store'
 
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import BaseButton from '../components/Base/BaseBtn.vue'
+import BaseButton from '../components/base/BaseBtn.vue'
 import { computed } from 'vue'
 import axios from 'axios'
 

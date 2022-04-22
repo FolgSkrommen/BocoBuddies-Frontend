@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
 import { PropType, ref } from 'vue'
-import BaseBtn from '../Base/BaseBtn.vue'
+import BaseBtn from '../base/BaseBtn.vue'
 
 interface IReceipt {
 	username: String
