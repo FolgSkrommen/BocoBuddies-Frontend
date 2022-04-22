@@ -20,6 +20,7 @@
 		"vee-validate": "^4.5.11",
 		"vue": "^3.2.25",
 		"vue-router": "^4.0.14",
+		"vue3-google-map": "^0.10.0",
 		"vue-stomp": "^0.0.5",
 		"vuex": "^4.0.2",
 		"webstomp-client": "^1.2.6",
