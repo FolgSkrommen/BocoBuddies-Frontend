@@ -16,7 +16,11 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<label class="text-dark-gray text-xl p-2 text-left">{{ label }}</label>
+		<label
+			class="text-dark-gray text-xl p-2 text-left"
+			data-testid="label"
+			>{{ label }}</label
+		>
 		<input
 			class="bg-gray-400 rounded-xl p-3 text-xl shadow-lg"
 			:class="disabled ? 'bg-gray-300' : ''"
