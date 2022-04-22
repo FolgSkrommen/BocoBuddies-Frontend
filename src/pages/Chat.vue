@@ -36,6 +36,7 @@ enum Type {
 
 interface Message {
 	sender: string
+	receiver: number
 	content: string
 	type: String
 }
@@ -75,6 +76,7 @@ function onError() {
 function sendMessage(event: any) {
 	if (stompClient.value) {
 		let chatMessage: Message = {
+			receiver: 123,
 			sender: username.value,
 			content: currentMessage.value,
 			type: 'CHAT',
@@ -84,6 +86,11 @@ function sendMessage(event: any) {
 			'/app/chat.sendMessage',
 			JSON.stringify(chatMessage)
 		)
+		messages.value.push({
+			message: currentMessage.value,
+			date: new Date(),
+			receive: false,
+		})
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -93,11 +100,15 @@ function onMessageReceived(payload: any) {
 	let message = JSON.parse(payload.body)
 	console.log(payload)
 	if (message.type === 'JOIN') {
-		alert(message.sender + ' joined')
+		//alert(message.sender + ' joined')
 	} else if (message.type === 'LEAVE') {
-		alert(message.sender + ' left!')
+		//alert(message.sender + ' left!')
 	} else {
-		alert(message.content)
+		messages.value.push({
+			message: message.content,
+			date: new Date(),
+			receive: true,
+		})
 	}
 }
 
@@ -136,7 +147,7 @@ function cancelLoanRequest() {
 
 function onSubmit() {
 	connect()
-	alert(currentMessage.value)
+	//alert(currentMessage.value)
 	currentMessage.value = ''
 }
 interface DateAndTime {
