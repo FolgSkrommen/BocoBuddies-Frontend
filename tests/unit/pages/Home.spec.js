@@ -1,10 +1,20 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import Home from '@/pages/Home.vue'
 
 describe('Home', () => {
 	describe('when entered', () => {
 		it('has the required elements initially', () => {
-			const wrapper = shallowMount(Home)
+			const mockRoute = {
+				params: {
+					id: 1,
+				},
+			}
+			const mockRouter = {
+				push: jest.fn(),
+			}
+			const wrapper = shallowMount(Home, {
+				stubs: { RouterLink: RouterLinkStub },
+			})
 
 			expect(wrapper.find('[data-testid="search-field"]').exists()).toBe(
 				true
@@ -34,5 +44,9 @@ describe('Home', () => {
 			const wrapper = shallowMount(Home)
 			expect(wrapper.vm.sortChosen).toBe(0)
 		})
+	})
+
+	describe('when a user searches for items', () => {
+		it('', () => {})
 	})
 })
