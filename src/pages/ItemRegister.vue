@@ -22,12 +22,12 @@ const schema = yup.object({
 const { errors } = useForm({
 	validationSchema: schema,
 })
-let { value: title } = useField('title')
-let { value: description } = useField('description')
-let { value: price } = useField('price')
-let { value: address } = useField('address')
-let { value: postalcode } = useField('postalcode')
-let { value: phonenumber } = useField('phonenumber')
+let { value: title } = useField<string>('title')
+let { value: description } = useField<string>('description')
+let { value: price } = useField<number>('price')
+let { value: address } = useField<string>('address')
+let { value: postalcode } = useField<number>('postalcode')
+let { value: phonenumber } = useField<number>('phonenumber')
 
 /*  Categories*/
 interface Category {
@@ -42,7 +42,7 @@ onMounted(() => {
 		categoryChoices.value.push(response.data)
 	})
 })
-
+// 0:
 let currentCategory: number = -1
 
 function updateCategories(categoryId: number, index: number) {
@@ -77,7 +77,7 @@ function uploadImage(input: any) {
 
 interface Item {
 	categoryId: string
-	title: string
+	name: string
 	description: string
 	price: number
 	priceUnit: string
@@ -89,10 +89,24 @@ interface Item {
 function submit() {
 	let item: Item = {
 		categoryId: currentCategory.toString(),
-		title: title.value,
+		name: title.value,
+		description: description.value,
+		price: price.value,
+		priceUnit: 'WEEK',
+		showPhonenumber: true,
+		address: address.value,
+		postalcode: postalcode.value,
 	}
+	console.log(item)
 
-	axios.post('/item/register')
+	axios
+		.post('/item/register', item)
+		.then(response => {
+			console.log(response)
+		})
+		.catch(error => {
+			alert(error.message)
+		})
 }
 </script>
 
