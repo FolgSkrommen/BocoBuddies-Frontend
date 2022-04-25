@@ -14,6 +14,8 @@ const colorClass = computed(() => {
 			return 'bg-blue text-white'
 		case 'red':
 			return 'bg-red text-white'
+		case 'gray':
+			return 'bg-slate-400 text-white'
 		default:
 			return 'bg-blue text-white'
 	}
