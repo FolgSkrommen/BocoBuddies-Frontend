@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //Components
-import BaseInput from '../components/Base/BaseInput.vue'
-import BaseButton from '../components/Base/BaseBtn.vue'
+import BaseInput from '../components/base/BaseInput.vue'
+import BaseButton from '../components/base/BaseBtn.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 
 import axios from 'axios'

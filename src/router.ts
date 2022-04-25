@@ -94,13 +94,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const loggedIn = store.getters.loggedIn
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
+	/*
 	if (requiresAuth && !loggedIn) {
 		return next('/login')
 	}
 	if (['/register', '/login'].includes(to.path) && loggedIn) {
 		return next('/user/settings')
-	}
+	}*/
 	return next()
 })
 
