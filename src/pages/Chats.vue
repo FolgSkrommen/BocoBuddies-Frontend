@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import Card from '../components/Card.vue'
+import axios from 'axios'
+import { store, User } from '../store'
 
 interface Chat {
 	chatId: number
@@ -21,10 +24,6 @@ onMounted(() => {
 			console.log(err)
 		})
 })
-
-import Card from '../components/Card.vue'
-import axios from 'axios'
-import { store, User } from '../store'
 </script>
 
 <template>
