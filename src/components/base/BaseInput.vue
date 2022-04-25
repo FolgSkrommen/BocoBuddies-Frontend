@@ -22,7 +22,7 @@ const updateValue = (event: Event) => {
 			>{{ label }}</label
 		>
 		<input
-			class="bg-gray-400 rounded-xl p-3 text-xl shadow-lg"
+			class="bg-gray-500 rounded-xl p-3 text-xl shadow-lg"
 			:class="disabled ? 'bg-gray-300' : ''"
 			:disabled="disabled"
 			:value="modelValue"
@@ -31,6 +31,6 @@ const updateValue = (event: Event) => {
 			data-testid="input"
 		/>
 
-		<p class="text-red text-xs">{{ error }}</p>
+		<p class="text-red text-xs w-full text-center">{{ error }}</p>
 	</div>
 </template>
