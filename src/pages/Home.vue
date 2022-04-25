@@ -290,7 +290,7 @@ observer.observe(items[items.length-1])*/
 		</div>
 	</div>
 	{{ sortChosen }}
-	<div class="flex items-center justify-center h-0 h-full">
+	<div class="flex items-center justify-center h-full">
 		<!--Sort dropdown-->
 		<BaseDropdown
 			:alternatives="sortAlts"

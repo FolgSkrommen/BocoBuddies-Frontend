@@ -9,9 +9,8 @@ import router from '../router'
 const newEmail = ref('')
 const newPassword = ref('')
 
-let user = store.state.user
-if (user) {
-	newEmail.value = user.email
+if (store.state.user) {
+	newEmail.value = store.state.user.email
 }
 
 function updateUser() {
@@ -30,17 +29,17 @@ function deleteUser() {
 </script>
 
 <template>
-	<div v-if="store.getters.loggedIn" class="grid gap-4">
+	<div v-if="store.state.user" class="grid gap-4">
 		<h1 class="text-xl font-bold">Innstillinger</h1>
 		<div class="grid">
 			<img
 				class="rounded-full"
-				:src="user.pictureUrl"
-				:alt="user.email"
+				:src="store.state.user.pictureUrl"
+				:alt="store.state.user.email"
 			/>
 			<div class="flex gap-2 text-lg font-bold">
-				<p>{{ user.firstName }}</p>
-				<p>{{ user.lastName }}</p>
+				<p>{{ store.state.user.firstName }}</p>
+				<p>{{ store.state.user.lastName }}</p>
 			</div>
 		</div>
 		<form class="grid gap-4" @submit.prevent="updateUser">
