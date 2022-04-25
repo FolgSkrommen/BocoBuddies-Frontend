@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import Card from '../components/Card.vue'
-import BaseInput from '../components/Base/BaseInput.vue'
+import BaseInput from '../components/base/BaseInput.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 interface Filter {
