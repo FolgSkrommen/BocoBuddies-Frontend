@@ -6,25 +6,13 @@ import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
+import qs from 'qs'
 import BaseCombobox from '../components/base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 //Interfaces
-interface ItemListing {
-	id: number
-	ownerId: number
-	categoryId: number
-	active: boolean
-	name: string
-	price: number
-	priceUnit: string
-	showPhoneNumber: boolean
-	address: string
-	postalcode: string
-	description: string
-}
 interface Category {
 	id: number
 	name: string
@@ -33,6 +21,17 @@ interface Category {
 interface Alternative {
 	id: number
 	alt: string
+}
+interface Item {
+	id: number
+	image: string
+	name: string
+	price: number
+	availableFrom: string
+	availableTo: string
+	priceUnit: string
+	address: string
+	postalCode: string
 }
 
 //Variables
@@ -49,7 +48,7 @@ let sortAlts: Array<Alternative> = [
 let searchWord = ref<string>('')
 let tagAlts = ref<Array<Category>>([])
 let chosenTags = ref<Array<Category>>([])
-let items = ref<Array<ItemListing>>([])
+let items = ref<Array<Item>>([])
 
 let currentPage = ref(0)
 
@@ -70,59 +69,85 @@ function getMainCategories() {
 		})
 }
 function search() {
-	if (searchWord.value.trim()) {
-		console.log('Searching for items.... ' + searchWord.value)
-		let sortChosenString: string
-		/*let sortAlts: Array<object> = [
-	{ id: 0, alt: 'Ingen sortering' },
+	console.log('Searching for items.... ' + searchWord.value)
+	let sortChosenString: string
+	/*
+  { id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Eldste først' },
-]*/
-		switch (sortChosen.value) {
-			case 0: {
-				sortChosenString = 'none'
-				break
-			}
-			case 1: {
-				sortChosenString = 'price-ascending'
-				break
-			}
-			case 2: {
-				sortChosenString = 'price-descending'
-				break
-			}
-			case 3: {
-				sortChosenString = 'closest'
-				break
-			}
-			case 4: {
-				sortChosenString = 'newest'
-				break
-			}
-			case 5: {
-				sortChosenString = 'oldest'
-				break
-			}
-			default: {
-				sortChosenString = 'none'
-			}
+	{ id: 5, alt: 'Eldste først' },*/
+	switch (sortChosen.value) {
+		case 0: {
+			sortChosenString = 'none'
+			break
 		}
-		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
-		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosenString}})
-        .then(response => {
-          items.value = response.data
-        })
-        .catch(error => {
-          //TODO error handling
-          console.log(error.message)
-        })*/
+		case 1: {
+			sortChosenString = 'price-ascending'
+			break
+		}
+		case 2: {
+			sortChosenString = 'price-descending'
+			break
+		}
+		case 3: {
+			sortChosenString = 'closest'
+			break
+		}
+		case 4: {
+			sortChosenString = 'newest'
+			break
+		}
+		case 5: {
+			sortChosenString = 'none'
+			break
+		}
+		default: {
+			sortChosenString = 'none'
+			break
+		}
 	}
+	let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
+	chosenTags.value.forEach(tag => {
+		chosenTagsIds.push(tag.id)
+	})
+
+	axios
+		.get('/item/search/' + searchWord.value.trim(), {
+			params: {
+				categories: chosenTagsIds,
+				sort: sortChosenString,
+				amount: 20,
+				offset: currentPage.value,
+			},
+			paramsSerializer: params => {
+				return qs.stringify(params, { arrayFormat: 'repeat' })
+			},
+		})
+		.then(response => {
+			items.value.push(response.data)
+			console.log(items.value)
+		})
+		.catch(error => {
+			//TODO error handling, tell user something went wrong
+			items.value = []
+			console.log(error.message)
+		})
+}
+function buttonOrEnterSearch() {
+	if (searchWord.value.trim()) {
+		currentPage.value = 0
+		search()
+	}
+}
+function categorySearch() {
+	currentPage.value = 0
+	search()
 }
 function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
+	categorySearch()
 	axios
 		.get('category/sub?categoryId=' + tag.id)
 		.then(response => {
@@ -139,6 +164,7 @@ function categoryRemoved(tag: Category) {
 		if (value.id == tag.id)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
 	})
+	categorySearch()
 	if (chosenTags.value.length < 1) {
 		getMainCategories()
 		return
@@ -157,41 +183,22 @@ function categoryRemoved(tag: Category) {
 	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
 	//searchBasedOnCategories(chosenTags.value)
 }
-function searchBasedOnCategories(categories: Array<Category>) {
-	console.log('Now searching based on categories...')
-	axios
-		.get('/items-by-categories', { params: { categories: categories } })
-		.then(response => {
-			items.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
-}
-function getAllSuperTags() {
-	axios.get('/url-to-get-all-super-tags').then(response => {
-		tagAlts = response.data
-	})
-}
-function gotClicked() {
-	console.log('Clicked')
-}
+
 function loadMoreItems() {
 	console.log('Getting next items...')
 	currentPage.value++
+	search()
 	for (let i = 0; i < 10; i++) {
 		items.value.push({
 			id: 1,
-			ownerId: 1,
-			categoryId: 1,
-			active: true,
-			name: 'asda',
+			image: 'image',
+			name: 'Kul ting',
 			price: 100,
-			priceUnit: '10/time',
-			showPhoneNumber: true,
-			address: 'her',
-			postalcode: '3440',
-			description: 'kul',
+			availableFrom: 'I dag',
+			availableTo: 'I morgen',
+			priceUnit: 'Dag',
+			address: 'Her',
+			postalCode: '3440',
 		})
 	}
 }
@@ -210,16 +217,19 @@ observer.observe(items[items.length-1])*/
 <template>
 	<div>
 		<h1>Hjem</h1>
+		{{ currentPage }}
 	</div>
 
 	<div class="flex">
 		<!--Text search input component-->
 		<BaseInput
-			@keyup.enter="search"
+			@keyup.enter="buttonOrEnterSearch"
 			v-model="searchWord"
 			data-testid="search-field"
 		></BaseInput>
-		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
+		<BaseBtn @click="buttonOrEnterSearch" data-testid="search-button"
+			>Søk</BaseBtn
+		>
 	</div>
 
 	<div class="py-10">
@@ -244,6 +254,34 @@ observer.observe(items[items.length-1])*/
 			<div v-for="i in items" data-testid="item-cards">
 				<Card>{{ i.name }}</Card>
 			</div>
+
+			<div class="grid gap-4">
+				<router-link
+					class="bg-slate-100 rounded-lg shadow-lg"
+					v-for="item in items"
+					:to="`/item/${item.id}`"
+				>
+					<div class="flex gap-2">
+						<img
+							class="w-32 rounded-l-lg"
+							:src="item.image"
+							:alt="item.name"
+						/>
+						<div class="p-2 grid">
+							<p class="font-bold text-lg">
+								{{ item.name }}
+							</p>
+							<div>
+								<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
+							</div>
+							<p class="text-slate-500">
+								{{ item.availableFrom }} -
+								{{ item.availableTo }}
+							</p>
+						</div>
+					</div>
+				</router-link>
+			</div>
 		</div>
 		<div class="flex justify-center my-10">
 			<BaseBtn @click="loadMoreItems" data-testid="load-more-items-button"
@@ -251,13 +289,13 @@ observer.observe(items[items.length-1])*/
 			>
 		</div>
 	</div>
-
+	{{ sortChosen }}
 	<div class="flex items-center justify-center h-0 h-full">
 		<!--Sort dropdown-->
 		<BaseDropdown
 			:alternatives="sortAlts"
-			v-model="sortChosen"
-			class="bottom-5 fixed"
+			v-model.number="sortChosen"
+			class="bottom-12 fixed"
 			data-testid="sort-dropdown"
 		></BaseDropdown>
 	</div>
