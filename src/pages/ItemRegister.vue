@@ -6,7 +6,8 @@ import ImageCarousel from '../components/ImageCarousel.vue'
 
 import axios from 'axios'
 
-import { onMounted, Ref, ref } from 'vue'
+import { computed, onMounted, Ref, ref } from 'vue'
+import router from '../router'
 
 //Form validation
 import { useForm, useField } from 'vee-validate'
@@ -28,6 +29,21 @@ let { value: price } = useField<number>('price')
 let { value: address } = useField<string>('address')
 let { value: postalcode } = useField<number>('postalcode')
 let { value: phonenumber } = useField<number>('phonenumber')
+
+const notValid = computed(
+	() =>
+		!!errors.value.title ||
+		!!errors.value.description ||
+		!!errors.value.price ||
+		!!errors.value.address ||
+		!!errors.value.postalcode ||
+		title.value == undefined ||
+		description.value == undefined ||
+		price.value == undefined ||
+		address.value == undefined ||
+		postalcode.value == undefined ||
+		phonenumber.value == undefined
+)
 
 /*  Categories*/
 interface Category {
@@ -100,7 +116,7 @@ function submit() {
 	axios
 		.post('/item/register', item)
 		.then(response => {
-			console.log(response)
+			router.push('/')
 		})
 		.catch(error => {
 			alert(error.message)
@@ -181,7 +197,9 @@ function submit() {
 				:error="errors.postalcode"
 			/>
 
-			<BaseButton class="m-4" type="submit">Send</BaseButton>
+			<BaseButton class="m-4" type="submit" :disabled="notValid"
+				>Send</BaseButton
+			>
 		</form>
 	</div>
 </template>

@@ -1,40 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { PlusIcon } from '@heroicons/vue/solid'
 interface Props {
-	to?: string
-	color?: 'blue' | 'red' | 'gray'
-	type?: 'submit'
+	to: string
 }
-
-const { color } = defineProps<Props>()
-
-const colorClass = computed(() => {
-	switch (color) {
-		case 'blue':
-			return 'bg-blue text-white'
-		case 'red':
-			return 'bg-red text-white'
-		default:
-			return 'bg-blue text-white'
-	}
-})
+const { to } = defineProps<Props>()
 </script>
 
 <template>
 	<router-link
-		class="w-fit py-1 px-2 rounded-lg self-end place-self-end shadow-lg disabled:bg-gray-500"
-		:class="colorClass"
-		v-if="to"
 		:to="to"
+		class="fixed bottom-20 right-8 p-1 rounded-full bg-blue shadow-xl"
 	>
-		<slot></slot>
+		<PlusIcon class="w-14 h-14 text-white" />
 	</router-link>
-	<button
-		v-else
-		class="w-fit p-2 text-xl rounded-lg self-end place-self-end shadow-lg disabled:bg-gray-500"
-		:class="colorClass"
-		:type="type ?? 'button'"
-	>
-		<slot></slot>
-	</button>
 </template>

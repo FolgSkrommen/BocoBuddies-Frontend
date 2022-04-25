@@ -5,14 +5,21 @@ import Message from './Message.vue'
 import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
 
-interface IMessage {
-	message: String
-	date: Date
+interface MessageDTO {
+	senderId: string | undefined
+	message: string
+	type: string
+	date: string
 	receive: boolean
 }
 
+interface Message {
+	userId: string
+	messages: Array<MessageDTO>
+}
+
 interface Props {
-	messages: IMessage[]
+	messages: Message
 	modelValue: boolean
 }
 
@@ -33,17 +40,19 @@ const { messages, modelValue } = defineProps<Props>()
 		class="bg-F7F9FC-100 border px-4 py-3 rounded md:container mx-auto h-full min-h-screen"
 	>
 		<Message
-			v-for="(message, i) in messages"
+			v-for="(message, i) in messages.messages"
 			:id="i"
 			:receive="message.receive"
 		>
 			<div>{{ message.message }}</div>
 		</Message>
+		<!--
 		<receipt :receipt="receipt" v-model="modelValue"></receipt>
 		<receipt
 			:receipt="receipt"
 			:receive="true"
 			v-model="modelValue"
 		></receipt>
+		-->
 	</div>
 </template>

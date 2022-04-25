@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { store } from '../store'
 import {
 	HomeIcon,
 	ChatIcon,
@@ -14,6 +15,7 @@ import {
 			<router-link to="/">
 				<HomeIcon class="w-8 h-8 text-white" />
 			</router-link>
+
 			<router-link to="/my-loans">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>
@@ -23,6 +25,7 @@ import {
 			<router-link to="/chats">
 				<ChatIcon class="w-8 h-8 text-white" />
 			</router-link>
+
 			<router-link to="/settings">
 				<UserIcon class="w-8 h-8 text-white" />
 			</router-link>

@@ -12,39 +12,40 @@ import Stomp, { Client } from 'webstomp-client'
 import { WebSocket } from 'vite'
 import router from '../router'
 import { useRoute } from 'vue-router'
+import axios from 'axios'
 const route = useRoute()
 
-const messages = ref([
-	{
-		message: 'Kan jeg låne?',
-		date: new Date(),
-		receive: false,
-	},
-	{
-		message: 'Yes sir!',
-		date: new Date(),
-		receive: true,
-	},
-	{
-		message: 'GGWP',
-		date: new Date(),
-		receive: false,
-	},
-])
+const messages = ref<Message>()
+
+const chat = ref<Chat>()
+
+interface Receipt {}
+
+interface Chat {
+	chatId: number
+	itemId: number
+	chatName: string
+}
 
 enum Type {
 	CHAT = 'CHAT',
 	JOIN = 'JOIN',
 }
 
-interface Message {
-	senderId: string
-	sender: string
-	recipientId: string
-	chatId: string
-	content: string
+interface MessageDTO {
+	senderId: string | undefined
+	message: string
 	type: string
+	date: string
+	receive: boolean
 }
+
+interface Message {
+	userId: string
+	messages: Array<MessageDTO>
+}
+
+interface sendMessage {}
 
 //WEBSOCKET
 const stompClient = ref<Client>()
@@ -59,19 +60,13 @@ function connect() {
 }
 let currentUserId = '1'
 let groupId = route.params.id
-let sessionId = ''
-let url: string = ''
+
 function onConnected() {
-	// Subscribe to the Public Topic
-	console.log(stompClient.value?.ws._transport.url)
 	stompClient.value?.send(
 		'/app/chat.addUser',
 		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
 	)
-	stompClient.value?.subscribe(
-		'/chat/' + groupId + '/user/' + currentUserId,
-		onMessageReceived
-	)
+	stompClient.value?.subscribe('/chat/' + groupId, onMessageReceived)
 }
 
 function onError() {
@@ -80,24 +75,45 @@ function onError() {
 
 function sendMessage(event: any) {
 	if (stompClient.value) {
-		let chatMessage: Message = {
-			senderId: '0',
-			recipientId: currentMessage.value,
-			sender: username.value,
-			content: currentMessage.value,
+		let chatMessage: MessageDTO = {
+			senderId: '',
+			message: currentMessage.value,
 			type: 'CHAT',
-			chatId: '1',
+			date: new Date().toDateString(),
+			receive: false,
 		}
+
 		console.log(JSON.stringify(chatMessage))
+
 		stompClient.value.send(
 			'/app/chat.sendMessage',
 			JSON.stringify(chatMessage)
 		)
-		messages.value.push({
+
+		messages.value?.messages.push(chatMessage)
+		currentMessage.value = ''
+	}
+	event.preventDefault()
+}
+
+function sendReceipt(event: any) {
+	if (stompClient.value) {
+		let chatMessage: MessageDTO = {
+			senderId: '',
 			message: currentMessage.value,
-			date: new Date(),
+			type: 'REQUEST_LOAN',
+			date: new Date().toDateString(),
 			receive: false,
-		})
+		}
+
+		console.log(JSON.stringify(chatMessage))
+
+		stompClient.value.send(
+			'/app/chat.sendMessage',
+			JSON.stringify(chatMessage)
+		)
+
+		messages.value?.messages.push(chatMessage)
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -111,17 +127,42 @@ function onMessageReceived(payload: any) {
 		//alert(message.sender + ' joined')
 	} else if (message.type === 'LEAVE') {
 		//alert(message.sender + ' left!')
+	} else if (message.type === 'REQUEST') {
+		//TODO add rent/loan here
 	} else {
-		messages.value.push({
-			message: message.content,
-			date: new Date(),
+		let msg: MessageDTO = {
+			senderId: undefined,
+			message: message.message,
+			type: '',
+			date: message.date,
 			receive: true,
-		})
+		}
+		if (msg.senderId) messages.value?.messages.push(msg)
 	}
 }
 
-onMounted(() => {
-	//connect()
+onMounted(async () => {
+	await axios
+		.get('/chat?chatId=' + route.params.id)
+		.then(res => {
+			chat.value = res.data
+		})
+		.catch(err => {
+			//TODO handle error
+			console.log(err)
+		})
+
+	await axios
+		.get('/message?chatId=' + chat.value?.chatId)
+		.then(res => {
+			console.log(res.data)
+			messages.value = res.data
+		})
+		.catch(err => {
+			console.log(err)
+		})
+
+	await connect()
 })
 
 function toggleLoan() {
@@ -165,14 +206,6 @@ interface DateAndTime {
 	toDate: string
 	toTime: string
 }
-/*
-let dateAndTime: DateAndTime = {
-  fromDate: new Date().toISOString().split('T')[0],
-  fromTime: "12:00",
-  toDate: new Date().toISOString().split('T')[0],
-  toTime: "13:00"
-}
-* */
 
 let dateAndTime: DateAndTime = {
 	fromDate: '',
@@ -181,9 +214,6 @@ let dateAndTime: DateAndTime = {
 	toTime: '',
 }
 
-function getReceive(id: number) {
-	return id === store?.state?.user?.id
-}
 //TODO add receiver to websocket
 const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
@@ -193,15 +223,17 @@ const loanStatus = ref(undefined)
 </script>
 <template>
 	<div>
-		<h1 class="text-center text-4xl">{{ username }}</h1>
+		<h1 class="text-center text-4xl">{{ 'asd' }}</h1>
 		<h2 class="text-center text-xl">{{ item }}</h2>
-
+		<!--
 		<MessageContainer
-			:messages="messages"
+			:messages="messages.value.messages"
 			v-model="loanStatus"
 			data-testid="message-container"
 		>
+
 		</MessageContainer>
+		-->
 		<form v-on:submit.prevent="sendMessage">
 			<div class="grid grid-cols-6">
 				<div class="col-span-5">
