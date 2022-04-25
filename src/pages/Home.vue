@@ -12,19 +12,6 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 //Interfaces
-interface ItemListing {
-	id: number
-	ownerId: number
-	categoryId: number
-	active: boolean
-	name: string
-	price: number
-	priceUnit: string
-	showPhoneNumber: boolean
-	address: string
-	postalcode: string
-	description: string
-}
 interface Category {
 	id: number
 	name: string
@@ -33,6 +20,17 @@ interface Category {
 interface Alternative {
 	id: number
 	alt: string
+}
+interface Item {
+	id: number
+	image: string
+	name: string
+	price: number
+	availableFrom: string
+	availableTo: string
+	priceUnit: string
+	address: string
+	postalCode: string
 }
 
 //Variables
@@ -49,7 +47,7 @@ let sortAlts: Array<Alternative> = [
 let searchWord = ref<string>('')
 let tagAlts = ref<Array<Category>>([])
 let chosenTags = ref<Array<Category>>([])
-let items = ref<Array<ItemListing>>([])
+let items = ref<Array<Item>>([])
 
 let currentPage = ref(0)
 
@@ -73,14 +71,7 @@ function search() {
 	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
 		let sortChosenString: string
-		/*let sortAlts: Array<object> = [
-	{ id: 0, alt: 'Ingen sortering' },
-	{ id: 1, alt: 'Pris lav-høy' },
-	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Nærmest' },
-	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Eldste først' },
-]*/
+
 		switch (sortChosen.value) {
 			case 0: {
 				sortChosenString = 'none'
