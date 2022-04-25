@@ -3,7 +3,7 @@ import { XCircleIcon } from '@heroicons/vue/solid'
 
 interface Props {
 	modelValue: Tag[]
-	removable: boolean
+	removable?: boolean
 }
 interface Tag {
 	id: number
