@@ -11,23 +11,97 @@ import MyLoans from './pages/MyLoans.vue'
 import Settings from './pages/Settings.vue'
 import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
+import { store } from './store'
 
 const routes = [
-	{ path: '/', component: Home },
-	{ path: '/chats', component: Chats },
-	{ path: '/chat/:id', component: Chat },
-	{ path: '/item/:id', component: Item },
-	{ path: '/item-register/', component: ItemRegister },
-	{ path: '/my-items/', component: MyItems },
-	{ path: '/my-loans', component: MyLoans },
-	{ path: '/settings', component: Settings },
-	{ path: '/user-login', component: UserLogin },
-	{ path: '/user-register', component: UserRegister },
+	{
+		path: '/',
+		component: Home,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/chats',
+		component: Chats,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/chat/:id',
+		component: Chat,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/item/:id',
+		component: Item,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/item/register',
+		component: ItemRegister,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/my-items/',
+		component: MyItems,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/my-loans',
+		component: MyLoans,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/user/settings',
+		component: Settings,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/login',
+		component: UserLogin,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/register',
+		component: UserRegister,
+		meta: {
+			requiresAuth: false,
+		},
+	},
 ]
 
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+})
+
+router.beforeEach((to, from, next) => {
+	const loggedIn = store.getters.loggedIn
+	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+	if (requiresAuth && !loggedIn) {
+		return next('/login')
+	}
+	if (['/register', '/login'].includes(to.path) && loggedIn) {
+		return next('/user/settings')
+	}
+	return next()
 })
 
 export default router

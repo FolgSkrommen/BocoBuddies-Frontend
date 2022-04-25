@@ -37,7 +37,6 @@ export const store = createStore<State>({
 
 	mutations: {
 		SET_USER_DATA(state, data) {
-			console.log(data)
 			state.user = data.userDTO
 			localStorage.setItem('userData', JSON.stringify(data))
 			axios.defaults.headers.common['authorization'] =
@@ -54,7 +53,6 @@ export const store = createStore<State>({
 		login({ commit }, data) {
 			return axios.post('/user/login', data).then(response => {
 				commit('SET_USER_DATA', response.data)
-				console.log(response)
 			})
 		},
 		logout({ commit }) {
