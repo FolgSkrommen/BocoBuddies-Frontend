@@ -175,7 +175,7 @@ let dateAndTime: DateAndTime = {
 function getReceive(id: number) {
 	return id === store?.state?.user?.id
 }
-
+//TODO add receiver to websocket
 const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
 const item = ref('Gjenstand')
