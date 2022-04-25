@@ -19,7 +19,7 @@ interface Message {
 }
 
 interface Props {
-	messages: Message
+	chatData: Message
 	modelValue: boolean
 }
 
@@ -32,15 +32,17 @@ const receipt = ref({
 	itemUnit: 'dag',
 	address: 'Adresse',
 })
-
-const { messages, modelValue } = defineProps<Props>()
+onMounted(() => {
+	console.log(chatData)
+})
+const { chatData, modelValue } = defineProps<Props>()
 </script>
 <template>
 	<div
 		class="bg-F7F9FC-100 border px-4 py-3 rounded md:container mx-auto h-full min-h-screen"
 	>
 		<Message
-			v-for="(message, i) in messages.messages"
+			v-for="(message, i) in chatData.messages"
 			:id="i"
 			:receive="message.receive"
 		>
