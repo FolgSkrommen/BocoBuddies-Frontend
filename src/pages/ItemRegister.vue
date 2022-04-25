@@ -81,7 +81,6 @@ interface Item {
 	description: string
 	price: number
 	priceUnit: string
-	showPhonenumber: boolean
 	address: string
 	postalcode: number
 }
@@ -93,7 +92,6 @@ function submit() {
 		description: description.value,
 		price: price.value,
 		priceUnit: 'WEEK',
-		showPhonenumber: true,
 		address: address.value,
 		postalcode: postalcode.value,
 	}
