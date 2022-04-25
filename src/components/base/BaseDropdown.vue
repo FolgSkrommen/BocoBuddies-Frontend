@@ -21,11 +21,13 @@ const updateValue = (event: Event) => {
 			v-model="modelValue"
 			@input="updateValue"
 			class="border-2 border-black rounded bg-gray-300 items-center animation-none"
+			data-testid="dropdown-container"
 		>
 			<option
 				v-for="element in alternatives"
 				:value="element.id"
 				:key="element.id"
+				data-testid="dropdown-option"
 			>
 				{{ element.alt }}
 			</option>

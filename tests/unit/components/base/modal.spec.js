@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import BaseModal from '@/components/Base/BaseModal.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 
 describe('BaseModal', () => {
 	describe('when loaded', () => {
