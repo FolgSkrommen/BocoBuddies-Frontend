@@ -64,7 +64,7 @@ const routes = [
 		},
 	},
 	{
-		path: '/user/settings',
+		path: '/settings',
 		component: Settings,
 		meta: {
 			requiresAuth: true,
