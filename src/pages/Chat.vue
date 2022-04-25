@@ -63,14 +63,16 @@ let groupId = route.params.id
 
 function onConnected() {
 	stompClient.value?.send(
-		'/app/chat.addUser',
+		'/app/chat/addUser',
 		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
 	)
+	console.log('got here')
 	stompClient.value?.subscribe('/chat/' + groupId, onMessageReceived)
 }
 
-function onError() {
+function onError(err: any) {
 	console.log('Could not connect to Websocket server')
+	console.log(err)
 }
 
 function sendMessage(event: any) {
@@ -86,7 +88,7 @@ function sendMessage(event: any) {
 		console.log(JSON.stringify(chatMessage))
 
 		stompClient.value.send(
-			'/app/chat.sendMessage',
+			'/app/chat/sendMessage',
 			JSON.stringify(chatMessage)
 		)
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
 	modelValue: number
-	alternatives: [Alternative]
+	alternatives: Alternative[]
 }
 interface Alternative {
 	alt: string
