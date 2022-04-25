@@ -15,8 +15,8 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 const route = useRoute()
 
-const messages = ref<Message>()
-
+const chatData = ref<Message>()
+chatData.value?.messages
 const chat = ref<Chat>()
 
 interface Receipt {}
@@ -90,7 +90,7 @@ function sendMessage(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		messages.value?.messages.push(chatMessage)
+		chatData.value?.messages.push(chatMessage)
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -113,7 +113,7 @@ function sendReceipt(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		messages.value?.messages.push(chatMessage)
+		chatData.value?.messages.push(chatMessage)
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -137,7 +137,7 @@ function onMessageReceived(payload: any) {
 			date: message.date,
 			receive: true,
 		}
-		if (msg.senderId) messages.value?.messages.push(msg)
+		if (msg.senderId) chatData.value?.messages.push(msg)
 	}
 }
 
@@ -156,12 +156,13 @@ onMounted(async () => {
 		.get('/message?chatId=' + chat.value?.chatId)
 		.then(res => {
 			console.log(res.data)
-			messages.value = res.data
+			chatData.value = res.data
 		})
 		.catch(err => {
 			console.log(err)
 		})
 
+	console.log(chatData.value?.messages)
 	await connect()
 })
 
@@ -225,15 +226,16 @@ const loanStatus = ref(undefined)
 	<div>
 		<h1 class="text-center text-4xl">{{ 'asd' }}</h1>
 		<h2 class="text-center text-xl">{{ item }}</h2>
+
 		<!--
 		<MessageContainer
-			:messages="messages.value.messages"
+			:messages="chatData.value.messages"
 			v-model="loanStatus"
 			data-testid="message-container"
 		>
 
 		</MessageContainer>
-		-->
+    !-->
 		<form v-on:submit.prevent="sendMessage">
 			<div class="grid grid-cols-6">
 				<div class="col-span-5">

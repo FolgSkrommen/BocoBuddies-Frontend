@@ -97,11 +97,11 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.address).toBe('Address')
 		expect(wrapper.vm.address).not.toBe('Wrong value')
 
-		wrapper.vm.postalcode = '7003'
+		wrapper.vm.postalCode = '7003'
 		expect(wrapper.vm.postalcode).toBe('7003')
 		expect(wrapper.vm.postalcode).not.toBe('Wrong value')
 
-		wrapper.vm.phonenumber = 95444369
+		wrapper.vm.phoneNumber = 95444369
 		expect(wrapper.vm.phonenumber).toBe(95444369)
 		expect(wrapper.vm.phonenumber).not.toBe(0)
 
