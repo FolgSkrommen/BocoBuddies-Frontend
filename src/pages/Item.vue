@@ -25,6 +25,7 @@ interface Item {
 	description: string
 	price: string
 	priceUnit: string
+	showPhonenumber: boolean
 	postalcode: string
 	address: string
 	position: Position

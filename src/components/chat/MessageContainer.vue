@@ -3,7 +3,7 @@ import Card from '../components/Card.vue'
 import { computed, onMounted, PropType, ref } from 'vue'
 import Message from './Message.vue'
 import Receipt from './Receipt.vue'
-import BaseBtn from '../Base/BaseBtn.vue'
+import BaseBtn from '../base/BaseBtn.vue'
 
 interface IMessage {
 	message: String

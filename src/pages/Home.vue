@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import BaseInput from '../components/Base/BaseInput.vue'
+import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
 import { ref } from 'vue'
 import TagList from '../components/TagList.vue'
-import BaseBtn from '../components/Base/BaseBtn.vue'
-import BaseDropdown from '../components/Base/BaseDropdown.vue'
+import BaseBtn from '../components/base/BaseBtn.vue'
+import BaseDropdown from '../components/base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
-import BaseCombobox from '../components/Base/BaseCombobox.vue'
+import BaseCombobox from '../components/base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
