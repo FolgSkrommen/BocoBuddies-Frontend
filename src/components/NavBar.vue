@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { store } from '../store'
 import {
 	HomeIcon,
 	ChatIcon,
@@ -14,15 +15,17 @@ import {
 			<router-link to="/">
 				<HomeIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link to="/my-loans">
+
+			<router-link v-if="store.getters.loggedIn" to="/my-loans">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link to="/my-items">
+			<router-link v-if="store.getters.loggedIn" to="/my-items">
 				<PlusIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link to="/chats">
+			<router-link v-if="store.getters.loggedIn" to="/chats">
 				<ChatIcon class="w-8 h-8 text-white" />
 			</router-link>
+
 			<router-link to="/settings">
 				<UserIcon class="w-8 h-8 text-white" />
 			</router-link>
