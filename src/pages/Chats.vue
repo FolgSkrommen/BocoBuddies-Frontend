@@ -1,58 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const chats = ref([
-	{
-		chatName: 'Chat1',
-		chatId: 1,
-		lastMessage: {
-			message: 'Yes sir!',
-			date: new Date().toLocaleDateString(),
-			receive: true,
-		},
-		item: {
-			active: true,
-			name: 'Bil',
-		},
-		user: {
-			username: 'Adrian1',
-		},
-	},
-	{
-		chatName: 'Chat2',
-		chatId: 2,
-		lastMessage: {
-			message: 'Yes sir!',
-			date: new Date().toLocaleDateString(),
-			receive: true,
-		},
-		item: {
-			active: true,
-			name: 'Brannbil',
-		},
-		user: {
-			username: 'William123',
-		},
-	},
-	{
-		chatName: 'Chat3',
-		chatId: 3,
-		lastMessage: {
-			message: 'Yes sir!',
-			date: new Date().toLocaleDateString(),
-			receive: true,
-		},
-		item: {
-			active: true,
-			name: 'Truse',
-		},
-		user: {
-			username: 'Len123',
-		},
-	},
-])
+interface Chat {
+	chatId: number
+	itemId: number
+	chatName: string
+}
+
+const chats = ref<Array<Chat>>([])
+
+onMounted(() => {
+	axios
+		.get('/chat/getByUser')
+		.then(res => {
+			console.log(res.data)
+			chats.value = res.data
+		})
+		.catch(err => {
+			//TODO proper error
+			console.log(err)
+		})
+})
 
 import Card from '../components/Card.vue'
+import axios from 'axios'
+import { store, User } from '../store'
 </script>
 
 <template>
@@ -63,15 +35,14 @@ import Card from '../components/Card.vue'
 				<router-link :to="'/chat/' + chat.chatId">
 					<div class="grid grid-cols-3">
 						<div>
-							{{ chat.item.name }}
+							{{ chat.itemId }}
 						</div>
 						<div class="col-span-2">
 							<p>
 								{{ chat.chatName }}
 							</p>
 							<p>
-								{{ chat.lastMessage.message }} -
-								{{ chat.lastMessage.date }}
+								{{ chat.chatId }}
 							</p>
 						</div>
 					</div>
