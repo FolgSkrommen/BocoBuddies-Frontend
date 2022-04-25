@@ -1,8 +1,8 @@
 <script setup lang="ts">
 //Components
-import BaseInput from '../components/Base/BaseInput.vue'
-import BaseButton from '../components/Base/BaseBtn.vue'
-import BaseDropdown from '../components/Base/BaseDropdown.vue'
+import BaseInput from '../components/base/BaseInput.vue'
+import BaseButton from '../components/base/BaseBtn.vue'
+import BaseDropdown from '../components/base/BaseDropdown.vue'
 
 import { store } from '../store'
 import axios from 'axios'

@@ -10,6 +10,9 @@ import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 
 import { WebSocket } from 'vite'
+import router from '../router'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const messages = ref([
 	{
@@ -35,10 +38,12 @@ enum Type {
 }
 
 interface Message {
+	senderId: string
 	sender: string
-	receiver: number
+	recipientId: string
+	chatId: string
 	content: string
-	type: String
+	type: string
 }
 
 //WEBSOCKET
@@ -52,20 +57,20 @@ function connect() {
 	console.log('Stomped over sock')
 	stompClient.value.connect({}, onConnected, onError)
 }
-
+let currentUserId = '1'
+let groupId = route.params.id
+let sessionId = ''
+let url: string = ''
 function onConnected() {
 	// Subscribe to the Public Topic
-	if (stompClient.value === undefined) {
-		return
-	}
-	console.log('Got to on connected')
-	stompClient.value.subscribe('/topic/public', onMessageReceived)
-	console.log('Subscribed to public')
-	console.log(JSON.stringify({ sender: 'Hello' }))
-	// Tell your username to the server
-	stompClient.value.send(
+	console.log(stompClient.value?.ws._transport.url)
+	stompClient.value?.send(
 		'/app/chat.addUser',
-		JSON.stringify({ sender: 'Hello' })
+		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
+	)
+	stompClient.value?.subscribe(
+		'/chat/' + groupId + '/user/' + currentUserId,
+		onMessageReceived
 	)
 }
 
@@ -76,10 +81,12 @@ function onError() {
 function sendMessage(event: any) {
 	if (stompClient.value) {
 		let chatMessage: Message = {
-			receiver: 123,
+			senderId: '0',
+			recipientId: currentMessage.value,
 			sender: username.value,
 			content: currentMessage.value,
 			type: 'CHAT',
+			chatId: '1',
 		}
 		console.log(JSON.stringify(chatMessage))
 		stompClient.value.send(
@@ -97,6 +104,7 @@ function sendMessage(event: any) {
 }
 
 function onMessageReceived(payload: any) {
+	console.log('Received!!')
 	let message = JSON.parse(payload.body)
 	console.log(payload)
 	if (message.type === 'JOIN') {
@@ -113,7 +121,7 @@ function onMessageReceived(payload: any) {
 }
 
 onMounted(() => {
-	connect()
+	//connect()
 })
 
 function toggleLoan() {
@@ -146,6 +154,7 @@ function cancelLoanRequest() {
 }
 
 function onSubmit() {
+	currentUserId = currentMessage.value
 	connect()
 	//alert(currentMessage.value)
 	currentMessage.value = ''
@@ -193,7 +202,7 @@ const loanStatus = ref(undefined)
 			data-testid="message-container"
 		>
 		</MessageContainer>
-		<form v-on:submit.prevent="onSubmit">
+		<form v-on:submit.prevent="sendMessage">
 			<div class="grid grid-cols-6">
 				<div class="col-span-5">
 					<base-input
@@ -217,6 +226,9 @@ const loanStatus = ref(undefined)
 				v-if="loanStatus === undefined"
 				data-testid="rent-button"
 				>Lån</BaseBtn
+			>
+			<BaseBtn class="place-self-center m-4" @click="onSubmit"
+				>test</BaseBtn
 			>
 		</div>
 		<!-- Popup or modal for when requesting loan -->
