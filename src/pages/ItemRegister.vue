@@ -152,12 +152,13 @@ function submit() {
 
 			<select
 				v-for="(categories, index) in categoryChoices"
+				v-if="categoryChoices"
 				:key="index"
 				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-				@input="event => updateCategories(event.target.value, index)"
+				@input="event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)"
 			>
 				>
-				<option :key="null" :value="null">Velg</option>
+				<option :key="-1" :value="null">Velg</option>
 
 				<option
 					v-for="category in categories"

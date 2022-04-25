@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import BaseButton from '../components/base/BaseBtn.vue'
 import { computed } from 'vue'
 import axios from 'axios'
+import router from '../router'
 
 const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
@@ -38,6 +39,7 @@ async function submit() {
 		.dispatch('login', data)
 		.then(() => {
 			console.log('logged in')
+			router.push('/')
 		})
 		.catch(err => {
 			alert(err)
