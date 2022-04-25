@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
@@ -11,6 +11,64 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
+//Interfaces
+interface ItemListing {
+	id: number
+	ownerId: number
+	categoryId: number
+	active: boolean
+	name: string
+	price: number
+	priceUnit: string
+	showPhoneNumber: boolean
+	address: string
+	postalcode: string
+	description: string
+}
+interface Category {
+	id: number
+	name: string
+	superCategoryId: number
+}
+interface Alternative {
+	id: number
+	alt: string
+}
+
+//Variables
+let sortChosen = ref(0)
+let sortAlts: Array<Alternative> = [
+	{ id: 0, alt: 'Ingen sortering' },
+	{ id: 1, alt: 'Pris lav-høy' },
+	{ id: 2, alt: 'Pris høy-lav' },
+	{ id: 3, alt: 'Nærmest' },
+	{ id: 4, alt: 'Nyeste først' },
+	{ id: 5, alt: 'Eldste først' },
+]
+
+let searchWord = ref<string>('')
+let tagAlts = ref<Array<Category>>([])
+let chosenTags = ref<Array<Category>>([])
+let items = ref<Array<ItemListing>>([])
+
+let currentPage = ref(0)
+
+//Mounted
+onMounted(() => {
+	getMainCategories()
+})
+
+//Functions
+function getMainCategories() {
+	axios
+		.get('/category/main')
+		.then(response => {
+			tagAlts.value = response.data
+		})
+		.catch(error => {
+			console.log(error)
+		})
+}
 function search() {
 	if (searchWord.value.trim()) {
 		console.log('Searching for items.... ' + searchWord.value)
@@ -65,17 +123,37 @@ function search() {
 }
 function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
-	tagAlts.value.forEach((value, index) => {
-		if (value.id == tag.id) tagAlts.value.splice(index, 1)
-	})
+	axios
+		.get('category/sub?categoryId=' + tag.id)
+		.then(response => {
+			tagAlts.value = response.data
+		})
+		.catch(error => {
+			console.log(error)
+		})
 	//TODO get all subcategories and put them in tagAlts, also update items accordingly instead of what is done now
 	//searchBasedOnCategories(chosenTags.value)
 }
 function categoryRemoved(tag: Category) {
-	tagAlts.value.push(tag)
 	chosenTags.value.forEach((value, index) => {
-		if (value.id == tag.id) chosenTags.value.splice(index, 1)
+		if (value.id == tag.id)
+			chosenTags.value.splice(index, chosenTags.value.length - index)
 	})
+	if (chosenTags.value.length < 1) {
+		getMainCategories()
+		return
+	}
+	axios
+		.get(
+			'category/sub?categoryId=' +
+				chosenTags.value[chosenTags.value.length - 1].id
+		)
+		.then(response => {
+			tagAlts.value = response.data
+		})
+		.catch(error => {
+			console.log(error)
+		})
 	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
 	//searchBasedOnCategories(chosenTags.value)
 }
@@ -117,54 +195,6 @@ function loadMoreItems() {
 		})
 	}
 }
-interface ItemListing {
-	id: number
-	ownerId: number
-	categoryId: number
-	active: boolean
-	name: string
-	price: number
-	priceUnit: string
-	showPhoneNumber: boolean
-	address: string
-	postalcode: string
-	description: string
-}
-interface Category {
-	id: number
-	superCategoryId: number
-	name: string
-}
-interface Alternative {
-	id: number
-	alt: string
-}
-
-let sortChosen = ref(0)
-let sortAlts: Array<Alternative> = [
-	{ id: 0, alt: 'Ingen sortering' },
-	{ id: 1, alt: 'Pris lav-høy' },
-	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Nærmest' },
-	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Eldste først' },
-]
-
-let searchWord = ref<string>('')
-let tagAlts = ref<Array<Category>>([
-	{ id: 1, superCategoryId: 0, name: 'some' },
-	{ id: 2, superCategoryId: 0, name: 'dummy' },
-	{ id: 3, superCategoryId: 0, name: 'values' },
-	{ id: 6, superCategoryId: 0, name: 'values' },
-	{ id: 7, superCategoryId: 0, name: 'values' },
-	{ id: 8, superCategoryId: 0, name: 'values' },
-])
-let chosenTags = ref<Array<Category>>([
-	{ id: 4, superCategoryId: 0, name: 'hola' },
-])
-let items = ref<Array<ItemListing>>([])
-
-let currentPage = ref(0)
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {
