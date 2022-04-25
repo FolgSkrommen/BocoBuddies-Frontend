@@ -6,7 +6,7 @@ import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseModal from '../components/base/BaseModal.vue'
-import SockJS from 'sockjs-client'
+import SockJS from 'sockjs-client/dist/sockjs.js'
 import Stomp, { Client } from 'webstomp-client'
 
 import { WebSocket } from 'vite'
