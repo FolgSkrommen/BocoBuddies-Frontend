@@ -16,14 +16,12 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<label
-			class="text-dark-gray text-xl p-2 text-left"
-			data-testid="label"
-			>{{ label }}</label
-		>
+		<label class="text-slate-500 text-left" data-testid="label">{{
+			label
+		}}</label>
 		<input
-			class="bg-gray-500 rounded-xl p-3 text-xl shadow-lg"
-			:class="disabled ? 'bg-gray-300' : ''"
+			class="bg-slate-100 rounded-xl p-3 shadow-lg"
+			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
 			@input="updateValue"
