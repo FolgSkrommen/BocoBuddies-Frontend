@@ -2,15 +2,13 @@
 //Components
 import BaseInput from '../components/Base/BaseInput.vue'
 import BaseButton from '../components/Base/BaseBtn.vue'
-import BaseDropdown from '../components/Base/BaseDropdown.vue'
+import ImageCarousel from '../components/ImageCarousel.vue'
 
-import { store } from '../store'
 import axios from 'axios'
 
-import { computed, onMounted, Ref, ref } from 'vue'
+import { onMounted, Ref, ref } from 'vue'
 
 //Form validation
-// /*
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 
@@ -18,7 +16,6 @@ const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
 	description: yup.string().required('Fornavn er påkrevd'),
 	price: yup.string().required('Etternavn er påkrevd'),
-	category: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
 })
@@ -28,15 +25,11 @@ const { errors } = useForm({
 let { value: title } = useField('title')
 let { value: description } = useField('description')
 let { value: price } = useField('price')
-let { value: category } = useField('category')
 let { value: address } = useField('address')
 let { value: postalcode } = useField('postalcode')
 let { value: phonenumber } = useField('phonenumber')
 
-function submit() {}
-
 /*  Categories*/
-
 interface Category {
 	name: String
 	id: number
@@ -50,8 +43,11 @@ onMounted(() => {
 	})
 })
 
-function update(categoryId: number, index: number) {
+let currentCategory: number = -1
+
+function updateCategories(categoryId: number, index: number) {
 	categoryChoices.value = categoryChoices.value.slice(0, index + 1)
+	currentCategory = categoryId
 	axios
 		.get('/category/sub', {
 			params: {
@@ -64,38 +60,77 @@ function update(categoryId: number, index: number) {
 			}
 		})
 }
+
+/* Images*/
+let imageList: Ref<string[]> = ref([])
+function uploadImage(input: any) {
+	let count = input.files.length
+	let index = 0
+
+	if (input.files) {
+		while (count--) {
+			imageList.value.push(URL.createObjectURL(input.files[index]))
+			index++
+		}
+	}
+}
+
+interface Item {
+	categoryId: string
+	title: string
+	description: string
+	price: number
+	priceUnit: string
+	showPhonenumber: boolean
+	address: string
+	postalcode: number
+}
+
+function submit() {
+	let item: Item = {
+		categoryId: currentCategory.toString(),
+		title: title.value,
+	}
+
+	axios.post('/item/register')
+}
 </script>
 
 <template>
-	<div class="text-center">
-		<h1 class="font-bold text-4xl">Ny gjenstand</h1>
+	<div class="">
+		<h1 class="font-bold text-4xl w-full">Ny gjenstand</h1>
 
 		<form @submit.prevent="submit()">
 			<BaseInput
 				v-model.lazy="title"
-				label="Tittel"
+				label="Tittel *"
 				:error="errors.title"
 			/>
 			<BaseInput
 				v-model.lazy="description"
-				label="Beskrivelse"
+				label="Beskrivelse *"
 				:error="errors.description"
 			/>
 
 			<BaseInput
 				v-model.lazy="price"
-				label="Pris"
+				label="Pris *"
 				:error="errors.price"
 			/>
 
-			<h2>Kategorier</h2>
+			<label class="text-dark-gray text-xl p-2 my-3" data-testid="label"
+				>Kategorier</label
+			>
+
 			<select
 				v-for="(categories, index) in categoryChoices"
 				:key="index"
-				class="border-2 border-black rounded bg-gray-300 items-center"
-				@input="event => update(event.target.value, index)"
+				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				@input="event => updateCategories(event.target.value, index)"
 			>
 				>
+				<option :key="null" :value="null">Velg</option>
+
 				<option
 					v-for="category in categories"
 					:key="category.id"
@@ -105,14 +140,32 @@ function update(categoryId: number, index: number) {
 				</option>
 			</select>
 
+			<label class="text-dark-gray text-xl p-2 my-3" data-testid="label"
+				>Bilder</label
+			>
+
+			<input
+				type="file"
+				accept="image/jpeg"
+				@input="event => uploadImage(event.target)"
+				multiple
+			/>
+
+			<ImageCarousel
+				v-if="imageList.length > 0"
+				:images="imageList"
+				class="h-52"
+			/>
+
 			<BaseInput
 				v-model="address"
-				label="Bilder"
+				label="Adresse"
 				:error="errors.address"
 			/>
+
 			<BaseInput
 				v-model="postalcode"
-				label="Adresse"
+				label="Postnummer *"
 				:error="errors.postalcode"
 			/>
 

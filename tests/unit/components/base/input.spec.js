@@ -23,7 +23,7 @@ describe('BaseModal', () => {
 			const input = wrapper.find('[data-testid="input"]')
 
 			expect(wrapper.props().modelValue).toBe('Test text')
-			expect(input.exists())
+			expect(input.exists()).toBe(true)
 			expect(input.element.value).toBe('Test text')
 
 			inputText = 'New test text'
