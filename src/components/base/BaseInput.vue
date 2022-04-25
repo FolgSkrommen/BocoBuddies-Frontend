@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BaseLabel from './BaseLabel.vue'
 const props = defineProps({
 	modelValue: [String, Number],
 	label: String,
@@ -16,11 +17,10 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<label class="text-slate-500 text-left" data-testid="label">{{
-			label
-		}}</label>
+		<BaseLabel :model-value="label" />
+
 		<input
-			class="bg-slate-100 rounded-xl p-3 shadow-lg"
+			class="bg-gray-500 rounded-xl p-3 shadow-lg"
 			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
