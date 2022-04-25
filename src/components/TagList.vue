@@ -13,16 +13,18 @@ const emit = defineEmits(['remove-tag-event', 'add-tag-event'])
 		<div
 			v-for="tag in props.modelValue"
 			:key="tag.id"
-			class="bg-blue text-white p-1 rounded-xl flex gap-1 items-center h-max"
+			class="bg-blue text-white p-1 px-2 flex gap-1 rounded-xl"
 		>
 			<XCircleIcon
 				v-if="props.removable"
 				@click="$emit('remove-tag-event', tag)"
-				class="h-6 w-6"
+				class="h-6 w-6 place-self-center"
 			></XCircleIcon>
-			<span @click="$emit('add-tag-event', tag)" class="text-lg">{{
-				tag.name
-			}}</span>
+			<span
+				@click="$emit('add-tag-event', tag)"
+				class="text-lg truncate"
+				>{{ tag.name }}</span
+			>
 		</div>
 	</div>
 </template>

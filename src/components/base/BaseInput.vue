@@ -16,14 +16,12 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<label
-			class="text-dark-gray text-xl p-2 text-left"
-			data-testid="label"
-			>{{ label }}</label
-		>
+		<label class="text-slate-500 text-left" data-testid="label">{{
+			label
+		}}</label>
 		<input
-			class="bg-gray-400 rounded-xl p-3 text-xl shadow-lg"
-			:class="disabled ? 'bg-gray-300' : ''"
+			class="bg-slate-100 rounded-xl p-3 shadow-lg"
+			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
 			@input="updateValue"
@@ -31,6 +29,6 @@ const updateValue = (event: Event) => {
 			data-testid="input"
 		/>
 
-		<p class="text-red text-xs">{{ error }}</p>
+		<p class="text-red text-xs w-full text-center">{{ error }}</p>
 	</div>
 </template>

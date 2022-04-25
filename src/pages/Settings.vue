@@ -30,7 +30,7 @@ function deleteUser() {
 </script>
 
 <template>
-	<div v-if="store.state.user" class="grid gap-4">
+	<div v-if="store.getters.loggedIn" class="grid gap-4">
 		<h1 class="text-xl font-bold">Innstillinger</h1>
 		<div class="grid">
 			<img
