@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import BaseModal from './base/BaseModal.vue'
+import BaseBtn from './base/BaseBtn.vue'
+
 interface Props {
 	modelValue: boolean
 }
@@ -10,14 +13,11 @@ const cancel = () => {
 }
 
 const { modelValue } = defineProps<Props>()
-
-import BaseModal from './base/BaseModal.vue'
-import BaseBtn from './base/BaseBtn.vue'
 </script>
 
 <template>
 	<div>
-		<BaseModal title="Title">
+		<BaseModal :modelValue="modelValue" title="Title">
 			<template v-slot:header> Vil du logge inn? </template>
 			<template v-slot:body> </template>
 			<template v-slot:footer>

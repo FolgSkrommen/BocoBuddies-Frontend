@@ -6,7 +6,7 @@ import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseModal from '../components/base/BaseModal.vue'
-import SockJS from 'sockjs-client/dist/sockjs'
+import SockJS from 'sockjs-client'
 import Stomp, { Client } from 'webstomp-client'
 
 import { WebSocket } from 'vite'
@@ -63,20 +63,22 @@ let groupId = route.params.id
 
 function onConnected() {
 	stompClient.value?.send(
-		'/app/chat.addUser',
+		'/app/chat/addUser',
 		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
 	)
+	console.log('got here')
 	stompClient.value?.subscribe('/chat/' + groupId, onMessageReceived)
 }
 
-function onError() {
+function onError(err: any) {
 	console.log('Could not connect to Websocket server')
+	console.log(err)
 }
 
 function sendMessage(event: any) {
 	if (stompClient.value) {
 		let chatMessage: MessageDTO = {
-			senderId: '',
+			senderId: chatData.value?.userId,
 			message: currentMessage.value,
 			type: 'CHAT',
 			date: new Date().toDateString(),
@@ -86,7 +88,7 @@ function sendMessage(event: any) {
 		console.log(JSON.stringify(chatMessage))
 
 		stompClient.value.send(
-			'/app/chat.sendMessage',
+			'/app/chat/sendMessage',
 			JSON.stringify(chatMessage)
 		)
 
