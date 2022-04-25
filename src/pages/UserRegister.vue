@@ -6,6 +6,7 @@ import * as yup from 'yup'
 import axios, { AxiosError } from 'axios'
 import BaseButton from '../components/base/BaseBtn.vue'
 import { ref, computed } from 'vue'
+import router from '../router'
 
 const schema = yup.object({
 	username: yup.string().required('Brukernavn er påkrevd'),
@@ -43,8 +44,8 @@ interface UserRegisterData {
 	email: string
 	password: string
 	address: string
-	postalcode: string
-	phonenumber: string
+	postalCode: string
+	phoneNumber: string
 	pictureUrl?: string
 }
 
@@ -56,13 +57,14 @@ async function submit() {
 		email: email.value,
 		password: password.value,
 		address: address.value,
-		postalcode: postalcode.value,
-		phonenumber: phonenumber.value,
+		postalCode: postalcode.value,
+		phoneNumber: phonenumber.value,
 	}
 	await axios
 		.post('/user/register', data)
 		.then(response => {
 			console.log(response)
+			router.push('/login')
 		})
 		.catch(error => {
 			console.log(error)
@@ -91,9 +93,13 @@ const notValid = computed(
 
 <template>
 	<div class="text-center">
-		<h1 class="font-bold text-4xl">Registrer deg</h1>
+		<h1 class="font-bold text-4xl my-8">Registrer deg</h1>
 
-		<form data-testid="register-form" @submit.prevent="submit()">
+		<form
+			class="grid gap-y-8"
+			data-testid="register-form"
+			@submit.prevent="submit()"
+		>
 			<BaseInput
 				v-model.lazy="username"
 				label="Brukernavn"
@@ -154,7 +160,7 @@ const notValid = computed(
 			/>
 
 			<BaseButton
-				class="m-4"
+				class="m-4 place-self-center"
 				type="submit"
 				:disabled="notValid"
 				data-testid="submit-button"

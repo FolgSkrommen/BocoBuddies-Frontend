@@ -8,6 +8,6 @@ import { PlusIcon } from '@heroicons/vue/solid'
 <template>
 	<div>
 		<h1>Mine Gjenstander</h1>
-		<FloatingBtn to="/item-register" />
+		<FloatingBtn to="/item/register" />
 	</div>
 </template>
