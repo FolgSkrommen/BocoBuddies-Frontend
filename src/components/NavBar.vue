@@ -9,7 +9,7 @@ import {
 </script>
 
 <template>
-	<nav class="bg-slate-900 w-full fixed bottom-0">
+	<nav class="bg-slate-900 w-full fixed bottom-0 z-50">
 		<div class="flex justify-between px-4 py-2 container mx-auto">
 			<router-link to="/">
 				<HomeIcon class="w-8 h-8 text-white" />
