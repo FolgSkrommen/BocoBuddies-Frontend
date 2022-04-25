@@ -5,6 +5,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import { ref } from 'vue'
 import router from '../router'
+import { UserIcon } from '@heroicons/vue/solid'
 
 const newEmail = ref('')
 const newPassword = ref('')
@@ -31,12 +32,15 @@ function deleteUser() {
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
 		<h1 class="text-xl font-bold">Innstillinger</h1>
-		<div class="grid">
-			<img
-				class="rounded-full"
+		<div class="grid gap-1">
+			<!--
+				<img
+				class="rounded-full min-w-1/2 min-h-1/2"
 				:src="store.state.user.pictureUrl"
 				:alt="store.state.user.email"
 			/>
+			-->
+
 			<div class="flex gap-2 text-lg font-bold">
 				<p>{{ store.state.user.firstName }}</p>
 				<p>{{ store.state.user.lastName }}</p>
