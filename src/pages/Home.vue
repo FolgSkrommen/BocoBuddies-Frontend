@@ -72,6 +72,13 @@ function search() {
 		console.log('Searching for items.... ' + searchWord.value)
 		let sortChosenString: string
 
+		/*
+  { id: 0, alt: 'Ingen sortering' },
+	{ id: 1, alt: 'Pris lav-høy' },
+	{ id: 2, alt: 'Pris høy-lav' },
+	{ id: 3, alt: 'Nærmest' },
+	{ id: 4, alt: 'Nyeste først' },
+	{ id: 5, alt: 'Eldste først' },*/
 		switch (sortChosen.value) {
 			case 0: {
 				sortChosenString = 'none'
@@ -94,22 +101,34 @@ function search() {
 				break
 			}
 			case 5: {
-				sortChosenString = 'oldest'
+				sortChosenString = 'none'
 				break
 			}
 			default: {
 				sortChosenString = 'none'
 			}
 		}
-		let chosenTagsIds: Array<number> //TODO gather all chosenTagsIds in here
-		/*axios.get("/search/"+searchWord, {params: {categories: chosenTagsIds, sort: sortChosenString}})
-        .then(response => {
-          items.value = response.data
-        })
-        .catch(error => {
-          //TODO error handling
-          console.log(error.message)
-        })*/
+		let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
+		chosenTags.value.forEach(tag => {
+			chosenTagsIds.push(tag.id)
+		})
+		axios
+			.get('/search/' + searchWord, {
+				params: {
+					categories: chosenTagsIds,
+					sort: sortChosenString,
+					amount: 20,
+					offset: currentPage,
+				},
+			})
+			.then(response => {
+				items.value = response.data
+				console.log(items.value)
+			})
+			.catch(error => {
+				//TODO error handling
+				console.log(error.message)
+			})
 	}
 }
 function categoryChosen(tag: Category) {
@@ -159,30 +178,21 @@ function searchBasedOnCategories(categories: Array<Category>) {
 			console.log(error)
 		})
 }
-function getAllSuperTags() {
-	axios.get('/url-to-get-all-super-tags').then(response => {
-		tagAlts = response.data
-	})
-}
-function gotClicked() {
-	console.log('Clicked')
-}
+
 function loadMoreItems() {
 	console.log('Getting next items...')
 	currentPage.value++
 	for (let i = 0; i < 10; i++) {
 		items.value.push({
 			id: 1,
-			ownerId: 1,
-			categoryId: 1,
-			active: true,
-			name: 'asda',
+			image: 'image',
+			name: 'Kul ting',
 			price: 100,
-			priceUnit: '10/time',
-			showPhoneNumber: true,
-			address: 'her',
-			postalcode: '3440',
-			description: 'kul',
+			availableFrom: 'I dag',
+			availableTo: 'I morgen',
+			priceUnit: 'Dag',
+			address: 'Her',
+			postalCode: '3440',
 		})
 	}
 }
@@ -201,6 +211,7 @@ observer.observe(items[items.length-1])*/
 <template>
 	<div>
 		<h1>Hjem</h1>
+		{{ currentPage }}
 	</div>
 
 	<div class="flex">
@@ -234,6 +245,34 @@ observer.observe(items[items.length-1])*/
 		<div class="grid gap-4">
 			<div v-for="i in items" data-testid="item-cards">
 				<Card>{{ i.name }}</Card>
+			</div>
+
+			<div class="grid gap-4">
+				<router-link
+					class="bg-slate-100 rounded-lg shadow-lg"
+					v-for="item in items"
+					:to="`/item/${item.id}`"
+				>
+					<div class="flex gap-2">
+						<img
+							class="w-32 rounded-l-lg"
+							:src="item.image"
+							:alt="item.name"
+						/>
+						<div class="p-2 grid">
+							<p class="font-bold text-lg">
+								{{ item.name }}
+							</p>
+							<div>
+								<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
+							</div>
+							<p class="text-slate-500">
+								{{ item.availableFrom }} -
+								{{ item.availableTo }}
+							</p>
+						</div>
+					</div>
+				</router-link>
 			</div>
 		</div>
 		<div class="flex justify-center my-10">
