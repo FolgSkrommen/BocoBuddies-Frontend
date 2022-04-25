@@ -6,6 +6,7 @@ import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
+import qs from 'qs'
 import BaseCombobox from '../components/base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
@@ -68,71 +69,85 @@ function getMainCategories() {
 		})
 }
 function search() {
-	if (searchWord.value.trim()) {
-		console.log('Searching for items.... ' + searchWord.value)
-		let sortChosenString: string
-
-		/*
+	console.log('Searching for items.... ' + searchWord.value)
+	let sortChosenString: string
+	/*
   { id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },*/
-		switch (sortChosen.value) {
-			case 0: {
-				sortChosenString = 'none'
-				break
-			}
-			case 1: {
-				sortChosenString = 'price-ascending'
-				break
-			}
-			case 2: {
-				sortChosenString = 'price-descending'
-				break
-			}
-			case 3: {
-				sortChosenString = 'closest'
-				break
-			}
-			case 4: {
-				sortChosenString = 'newest'
-				break
-			}
-			case 5: {
-				sortChosenString = 'none'
-				break
-			}
-			default: {
-				sortChosenString = 'none'
-			}
+	switch (sortChosen.value) {
+		case 0: {
+			sortChosenString = 'none'
+			break
 		}
-		let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
-		chosenTags.value.forEach(tag => {
-			chosenTagsIds.push(tag.id)
-		})
-		axios
-			.get('/search/' + searchWord, {
-				params: {
-					categories: chosenTagsIds,
-					sort: sortChosenString,
-					amount: 20,
-					offset: currentPage,
-				},
-			})
-			.then(response => {
-				items.value = response.data
-				console.log(items.value)
-			})
-			.catch(error => {
-				//TODO error handling
-				console.log(error.message)
-			})
+		case 1: {
+			sortChosenString = 'price-ascending'
+			break
+		}
+		case 2: {
+			sortChosenString = 'price-descending'
+			break
+		}
+		case 3: {
+			sortChosenString = 'closest'
+			break
+		}
+		case 4: {
+			sortChosenString = 'newest'
+			break
+		}
+		case 5: {
+			sortChosenString = 'none'
+			break
+		}
+		default: {
+			sortChosenString = 'none'
+			break
+		}
 	}
+	let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
+	chosenTags.value.forEach(tag => {
+		chosenTagsIds.push(tag.id)
+	})
+
+	axios
+		.get('/item/search/' + searchWord.value.trim(), {
+			params: {
+				categories: chosenTagsIds,
+				sort: sortChosenString,
+				amount: 20,
+				offset: currentPage.value,
+			},
+			paramsSerializer: params => {
+				return qs.stringify(params, { arrayFormat: 'repeat' })
+			},
+		})
+		.then(response => {
+			items.value.push(response.data)
+			console.log(items.value)
+		})
+		.catch(error => {
+			//TODO error handling, tell user something went wrong
+			items.value = []
+			console.log(error.message)
+		})
+}
+function buttonOrEnterSearch() {
+	if (searchWord.value.trim()) {
+		currentPage.value = 0
+		search()
+	}
+}
+function categorySearch() {
+	currentPage.value = 0
+	search()
 }
 function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
+	categorySearch()
 	axios
 		.get('category/sub?categoryId=' + tag.id)
 		.then(response => {
@@ -149,6 +164,7 @@ function categoryRemoved(tag: Category) {
 		if (value.id == tag.id)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
 	})
+	categorySearch()
 	if (chosenTags.value.length < 1) {
 		getMainCategories()
 		return
@@ -167,21 +183,11 @@ function categoryRemoved(tag: Category) {
 	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
 	//searchBasedOnCategories(chosenTags.value)
 }
-function searchBasedOnCategories(categories: Array<Category>) {
-	console.log('Now searching based on categories...')
-	axios
-		.get('/items-by-categories', { params: { categories: categories } })
-		.then(response => {
-			items.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
-}
 
 function loadMoreItems() {
 	console.log('Getting next items...')
 	currentPage.value++
+	search()
 	for (let i = 0; i < 10; i++) {
 		items.value.push({
 			id: 1,
@@ -217,11 +223,13 @@ observer.observe(items[items.length-1])*/
 	<div class="flex">
 		<!--Text search input component-->
 		<BaseInput
-			@keyup.enter="search"
+			@keyup.enter="buttonOrEnterSearch"
 			v-model="searchWord"
 			data-testid="search-field"
 		></BaseInput>
-		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
+		<BaseBtn @click="buttonOrEnterSearch" data-testid="search-button"
+			>Søk</BaseBtn
+		>
 	</div>
 
 	<div class="py-10">
@@ -281,13 +289,13 @@ observer.observe(items[items.length-1])*/
 			>
 		</div>
 	</div>
-
+	{{ sortChosen }}
 	<div class="flex items-center justify-center h-0 h-full">
 		<!--Sort dropdown-->
 		<BaseDropdown
 			:alternatives="sortAlts"
-			v-model="sortChosen"
-			class="bottom-5 fixed"
+			v-model.number="sortChosen"
+			class="bottom-12 fixed"
 			data-testid="sort-dropdown"
 		></BaseDropdown>
 	</div>
