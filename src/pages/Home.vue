@@ -7,7 +7,6 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
 import qs from 'qs'
-import BaseCombobox from '../components/base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
