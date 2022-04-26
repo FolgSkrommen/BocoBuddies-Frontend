@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
@@ -14,7 +14,7 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 //Interfaces
 interface Category {
-	id: number
+	categoryId: number
 	name: string
 	superCategoryId: number
 }
@@ -36,7 +36,7 @@ interface Item {
 
 //Variables
 let sortChosen = ref(0)
-let sortAlts: Array<Alternative> = [
+let sortAlts: Alternative[] = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
@@ -57,7 +57,23 @@ onMounted(() => {
 	getMainCategories()
 })
 
+//Computed
+const searchHits = computed<string>(() => `${items.value.length} resultater`)
+
 //Functions
+function isAnItem(obj: any): obj is Item {
+	return (
+		'id' in obj &&
+		'image' in obj &&
+		'name' in obj &&
+		'price' in obj &&
+		'availableFrom' in obj &&
+		'availableTo' in obj &&
+		'priceUnit' in obj &&
+		'address' in obj &&
+		'postalCode' in obj
+	)
+}
 function getMainCategories() {
 	axios
 		.get('/category/main')
@@ -110,7 +126,7 @@ function search() {
 	}
 	let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
 	chosenTags.value.forEach(tag => {
-		chosenTagsIds.push(tag.id)
+		chosenTagsIds.push(tag.categoryId)
 	})
 
 	axios
@@ -126,7 +142,9 @@ function search() {
 			},
 		})
 		.then(response => {
-			items.value.push(response.data)
+			items = response.data
+			if (Array.isArray(items) && items.length > 0 && isAnItem(items[0]))
+				items.value.push(response.data)
 			console.log(items.value)
 		})
 		.catch(error => {
@@ -149,7 +167,7 @@ function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
 	categorySearch()
 	axios
-		.get('category/sub?categoryId=' + tag.id)
+		.get('category/sub?categoryId=' + tag.categoryId)
 		.then(response => {
 			tagAlts.value = response.data
 		})
@@ -161,7 +179,7 @@ function categoryChosen(tag: Category) {
 }
 function categoryRemoved(tag: Category) {
 	chosenTags.value.forEach((value, index) => {
-		if (value.id == tag.id)
+		if (value.categoryId == tag.categoryId)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
 	})
 	categorySearch()
@@ -172,7 +190,7 @@ function categoryRemoved(tag: Category) {
 	axios
 		.get(
 			'category/sub?categoryId=' +
-				chosenTags.value[chosenTags.value.length - 1].id
+				chosenTags.value[chosenTags.value.length - 1].categoryId
 		)
 		.then(response => {
 			tagAlts.value = response.data
@@ -185,21 +203,11 @@ function categoryRemoved(tag: Category) {
 }
 
 function loadMoreItems() {
-	console.log('Getting next items...')
-	currentPage.value++
-	search()
-	for (let i = 0; i < 10; i++) {
-		items.value.push({
-			id: 1,
-			image: 'image',
-			name: 'Kul ting',
-			price: 100,
-			availableFrom: 'I dag',
-			availableTo: 'I morgen',
-			priceUnit: 'Dag',
-			address: 'Her',
-			postalCode: '3440',
-		})
+	if (items.value.length > 0) {
+		//Not allowed to load more items if no items
+		console.log('Getting next items...')
+		currentPage.value++
+		search()
 	}
 }
 
@@ -217,7 +225,6 @@ observer.observe(items[items.length-1])*/
 <template>
 	<div>
 		<h1>Hjem</h1>
-		{{ currentPage }}
 	</div>
 
 	<div class="flex">
@@ -240,6 +247,7 @@ observer.observe(items[items.length-1])*/
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
 			data-testid="categories-tag-chosen"
+			class="border-solid bg-gray-500 rounded"
 		></TagList>
 		<TagList
 			v-model="tagAlts"
@@ -250,6 +258,7 @@ observer.observe(items[items.length-1])*/
 
 	<div>
 		<!--List component-->
+		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4">
 			<div v-for="i in items" data-testid="item-cards">
 				<Card>{{ i.name }}</Card>
@@ -289,7 +298,7 @@ observer.observe(items[items.length-1])*/
 			>
 		</div>
 	</div>
-	{{ sortChosen }}
+
 	<div class="flex items-center justify-center h-full">
 		<!--Sort dropdown-->
 		<BaseDropdown
