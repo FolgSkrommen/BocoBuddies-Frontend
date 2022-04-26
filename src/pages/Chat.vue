@@ -44,11 +44,15 @@ interface Message {
 	messages: Array<MessageDTO>
 }
 
-interface sendMessage {}
+interface LoanRequest {
+	item: number | undefined
+	loaner: number | undefined
+	start: string | undefined
+	stop: string | undefined
+}
 
 //WEBSOCKET
 const stompClient = ref<Client>()
-let connected = ref<boolean>(false)
 let socket: any
 function connect() {
 	socket = new SockJS('http://localhost:8001/ws')
@@ -59,12 +63,14 @@ let currentUserId = '1'
 let groupId = route.params.id
 
 function onConnected() {
-	stompClient.value?.send(
-		'/app/chat/addUser',
-		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
+	stompClient.value?.subscribe(
+		'/chat/' + groupId + '/message',
+		onMessageReceived
 	)
-	console.log('got here')
-	stompClient.value?.subscribe('/chat/' + groupId, onMessageReceived)
+	stompClient.value?.subscribe(
+		'/chat/' + groupId + '/requestLoan',
+		onRequestReceived
+	)
 }
 
 function onError(err: any) {
@@ -94,32 +100,33 @@ function sendMessage(event: any) {
 	event.preventDefault()
 }
 
-function sendReceipt(event: any) {
+function sendLoanRequestWS() {
 	if (stompClient.value) {
-		let chatMessage: MessageDTO = {
-			senderId: '',
-			message: currentMessage.value,
-			type: 'REQUEST_LOAN',
-			date: new Date().toDateString(),
-			receive: false,
-			chatId: chat.value?.chatId.toString(),
+		if (chatData.value?.userId) {
+			let loanRequest: LoanRequest = {
+				item: chat.value?.itemId,
+				loaner: parseInt(chatData.value?.userId),
+				start:
+					dateAndTime.fromDate +
+					'T' +
+					dateAndTime.fromTime +
+					':00.000Z',
+				stop:
+					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+			}
+			stompClient.value.send(
+				'/app/chat/sendLoanRequest',
+				JSON.stringify(loanRequest)
+			)
 		}
-
-		console.log(JSON.stringify(chatMessage))
-
-		stompClient.value.send(
-			'/app/chat.sendMessage',
-			JSON.stringify(chatMessage)
-		)
-
-		//chatData.value?.messages.push(chatMessage)
-		currentMessage.value = ''
 	}
+}
+
+function onRequestReceived(event: any) {
 	event.preventDefault()
 }
 
 function onMessageReceived(payload: any) {
-	console.log('Received!!')
 	let message = JSON.parse(payload.body)
 	console.log(payload)
 	if (message.type === 'JOIN') {
@@ -165,6 +172,7 @@ onBeforeMount(async () => {
 			chatData.value?.messages.forEach(m => {
 				m.receive = m.senderId != chatData.value?.userId
 			})
+			chatData.value?.messages.reverse()
 		})
 		.catch(err => {
 			console.log(err)
@@ -188,6 +196,7 @@ function sendLoanRequest() {
 		console.log(dateAndTime)
 		//TODO add checks if from date is later than to etc
 		toggleLoan()
+		sendLoanRequestWS()
 	} else {
 		alert('Add exception handling')
 	}
@@ -203,12 +212,6 @@ function cancelLoanRequest() {
 	toggleLoan()
 }
 
-function onSubmit() {
-	currentUserId = currentMessage.value
-	connect()
-	//alert(currentMessage.value)
-	currentMessage.value = ''
-}
 interface DateAndTime {
 	fromDate: string
 	fromTime: string
