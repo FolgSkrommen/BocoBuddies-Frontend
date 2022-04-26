@@ -5,6 +5,8 @@ import Home from './pages/Home.vue'
 import Chat from './pages/Chat.vue'
 import Chats from './pages/Chats.vue'
 import Item from './pages/Item.vue'
+import MyItem from './pages/MyItem.vue'
+import MyLoan from './pages/MyLoan.vue'
 import ItemRegister from './pages/ItemRegister.vue'
 import MyItems from './pages/MyItems.vue'
 import MyLoans from './pages/MyLoans.vue'
@@ -40,6 +42,20 @@ const routes = [
 		component: Item,
 		meta: {
 			requiresAuth: false,
+		},
+	},
+	{
+		path: '/my-item/:id',
+		component: MyItem,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/my-loan/:id',
+		component: MyLoan,
+		meta: {
+			requiresAuth: true,
 		},
 	},
 	{
