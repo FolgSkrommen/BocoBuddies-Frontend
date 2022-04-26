@@ -9,7 +9,7 @@ interface Alternative {
 }
 let { modelValue, alternatives } = defineProps<Props>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'sort-clicked'])
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
@@ -28,6 +28,7 @@ const updateValue = (event: Event) => {
 				:value="element.id"
 				:key="element.id"
 				data-testid="dropdown-option"
+				@input="$emit('sort-clicked')"
 			>
 				{{ element.alt }}
 			</option>

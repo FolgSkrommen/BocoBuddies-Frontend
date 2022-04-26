@@ -7,7 +7,6 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import Card from '../components/Card.vue'
 import qs from 'qs'
-import BaseCombobox from '../components/base/BaseCombobox.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
@@ -50,15 +49,18 @@ let tagAlts = ref<Array<Category>>([])
 let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
-let currentPage = ref(0)
+let currentPage = ref<number>(0)
 
 //Mounted
 onMounted(() => {
 	getMainCategories()
+	search()
 })
 
 //Computed
-const searchHits = computed<string>(() => `${items.value.length} resultater`)
+const searchHits = computed<string>(() =>
+	items.value.length == 1 ? `1 resultat` : `${items.value.length} resultater`
+)
 
 //Functions
 function isAnItem(obj: any): obj is Item {
@@ -81,11 +83,10 @@ function getMainCategories() {
 			tagAlts.value = response.data
 		})
 		.catch(error => {
-			console.log(error)
+			//console.log(error)
 		})
 }
 function search() {
-	console.log('Searching for items.... ' + searchWord.value)
 	let sortChosenString: string
 	/*
   { id: 0, alt: 'Ingen sortering' },
@@ -124,7 +125,8 @@ function search() {
 			break
 		}
 	}
-	let chosenTagsIds: Array<number> = [] //TODO gather all chosenTagsIds in here
+
+	let chosenTagsIds: Array<number> = []
 	chosenTags.value.forEach(tag => {
 		chosenTagsIds.push(tag.categoryId)
 	})
@@ -132,7 +134,7 @@ function search() {
 	axios
 		.get('/item/search/' + searchWord.value.trim(), {
 			params: {
-				categories: chosenTagsIds,
+				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
 				amount: 20,
 				offset: currentPage.value,
@@ -142,10 +144,14 @@ function search() {
 			},
 		})
 		.then(response => {
-			items = response.data
-			if (Array.isArray(items) && items.length > 0 && isAnItem(items[0]))
-				items.value.push(response.data)
-			console.log(items.value)
+			let responseData: Item[] = response.data
+			if (
+				Array.isArray(responseData) &&
+				responseData.length > 0 &&
+				isAnItem(responseData[0])
+			)
+				items.value = items.value.concat(responseData)
+			console.log(responseData)
 		})
 		.catch(error => {
 			//TODO error handling, tell user something went wrong
@@ -153,26 +159,21 @@ function search() {
 			console.log(error.message)
 		})
 }
-function buttonOrEnterSearch() {
-	if (searchWord.value.trim()) {
-		currentPage.value = 0
-		search()
-	}
-}
-function categorySearch() {
+function searchAndResetItems() {
 	currentPage.value = 0
+	items.value = []
 	search()
 }
 function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
-	categorySearch()
+	searchAndResetItems()
 	axios
 		.get('category/sub?categoryId=' + tag.categoryId)
 		.then(response => {
 			tagAlts.value = response.data
 		})
 		.catch(error => {
-			console.log(error)
+			//console.log(error)
 		})
 	//TODO get all subcategories and put them in tagAlts, also update items accordingly instead of what is done now
 	//searchBasedOnCategories(chosenTags.value)
@@ -182,7 +183,7 @@ function categoryRemoved(tag: Category) {
 		if (value.categoryId == tag.categoryId)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
 	})
-	categorySearch()
+	searchAndResetItems()
 	if (chosenTags.value.length < 1) {
 		getMainCategories()
 		return
@@ -196,7 +197,7 @@ function categoryRemoved(tag: Category) {
 			tagAlts.value = response.data
 		})
 		.catch(error => {
-			console.log(error)
+			//console.log(error)
 		})
 	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
 	//searchBasedOnCategories(chosenTags.value)
@@ -205,10 +206,14 @@ function categoryRemoved(tag: Category) {
 function loadMoreItems() {
 	if (items.value.length > 0) {
 		//Not allowed to load more items if no items
-		console.log('Getting next items...')
+		//console.log('Getting next items...')
 		currentPage.value++
 		search()
 	}
+}
+
+function clicked() {
+	console.log('clicked baby!')
 }
 
 //Intersection observer for later if we have time to implement
@@ -230,11 +235,11 @@ observer.observe(items[items.length-1])*/
 	<div class="flex">
 		<!--Text search input component-->
 		<BaseInput
-			@keyup.enter="buttonOrEnterSearch"
+			@keyup.enter="searchAndResetItems"
 			v-model="searchWord"
 			data-testid="search-field"
 		></BaseInput>
-		<BaseBtn @click="buttonOrEnterSearch" data-testid="search-button"
+		<BaseBtn @click="searchAndResetItems" data-testid="search-button"
 			>Søk</BaseBtn
 		>
 	</div>
@@ -260,37 +265,31 @@ observer.observe(items[items.length-1])*/
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4">
-			<div v-for="i in items" data-testid="item-cards">
-				<Card>{{ i.name }}</Card>
-			</div>
-
-			<div class="grid gap-4">
-				<router-link
-					class="bg-slate-100 rounded-lg shadow-lg"
-					v-for="item in items"
-					:to="`/item/${item.id}`"
-				>
-					<div class="flex gap-2">
-						<img
-							class="w-32 rounded-l-lg"
-							:src="item.image"
-							:alt="item.name"
-						/>
-						<div class="p-2 grid">
-							<p class="font-bold text-lg">
-								{{ item.name }}
-							</p>
-							<div>
-								<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
-							</div>
-							<p class="text-slate-500">
-								{{ item.availableFrom }} -
-								{{ item.availableTo }}
-							</p>
+			<router-link
+				class="bg-slate-100 rounded-lg shadow-lg"
+				v-for="item in items"
+				:to="`/item/${item.id}`"
+			>
+				<div class="flex gap-2">
+					<img
+						class="w-32 rounded-l-lg"
+						:src="item.image"
+						:alt="item.name"
+					/>
+					<div class="p-2 grid">
+						<p class="font-bold text-lg">
+							{{ item.name }}
+						</p>
+						<div>
+							<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
 						</div>
+						<p class="text-slate-500">
+							{{ item.availableFrom }} -
+							{{ item.availableTo }}
+						</p>
 					</div>
-				</router-link>
-			</div>
+				</div>
+			</router-link>
 		</div>
 		<div class="flex justify-center my-10">
 			<BaseBtn @click="loadMoreItems" data-testid="load-more-items-button"

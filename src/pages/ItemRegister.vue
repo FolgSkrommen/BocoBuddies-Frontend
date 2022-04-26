@@ -49,7 +49,7 @@ const notValid = computed(
 /*  Categories*/
 interface Category {
 	name: String
-	id: number
+	categoryId: number
 	superCategoryId?: number
 }
 let categoryChoices: Ref<Array<Category[]>> = ref([])
@@ -162,8 +162,8 @@ function submit() {
 
 					<option
 						v-for="category in categories"
-						:key="category.id"
-						:value="category.id"
+						:key="category.categoryId"
+						:value="category.categoryId"
 					>
 						{{ category.name }}
 					</option>
