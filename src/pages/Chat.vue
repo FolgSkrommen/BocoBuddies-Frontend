@@ -6,6 +6,7 @@ import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseModal from '../components/base/BaseModal.vue'
+//@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 
@@ -31,12 +32,14 @@ enum Type {
 }
 
 interface MessageDTO {
-	senderId: string | undefined
+	senderId?: string
 	message: string
 	type: string
 	date: string
 	receive: boolean
-	chatId: string | undefined
+	chatId?: string
+	start?: string
+	stop?: string
 }
 
 interface Message {
@@ -59,17 +62,17 @@ function connect() {
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
-let currentUserId = '1'
+
 let groupId = route.params.id
 
 function onConnected() {
 	stompClient.value?.subscribe(
-		'/chat/' + groupId + '/message',
-		onMessageReceived
-	)
-	stompClient.value?.subscribe(
 		'/chat/' + groupId + '/requestLoan',
 		onRequestReceived
+	)
+	stompClient.value?.subscribe(
+		'/chat/' + groupId + '/message',
+		onMessageReceived
 	)
 }
 
@@ -102,10 +105,10 @@ function sendMessage(event: any) {
 
 function sendLoanRequestWS() {
 	if (stompClient.value) {
-		if (chatData.value?.userId) {
+		if (chat.value?.chatId) {
 			let loanRequest: LoanRequest = {
 				item: chat.value?.itemId,
-				loaner: parseInt(chatData.value?.userId),
+				loaner: chat.value?.chatId,
 				start:
 					dateAndTime.fromDate +
 					'T' +
@@ -122,8 +125,16 @@ function sendLoanRequestWS() {
 	}
 }
 
-function onRequestReceived(event: any) {
-	event.preventDefault()
+function onRequestReceived(payload: any) {
+	console.log(payload)
+	let msg: MessageDTO = {
+		senderId: undefined,
+		message: '',
+		type: '',
+		date: '',
+		receive: false,
+		chatId: undefined,
+	}
 }
 
 function onMessageReceived(payload: any) {
@@ -139,7 +150,7 @@ function onMessageReceived(payload: any) {
 		let msg: MessageDTO = {
 			senderId: message.senderId,
 			message: message.message,
-			type: '',
+			type: 'CHAT',
 			date: message.date,
 			receive: true,
 			chatId: chat.value?.chatId.toString(),
@@ -171,6 +182,7 @@ onBeforeMount(async () => {
 			chatData.value = res.data
 			chatData.value?.messages.forEach(m => {
 				m.receive = m.senderId != chatData.value?.userId
+				m.type = 'CHAT'
 			})
 			chatData.value?.messages.reverse()
 		})

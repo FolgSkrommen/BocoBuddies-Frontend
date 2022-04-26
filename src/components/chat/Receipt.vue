@@ -4,8 +4,7 @@ import { PropType, ref } from 'vue'
 import BaseBtn from '../base/BaseBtn.vue'
 
 interface IReceipt {
-	username: String
-	itemName: String
+	itemId: number
 	loanStart: String
 	loanStop: String
 	itemPrice: Number
