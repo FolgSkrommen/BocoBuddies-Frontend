@@ -15,9 +15,6 @@ build-deploy-job:
         - apk add --update npm
         - npm install
         - npm run build
-        - mkdir .public
-        - cp -r /builds/eivisha/to-do-list/dist/*
-        - mv .public public
         - echo "Compile complete."
 
 #lint-job:
