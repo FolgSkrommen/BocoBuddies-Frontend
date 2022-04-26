@@ -4,13 +4,16 @@ import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
 import { store, User } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
+import { DatePicker } from 'v-calendar'
+import 'v-calendar/dist/style.css'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import BaseModal from '../components/base/BaseModal.vue'
+
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import BasePopup from '../components/base/BasePopup.vue'
 const route = useRoute()
 
 interface Chat {
@@ -109,19 +112,14 @@ function sendMessage(event: any) {
  * When sending request via WS
  */
 function sendLoanRequestWS() {
-	if (stompClient.value) {
+	if (stompClient.value && range.value) {
 		if (chatData.value?.userId && chat.value?.chatId) {
 			let loanRequest: Loan = {
 				loanId: chat.value?.chatId,
 				item: chat.value?.itemId,
 				loaner: parseInt(chatData.value?.userId),
-				start:
-					dateAndTime.fromDate +
-					'T' +
-					dateAndTime.fromTime +
-					':00.000Z',
-				stop:
-					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+				start: range.value.start.toISOString(),
+				stop: range.value.end.toISOString(),
 			}
 			stompClient.value.send(
 				'/app/chat/sendLoanRequest',
@@ -131,13 +129,8 @@ function sendLoanRequestWS() {
 				type: 'REQUEST',
 				receive: false,
 				senderId: loanRequest.loaner.toString(),
-				start:
-					dateAndTime.fromDate +
-					'T' +
-					dateAndTime.fromTime +
-					':00.000Z',
-				stop:
-					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+				start: range.value.start.toISOString(),
+				stop: range.value.end.toISOString(),
 			}
 			chatData.value?.messages.push(loanRequestMessage)
 		}
@@ -276,36 +269,6 @@ onBeforeMount(async () => {
 	await connect()
 })
 
-function toggleLoan() {
-	showLoanModal.value = !showLoanModal.value
-}
-
-function sendLoanRequest() {
-	if (
-		dateAndTime.toDate !== '' &&
-		dateAndTime.fromDate !== '' &&
-		dateAndTime.toTime !== '' &&
-		dateAndTime.fromTime !== ''
-	) {
-		console.log(dateAndTime)
-		//TODO add checks if from date is later than to etc
-		toggleLoan()
-		sendLoanRequestWS()
-	} else {
-		alert('Add exception handling')
-	}
-}
-
-function cancelLoanRequest() {
-	dateAndTime = {
-		fromDate: '',
-		fromTime: '',
-		toDate: '',
-		toTime: '',
-	}
-	toggleLoan()
-}
-
 function handleLoanRequest() {
 	if (loanStatus.value) {
 		console.log('Loaned')
@@ -313,20 +276,6 @@ function handleLoanRequest() {
 	} else {
 		console.log('Not loaned true')
 	}
-}
-
-interface DateAndTime {
-	fromDate: string
-	fromTime: string
-	toDate: string
-	toTime: string
-}
-
-let dateAndTime: DateAndTime = {
-	fromDate: '',
-	fromTime: '',
-	toDate: '',
-	toTime: '',
 }
 
 //TODO add receiver to websocket
@@ -337,6 +286,20 @@ const currentMessage = ref<string>('')
 const loanStatus = ref(false)
 const chatData = ref<Message>()
 const chat = ref<Chat>()
+
+const showLoginModal = ref(false)
+
+interface Range {
+	start: Date
+	end: Date
+}
+const range = ref<Range>()
+
+function sendLoanRequest() {
+	if (!range.value) return
+	//TODO: add checks if from date is later than to etc
+	sendLoanRequestWS()
+}
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -365,9 +328,9 @@ const chat = ref<Chat>()
 			<div class="flex gap-2 my-4">
 				<BaseBtn
 					class="grow bg-green-600"
-					@click="toggleLoan"
 					v-if="loanStatus === false"
 					data-testid="rent-button"
+					@click="showLoginModal = true"
 					>Forespør</BaseBtn
 				>
 
@@ -389,37 +352,22 @@ const chat = ref<Chat>()
 		</form>
 	</div>
 
-	<!-- Popup or modal for when requesting loan -->
-	<BaseModal v-model="showLoanModal" title="Title" data-testid="loan-modal">
-		<template v-slot:header> Når vil du leie gjenstanden? </template>
-		<template v-slot:body>
-			<BaseInput
-				type="date"
-				label="Fra (dato)"
-				v-model="dateAndTime.fromDate"
-			></BaseInput>
-			<BaseInput
-				type="time"
-				label="Fra (tidspunkt)"
-				v-model="dateAndTime.fromTime"
-			></BaseInput>
-
-			<BaseInput
-				type="date"
-				label="Til"
-				v-model="dateAndTime.toDate"
-			></BaseInput>
-			<BaseInput
-				type="time"
-				label="Til (tidspunkt)"
-				v-model="dateAndTime.toTime"
-			></BaseInput>
-		</template>
-		<template v-slot:footer>
-			<div class="grid gap-4 grid-cols-2">
-				<BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
-				<BaseBtn @click="sendLoanRequest">Send</BaseBtn>
-			</div>
-		</template>
-	</BaseModal>
+	<BasePopup v-show="showLoginModal" @exit="showLoginModal = false">
+		<DatePicker
+			class="place-self-center"
+			v-model="range"
+			mode="dateTime"
+			is-range
+			locale="no"
+			is24hr
+		/>
+		<div class="flex justify-between">
+			<BaseBtn @click="showLoginModal = false" color="gray"
+				>Avbryt</BaseBtn
+			>
+			<BaseBtn @click="sendLoanRequest" :disabled="!range"
+				>Avtal lån</BaseBtn
+			>
+		</div>
+	</BasePopup>
 </template>

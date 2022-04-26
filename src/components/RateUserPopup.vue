@@ -52,9 +52,9 @@ function handleRate() {
 		</div>
 		<textarea class="p-2" v-model="comment" rows="4"></textarea>
 		<div class="flex justify-between">
-			<BaseBtn @click="emit('exit')" color="gray">Cancel</BaseBtn>
+			<BaseBtn @click="emit('exit')" color="gray">Avbryt</BaseBtn>
 			<BaseBtn @click="handleRate" :disabled="rating === -1"
-				>Rate</BaseBtn
+				>Ranger</BaseBtn
 			>
 		</div>
 	</BasePopup>

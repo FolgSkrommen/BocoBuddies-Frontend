@@ -101,6 +101,7 @@ const showRateUserPopup = ref(false)
 				is-range
 				:contenteditable="false"
 				color="red"
+				locale="no"
 			/>
 		</div>
 		<BaseBtn v-if="!loan.returned">Gå til chat</BaseBtn>
