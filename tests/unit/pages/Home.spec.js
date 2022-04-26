@@ -56,9 +56,11 @@ describe('Home', () => {
 				expect(wrapper.vm.items.length).toBe(0)
 			}),
 				it('does search if word is typed', async () => {
-					//const wrapper = shallowMount(Home)
-					//await wrapper.find('[data-testid="search-field"]').setValue('sko')
-					//expect(wrapper.vm.searchWord).toEqual('sko')
+					const wrapper = shallowMount(Home)
+					let searchString = 'sko'
+					wrapper.vm.searchWord = searchString
+
+					expect(wrapper.vm.searchWord).toEqual('sko')
 					//TODO implement test
 				})
 		})
