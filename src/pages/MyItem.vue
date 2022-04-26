@@ -88,7 +88,7 @@ const range = computed(() => ({
 				</p>
 			</div>
 			<DatePicker
-				class="place-self-center pointer-events-none"
+				class="place-self-center pointer-events-none -z-10"
 				v-model="range"
 				is-range
 				:contenteditable="false"
