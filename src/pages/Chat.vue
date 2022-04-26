@@ -47,7 +47,7 @@ interface Loan {
 	item: number
 	loaner: number
 	start: string
-	stop: string
+	end: string
 	active?: boolean
 	returned?: boolean
 	creationDate?: string
@@ -136,40 +136,42 @@ function sendMessage(event: any) {
  * When sending request via WS
  */
 async function sendLoanRequestWS() {
-	if (stompClient.value && range.value) {
-		if (chatData.value?.userId && chat.value?.chatId) {
-			let loanRequest: Loan = {
-				loanId: chat.value?.chatId,
-				item: chat.value?.itemId,
-				loaner: parseInt(chatData.value?.userId),
-				start: range.value.start.toISOString(),
-				stop: range.value.end.toISOString(),
-			}
-
-			await axios
-				.post('/loan', loanRequest)
-				.then(res => {
-					loanRequest = res.data
-					loan.value = res.data
-				})
-				.catch(err => {
-					alert(err)
-				})
-
-			stompClient.value.send(
-				'/app/chat/sendLoanRequest',
-				JSON.stringify(loanRequest)
-			)
-
-			let loanRequestMessage: MessageDTO = {
-				type: 'REQUEST',
-				receive: false,
-				senderId: loanRequest.loaner.toString(),
-				start: range.value.start.toISOString(),
-				stop: range.value.end.toISOString(),
-			}
-			chatData.value?.messages.push(loanRequestMessage)
+	if (chatData.value?.userId && chat.value?.chatId && range.value) {
+		let loanRequest: Loan = {
+			loanId: chat.value?.chatId,
+			item: chat.value?.itemId,
+			loaner: parseInt(chatData.value?.userId),
+			start: range.value.start.toISOString(),
+			end: range.value.end.toISOString(),
 		}
+
+		await axios
+			.post('/loan', loanRequest)
+			.then(res => {
+				loanRequest = res.data
+				loan.value = res.data
+				let test = loanRequest
+				if (stompClient.value && range.value) {
+					test.loaner = 6
+					stompClient.value.send(
+						'/app/chat/sendLoanRequest',
+						JSON.stringify(test)
+					)
+					loanRequest = res.data
+					console.log(loanRequest)
+					let loanRequestMessage: MessageDTO = {
+						type: 'REQUEST',
+						receive: false,
+						senderId: loanRequest.loaner.toString(),
+						start: range.value.start.toISOString(),
+						stop: range.value.end.toISOString(),
+					}
+					chatData.value?.messages.push(loanRequestMessage)
+				}
+			})
+			.catch(err => {
+				alert(err)
+			})
 	}
 }
 
@@ -181,7 +183,7 @@ async function sendLoanAccept() {
 				item: chat.value?.itemId,
 				loaner: 0,
 				start: '',
-				stop: '',
+				end: '',
 				returned: false,
 				active: true,
 			}
@@ -322,6 +324,27 @@ onBeforeMount(async () => {
 			user.value = res.data.user
 			item.value = res.data.item
 			loan.value = res.data.loan
+			if (loan.value) {
+				let msg: MessageDTO = {
+					senderId: loan.value?.loaner.toString(),
+					type: 'REQUEST',
+					receive:
+						loan.value?.loaner.toString() != chatData.value?.userId,
+					start: loan.value?.start,
+					stop: loan.value?.end,
+					date: loan.value?.creationDate,
+					returned: loan.value?.returned,
+					active: loan.value?.active,
+				}
+				chatData.value?.messages.push(msg)
+				//Sorts chat by date
+				chatData.value?.messages.sort(function (a, b) {
+					if (a.date && b.date)
+						return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
+
+					return -1
+				})
+			}
 		})
 		.catch(err => {})
 	/**console.log(chat.value?.itemId)
@@ -354,8 +377,6 @@ function handleLoanRequest() {
 	}
 }
 
-//TODO add receiver to websocket
-const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
 
 const item = ref<Item>()
