@@ -131,7 +131,7 @@ const displayedItems = computed(() => {
 			<router-link
 				class="bg-slate-100 rounded-lg shadow-lg"
 				v-for="item in displayedItems"
-				:to="`/my-item/${item.id}`"
+				:to="`/my-loan/${item.id}`"
 			>
 				<div class="flex gap-2">
 					<img
