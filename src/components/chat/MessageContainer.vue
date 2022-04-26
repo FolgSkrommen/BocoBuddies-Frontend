@@ -44,7 +44,7 @@ const { chatData, modelValue } = defineProps<Props>()
 		<Message
 			v-for="(message, i) in chatData.messages"
 			:id="i"
-			:receive="message.receive"
+			:receive="!message.receive"
 		>
 			<div>{{ message.message }}</div>
 		</Message>

@@ -95,7 +95,7 @@ function sendMessage(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		//chatData.value?.messages.push(chatMessage)
+		chatData.value.messages.push(chatMessage)
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -137,16 +137,19 @@ function onMessageReceived(payload: any) {
 		//TODO add rent/loan here
 	} else {
 		let msg: MessageDTO = {
-			senderId: undefined,
+			senderId: message.senderId,
 			message: message.message,
 			type: '',
 			date: message.date,
 			receive: true,
 			chatId: chat.value?.chatId.toString(),
 		}
-		if (msg.senderId !== chatData.value?.userId) {
+		if (msg.senderId != chatData.value.userId) {
 			console.log(payload)
-			//chatData.value?.messages.push(msg)
+			chatData.value?.messages.push(msg)
+		} else {
+			console.log(msg.senderId)
+			console.log(chatData.value.userId)
 		}
 	}
 }
@@ -167,6 +170,12 @@ onBeforeMount(async () => {
 		.then(res => {
 			console.log(res.data)
 			chatData.value = res.data
+			chatData.value.messages.forEach(m => {
+				m.receive = m.senderId != chatData.value.userId
+			})
+			for (let i = 0; i < chatData.value.messages.length; i++) {
+				chatData.value.messages
+			}
 		})
 		.catch(err => {
 			console.log(err)
@@ -234,7 +243,7 @@ const loanStatus = ref(undefined)
 </script>
 <template>
 	<div>
-		<h1 class="text-center text-4xl">{{ chat.chatName }}</h1>
+		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
 		<h2 class="text-center text-xl">{{ chatData.userId }}</h2>
 
 		<MessageContainer
