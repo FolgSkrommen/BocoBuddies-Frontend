@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, Ref, ref } from 'vue'
 import { store, User } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseModal from '../components/base/BaseModal.vue'
-import SockJS from 'sockjs-client/dist/sockjs.js'
+import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 
-import { WebSocket } from 'vite'
 import router from '../router'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 const route = useRoute()
 
 const chatData = ref<Message>()
-chatData.value?.messages
 const chat = ref<Chat>()
 
 interface Receipt {}
@@ -38,6 +36,7 @@ interface MessageDTO {
 	type: string
 	date: string
 	receive: boolean
+	chatId: string | undefined
 }
 
 interface Message {
@@ -53,9 +52,7 @@ let connected = ref<boolean>(false)
 let socket: any
 function connect() {
 	socket = new SockJS('http://localhost:8001/ws')
-	console.log('Created sock')
 	stompClient.value = Stomp.over(socket)
-	console.log('Stomped over sock')
 	stompClient.value.connect({}, onConnected, onError)
 }
 let currentUserId = '1'
@@ -83,9 +80,8 @@ function sendMessage(event: any) {
 			type: 'CHAT',
 			date: new Date().toDateString(),
 			receive: false,
+			chatId: chat.value?.chatId.toString(),
 		}
-
-		console.log(JSON.stringify(chatMessage))
 
 		stompClient.value.send(
 			'/app/chat/sendMessage',
@@ -106,6 +102,7 @@ function sendReceipt(event: any) {
 			type: 'REQUEST_LOAN',
 			date: new Date().toDateString(),
 			receive: false,
+			chatId: chat.value?.chatId.toString(),
 		}
 
 		console.log(JSON.stringify(chatMessage))
@@ -115,7 +112,7 @@ function sendReceipt(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		chatData.value?.messages.push(chatMessage)
+		//chatData.value?.messages.push(chatMessage)
 		currentMessage.value = ''
 	}
 	event.preventDefault()
@@ -133,17 +130,24 @@ function onMessageReceived(payload: any) {
 		//TODO add rent/loan here
 	} else {
 		let msg: MessageDTO = {
-			senderId: undefined,
+			senderId: message.senderId,
 			message: message.message,
 			type: '',
 			date: message.date,
 			receive: true,
+			chatId: chat.value?.chatId.toString(),
 		}
-		if (msg.senderId) chatData.value?.messages.push(msg)
+		if (msg.senderId != chatData.value?.userId) {
+			console.log(payload)
+			chatData.value?.messages.push(msg)
+		} else {
+			console.log(msg.senderId)
+			console.log(chatData.value?.userId)
+		}
 	}
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
 	await axios
 		.get('/chat?chatId=' + route.params.id)
 		.then(res => {
@@ -157,8 +161,10 @@ onMounted(async () => {
 	await axios
 		.get('/message?chatId=' + chat.value?.chatId)
 		.then(res => {
-			console.log(res.data)
 			chatData.value = res.data
+			chatData.value?.messages.forEach(m => {
+				m.receive = m.senderId != chatData.value?.userId
+			})
 		})
 		.catch(err => {
 			console.log(err)
@@ -226,18 +232,17 @@ const loanStatus = ref(undefined)
 </script>
 <template>
 	<div>
-		<h1 class="text-center text-4xl">{{ 'asd' }}</h1>
-		<h2 class="text-center text-xl">{{ item }}</h2>
+		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
+		<h2 class="text-center text-xl">{{ chatData.userId }}</h2>
 
-		<!--
 		<MessageContainer
-			:messages="chatData.value.messages"
+			v-if="chatData"
+			:chatData="chatData"
 			v-model="loanStatus"
 			data-testid="message-container"
 		>
-
 		</MessageContainer>
-    !-->
+
 		<form v-on:submit.prevent="sendMessage">
 			<div class="grid grid-cols-6">
 				<div class="col-span-5">
@@ -262,9 +267,6 @@ const loanStatus = ref(undefined)
 				v-if="loanStatus === undefined"
 				data-testid="rent-button"
 				>Lån</BaseBtn
-			>
-			<BaseBtn class="place-self-center m-4" @click="onSubmit"
-				>test</BaseBtn
 			>
 		</div>
 		<!-- Popup or modal for when requesting loan -->
