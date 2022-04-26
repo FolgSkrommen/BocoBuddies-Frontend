@@ -258,11 +258,11 @@ const loanStatus = ref(false)
 
 		<MessageContainer
 			class="grow"
-			v-if="chatData"
+			v-if="chatData && chat"
 			:chatData="chatData"
+			:chat="chat"
 			v-model="loanStatus"
 			data-testid="message-container"
-			ref="childRef"
 		/>
 
 		<form class="my-2" v-on:submit.prevent="sendMessage">
