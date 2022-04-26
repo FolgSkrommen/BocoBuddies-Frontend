@@ -44,7 +44,8 @@ const { chatData, modelValue, chat } = defineProps<Props>()
 </script>
 <template>
 	<div
-		class="bg-gray-100 border px-4 py-3 rounded w-full max-w-full h-full overflow-auto"
+		class="bg-gray-100 border px-2 py-3 rounded w-full h-full overflow-auto"
+		id="box"
 	>
 		<Message
 			v-for="(message, i) in chatData.messages"

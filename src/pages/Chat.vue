@@ -247,50 +247,53 @@ const currentMessage = ref<string>('')
 const loanStatus = ref(false)
 </script>
 <template>
-	<div class="h-[68vh]">
+	<div class="h-96 flex-col w-full">
 		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
 		<h2 class="text-center text-xl" v-if="chatData">
 			{{ chatData.userId }}
 		</h2>
 
 		<MessageContainer
+			class="grow"
 			v-if="chatData"
 			:chatData="chatData"
 			v-model="loanStatus"
 			data-testid="message-container"
+			ref="childRef"
 		/>
 
-		<form class="grid grid-cols-6 my-2" v-on:submit.prevent="sendMessage">
+		<form class="my-2" v-on:submit.prevent="sendMessage">
 			<base-input
-				class="col-span-5"
+				class=""
 				v-model="currentMessage"
 				data-testid="message-input"
 			/>
 
-			<base-btn
-				class="h-full"
-				type="submit"
-				:disabled="currentMessage.length < 1"
-				data-testid="submit-button"
-				@click="sendMessage"
-				>Send</base-btn
-			>
+			<div class="flex gap-2 my-4">
+				<BaseBtn
+					class="grow bg-green-600"
+					@click="toggleLoan"
+					v-if="loanStatus === false"
+					data-testid="rent-button"
+					>Forespør</BaseBtn
+				>
+
+				<BaseBtn
+					v-else
+					data-testid="feedback-button"
+					class="bg-purple-500"
+					>Gi tilbakemelding</BaseBtn
+				>
+				<base-btn
+					class="grow"
+					type="submit"
+					:disabled="currentMessage.length < 1"
+					data-testid="submit-button"
+					@click="sendMessage"
+					>Send</base-btn
+				>
+			</div>
 		</form>
-
-		<BaseBtn
-			class="place-self-center m-4 w-full"
-			@click="toggleLoan"
-			v-if="loanStatus === false"
-			data-testid="rent-button"
-			>Lån</BaseBtn
-		>
-
-		<BaseBtn
-			v-else
-			data-testid="feedback-button"
-			class="place-self-center m-4"
-			>Gi tilbakemelding</BaseBtn
-		>
 	</div>
 
 	<!-- Popup or modal for when requesting loan -->
