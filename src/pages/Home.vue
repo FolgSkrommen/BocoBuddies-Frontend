@@ -305,7 +305,7 @@ observer.observe(items[items.length-1])*/
 			v-model.number="sortChosen"
 			class="bottom-12 fixed"
 			data-testid="sort-dropdown"
-			@sort-clicked="clicked"
+			@sort-clicked="searchAndResetItems"
 		></BaseDropdown>
 	</div>
 </template>
