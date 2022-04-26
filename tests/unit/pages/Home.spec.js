@@ -1,9 +1,20 @@
-import { shallowMount, RouterLinkStub } from '@vue/test-utils'
+import { shallowMount, RouterLinkStub, flushPromises } from '@vue/test-utils'
 import Home from '@/pages/Home.vue'
+import axios from 'axios'
 
 describe('Home', () => {
 	describe('when entered', () => {
-		it('has the required elements initially', () => {
+		let mockCategoryList = [
+			{
+				categoryId: 1,
+				name: 'test',
+				superCategoryId: undefined,
+			},
+		]
+
+		jest.spyOn(axios, 'get').mockResolvedValue(mockCategoryList)
+
+		it('has the required elements, including one tag alternative, initially', async () => {
 			const mockRoute = {
 				params: {
 					id: 1,
@@ -15,6 +26,14 @@ describe('Home', () => {
 			const wrapper = shallowMount(Home, {
 				stubs: { RouterLink: RouterLinkStub },
 			})
+
+			expect(axios.get).toHaveBeenCalledTimes(1)
+			expect(axios.get).toHaveBeenCalledWith('/category/main')
+
+			await flushPromises()
+			expect(
+				wrapper.findAll('[data-testid="categories-tag-alts"]')
+			).toHaveLength(1)
 
 			expect(wrapper.find('[data-testid="search-field"]').exists()).toBe(
 				true
@@ -55,7 +74,7 @@ describe('Home', () => {
 					.trigger('click')
 				expect(wrapper.vm.items.length).toBe(0)
 			}),
-				it('does search if word is typed', async () => {
+				it('does search if word is typed', () => {
 					const wrapper = shallowMount(Home)
 					let searchString = 'sko'
 					wrapper.vm.searchWord = searchString

@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
 import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
-import { store, User } from '../store'
+import { store } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
+import { DatePicker } from 'v-calendar'
+import 'v-calendar/dist/style.css'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import BaseModal from '../components/base/BaseModal.vue'
+
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import BasePopup from '../components/base/BasePopup.vue'
 const route = useRoute()
 
 interface Chat {
@@ -47,6 +50,30 @@ interface Loan {
 	stop: string
 	active?: boolean
 	returned?: boolean
+	creationDate?: string
+}
+
+interface Item {
+	name: string
+	description: string
+	price: number
+	priceUnit: string
+	postalCode: string
+	address: string
+	images: string[]
+	availableFrom: string
+	availableTo: string
+	categories: string[]
+}
+
+interface User {
+	userId: number
+	firstName: string
+	lastName: string
+	username: string
+	rating: number
+	pictureUrl: string
+	trusted: boolean
 }
 
 //WEBSOCKET
@@ -108,52 +135,70 @@ function sendMessage(event: any) {
 /**
  * When sending request via WS
  */
-function sendLoanRequestWS() {
-	if (stompClient.value) {
+async function sendLoanRequestWS() {
+	if (stompClient.value && range.value) {
 		if (chatData.value?.userId && chat.value?.chatId) {
 			let loanRequest: Loan = {
 				loanId: chat.value?.chatId,
 				item: chat.value?.itemId,
 				loaner: parseInt(chatData.value?.userId),
-				start:
-					dateAndTime.fromDate +
-					'T' +
-					dateAndTime.fromTime +
-					':00.000Z',
-				stop:
-					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+				start: range.value.start.toISOString(),
+				stop: range.value.end.toISOString(),
 			}
+
+			await axios
+				.post('/loan', loanRequest)
+				.then(res => {
+					loanRequest = res.data
+					loan.value = res.data
+				})
+				.catch(err => {
+					alert(err)
+				})
+
 			stompClient.value.send(
 				'/app/chat/sendLoanRequest',
 				JSON.stringify(loanRequest)
 			)
+
 			let loanRequestMessage: MessageDTO = {
 				type: 'REQUEST',
 				receive: false,
 				senderId: loanRequest.loaner.toString(),
-				start:
-					dateAndTime.fromDate +
-					'T' +
-					dateAndTime.fromTime +
-					':00.000Z',
-				stop:
-					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+				start: range.value.start.toISOString(),
+				stop: range.value.end.toISOString(),
 			}
 			chatData.value?.messages.push(loanRequestMessage)
 		}
 	}
 }
 
-function sendLoanAccept() {
+async function sendLoanAccept() {
 	if (stompClient.value) {
-		let loanAccept: Loan = {
-			loanId: 0,
-			item: 0,
-			loaner: 0,
-			start: '',
-			stop: '',
-			returned: false,
-			active: true,
+		if (loanId.value !== -1 && chat.value?.itemId && loan.value?.loanId) {
+			let loanAccept: Loan = {
+				loanId: loan.value?.loanId,
+				item: chat.value?.itemId,
+				loaner: 0,
+				start: '',
+				stop: '',
+				returned: false,
+				active: true,
+			}
+
+			await axios
+				.put('/loan', loanAccept)
+				.then(res => {
+					loanAccept = res.data
+				})
+				.catch(err => {
+					alert(err)
+				})
+
+			stompClient.value.send(
+				'/app/chat/sendLoanRequest',
+				JSON.stringify(loanAccept)
+			)
 		}
 		//Axios call
 	}
@@ -172,9 +217,20 @@ function onLoanAccept(payload: any) {
 		type: 'ACCEPT',
 		receive: true,
 		start: accept.start,
-		stop: accept.stop,
+		stop: accept.end,
 		returned: accept.returned,
 		active: accept.active,
+	}
+
+	//If loan is accepted
+	if (msg.active && !msg.returned) {
+		loanStatus.value = true
+	}
+
+	//If loan is denied
+	if (!msg.active) {
+		loanStatus.value = false
+		loanPending.value = false
 	}
 }
 
@@ -190,7 +246,7 @@ function onRequestReceived(payload: any) {
 		type: 'REQUEST',
 		receive: true,
 		start: request.start,
-		stop: request.stop,
+		stop: request.end,
 		returned: request.returned,
 		active: request.active,
 	}
@@ -260,6 +316,14 @@ onBeforeMount(async () => {
 			console.log(err)
 		})
 
+	await axios
+		.get('/loan')
+		.then(res => {
+			user.value = res.data.user
+			item.value = res.data.item
+			loan.value = res.data.loan
+		})
+		.catch(err => {})
 	/**console.log(chat.value?.itemId)
 	if (chat.value?.itemId) {
 		await axios
@@ -276,36 +340,11 @@ onBeforeMount(async () => {
 	await connect()
 })
 
-function toggleLoan() {
-	showLoanModal.value = !showLoanModal.value
-}
-
 function sendLoanRequest() {
-	if (
-		dateAndTime.toDate !== '' &&
-		dateAndTime.fromDate !== '' &&
-		dateAndTime.toTime !== '' &&
-		dateAndTime.fromTime !== ''
-	) {
-		console.log(dateAndTime)
-		//TODO add checks if from date is later than to etc
-		toggleLoan()
-		sendLoanRequestWS()
-	} else {
-		alert('Add exception handling')
-	}
+	if (!range.value) return
+	//TODO: add checks if from date is later than to etc
+	sendLoanRequestWS()
 }
-
-function cancelLoanRequest() {
-	dateAndTime = {
-		fromDate: '',
-		fromTime: '',
-		toDate: '',
-		toTime: '',
-	}
-	toggleLoan()
-}
-
 function handleLoanRequest() {
 	if (loanStatus.value) {
 		console.log('Loaned')
@@ -315,28 +354,28 @@ function handleLoanRequest() {
 	}
 }
 
-interface DateAndTime {
-	fromDate: string
-	fromTime: string
-	toDate: string
-	toTime: string
-}
-
-let dateAndTime: DateAndTime = {
-	fromDate: '',
-	fromTime: '',
-	toDate: '',
-	toTime: '',
-}
-
 //TODO add receiver to websocket
 const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
-const item = ref('Gjenstand')
+
+const item = ref<Item>()
+const user = ref<User>()
+const loan = ref<Loan>()
+
 const currentMessage = ref<string>('')
 const loanStatus = ref(false)
+const loanPending = ref(false)
+const loanId = ref(-1)
 const chatData = ref<Message>()
 const chat = ref<Chat>()
+
+const showLoginModal = ref(false)
+
+interface Range {
+	start: Date
+	end: Date
+}
+const range = ref<Range>()
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -365,9 +404,10 @@ const chat = ref<Chat>()
 			<div class="flex gap-2 my-4">
 				<BaseBtn
 					class="grow bg-green-600"
-					@click="toggleLoan"
 					v-if="loanStatus === false"
+					:disabled="loanPending || loanStatus"
 					data-testid="rent-button"
+					@click="showLoginModal = true"
 					>Forespør</BaseBtn
 				>
 
@@ -389,37 +429,22 @@ const chat = ref<Chat>()
 		</form>
 	</div>
 
-	<!-- Popup or modal for when requesting loan -->
-	<BaseModal v-model="showLoanModal" title="Title" data-testid="loan-modal">
-		<template v-slot:header> Når vil du leie gjenstanden? </template>
-		<template v-slot:body>
-			<BaseInput
-				type="date"
-				label="Fra (dato)"
-				v-model="dateAndTime.fromDate"
-			></BaseInput>
-			<BaseInput
-				type="time"
-				label="Fra (tidspunkt)"
-				v-model="dateAndTime.fromTime"
-			></BaseInput>
-
-			<BaseInput
-				type="date"
-				label="Til"
-				v-model="dateAndTime.toDate"
-			></BaseInput>
-			<BaseInput
-				type="time"
-				label="Til (tidspunkt)"
-				v-model="dateAndTime.toTime"
-			></BaseInput>
-		</template>
-		<template v-slot:footer>
-			<div class="grid gap-4 grid-cols-2">
-				<BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
-				<BaseBtn @click="sendLoanRequest">Send</BaseBtn>
-			</div>
-		</template>
-	</BaseModal>
+	<BasePopup v-show="showLoginModal" @exit="showLoginModal = false">
+		<DatePicker
+			class="place-self-center"
+			v-model="range"
+			mode="dateTime"
+			is-range
+			locale="no"
+			is24hr
+		/>
+		<div class="flex justify-between">
+			<BaseBtn @click="showLoginModal = false" color="gray"
+				>Avbryt</BaseBtn
+			>
+			<BaseBtn @click="sendLoanRequest" :disabled="!range"
+				>Avtal lån</BaseBtn
+			>
+		</div>
+	</BasePopup>
 </template>
