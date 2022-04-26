@@ -7,7 +7,7 @@ interface Props {
 }
 interface Tag {
 	categoryId: number
-	name: string
+	categoryName: string
 	superCategoryId: number
 }
 let { modelValue, removable } = defineProps<Props>()
@@ -29,7 +29,7 @@ const emit = defineEmits(['remove-tag-event', 'add-tag-event'])
 			<span
 				@click="$emit('add-tag-event', tag)"
 				class="text-lg truncate"
-				>{{ tag.name }}</span
+				>{{ tag.categoryName }}</span
 			>
 		</div>
 	</div>

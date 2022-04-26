@@ -14,7 +14,7 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 //Interfaces
 interface Category {
 	categoryId: number
-	name: string
+	categoryName: string
 	superCategoryId: number
 }
 interface Alternative {
@@ -305,6 +305,7 @@ observer.observe(items[items.length-1])*/
 			v-model.number="sortChosen"
 			class="bottom-12 fixed"
 			data-testid="sort-dropdown"
+			@sort-clicked="clicked"
 		></BaseDropdown>
 	</div>
 </template>
