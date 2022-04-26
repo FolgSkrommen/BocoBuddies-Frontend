@@ -35,13 +35,15 @@ enum Type {
 
 interface MessageDTO {
 	senderId?: string
-	message: string
+	message?: string
 	type: string
-	date: string
+	date?: string
 	receive: boolean
 	chatId?: string
 	start?: string
 	stop?: string
+	active?: boolean
+	returned?: boolean
 }
 
 interface Message {
@@ -50,11 +52,11 @@ interface Message {
 }
 
 interface LoanRequest {
-	loanId?: number
-	item: number | undefined
-	loaner: number | undefined
-	start: string | undefined
-	stop: string | undefined
+	loanId: number
+	item: number
+	loaner: number
+	start: string
+	stop: string
 }
 
 //WEBSOCKET
@@ -68,6 +70,9 @@ function connect() {
 
 let groupId = route.params.id
 
+/**
+ * Listens to two ws channels. One for receiving loan, one for receiving message
+ */
 function onConnected() {
 	stompClient.value?.subscribe(
 		'/chat/' + groupId + '/requestLoan',
@@ -106,12 +111,16 @@ function sendMessage(event: any) {
 	event.preventDefault()
 }
 
+/**
+ * When sending request via WS
+ */
 function sendLoanRequestWS() {
 	if (stompClient.value) {
-		if (chat.value?.chatId) {
+		if (chatData.value?.userId && chat.value?.chatId) {
 			let loanRequest: LoanRequest = {
+				loanId: chat.value?.chatId,
 				item: chat.value?.itemId,
-				loaner: chat.value?.chatId,
+				loaner: parseInt(chatData.value?.userId),
 				start:
 					dateAndTime.fromDate +
 					'T' +
@@ -124,22 +133,51 @@ function sendLoanRequestWS() {
 				'/app/chat/sendLoanRequest',
 				JSON.stringify(loanRequest)
 			)
+			let loanRequestMessage: MessageDTO = {
+				type: 'REQUEST',
+				receive: false,
+				senderId: loanRequest.loaner.toString(),
+				start:
+					dateAndTime.fromDate +
+					'T' +
+					dateAndTime.fromTime +
+					':00.000Z',
+				stop:
+					dateAndTime.toDate + 'T' + dateAndTime.toTime + ':00.000Z',
+			}
+			chatData.value?.messages.push(loanRequestMessage)
 		}
 	}
 }
 
+/**
+ * Called when request is received from ws
+ * @param payload
+ */
 function onRequestReceived(payload: any) {
 	console.log(payload)
+	let request = JSON.parse(payload.body)
 	let msg: MessageDTO = {
-		senderId: undefined,
-		message: '',
-		type: '',
-		date: '',
-		receive: false,
-		chatId: undefined,
+		senderId: request.senderId,
+		type: 'REQUEST',
+		receive: true,
+		start: request.start,
+		stop: request.stop,
+	}
+	//Adds the received request to message array if receiver is not sender
+	if (msg.senderId != chatData.value?.userId) {
+		console.log(payload)
+		chatData.value?.messages.push(msg)
+	} else {
+		console.log(msg.senderId)
+		console.log(chatData.value?.userId)
 	}
 }
 
+/**
+ * When receiving a message
+ * @param payload
+ */
 function onMessageReceived(payload: any) {
 	let message = JSON.parse(payload.body)
 	console.log(payload)
@@ -168,6 +206,9 @@ function onMessageReceived(payload: any) {
 	}
 }
 
+/**
+ * Fetches data before view is mounted
+ */
 onBeforeMount(async () => {
 	await axios
 		.get('/chat?chatId=' + route.params.id)
@@ -259,6 +300,7 @@ const loanStatus = ref(false)
 		<MessageContainer
 			class="grow"
 			v-if="chatData"
+			:chat="chat"
 			:chatData="chatData"
 			v-model="loanStatus"
 			data-testid="message-container"
