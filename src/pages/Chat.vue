@@ -144,21 +144,27 @@ async function sendLoanRequestWS() {
 			start: range.value.start.toISOString(),
 			end: range.value.end.toISOString(),
 		}
-
+		console.log(chatData.value?.userId)
 		await axios
 			.post('/loan', loanRequest)
 			.then(res => {
+				console.log(res.data)
 				loanRequest = res.data
 				loan.value = res.data
+
 				let test = loanRequest
-				if (stompClient.value && range.value) {
-					test.loaner = 6
+				if (stompClient.value && range.value && chat.value?.chatId) {
+					test.loanId = chat.value?.chatId
+					console.log(test)
+
 					stompClient.value.send(
 						'/app/chat/sendLoanRequest',
 						JSON.stringify(test)
 					)
+
 					loanRequest = res.data
 					console.log(loanRequest)
+
 					let loanRequestMessage: MessageDTO = {
 						type: 'REQUEST',
 						receive: false,
@@ -202,7 +208,8 @@ async function sendLoanAccept() {
 				JSON.stringify(loanAccept)
 			)
 		}
-		//Axios call
+		loanStatus.value = false
+		loanPending.value = true
 	}
 }
 
@@ -210,7 +217,7 @@ async function sendLoanAccept() {
  * Called when loan accepted
  * @param payload
  */
-function onLoanAccept(payload: any) {
+async function onLoanAccept(payload: any) {
 	console.log(payload)
 	let accept = JSON.parse(payload.body)
 
@@ -226,6 +233,7 @@ function onLoanAccept(payload: any) {
 
 	//If loan is accepted
 	if (msg.active && !msg.returned) {
+		axios.put()
 		loanStatus.value = true
 	}
 
@@ -306,6 +314,7 @@ onBeforeMount(async () => {
 		.get('/message?chatId=' + chat.value?.chatId)
 		.then(res => {
 			chatData.value = res.data
+			console.log(res.data)
 			chatData.value?.messages.forEach(m => {
 				m.receive = m.senderId != chatData.value?.userId
 				m.type = 'CHAT'
