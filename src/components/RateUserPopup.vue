@@ -33,31 +33,29 @@ function handleRate() {
 </script>
 
 <template>
-	<div>
-		<BasePopup @exit="emit('exit')">
-			<img
-				class="w-16 h-16 rounded-full place-self-center"
-				:src="lender.pictureUrl"
-				:alt="lender.username"
+	<BasePopup @exit="emit('exit')">
+		<img
+			class="w-16 h-16 rounded-full place-self-center"
+			:src="lender.pictureUrl"
+			:alt="lender.username"
+		/>
+		<p class="place-self-center font-bold text-lg">
+			{{ lender.firstName }} {{ lender.lastName }}
+		</p>
+		<div class="flex gap-2 place-self-center">
+			<StarIcon
+				v-for="(icon, i) in 5"
+				@click="rating = i"
+				class="h-8 w-8 bg-black text-white rounded-full p-1"
+				:class="i < rating + 1 ? 'text-yellow-400' : ''"
 			/>
-			<p class="place-self-center font-bold text-lg">
-				{{ lender.firstName }} {{ lender.lastName }}
-			</p>
-			<div class="flex gap-2 place-self-center">
-				<StarIcon
-					v-for="(icon, i) in 5"
-					@click="rating = i"
-					class="h-8 w-8 bg-black text-white rounded-full p-1"
-					:class="i < rating + 1 ? 'text-yellow-400' : ''"
-				/>
-			</div>
-			<textarea class="p-2" v-model="comment" rows="4"></textarea>
-			<div class="flex justify-between">
-				<BaseBtn @click="emit('exit')" color="gray">Cancel</BaseBtn>
-				<BaseBtn @click="handleRate" :disabled="rating === -1"
-					>Rate</BaseBtn
-				>
-			</div>
-		</BasePopup>
-	</div>
+		</div>
+		<textarea class="p-2" v-model="comment" rows="4"></textarea>
+		<div class="flex justify-between">
+			<BaseBtn @click="emit('exit')" color="gray">Cancel</BaseBtn>
+			<BaseBtn @click="handleRate" :disabled="rating === -1"
+				>Rate</BaseBtn
+			>
+		</div>
+	</BasePopup>
 </template>
