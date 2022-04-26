@@ -7,7 +7,7 @@ const emit = defineEmits(['exit'])
 
 <template>
 	<div
-		class="bg-[rgb(0,0,0,0.5)] fixed w-full h-full top-0 left-0 grid place-items-center"
+		class="bg-[rgb(0,0,0,0.5)] fixed w-full h-full top-0 left-0 grid place-items-center z-40"
 	>
 		<div class="min-w-[256px]">
 			<Card>

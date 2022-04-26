@@ -311,12 +311,11 @@ const loanStatus = ref(false)
 
 		<MessageContainer
 			class="grow"
-			v-if="chatData"
-			:chat="chat"
+			v-if="chatData && chat"
 			:chatData="chatData"
+			:chat="chat"
 			v-model="loanStatus"
 			data-testid="message-container"
-			ref="childRef"
 		/>
 
 		<form class="my-2" v-on:submit.prevent="sendMessage">
@@ -338,7 +337,7 @@ const loanStatus = ref(false)
 				<BaseBtn
 					v-else
 					data-testid="feedback-button"
-					class="bg-purple-500"
+					class="grow bg-purple-500"
 					>Gi tilbakemelding</BaseBtn
 				>
 				<base-btn
