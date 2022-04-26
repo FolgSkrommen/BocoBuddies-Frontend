@@ -12,6 +12,7 @@ import router from '../router'
 //Form validation
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import BaseLabel from '../components/base/BaseLabel.vue'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -126,9 +127,9 @@ function submit() {
 
 <template>
 	<div class="">
-		<h1 class="font-bold text-4xl w-full">Ny gjenstand</h1>
+		<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
 
-		<form @submit.prevent="submit()">
+		<form class="grid gap-y-6" @submit.prevent="submit()">
 			<BaseInput
 				v-model.lazy="title"
 				label="Tittel *"
@@ -146,45 +147,45 @@ function submit() {
 				:error="errors.price"
 			/>
 
-			<label class="text-dark-gray text-xl p-2 my-3" data-testid="label"
-				>Kategorier</label
-			>
+			<div>
+				<BaseLabel model-value="Kategori" />
 
-			<select
-				v-for="(categories, index) in categoryChoices"
-				v-if="categoryChoices"
-				:key="index"
-				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-				@input="event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)"
-			>
+				<select
+					v-for="(categories, index) in categoryChoices"
+					v-if="categoryChoices"
+					:key="index"
+					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					@input="event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)"
 				>
-				<option :key="-1" :value="null">Velg</option>
+					>
+					<option :key="-1" :value="null">Velg</option>
 
-				<option
-					v-for="category in categories"
-					:key="category.id"
-					:value="category.id"
-				>
-					{{ category.name }}
-				</option>
-			</select>
+					<option
+						v-for="category in categories"
+						:key="category.id"
+						:value="category.id"
+					>
+						{{ category.name }}
+					</option>
+				</select>
+			</div>
 
-			<label class="text-dark-gray text-xl p-2 my-3" data-testid="label"
-				>Bilder</label
-			>
+			<div>
+				<BaseLabel model-value="Bilder" />
 
-			<input
-				type="file"
-				accept="image/jpeg"
-				@input="event => uploadImage(event.target)"
-				multiple
-			/>
+				<input
+					type="file"
+					accept="image/jpeg"
+					@input="event => uploadImage(event.target)"
+					multiple
+				/>
 
-			<ImageCarousel
-				v-if="imageList.length > 0"
-				:images="imageList"
-				class="h-52"
-			/>
+				<ImageCarousel
+					v-if="imageList.length > 0"
+					:images="imageList"
+					class="h-52"
+				/>
+			</div>
 
 			<BaseInput
 				v-model="address"
@@ -198,7 +199,10 @@ function submit() {
 				:error="errors.postalcode"
 			/>
 
-			<BaseButton class="m-4" type="submit" :disabled="notValid"
+			<BaseButton
+				class="m-4 place-self-center"
+				type="submit"
+				:disabled="notValid"
 				>Send</BaseButton
 			>
 		</form>
