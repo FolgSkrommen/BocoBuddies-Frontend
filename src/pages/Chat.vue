@@ -26,6 +26,8 @@ interface Chat {
 	chatName: string
 }
 
+interface Item {}
+
 enum Type {
 	CHAT = 'CHAT',
 	JOIN = 'JOIN',
@@ -48,6 +50,7 @@ interface Message {
 }
 
 interface LoanRequest {
+	loanId?: number
 	item: number | undefined
 	loaner: number | undefined
 	start: string | undefined

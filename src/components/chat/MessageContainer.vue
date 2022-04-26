@@ -6,11 +6,14 @@ import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
 
 interface MessageDTO {
-	senderId: string | undefined
+	senderId?: string
 	message: string
 	type: string
 	date: string
 	receive: boolean
+	chatId?: string
+	start?: string
+	stop?: string
 }
 
 interface Chat {
