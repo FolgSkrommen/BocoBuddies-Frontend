@@ -89,6 +89,7 @@ const range = computed(() => ({
 			v-model="range"
 			is-range
 			:contenteditable="false"
+			locale="no"
 		/>
 		<div>
 			<p class="font-bold text-lg">Adresse</p>

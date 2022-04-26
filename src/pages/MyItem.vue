@@ -109,6 +109,7 @@ const showRateUserPopup = ref(false)
 				is-range
 				:contenteditable="false"
 				color="green"
+				locale="no"
 			/>
 			<UserCard :user="loaner" color="green" />
 			<BaseBtn>Gå til chat</BaseBtn>

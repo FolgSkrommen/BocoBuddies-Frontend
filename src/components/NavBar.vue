@@ -15,7 +15,6 @@ import {
 			<router-link to="/">
 				<HomeIcon class="w-8 h-8 text-white" />
 			</router-link>
-
 			<router-link to="/my-loans">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>

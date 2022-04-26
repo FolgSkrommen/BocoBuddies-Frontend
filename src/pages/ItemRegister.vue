@@ -19,7 +19,7 @@ const schema = yup.object({
 	description: yup.string().required('Fornavn er påkrevd'),
 	price: yup.string().required('Etternavn er påkrevd'),
 	address: yup.string().required('Adresse er påkrevd'),
-	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
+	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
 })
 const { errors } = useForm({
 	validationSchema: schema,
@@ -28,8 +28,7 @@ let { value: title } = useField<string>('title')
 let { value: description } = useField<string>('description')
 let { value: price } = useField<number>('price')
 let { value: address } = useField<string>('address')
-let { value: postalcode } = useField<number>('postalcode')
-let { value: phonenumber } = useField<number>('phonenumber')
+let { value: postalCode } = useField<number>('postalCode')
 
 const notValid = computed(
 	() =>
@@ -37,13 +36,12 @@ const notValid = computed(
 		!!errors.value.description ||
 		!!errors.value.price ||
 		!!errors.value.address ||
-		!!errors.value.postalcode ||
+		!!errors.value.postalCode ||
 		title.value == undefined ||
 		description.value == undefined ||
 		price.value == undefined ||
 		address.value == undefined ||
-		postalcode.value == undefined ||
-		phonenumber.value == undefined
+		postalCode.value == undefined
 )
 
 /*  Categories*/
@@ -101,7 +99,7 @@ interface Item {
 	price: number
 	priceUnit: string
 	address: string
-	postalcode: number
+	postalCode: number
 }
 
 function submit() {
@@ -112,7 +110,7 @@ function submit() {
 		price: price.value,
 		priceUnit: 'WEEK',
 		address: address.value,
-		postalcode: postalcode.value,
+		postalCode: postalCode.value,
 	}
 	console.log(item)
 
@@ -198,9 +196,9 @@ function submit() {
 			/>
 
 			<BaseInput
-				v-model="postalcode"
+				v-model="postalCode"
 				label="Postnummer *"
-				:error="errors.postalcode"
+				:error="errors.postalCode"
 			/>
 
 			<BaseButton
