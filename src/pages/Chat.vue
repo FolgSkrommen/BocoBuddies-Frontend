@@ -235,6 +235,18 @@ onBeforeMount(async () => {
 			console.log(err)
 		})
 
+	/**console.log(chat.value?.itemId)
+	if (chat.value?.itemId) {
+		await axios
+			.get('/item/' + chat.value?.itemId)
+			.then(response => {
+				console.log(response)
+			})
+			.catch(error => {
+				alert(error)
+			})
+	}*/
+
 	console.log(chatData.value?.messages)
 	await connect()
 })
