@@ -18,7 +18,7 @@ const colorClass = computed(() => {
 </script>
 
 <template>
-	<div class="p-2 shadow-lg rounded-xl grid gap-2" :class="colorClass">
+	<div class="z-20 p-2 shadow-lg rounded-xl grid gap-2" :class="colorClass">
 		<slot></slot>
 	</div>
 </template>
