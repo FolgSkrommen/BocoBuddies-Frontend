@@ -12,6 +12,7 @@ import { computed } from 'vue'
 interface Loan {
 	startDate: string
 	endDate: string
+	returned: boolean
 	active: boolean
 }
 
@@ -62,7 +63,8 @@ const { item, lender, loan }: Response = {
 		trusted: true,
 	},
 	loan: {
-		active: true,
+		returned: false,
+		active: false,
 		startDate: '2022-04-20T18:00:00',
 		endDate: '2022-06-20T18:00:00',
 	},
@@ -77,7 +79,7 @@ const range = computed(() => ({
 <template>
 	<div class="grid gap-4">
 		<h1 class="text-4xl font-bold">{{ item.name }}</h1>
-		<div v-if="loan.active" class="grid gap-4">
+		<div v-if="!loan.returned" class="grid gap-4">
 			<div>
 				<p class="font-bold text-lg">Låneperiode</p>
 				<p>
@@ -93,10 +95,10 @@ const range = computed(() => ({
 				color="red"
 			/>
 		</div>
-		<BaseBtn v-if="loan.active">Avlys leie</BaseBtn>
-		<BaseBtn v-else>Gi tilbakemelding</BaseBtn>
+		<BaseBtn v-if="!loan.returned">Gå til chat</BaseBtn>
+		<BaseBtn v-if="!loan.returned" color="red">Avlys</BaseBtn>
+		<BaseBtn v-if="loan.returned">Gi tilbakemelding</BaseBtn>
 		<ItemInfo :item="item" />
 		<UserCard :user="lender" />
-		<BaseBtn to="/chat/1234">Forespør lån</BaseBtn>
 	</div>
 </template>

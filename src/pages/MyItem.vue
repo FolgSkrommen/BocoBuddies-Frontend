@@ -12,6 +12,7 @@ import UserCard, { User } from '../components/UserCard.vue'
 interface Loan {
 	startDate: string
 	endDate: string
+	returned: boolean
 	active: boolean
 }
 
@@ -62,7 +63,8 @@ const { item, loaner, loan }: LoanResponse = {
 		trusted: true,
 	},
 	loan: {
-		active: true,
+		returned: false,
+		active: false,
 		startDate: '2022-05-20T18:00:00',
 		endDate: '2022-06-12T18:00:00',
 	},
@@ -77,7 +79,7 @@ const range = computed(() => ({
 <template>
 	<div class="grid gap-4">
 		<h1 class="text-4xl font-bold">{{ item.name }}</h1>
-		<div v-if="loan.active && loaner" class="grid gap-4">
+		<div v-if="!loan.returned && loan.active" class="grid gap-4">
 			<div>
 				<p class="font-bold text-lg">Låneperiode</p>
 				<p>
@@ -93,8 +95,9 @@ const range = computed(() => ({
 				color="green"
 			/>
 			<UserCard :user="loaner" color="green" />
+			<BaseBtn>Gå til chat</BaseBtn>
 		</div>
+		<BaseBtn v-else color="red">Slett</BaseBtn>
 		<ItemInfo :item="item" />
-		<BaseBtn to="/chat/1234">Forespør lån</BaseBtn>
 	</div>
 </template>
