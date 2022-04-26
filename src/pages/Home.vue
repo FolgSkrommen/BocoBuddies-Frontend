@@ -4,8 +4,8 @@ import axios from 'axios'
 import { onMounted, ref, computed } from 'vue'
 import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
+import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
-import Card from '../components/Card.vue'
 import qs from 'qs'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
@@ -151,7 +151,6 @@ function search() {
 				isAnItem(responseData[0])
 			)
 				items.value = items.value.concat(responseData)
-			console.log(responseData)
 		})
 		.catch(error => {
 			//TODO error handling, tell user something went wrong
@@ -173,10 +172,9 @@ function categoryChosen(tag: Category) {
 			tagAlts.value = response.data
 		})
 		.catch(error => {
-			//console.log(error)
+			console.log(error)
 		})
 	//TODO get all subcategories and put them in tagAlts, also update items accordingly instead of what is done now
-	//searchBasedOnCategories(chosenTags.value)
 }
 function categoryRemoved(tag: Category) {
 	chosenTags.value.forEach((value, index) => {
@@ -197,23 +195,17 @@ function categoryRemoved(tag: Category) {
 			tagAlts.value = response.data
 		})
 		.catch(error => {
-			//console.log(error)
+			console.log(error)
 		})
 	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
-	//searchBasedOnCategories(chosenTags.value)
 }
 
 function loadMoreItems() {
 	if (items.value.length > 0) {
 		//Not allowed to load more items if no items
-		//console.log('Getting next items...')
 		currentPage.value++
 		search()
 	}
-}
-
-function clicked() {
-	console.log('clicked baby!')
 }
 
 //Intersection observer for later if we have time to implement
@@ -228,13 +220,11 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<div>
-		<h1>Hjem</h1>
-	</div>
+	<h1 class="text-4xl font-bold">Hjem</h1>
 
-	<div class="flex">
-		<!--Text search input component-->
-		<BaseInput
+	<!--<div class="flex">-->
+	<!--Text search input component-->
+	<!--<BaseInput
 			@keyup.enter="searchAndResetItems"
 			v-model="searchWord"
 			data-testid="search-field"
@@ -242,11 +232,15 @@ observer.observe(items[items.length-1])*/
 		<BaseBtn @click="searchAndResetItems" data-testid="search-button"
 			>Søk</BaseBtn
 		>
-	</div>
+	</div>-->
+	<SearchbarAndButton
+		v-model="searchWord"
+		@search-and-reset="searchAndResetItems"
+	></SearchbarAndButton>
 
 	<div class="py-10">
 		<!--Tag input component-->
-		<div>categories goes here</div>
+		<h2 class="text-2xl font-semibold">Kategorier</h2>
 		<TagList
 			v-model="chosenTags"
 			:removable="true"
@@ -286,6 +280,9 @@ observer.observe(items[items.length-1])*/
 						<p class="text-slate-500">
 							{{ item.availableFrom }} -
 							{{ item.availableTo }}
+						</p>
+						<p class="text-slate-500">
+							{{ item.postalCode }}, {{ item.address }}
 						</p>
 					</div>
 				</div>
