@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
-import { GoogleMap, Marker, Circle } from 'vue3-google-map'
 import { Calendar, DatePicker } from 'v-calendar'
 
 export interface Filter {
@@ -96,20 +95,5 @@ const range = computed(() => ({
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalcode }}</p>
 		</div>
-		<GoogleMap
-			class="z-0"
-			v-if="item.position"
-			api-key="AIzaSyAnMA9aHGVJ1Fw6w6j43au2We09k4V5_kQ"
-			style="width: 100%; height: 500px"
-			:center="item.position"
-			:zoom="14"
-		>
-			<Circle
-				:options="{
-					center: randomCenter(item.position),
-					radius: 400,
-				}"
-			/>
-		</GoogleMap>
 	</div>
 </template>
