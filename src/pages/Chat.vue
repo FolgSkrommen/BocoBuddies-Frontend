@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
 import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
-import { store, User } from '../store'
+import { store } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
@@ -50,6 +50,30 @@ interface Loan {
 	stop: string
 	active?: boolean
 	returned?: boolean
+	creationDate?: string
+}
+
+interface Item {
+	name: string
+	description: string
+	price: number
+	priceUnit: string
+	postalCode: string
+	address: string
+	images: string[]
+	availableFrom: string
+	availableTo: string
+	categories: string[]
+}
+
+interface User {
+	userId: number
+	firstName: string
+	lastName: string
+	username: string
+	rating: number
+	pictureUrl: string
+	trusted: boolean
 }
 
 //WEBSOCKET
@@ -111,7 +135,7 @@ function sendMessage(event: any) {
 /**
  * When sending request via WS
  */
-function sendLoanRequestWS() {
+async function sendLoanRequestWS() {
 	if (stompClient.value && range.value) {
 		if (chatData.value?.userId && chat.value?.chatId) {
 			let loanRequest: Loan = {
@@ -121,10 +145,22 @@ function sendLoanRequestWS() {
 				start: range.value.start.toISOString(),
 				stop: range.value.end.toISOString(),
 			}
+
+			await axios
+				.post('/loan', loanRequest)
+				.then(res => {
+					loanRequest = res.data
+					loan.value = res.data
+				})
+				.catch(err => {
+					alert(err)
+				})
+
 			stompClient.value.send(
 				'/app/chat/sendLoanRequest',
 				JSON.stringify(loanRequest)
 			)
+
 			let loanRequestMessage: MessageDTO = {
 				type: 'REQUEST',
 				receive: false,
@@ -137,16 +173,32 @@ function sendLoanRequestWS() {
 	}
 }
 
-function sendLoanAccept() {
+async function sendLoanAccept() {
 	if (stompClient.value) {
-		let loanAccept: Loan = {
-			loanId: 0,
-			item: 0,
-			loaner: 0,
-			start: '',
-			stop: '',
-			returned: false,
-			active: true,
+		if (loanId.value !== -1 && chat.value?.itemId && loan.value?.loanId) {
+			let loanAccept: Loan = {
+				loanId: loan.value?.loanId,
+				item: chat.value?.itemId,
+				loaner: 0,
+				start: '',
+				stop: '',
+				returned: false,
+				active: true,
+			}
+
+			await axios
+				.put('/loan', loanAccept)
+				.then(res => {
+					loanAccept = res.data
+				})
+				.catch(err => {
+					alert(err)
+				})
+
+			stompClient.value.send(
+				'/app/chat/sendLoanRequest',
+				JSON.stringify(loanAccept)
+			)
 		}
 		//Axios call
 	}
@@ -165,9 +217,20 @@ function onLoanAccept(payload: any) {
 		type: 'ACCEPT',
 		receive: true,
 		start: accept.start,
-		stop: accept.stop,
+		stop: accept.end,
 		returned: accept.returned,
 		active: accept.active,
+	}
+
+	//If loan is accepted
+	if (msg.active && !msg.returned) {
+		loanStatus.value = true
+	}
+
+	//If loan is denied
+	if (!msg.active) {
+		loanStatus.value = false
+		loanPending.value = false
 	}
 }
 
@@ -183,7 +246,7 @@ function onRequestReceived(payload: any) {
 		type: 'REQUEST',
 		receive: true,
 		start: request.start,
-		stop: request.stop,
+		stop: request.end,
 		returned: request.returned,
 		active: request.active,
 	}
@@ -253,6 +316,14 @@ onBeforeMount(async () => {
 			console.log(err)
 		})
 
+	await axios
+		.get('/loan')
+		.then(res => {
+			user.value = res.data.user
+			item.value = res.data.item
+			loan.value = res.data.loan
+		})
+		.catch(err => {})
 	/**console.log(chat.value?.itemId)
 	if (chat.value?.itemId) {
 		await axios
@@ -269,6 +340,11 @@ onBeforeMount(async () => {
 	await connect()
 })
 
+function sendLoanRequest() {
+	if (!range.value) return
+	//TODO: add checks if from date is later than to etc
+	sendLoanRequestWS()
+}
 function handleLoanRequest() {
 	if (loanStatus.value) {
 		console.log('Loaned')
@@ -281,9 +357,15 @@ function handleLoanRequest() {
 //TODO add receiver to websocket
 const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
-const item = ref('Gjenstand')
+
+const item = ref<Item>()
+const user = ref<User>()
+const loan = ref<Loan>()
+
 const currentMessage = ref<string>('')
 const loanStatus = ref(false)
+const loanPending = ref(false)
+const loanId = ref(-1)
 const chatData = ref<Message>()
 const chat = ref<Chat>()
 
@@ -294,12 +376,6 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
-
-function sendLoanRequest() {
-	if (!range.value) return
-	//TODO: add checks if from date is later than to etc
-	sendLoanRequestWS()
-}
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -329,6 +405,7 @@ function sendLoanRequest() {
 				<BaseBtn
 					class="grow bg-green-600"
 					v-if="loanStatus === false"
+					:disabled="loanPending || loanStatus"
 					data-testid="rent-button"
 					@click="showLoginModal = true"
 					>Forespør</BaseBtn
