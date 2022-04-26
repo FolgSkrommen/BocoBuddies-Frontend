@@ -82,6 +82,10 @@ function onConnected() {
 		'/chat/' + groupId + '/message',
 		onMessageReceived
 	)
+	stompClient.value?.subscribe(
+		'/chat/' + groupId + '/acceptLoan',
+		onLoanAccept
+	)
 }
 
 function onError(err: any) {
@@ -151,6 +155,12 @@ function sendLoanRequestWS() {
 }
 
 /**
+ * Called when loan accepted
+ * @param payload
+ */
+function onLoanAccept(payload: any) {}
+
+/**
  * Called when request is received from ws
  * @param payload
  */
@@ -158,15 +168,17 @@ function onRequestReceived(payload: any) {
 	console.log(payload)
 	let request = JSON.parse(payload.body)
 	let msg: MessageDTO = {
-		senderId: request.senderId,
+		senderId: request.loaner,
 		type: 'REQUEST',
 		receive: true,
 		start: request.start,
 		stop: request.stop,
 	}
+	console.log(msg)
 	//Adds the received request to message array if receiver is not sender
 	if (msg.senderId != chatData.value?.userId) {
-		console.log(payload)
+		console.log(msg.senderId)
+		console.log(chatData.value?.userId)
 		chatData.value?.messages.push(msg)
 	} else {
 		console.log(msg.senderId)
