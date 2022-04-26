@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, onBeforeMount, onMounted, Ref, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
 import { store, User } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
@@ -9,16 +9,9 @@ import BaseModal from '../components/base/BaseModal.vue'
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
-
-import router from '../router'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 const route = useRoute()
-
-const chatData = ref<Message>()
-const chat = ref<Chat>()
-
-interface Receipt {}
 
 interface Chat {
 	chatId: number
@@ -27,11 +20,6 @@ interface Chat {
 }
 
 interface Item {}
-
-enum Type {
-	CHAT = 'CHAT',
-	JOIN = 'JOIN',
-}
 
 interface MessageDTO {
 	senderId?: string
@@ -51,12 +39,14 @@ interface Message {
 	messages: Array<MessageDTO>
 }
 
-interface LoanRequest {
+interface Loan {
 	loanId: number
 	item: number
 	loaner: number
 	start: string
 	stop: string
+	active?: boolean
+	returned?: boolean
 }
 
 //WEBSOCKET
@@ -68,12 +58,12 @@ function connect() {
 	stompClient.value.connect({}, onConnected, onError)
 }
 
-let groupId = route.params.id
-
 /**
  * Listens to two ws channels. One for receiving loan, one for receiving message
  */
 function onConnected() {
+	let groupId = route.params.id
+
 	stompClient.value?.subscribe(
 		'/chat/' + groupId + '/requestLoan',
 		onRequestReceived
@@ -121,7 +111,7 @@ function sendMessage(event: any) {
 function sendLoanRequestWS() {
 	if (stompClient.value) {
 		if (chatData.value?.userId && chat.value?.chatId) {
-			let loanRequest: LoanRequest = {
+			let loanRequest: Loan = {
 				loanId: chat.value?.chatId,
 				item: chat.value?.itemId,
 				loaner: parseInt(chatData.value?.userId),
@@ -154,11 +144,39 @@ function sendLoanRequestWS() {
 	}
 }
 
+function sendLoanAccept() {
+	if (stompClient.value) {
+		let loanAccept: Loan = {
+			loanId: 0,
+			item: 0,
+			loaner: 0,
+			start: '',
+			stop: '',
+			returned: false,
+			active: true,
+		}
+		//Axios call
+	}
+}
+
 /**
  * Called when loan accepted
  * @param payload
  */
-function onLoanAccept(payload: any) {}
+function onLoanAccept(payload: any) {
+	console.log(payload)
+	let accept = JSON.parse(payload.body)
+
+	let msg: MessageDTO = {
+		senderId: accept.loaner,
+		type: 'ACCEPT',
+		receive: true,
+		start: accept.start,
+		stop: accept.stop,
+		returned: accept.returned,
+		active: accept.active,
+	}
+}
 
 /**
  * Called when request is received from ws
@@ -173,6 +191,8 @@ function onRequestReceived(payload: any) {
 		receive: true,
 		start: request.start,
 		stop: request.stop,
+		returned: request.returned,
+		active: request.active,
 	}
 	console.log(msg)
 	//Adds the received request to message array if receiver is not sender
@@ -193,28 +213,20 @@ function onRequestReceived(payload: any) {
 function onMessageReceived(payload: any) {
 	let message = JSON.parse(payload.body)
 	console.log(payload)
-	if (message.type === 'JOIN') {
-		//alert(message.sender + ' joined')
-	} else if (message.type === 'LEAVE') {
-		//alert(message.sender + ' left!')
-	} else if (message.type === 'REQUEST') {
-		//TODO add rent/loan here
+	let msg: MessageDTO = {
+		senderId: message.senderId,
+		message: message.message,
+		type: 'CHAT',
+		date: message.date,
+		receive: true,
+		chatId: chat.value?.chatId.toString(),
+	}
+	if (msg.senderId != chatData.value?.userId) {
+		console.log(payload)
+		chatData.value?.messages.push(msg)
 	} else {
-		let msg: MessageDTO = {
-			senderId: message.senderId,
-			message: message.message,
-			type: 'CHAT',
-			date: message.date,
-			receive: true,
-			chatId: chat.value?.chatId.toString(),
-		}
-		if (msg.senderId != chatData.value?.userId) {
-			console.log(payload)
-			chatData.value?.messages.push(msg)
-		} else {
-			console.log(msg.senderId)
-			console.log(chatData.value?.userId)
-		}
+		console.log(msg.senderId)
+		console.log(chatData.value?.userId)
 	}
 }
 
@@ -243,11 +255,11 @@ onBeforeMount(async () => {
 			chatData.value?.messages.reverse()
 		})
 		.catch(err => {
+			//TODO handle error
 			confirm(err)
 			console.log(err)
 		})
 
-	console.log(chatData.value?.messages)
 	await connect()
 })
 
@@ -281,6 +293,15 @@ function cancelLoanRequest() {
 	toggleLoan()
 }
 
+function handleLoanRequest() {
+	if (loanStatus.value) {
+		console.log('Loaned')
+		sendLoanAccept()
+	} else {
+		console.log('Not loaned true')
+	}
+}
+
 interface DateAndTime {
 	fromDate: string
 	fromTime: string
@@ -301,6 +322,8 @@ const username = ref<string>('Brukernavn')
 const item = ref('Gjenstand')
 const currentMessage = ref<string>('')
 const loanStatus = ref(false)
+const chatData = ref<Message>()
+const chat = ref<Chat>()
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -316,6 +339,7 @@ const loanStatus = ref(false)
 			:chat="chat"
 			v-model="loanStatus"
 			data-testid="message-container"
+			@update="handleLoanRequest"
 		/>
 
 		<form class="my-2" v-on:submit.prevent="sendMessage">
