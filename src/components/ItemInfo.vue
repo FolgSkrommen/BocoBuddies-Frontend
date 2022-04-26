@@ -96,6 +96,7 @@ const range = computed(() => ({
 			<p>{{ item.postalcode }}</p>
 		</div>
 		<GoogleMap
+			class="-z-20"
 			v-if="item.position"
 			api-key="AIzaSyAnMA9aHGVJ1Fw6w6j43au2We09k4V5_kQ"
 			style="width: 100%; height: 500px"
