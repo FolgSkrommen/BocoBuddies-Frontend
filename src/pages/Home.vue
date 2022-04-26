@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
@@ -56,6 +56,9 @@ let currentPage = ref(0)
 onMounted(() => {
 	getMainCategories()
 })
+
+//Computed
+const searchHits = computed<string>(() => `${items.value.length} resultater`)
 
 //Functions
 function isAnItem(obj: any): obj is Item {
@@ -222,7 +225,6 @@ observer.observe(items[items.length-1])*/
 <template>
 	<div>
 		<h1>Hjem</h1>
-		{{ currentPage }}
 	</div>
 
 	<div class="flex">
@@ -245,6 +247,7 @@ observer.observe(items[items.length-1])*/
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
 			data-testid="categories-tag-chosen"
+			class="border-solid bg-gray-500 rounded"
 		></TagList>
 		<TagList
 			v-model="tagAlts"
@@ -255,6 +258,7 @@ observer.observe(items[items.length-1])*/
 
 	<div>
 		<!--List component-->
+		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4">
 			<div v-for="i in items" data-testid="item-cards">
 				<Card>{{ i.name }}</Card>
@@ -294,7 +298,7 @@ observer.observe(items[items.length-1])*/
 			>
 		</div>
 	</div>
-	{{ sortChosen }}
+
 	<div class="flex items-center justify-center h-full">
 		<!--Sort dropdown-->
 		<BaseDropdown
