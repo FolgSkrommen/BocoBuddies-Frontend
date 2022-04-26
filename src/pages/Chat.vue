@@ -48,7 +48,6 @@ interface sendMessage {}
 
 //WEBSOCKET
 const stompClient = ref<Client>()
-let connected = ref<boolean>(false)
 let socket: any
 function connect() {
 	socket = new SockJS('http://localhost:8001/ws')
@@ -59,11 +58,6 @@ let currentUserId = '1'
 let groupId = route.params.id
 
 function onConnected() {
-	stompClient.value?.send(
-		'/app/chat/addUser',
-		JSON.stringify({ senderId: currentUserId, type: 'JOIN' })
-	)
-	console.log('got here')
 	stompClient.value?.subscribe('/chat/' + groupId, onMessageReceived)
 }
 
@@ -154,7 +148,7 @@ onBeforeMount(async () => {
 			chat.value = res.data
 		})
 		.catch(err => {
-			//TODO handle error
+			alert(err)
 			console.log(err)
 		})
 
@@ -167,6 +161,7 @@ onBeforeMount(async () => {
 			})
 		})
 		.catch(err => {
+			confirm(err)
 			console.log(err)
 		})
 
@@ -228,91 +223,86 @@ const showLoanModal = ref(false)
 const username = ref<string>('Brukernavn')
 const item = ref('Gjenstand')
 const currentMessage = ref<string>('')
-const loanStatus = ref(undefined)
+const loanStatus = ref(false)
 </script>
 <template>
-	<div>
+	<div class="h-[68vh]">
 		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
-		<h2 class="text-center text-xl">{{ chatData.userId }}</h2>
+		<h2 class="text-center text-xl" v-if="chatData">
+			{{ chatData.userId }}
+		</h2>
 
 		<MessageContainer
 			v-if="chatData"
 			:chatData="chatData"
 			v-model="loanStatus"
 			data-testid="message-container"
-		>
-		</MessageContainer>
+		/>
 
-		<form v-on:submit.prevent="sendMessage">
-			<div class="grid grid-cols-6">
-				<div class="col-span-5">
-					<base-input
-						v-model="currentMessage"
-						data-testid="message-input"
-					></base-input>
-				</div>
-				<base-btn
-					type="submit"
-					data-testid="submit-button"
-					@click="sendMessage"
-					>Send</base-btn
-				>
-			</div>
+		<form class="grid grid-cols-6 my-2" v-on:submit.prevent="sendMessage">
+			<base-input
+				class="col-span-5"
+				v-model="currentMessage"
+				data-testid="message-input"
+			/>
+
+			<base-btn
+				class="h-full"
+				type="submit"
+				:disabled="currentMessage.length < 1"
+				data-testid="submit-button"
+				@click="sendMessage"
+				>Send</base-btn
+			>
 		</form>
 
-		<div class="grid">
-			<BaseBtn
-				class="place-self-center m-4"
-				@click="toggleLoan"
-				v-if="loanStatus === undefined"
-				data-testid="rent-button"
-				>Lån</BaseBtn
-			>
-		</div>
-		<!-- Popup or modal for when requesting loan -->
-		<BaseModal
-			v-model="showLoanModal"
-			title="Title"
-			data-testid="loan-modal"
+		<BaseBtn
+			class="place-self-center m-4 w-full"
+			@click="toggleLoan"
+			v-if="loanStatus === false"
+			data-testid="rent-button"
+			>Lån</BaseBtn
 		>
-			<template v-slot:header> Når vil du leie gjenstanden? </template>
-			<template v-slot:body>
-				<BaseInput
-					type="date"
-					label="Fra (dato)"
-					v-model="dateAndTime.fromDate"
-				></BaseInput>
-				<BaseInput
-					type="time"
-					label="Fra (tidspunkt)"
-					v-model="dateAndTime.fromTime"
-				></BaseInput>
 
-				<BaseInput
-					type="date"
-					label="Til"
-					v-model="dateAndTime.toDate"
-				></BaseInput>
-				<BaseInput
-					type="time"
-					label="Til (tidspunkt)"
-					v-model="dateAndTime.toTime"
-				></BaseInput>
-			</template>
-			<template v-slot:footer>
-				<div class="grid gap-4 grid-cols-2">
-					<BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
-					<BaseBtn @click="sendLoanRequest">Send</BaseBtn>
-				</div>
-			</template>
-		</BaseModal>
-
-		<div
-			class="grid"
-			v-if="loanStatus === true"
+		<BaseBtn
+			v-else
 			data-testid="feedback-button"
+			class="place-self-center m-4"
+			>Gi tilbakemelding</BaseBtn
 		>
-			<BaseBtn class="place-self-center m-4">Gi tilbakemelding</BaseBtn>
-		</div>
 	</div>
+
+	<!-- Popup or modal for when requesting loan -->
+	<BaseModal v-model="showLoanModal" title="Title" data-testid="loan-modal">
+		<template v-slot:header> Når vil du leie gjenstanden? </template>
+		<template v-slot:body>
+			<BaseInput
+				type="date"
+				label="Fra (dato)"
+				v-model="dateAndTime.fromDate"
+			></BaseInput>
+			<BaseInput
+				type="time"
+				label="Fra (tidspunkt)"
+				v-model="dateAndTime.fromTime"
+			></BaseInput>
+
+			<BaseInput
+				type="date"
+				label="Til"
+				v-model="dateAndTime.toDate"
+			></BaseInput>
+			<BaseInput
+				type="time"
+				label="Til (tidspunkt)"
+				v-model="dateAndTime.toTime"
+			></BaseInput>
+		</template>
+		<template v-slot:footer>
+			<div class="grid gap-4 grid-cols-2">
+				<BaseBtn @click="cancelLoanRequest">Avbryt</BaseBtn>
+				<BaseBtn @click="sendLoanRequest">Send</BaseBtn>
+			</div>
+		</template>
+	</BaseModal>
 </template>
