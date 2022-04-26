@@ -46,7 +46,7 @@ const notValid = computed(
 
 /*  Categories*/
 interface Category {
-	name: String
+	categoryName: String
 	categoryId: number
 	superCategoryId?: number
 }
@@ -55,6 +55,7 @@ let categoryChoices: Ref<Array<Category[]>> = ref([])
 onMounted(() => {
 	axios.get('/category/main').then(response => {
 		categoryChoices.value.push(response.data)
+		console.log(categoryChoices.value)
 		console.log(response.data)
 	})
 })
@@ -72,6 +73,7 @@ function updateCategories(categoryId: number, index: number) {
 			},
 		})
 		.then(response => {
+			console.log(response.data)
 			if (response.data.length > 0) {
 				categoryChoices.value.push(response.data)
 			}
@@ -167,7 +169,7 @@ function submit() {
 						:key="category.categoryId"
 						:value="category.categoryId"
 					>
-						{{ category.name }}
+						{{ category.categoryName }}
 					</option>
 				</select>
 			</div>

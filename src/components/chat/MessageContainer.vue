@@ -7,13 +7,15 @@ import BaseBtn from '../base/BaseBtn.vue'
 
 interface MessageDTO {
 	senderId?: string
-	message: string
+	message?: string
 	type: string
-	date: string
+	date?: string
 	receive: boolean
 	chatId?: string
 	start?: string
 	stop?: string
+	active?: boolean
+	returned?: boolean
 }
 
 interface Chat {
@@ -60,22 +62,19 @@ const { chatData, modelValue, chat } = defineProps<Props>()
 			</div>
 			<div v-if="message.type === 'REQUEST'">
 				<div
-					class="bg-blue border text-white px-4 py-3 rounded-lg my-5 w-fit place-self-end text-center"
-					v-if="message.receive"
+					class="bg-blue text-white rounded-md w-fit place-self-end text-center"
+					v-if="!message.receive"
 				>
 					<h2 class="text-xl">Forespørsel</h2>
 					<h3>{{ chat.itemId }}</h3>
 					<h3>{{ message.start }} - {{ message.stop }}</h3>
 					<div
-						v-if="modelValue === false"
+						v-if="modelValue === undefined"
 						class="grid gap-4 grid-cols-2"
 					>
-						<div>
-							<BaseBtn @click="decline">Avslå</BaseBtn>
-						</div>
-						<div>
-							<BaseBtn @click="confirm">Bekreft</BaseBtn>
-						</div>
+						<BaseBtn @click="decline">Avslå</BaseBtn>
+
+						<BaseBtn @click="confirm">Bekreft</BaseBtn>
 					</div>
 				</div>
 				<div
