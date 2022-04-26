@@ -6,7 +6,8 @@ import ItemInfo, { Item } from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard, { User } from '../components/UserCard.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import RateUserPopup from '../components/RateUserPopup.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 interface Loan {
@@ -63,7 +64,7 @@ const { item, lender, loan }: Response = {
 		trusted: true,
 	},
 	loan: {
-		returned: false,
+		returned: true,
 		active: false,
 		startDate: '2022-04-20T18:00:00',
 		endDate: '2022-06-20T18:00:00',
@@ -74,9 +75,16 @@ const range = computed(() => ({
 	start: new Date(loan.startDate),
 	end: new Date(loan.endDate),
 }))
+
+const showRateUserPopup = ref(false)
 </script>
 
 <template>
+	<RateUserPopup
+		v-show="showRateUserPopup"
+		@exit="showRateUserPopup = false"
+		:lender="lender"
+	/>
 	<div class="grid gap-4">
 		<h1 class="text-4xl font-bold">{{ item.name }}</h1>
 		<div v-if="!loan.returned" class="grid gap-4">
@@ -88,16 +96,22 @@ const range = computed(() => ({
 				</p>
 			</div>
 			<DatePicker
-				class="place-self-center pointer-events-none"
+				class="place-self-center pointer-events-none -z-10"
 				v-model="range"
 				is-range
 				:contenteditable="false"
 				color="red"
+				locale="no"
 			/>
 		</div>
 		<BaseBtn v-if="!loan.returned">Gå til chat</BaseBtn>
 		<BaseBtn v-if="!loan.returned" color="red">Avlys</BaseBtn>
-		<BaseBtn v-if="loan.returned">Gi tilbakemelding</BaseBtn>
+		<div v-if="loan.returned" class="grid gap-4">
+			<p class="font-bold text-lg">Objektet er returnert</p>
+			<BaseBtn @click="showRateUserPopup = true" v-if="loan.returned"
+				>Gi tilbakemelding</BaseBtn
+			>
+		</div>
 		<ItemInfo :item="item" />
 		<UserCard :user="lender" />
 	</div>

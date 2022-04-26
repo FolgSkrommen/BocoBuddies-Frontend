@@ -85,10 +85,11 @@ const range = computed(() => ({
 			</p>
 		</div>
 		<DatePicker
-			class="place-self-center pointer-events-none"
+			class="place-self-center pointer-events-none -z-10"
 			v-model="range"
 			is-range
 			:contenteditable="false"
+			locale="no"
 		/>
 		<div>
 			<p class="font-bold text-lg">Adresse</p>
@@ -96,6 +97,7 @@ const range = computed(() => ({
 			<p>{{ item.postalcode }}</p>
 		</div>
 		<GoogleMap
+			class="z-0"
 			v-if="item.position"
 			api-key="AIzaSyAnMA9aHGVJ1Fw6w6j43au2We09k4V5_kQ"
 			style="width: 100%; height: 500px"
