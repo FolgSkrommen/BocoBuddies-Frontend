@@ -6,7 +6,7 @@ interface Props {
 	removable?: boolean
 }
 interface Tag {
-	id: number
+	categoryId: number
 	name: string
 	superCategoryId: number
 }
@@ -18,7 +18,7 @@ const emit = defineEmits(['remove-tag-event', 'add-tag-event'])
 	<div class="flex gap-3 overflow-x-auto">
 		<div
 			v-for="tag in modelValue"
-			:key="tag.id"
+			:key="tag.categoryId"
 			class="bg-blue text-white p-1 px-2 flex gap-1 rounded-xl"
 		>
 			<XCircleIcon
