@@ -49,7 +49,7 @@ const notValid = computed(
 /*  Categories*/
 interface Category {
 	name: String
-	id: number
+	categoryId: number
 	superCategoryId?: number
 }
 let categoryChoices: Ref<Array<Category[]>> = ref([])
@@ -57,6 +57,7 @@ let categoryChoices: Ref<Array<Category[]>> = ref([])
 onMounted(() => {
 	axios.get('/category/main').then(response => {
 		categoryChoices.value.push(response.data)
+		console.log(response.data)
 	})
 })
 // 0:
@@ -65,6 +66,7 @@ let currentCategory: number = -1
 function updateCategories(categoryId: number, index: number) {
 	categoryChoices.value = categoryChoices.value.slice(0, index + 1)
 	currentCategory = categoryId
+	console.log(categoryId, index)
 	axios
 		.get('/category/sub', {
 			params: {
@@ -155,15 +157,17 @@ function submit() {
 					v-if="categoryChoices"
 					:key="index"
 					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-					@input="event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)"
+					@input="
+						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
+					"
 				>
 					>
 					<option :key="-1" :value="null">Velg</option>
 
 					<option
 						v-for="category in categories"
-						:key="category.id"
-						:value="category.id"
+						:key="category.categoryId"
+						:value="category.categoryId"
 					>
 						{{ category.name }}
 					</option>
