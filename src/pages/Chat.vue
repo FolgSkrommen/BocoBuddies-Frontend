@@ -337,47 +337,48 @@ onBeforeMount(async () => {
 			})
 			.then(response => {
 				item.value = response.data.item
-				console.log('DITT ITEM')
-				console.log(item.value)
+				lender.value = response.data.lender
 			})
 			.catch(error => {})
 
-		await axios
-			.get('/loan?chatId=' + chat.value?.chatId)
-			.then(res => {
-				console.log(res.data)
-				user.value = res.data.user
-				item.value = res.data.item
-				loan.value = res.data.loan
-				if (loan.value) {
-					console.log('Log has value')
-					let msg: MessageDTO = {
-						senderId: loan.value?.loaner.toString(),
-						type: 'REQUEST',
-						receive:
-							loan.value?.loaner.toString() !=
-							chatData.value?.userId,
-						start: loan.value?.start,
-						stop: loan.value?.end,
-						date: loan.value?.creationDate,
-						returned: loan.value?.returned,
-						active: loan.value?.active,
-					}
-					chatData.value?.messages.push(msg)
-					//Sorts chat by date
-					chatData.value?.messages.sort(function (a, b) {
-						if (a.date && b.date)
-							return a.date > b.date
-								? -1
-								: a.date < b.date
-								? 1
-								: 0
+		if (lender.value) {
+			await axios
+				.get('/loan?chatId=' + chat.value?.chatId)
+				.then(res => {
+					console.log(res.data)
+					user.value = res.data.user
+					item.value = res.data.item
+					loan.value = res.data.loan
+					if (loan.value) {
+						console.log('Log has value')
+						let msg: MessageDTO = {
+							senderId: loan.value?.loaner.toString(),
+							type: 'REQUEST',
+							receive:
+								loan.value?.loaner.toString() !=
+								chatData.value?.userId,
+							start: loan.value?.start,
+							stop: loan.value?.end,
+							date: loan.value?.creationDate,
+							returned: loan.value?.returned,
+							active: loan.value?.active,
+						}
+						chatData.value?.messages.push(msg)
+						//Sorts chat by date
+						chatData.value?.messages.sort(function (a, b) {
+							if (a.date && b.date)
+								return a.date > b.date
+									? -1
+									: a.date < b.date
+									? 1
+									: 0
 
-						return -1
-					})
-				}
-			})
-			.catch(err => {})
+							return -1
+						})
+					}
+				})
+				.catch(err => {})
+		}
 	}
 
 	await connect()
@@ -401,6 +402,7 @@ const username = ref<string>('Brukernavn')
 
 const item = ref<Item>()
 const user = ref<User>()
+const lender = ref<User>()
 const loan = ref<Loan>()
 
 const currentMessage = ref<string>('')
@@ -437,35 +439,36 @@ const range = ref<Range>()
 		/>
 
 		<form class="my-2" v-on:submit.prevent="sendMessage">
-			<base-input
-				class=""
-				v-model="currentMessage"
-				data-testid="message-input"
-			/>
-
-			<div class="flex gap-2 my-4">
-				<BaseBtn
-					class="grow bg-green-600"
-					v-if="loanStatus === false"
-					:disabled="loanPending || loanStatus"
-					data-testid="rent-button"
-					@click="showLoginModal = true"
-					>Forespør</BaseBtn
-				>
-
-				<BaseBtn
-					v-else
-					data-testid="feedback-button"
-					class="grow bg-purple-500"
-					>Gi tilbakemelding</BaseBtn
-				>
-				<base-btn
+			<div class="flex gap-2 content-center min-h-fit">
+				<base-input
 					class="grow"
+					v-model="currentMessage"
+					data-testid="message-input"
+				/>
+				<base-btn
+					class="h-full"
 					type="submit"
 					:disabled="currentMessage.length < 1"
 					data-testid="submit-button"
 					@click="sendMessage"
 					>Send</base-btn
+				>
+			</div>
+
+			<div class="flex my-4">
+				<BaseBtn
+					v-if="lender?.userId != store.state.user?.id"
+					class="grow bg-green-600"
+					:disabled="loanPending || loanStatus"
+					data-testid="rent-button"
+					@click="showLoginModal = true"
+					>Forespør</BaseBtn
+				>
+				<BaseBtn
+					v-if="lender?.userId != store.state.user?.id && loan"
+					data-testid="feedback-button"
+					class="grow bg-purple-500"
+					>Gi tilbakemelding</BaseBtn
 				>
 			</div>
 		</form>
