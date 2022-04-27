@@ -342,7 +342,7 @@ function onRequestReceived(payload: any) {
  */
 function onMessageReceived(payload: any) {
 	let message = JSON.parse(payload.body)
-	console.log(payload)
+
 	let msg: MessageDTO = {
 		senderId: message.senderId,
 		message: message.message,
@@ -352,7 +352,6 @@ function onMessageReceived(payload: any) {
 		chatId: chat.value?.chatId.toString(),
 	}
 	if (msg.senderId != chatData.value?.userId) {
-		console.log(payload)
 		chatData.value?.messages.push(msg)
 	} else {
 		console.log(msg.senderId)
@@ -378,7 +377,6 @@ onBeforeMount(async () => {
 		.get('/message?chatId=' + chat.value?.chatId)
 		.then(res => {
 			chatData.value = res.data
-			console.log(res.data)
 			chatData.value?.messages.forEach(m => {
 				m.receive = m.senderId != chatData.value?.userId
 				m.type = 'CHAT'
@@ -408,14 +406,13 @@ onBeforeMount(async () => {
 	await axios
 		.get('/loan/chat?chatId=' + chat.value?.chatId)
 		.then(res => {
-			console.log(res.data)
 			user.value = res.data.user
 			item.value = res.data.item
 			if (chat.value?.chatId) {
 				loan.value = {
 					chatId: chat.value?.chatId,
-					start: res.data.loan.startTime,
-					end: res.data.loan.endTime,
+					start: res.data.loan.startDate,
+					end: res.data.loan.endDate,
 					loanId: res.data.loan.loanId,
 					active: res.data.loan.active,
 					returned: res.data.loan.returned,
@@ -423,38 +420,35 @@ onBeforeMount(async () => {
 			}
 
 			if (loan.value) {
-				console.log('Log has value')
-				console.log(res.data.loan)
-				console.log(res.data.loan.startTime)
-				console.log(res.data.loan.endTime)
 				let msg: MessageDTO = {
-					senderId: res.data.user.id.toString(),
+					senderId: res.data.user.userId.toString(),
 					type: 'REQUEST',
 					receive:
-						res.data.user.id.toString() != chatData.value?.userId,
-					start: res.data.loan.startTime,
-					stop: res.data.loan.endTime,
+						res.data.user.userId.toString() !=
+						chatData.value?.userId,
+					start: res.data.loan.startDate,
+					stop: res.data.loan.endDate,
 					date: loan.value?.creationDate,
 					returned: loan.value?.returned,
 					active: loan.value?.active,
 				}
 
-				console.log(msg)
 				chatData.value?.messages.push(msg)
 				//Sorts chat by date
+				console.log(chatData.value?.messages)
 				chatData.value?.messages.sort(function (a, b) {
 					if (a.date && b.date)
 						return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
 
 					return -1
 				})
+				console.log(chatData.value?.messages)
 				loanPending.value = true
 				if (loan.value?.active) loanStatus.value = loan.value?.active
-
-				console.log(chatData.value?.messages)
 			}
 		})
 		.catch(err => {
+			alert(err)
 			loanPending.value = false
 			loanStatus.value = false
 		})
@@ -466,6 +460,7 @@ function sendLoanRequest() {
 	if (!range.value) return
 	//TODO: add checks if from date is later than to etc
 	sendLoanRequestWS()
+	loanPending.value = true
 }
 function handleLoanRequest() {
 	if (loanStatus.value) {
@@ -476,6 +471,20 @@ function handleLoanRequest() {
 		loanPending.value = false
 		sendLoanDecline()
 	}
+}
+
+function getDateAndTime(dateAndTime: Array<string>) {
+	return (
+		dateAndTime.at(2) +
+		'-' +
+		dateAndTime.at(1) +
+		'-' +
+		dateAndTime.at(0) +
+		' ' +
+		dateAndTime.at(3) +
+		':' +
+		dateAndTime.at(4)
+	)
 }
 
 const username = ref<string>('Brukernavn')
@@ -504,9 +513,6 @@ const range = ref<Range>()
 	<div class="h-96 flex-col w-full">
 		<h1 class="text-center text-4xl" v-if="item?.name">{{ item.name }}</h1>
 		<h1 class="text-center text-4xl" v-else>Chat</h1>
-		<h2 class="text-center text-xl" v-if="chatData">
-			{{ chatData.userId }}
-		</h2>
 
 		<MessageContainer
 			class="grow"
@@ -537,7 +543,7 @@ const range = ref<Range>()
 
 			<div class="flex my-4">
 				<BaseBtn
-					v-if="lender?.userId != store.state.user?.id"
+					v-if="lender?.userId != store.state.user?.id && !loanStatus"
 					class="grow bg-green-600"
 					:disabled="loanPending || loanStatus"
 					data-testid="rent-button"
@@ -545,7 +551,11 @@ const range = ref<Range>()
 					>Forespør</BaseBtn
 				>
 				<BaseBtn
-					v-if="lender?.userId != store.state.user?.id && loan"
+					v-if="
+						lender?.userId != store.state.user?.id &&
+						loanStatus &&
+						loanPending
+					"
 					data-testid="feedback-button"
 					class="grow bg-purple-500"
 					>Gi tilbakemelding</BaseBtn

@@ -11,6 +11,7 @@ import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+import { array } from 'yup'
 
 const { params } = useRoute()
 const id = params.id as string
