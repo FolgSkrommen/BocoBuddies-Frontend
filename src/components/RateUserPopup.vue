@@ -15,10 +15,10 @@ export interface User {
 }
 
 interface Props {
-	lender: User
+	user: User
 }
 
-const { lender } = defineProps<Props>()
+const { user } = defineProps<Props>()
 
 const emit = defineEmits(['exit'])
 
@@ -36,11 +36,11 @@ function handleRate() {
 	<BasePopup @exit="emit('exit')">
 		<img
 			class="w-16 h-16 rounded-full place-self-center"
-			:src="lender.pictureUrl"
-			:alt="lender.username"
+			:src="user.pictureUrl"
+			:alt="user.username"
 		/>
 		<p class="place-self-center font-bold text-lg">
-			{{ lender.firstName }} {{ lender.lastName }}
+			{{ user.firstName }} {{ user.lastName }}
 		</p>
 		<div class="flex gap-2 place-self-center">
 			<StarIcon
