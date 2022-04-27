@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import qs from 'qs'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
+import ItemList from '../components/ItemList.vue'
+import SortDropdown from '../components/SortDropdown.vue'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -61,6 +63,11 @@ onMounted(() => {
 const searchHits = computed<string>(() =>
 	items.value.length == 1 ? `1 resultat` : `${items.value.length} resultater`
 )
+
+//Watchers
+watch(sortChosen, () => {
+	searchAndResetItems()
+})
 
 //Functions
 function isAnItem(obj: any): obj is Item {
@@ -221,18 +228,8 @@ observer.observe(items[items.length-1])*/
 
 <template>
 	<h1 class="text-4xl font-bold">Hjem</h1>
+	sort chosen: {{ sortChosen }}
 
-	<!--<div class="flex">-->
-	<!--Text search input component-->
-	<!--<BaseInput
-			@keyup.enter="searchAndResetItems"
-			v-model="searchWord"
-			data-testid="search-field"
-		></BaseInput>
-		<BaseBtn @click="searchAndResetItems" data-testid="search-button"
-			>Søk</BaseBtn
-		>
-	</div>-->
 	<SearchbarAndButton
 		v-model="searchWord"
 		@search-and-reset="searchAndResetItems"
@@ -255,54 +252,13 @@ observer.observe(items[items.length-1])*/
 		></TagList>
 	</div>
 
-	<div>
-		<!--List component-->
-		<p class="align-middle">{{ searchHits }}</p>
-		<div class="grid gap-4">
-			<router-link
-				class="bg-slate-100 rounded-lg shadow-lg"
-				v-for="item in items"
-				:to="`/item/${item.id}`"
-			>
-				<div class="flex gap-2">
-					<img
-						class="w-32 rounded-l-lg"
-						:src="item.image"
-						:alt="item.name"
-					/>
-					<div class="p-2 grid">
-						<p class="font-bold text-lg">
-							{{ item.name }}
-						</p>
-						<div>
-							<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
-						</div>
-						<p class="text-slate-500">
-							{{ item.availableFrom }} -
-							{{ item.availableTo }}
-						</p>
-						<p class="text-slate-500">
-							{{ item.postalCode }}, {{ item.address }}
-						</p>
-					</div>
-				</div>
-			</router-link>
-		</div>
-		<div class="flex justify-center my-10">
-			<BaseBtn @click="loadMoreItems" data-testid="load-more-items-button"
-				>Last inn flere</BaseBtn
-			>
-		</div>
-	</div>
+	<ItemList
+		:items="items"
+		:searchHits="searchHits"
+		@load-more-items="loadMoreItems"
+	>
+	</ItemList>
 
-	<div class="flex items-center justify-center h-full">
-		<!--Sort dropdown-->
-		<BaseDropdown
-			:alternatives="sortAlts"
-			v-model.number="sortChosen"
-			class="bottom-12 fixed"
-			data-testid="sort-dropdown"
-			@sort-clicked="searchAndResetItems"
-		></BaseDropdown>
-	</div>
+	<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
+	</SortDropdown>
 </template>
