@@ -20,8 +20,10 @@ const loadMoreItems = () => {
 interface Props {
 	items: Array<Item>
 	searchHits: string
+	redirect: string
 }
-const { items, searchHits } = defineProps<Props>()
+const { items, searchHits, redirect } = defineProps<Props>()
+//const redirect: string = 'item'
 </script>
 
 <template>
@@ -32,7 +34,7 @@ const { items, searchHits } = defineProps<Props>()
 			<router-link
 				class="bg-slate-100 rounded-lg shadow-lg"
 				v-for="item in items"
-				:to="`/item/${item.id}`"
+				:to="`/${redirect}/${item.id}`"
 			>
 				<div class="flex gap-2">
 					<img
