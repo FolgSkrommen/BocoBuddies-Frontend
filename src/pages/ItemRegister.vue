@@ -2,6 +2,7 @@
 //Components
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseBtn.vue'
+import BaseDropdown from '../components/base/BaseDropdown.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { DatePicker } from 'v-calendar'
 
@@ -82,6 +83,7 @@ let currentCategory: number = -1
 let filterTypes: Ref<Array<FilterType>> = ref([])
 
 function updateCategories(categoryId: number, index: number) {
+	filterTypes.value = []
 	categoryChoices.value = categoryChoices.value.slice(0, index + 1)
 	currentCategory = categoryId
 	axios
@@ -91,18 +93,20 @@ function updateCategories(categoryId: number, index: number) {
 			},
 		})
 		.then(response => {
+			console.log(response.data)
 			if (response.data.length > 0) {
 				categoryChoices.value.push(response.data)
-
-				categoryChoices.value[index].forEach(object => {
-					if (object.categoryId == categoryId) {
-						if (object.filterTypes) {
-							filterTypes.value = object.filterTypes
-						}
-					}
-				})
 			}
 		})
+
+	categoryChoices.value[index].forEach(object => {
+		if (object.categoryId == categoryId) {
+			console.log(object.filterTypes)
+			if (object.filterTypes) {
+				filterTypes.value = object.filterTypes
+			}
+		}
+	})
 }
 
 /* Filter */
@@ -129,6 +133,42 @@ function uploadImage(input: any) {
 	}
 }
 
+/* Price */
+
+interface PriceUnit {
+	value: string
+	name: string
+}
+
+let priceUnits: PriceUnit[] = [
+	{
+		value: 'HOUR',
+		name: 'Time',
+	},
+	{
+		value: 'DAY',
+		name: 'Dag',
+	},
+	{
+		value: 'WEEK',
+		name: 'Uke',
+	},
+	{
+		value: 'MONTH',
+		name: 'Måned',
+	},
+	{
+		value: 'YEAR',
+		name: 'År',
+	},
+]
+
+let currentPriceUnit: string
+function setPriceUnit(priceUnit: string) {
+	currentPriceUnit = priceUnit
+}
+
+/* Submit */
 interface Item {
 	categoryId: number
 	FilterIdList: number[]
@@ -164,7 +204,7 @@ function submit() {
 	formData.append('name', title.value)
 	formData.append('description', description.value)
 	formData.append('price', price.value.toString())
-	formData.append('priceUnit', 'WEEK')
+	formData.append('priceUnit', currentPriceUnit)
 	formData.append('address', address.value)
 	formData.append('postalCode', postalCode.value.toString())
 	formData.append('startDate', range.value.start.toISOString())
@@ -202,12 +242,34 @@ function submit() {
 				label="Beskrivelse *"
 				:error="errors.description"
 			/>
+			<div class="flex gap-4">
+				<BaseInput
+					class="grow"
+					v-model.lazy="price"
+					type="number"
+					label="NOK *"
+					:error="errors.price"
+				/>
 
-			<BaseInput
-				v-model.lazy="price"
-				label="Pris *"
-				:error="errors.price"
-			/>
+				<div class="grow">
+					<BaseLabel model-value="Per" />
+
+					<select
+						class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+						@input="
+						event => setPriceUnit((event.target as HTMLInputElement).value)
+					"
+					>
+						<option
+							v-for="unit in priceUnits"
+							:key="unit.value"
+							:value="unit.value"
+						>
+							{{ unit.name }}
+						</option>
+					</select>
+				</div>
+			</div>
 
 			<div>
 				<BaseLabel model-value="Kategori" />
