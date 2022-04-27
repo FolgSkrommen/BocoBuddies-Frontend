@@ -8,6 +8,7 @@ import UserCard, { User } from '../components/UserCard.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -61,7 +62,11 @@ getItem()
 		<h1 class="text-4xl font-bold">{{ item.name }}</h1>
 		<ItemInfo :item="item" />
 		<UserCard :user="lender" />
-		<BaseBtn to="/chat/1234">Forespør lån</BaseBtn>
+		<BaseBtn
+			v-if="lender.username !== store.state.user?.username"
+			to="/chat/1234"
+			>Forespør lån</BaseBtn
+		>
 	</div>
 	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>
