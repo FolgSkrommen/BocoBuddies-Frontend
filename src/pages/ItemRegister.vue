@@ -78,7 +78,7 @@ interface FilterType {
 	filterValues: FilterValue[]
 }
 
-let currentCategory: number = -1
+let currentCategory: number = 0
 
 let filterTypes: Ref<Array<FilterType>> = ref([])
 
