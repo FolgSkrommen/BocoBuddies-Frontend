@@ -328,50 +328,58 @@ onBeforeMount(async () => {
 			console.log(err)
 		})
 
-	await axios
-		.get('/loan?chatId=' + chat.value?.chatId)
-		.then(res => {
-			console.log(res.data)
-			user.value = res.data.user
-			item.value = res.data.item
-			loan.value = res.data.loan
-			if (loan.value) {
-				console.log('Log has value')
-				let msg: MessageDTO = {
-					senderId: loan.value?.loaner.toString(),
-					type: 'REQUEST',
-					receive:
-						loan.value?.loaner.toString() != chatData.value?.userId,
-					start: loan.value?.start,
-					stop: loan.value?.end,
-					date: loan.value?.creationDate,
-					returned: loan.value?.returned,
-					active: loan.value?.active,
-				}
-				chatData.value?.messages.push(msg)
-				//Sorts chat by date
-				chatData.value?.messages.sort(function (a, b) {
-					if (a.date && b.date)
-						return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
-
-					return -1
-				})
-			}
-		})
-		.catch(err => {})
-	/**console.log(chat.value?.itemId)
 	if (chat.value?.itemId) {
 		await axios
-			.get('/item/' + chat.value?.itemId)
+			.get('/item', {
+				params: {
+					id: chat.value?.itemId,
+				},
+			})
 			.then(response => {
-				console.log(response)
+				item.value = response.data.item
+				console.log('DITT ITEM')
+				console.log(item.value)
 			})
-			.catch(error => {
-				alert(error)
-			})
-	}*/
+			.catch(error => {})
 
-	console.log(chatData.value?.messages)
+		await axios
+			.get('/loan?chatId=' + chat.value?.chatId)
+			.then(res => {
+				console.log(res.data)
+				user.value = res.data.user
+				item.value = res.data.item
+				loan.value = res.data.loan
+				if (loan.value) {
+					console.log('Log has value')
+					let msg: MessageDTO = {
+						senderId: loan.value?.loaner.toString(),
+						type: 'REQUEST',
+						receive:
+							loan.value?.loaner.toString() !=
+							chatData.value?.userId,
+						start: loan.value?.start,
+						stop: loan.value?.end,
+						date: loan.value?.creationDate,
+						returned: loan.value?.returned,
+						active: loan.value?.active,
+					}
+					chatData.value?.messages.push(msg)
+					//Sorts chat by date
+					chatData.value?.messages.sort(function (a, b) {
+						if (a.date && b.date)
+							return a.date > b.date
+								? -1
+								: a.date < b.date
+								? 1
+								: 0
+
+						return -1
+					})
+				}
+			})
+			.catch(err => {})
+	}
+
 	await connect()
 })
 
@@ -412,7 +420,8 @@ const range = ref<Range>()
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
-		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
+		<h1 class="text-center text-4xl" v-if="item?.name">{{ item.name }}</h1>
+		<h1 class="text-center text-4xl" v-else>Chat</h1>
 		<h2 class="text-center text-xl" v-if="chatData">
 			{{ chatData.userId }}
 		</h2>
