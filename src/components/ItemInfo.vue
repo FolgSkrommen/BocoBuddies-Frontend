@@ -55,7 +55,7 @@ const range = computed(() => ({
 			<p class="font-bold text-lg">Pris</p>
 			<p>{{ item.price }} / {{ item.priceUnit }}</p>
 		</div>
-		<div>
+		<div v-if="item.categories.length > 0">
 			<p class="font-bold text-lg">Kategori</p>
 			<div class="flex gap-4">
 				<div
@@ -67,7 +67,7 @@ const range = computed(() => ({
 				</div>
 			</div>
 		</div>
-		<div>
+		<div v-if="item.filters.length > 0">
 			<p class="font-bold text-lg">Filtere</p>
 			<div class="grid gap-2">
 				<div v-for="filter in item.filters" class="flex gap-2">
