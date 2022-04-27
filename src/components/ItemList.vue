@@ -23,7 +23,6 @@ interface Props {
 	redirect: string
 }
 const { items, searchHits, redirect } = defineProps<Props>()
-//const redirect: string = 'item'
 </script>
 
 <template>

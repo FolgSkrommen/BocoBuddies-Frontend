@@ -61,12 +61,14 @@ onMounted(() => {
 							:alt="chat.item.name"
 						/>
 
-						<h1 class="text-4xl">
-							{{ chat.item?.name }}
-						</h1>
-						<h2 class="text-xl">
-							{{ chat.item?.description }}
-						</h2>
+						<div class="flex-col">
+							<h1 class="text-4xl">
+								{{ chat.item?.name }}
+							</h1>
+							<h2 class="text-xl">
+								{{ chat.item?.description }}
+							</h2>
+						</div>
 					</div>
 				</router-link>
 			</Card>
