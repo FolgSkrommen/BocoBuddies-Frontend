@@ -63,13 +63,13 @@ const { chatData, modelValue, chat } = defineProps<Props>()
 			<div v-if="message.type === 'REQUEST'">
 				<div
 					class="bg-blue text-white rounded-md w-fit place-self-end text-center"
-					v-if="!message.receive"
+					v-if="message.receive"
 				>
 					<h2 class="text-xl">Forespørsel</h2>
 					<h3>{{ chat.itemId }}</h3>
 					<h3>{{ message.start }} - {{ message.stop }}</h3>
 					<div
-						v-if="modelValue === undefined"
+						v-if="modelValue === false"
 						class="grid gap-4 grid-cols-2"
 					>
 						<BaseBtn @click="decline">Avslå</BaseBtn>
