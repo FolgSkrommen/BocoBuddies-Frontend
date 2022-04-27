@@ -272,7 +272,7 @@ function submit() {
 					"
 				>
 					>
-					<option :key="-1" :value="null">Velg</option>
+					<option value="1">Velg</option>
 
 					<option
 						v-for="category in categories"
