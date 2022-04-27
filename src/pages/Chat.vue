@@ -407,7 +407,6 @@ onBeforeMount(async () => {
 		.get('/loan/chat?chatId=' + chat.value?.chatId)
 		.then(res => {
 			user.value = res.data.user
-			item.value = res.data.item
 			if (chat.value?.chatId) {
 				loan.value = {
 					chatId: chat.value?.chatId,
