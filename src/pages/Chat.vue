@@ -22,8 +22,6 @@ interface Chat {
 	chatName: string
 }
 
-interface Item {}
-
 interface MessageDTO {
 	senderId?: string
 	message?: string
@@ -137,6 +135,7 @@ function sendMessage(event: any) {
  * When sending request via WS
  */
 async function sendLoanRequestWS() {
+	console.log(range.value)
 	if (chatData.value?.userId && chat.value?.chatId && range.value) {
 		let loanRequest: Loan = {
 			chatId: chat.value?.chatId,
@@ -456,6 +455,7 @@ onBeforeMount(async () => {
 		})
 
 	await connect()
+	reRenderChat()
 })
 
 function sendLoanRequest() {
@@ -476,8 +476,6 @@ function handleLoanRequest() {
 	}
 }
 
-const username = ref<string>('Brukernavn')
-
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -486,7 +484,6 @@ const loan = ref<Loan>()
 const currentMessage = ref<string>('')
 const loanStatus = ref(false)
 const loanPending = ref(false)
-const loanId = ref(-1)
 const chatData = ref<Message>()
 const chat = ref<Chat>()
 
@@ -497,16 +494,22 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
-const render = ref<boolean>(false)
+const render = ref<number>(0)
 
 function reRenderChat() {
-	render.value = !render.value
+	render.value++
 }
 </script>
 <template>
-	<div class="h-96 flex-col w-full">
-		<h1 class="text-center text-4xl" v-if="item?.name">{{ item.name }}</h1>
-		<h1 class="text-center text-4xl" v-else>Chat</h1>
+	<div class="h-full flex-col w-full">
+		<div class="flex gap-2">
+			<RouterLink class="place-sel" to="/chats"> Back </RouterLink>
+			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
+			<h1 class="text-center text-4xl" v-if="item?.name">
+				{{ item.name }}
+			</h1>
+			<h1 class="text-center text-4xl" v-else>Chat</h1>
+		</div>
 
 		<MessageContainer
 			class="grow"

@@ -17,7 +17,7 @@ const { receive } = defineProps<Props>()
 			<slot></slot>
 		</div>
 		<div
-			class="bg-gray-200 text-black px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-start"
+			class="bg-gray-400 text-black px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-start"
 			v-else
 		>
 			<slot></slot>

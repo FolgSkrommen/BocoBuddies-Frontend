@@ -15,7 +15,7 @@ const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
-	phonenumber: yup.number().required('Telefon er påkrevd').min(8),
+	phonenumber: yup.number().required('Telefon er påkrevd'),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
 // Create a form context with the validation schema
@@ -33,9 +33,6 @@ const { value: phonenumber } = useField<string>('phonenumber')
 const { value: password } = useField<string>('password')
 
 const passwordCheck = ref('')
-const passwordIsSame = computed<boolean>(
-	() => password.value === passwordCheck.value
-)
 
 interface UserRegisterData {
 	firstName: string
@@ -87,7 +84,7 @@ const notValid = computed(
 		postalCode.value == undefined ||
 		phonenumber.value == undefined ||
 		password.value == undefined ||
-		!passwordIsSame
+		password.value != passwordCheck.value
 )
 </script>
 
@@ -122,6 +119,7 @@ const notValid = computed(
 			<BaseInput
 				v-model.lazy="email"
 				label="E-post"
+				type="email"
 				:error="errors.email"
 				data-testid="email-input"
 			/>
@@ -129,6 +127,7 @@ const notValid = computed(
 				v-model="phonenumber"
 				label="Telefon"
 				:error="errors.phonenumber"
+				type="number"
 				data-testid="phonenumber-input"
 			/>
 
