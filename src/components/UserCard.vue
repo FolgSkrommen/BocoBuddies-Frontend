@@ -9,6 +9,7 @@ export interface User {
 	username: string
 	rating: number
 	pictureUrl: string
+	profilePicture: string
 	trusted: boolean
 }
 
@@ -22,7 +23,7 @@ const { user } = defineProps<Props>()
 <template>
 	<Card :color="color">
 		<div class="flex gap-4 w-full justify-between">
-			<img class="w-16 h-16 rounded-full" :src="user.pictureUrl" />
+			<img class="w-16 h-16 rounded-full" :src="user.profilePicture" />
 			<div class="grid gap-2">
 				<p class="font-bold text-lg">
 					{{ user.firstName }} {{ user.lastName }}
