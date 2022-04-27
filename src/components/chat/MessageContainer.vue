@@ -35,6 +35,17 @@ interface Props {
 	chat: Chat
 }
 
+onMounted(() => {
+	scrollToElement()
+})
+
+function scrollToElement(this: any) {
+	const el = this.$refs.box
+	if (el) {
+		el.scrollIntoView({ behavior: 'smooth' })
+	}
+}
+
 const emit = defineEmits(['update:modelValue'])
 
 const confirm = () => {

@@ -493,10 +493,10 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
-const render = ref<boolean>(false)
+const render = ref<number>(0)
 
 function reRenderChat() {
-	render.value = !render.value
+	render.value++
 }
 </script>
 <template>
