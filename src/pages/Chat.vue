@@ -455,6 +455,7 @@ onBeforeMount(async () => {
 		})
 
 	await connect()
+	reRenderChat()
 })
 
 function sendLoanRequest() {

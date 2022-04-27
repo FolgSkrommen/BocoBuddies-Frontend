@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, onMounted, PropType, ref } from 'vue'
+import {
+	computed,
+	onMounted,
+	onRenderTracked,
+	onRenderTriggered,
+	PropType,
+	ref,
+} from 'vue'
 import Message from './Message.vue'
 import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
@@ -36,15 +43,9 @@ interface Props {
 }
 
 onMounted(() => {
-	scrollToElement()
+	var myDiv = document.getElementById('box')
+	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
 })
-
-function scrollToElement(this: any) {
-	const el = this.$refs.box
-	if (el) {
-		el.scrollIntoView({ behavior: 'smooth' })
-	}
-}
 
 const emit = defineEmits(['update:modelValue'])
 
