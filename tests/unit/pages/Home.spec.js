@@ -12,7 +12,23 @@ describe('Home', () => {
 			},
 		]
 
-		jest.spyOn(axios, 'get').mockResolvedValue(mockCategoryList)
+		let mockItemList = [
+			{
+				id: 1,
+				image: 'Image',
+				name: 'Name',
+				price: 100,
+				availableFrom: 'Today',
+				availableTo: 'Tomorrow',
+				priceUnit: 'Unit',
+				address: 'Here',
+				postalCode: 'Code',
+			},
+		]
+
+		jest.spyOn(axios, 'get')
+			.mockResolvedValue(mockCategoryList)
+			.mockResolvedValue(mockItemList)
 
 		it('has the required elements, including one tag alternative, initially', async () => {
 			const mockRoute = {
@@ -27,33 +43,26 @@ describe('Home', () => {
 				stubs: { RouterLink: RouterLinkStub },
 			})
 
-			expect(axios.get).toHaveBeenCalledTimes(1)
+			expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
 			expect(axios.get).toHaveBeenCalledWith('/category/main')
 
 			await flushPromises()
+
 			expect(
 				wrapper.findAll('[data-testid="categories-tag-alts"]')
 			).toHaveLength(1)
-
-			expect(wrapper.find('[data-testid="search-field"]').exists()).toBe(
-				true
-			)
-			expect(wrapper.find('[data-testid="search-button"]').exists()).toBe(
-				true
-			)
+			expect(
+				wrapper.find('[data-testid="searchbar-and-button"]').exists()
+			).toBe(true)
 			expect(
 				wrapper.find('[data-testid="categories-tag-chosen"]').exists()
 			).toBe(true)
 			expect(
 				wrapper.find('[data-testid="categories-tag-alts"]').exists()
 			).toBe(true)
-			//ItemCards are not rendered, because no search has been done
-			expect(wrapper.find('[data-testid="item-cards"]').exists()).toBe(
-				false
+			expect(wrapper.find('[data-testid="item-list"]').exists()).toBe(
+				true
 			)
-			expect(
-				wrapper.find('[data-testid="load-more-items-button"]').exists()
-			).toBe(true)
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
 				true
 			)
@@ -65,7 +74,8 @@ describe('Home', () => {
 		})
 	})
 
-	describe('when a user searches for items', () => {
+	//OLD TESTS
+	/*describe('when a user searches for items', () => {
 		describe('user pushes search button', () => {
 			it('does not search if no word is typed', async () => {
 				const wrapper = shallowMount(Home)
@@ -73,15 +83,15 @@ describe('Home', () => {
 					.find('[data-testid="search-button"]')
 					.trigger('click')
 				expect(wrapper.vm.items.length).toBe(0)
-			}),
-				it('does search if word is typed', () => {
-					const wrapper = shallowMount(Home)
-					let searchString = 'sko'
-					wrapper.vm.searchWord = searchString
+			})
+			it('does search if word is typed', () => {
+				const wrapper = shallowMount(Home)
+				let searchString = 'sko'
+				wrapper.vm.searchWord = searchString
 
-					expect(wrapper.vm.searchWord).toEqual('sko')
-					//TODO implement test
-				})
+				expect(wrapper.vm.searchWord).toEqual('sko')
+				//TODO implement test
+			})
 		})
 		describe('user pushes enter', () => {
 			it('does not search if no word is typed', async () => {
@@ -92,5 +102,5 @@ describe('Home', () => {
 				expect(wrapper.vm.items.length).toBe(0)
 			})
 		})
-	})
+	})*/
 })

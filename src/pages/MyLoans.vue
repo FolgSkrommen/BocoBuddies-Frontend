@@ -38,11 +38,6 @@ interface Item {
 	filters: Filter[]
 }*/
 
-enum Status {
-	ACTIVE = 'Active',
-	ARCHIVED = 'Archived',
-}
-
 /*interface LoanedItem {
 	id: number
 	name: string
@@ -97,6 +92,12 @@ const items = ref<LoanedItem[]>([
 	},
 ])*/
 
+//Enums
+enum Status {
+	ACTIVE = 'Active',
+	ARCHIVED = 'Archived',
+}
+
 //Interfaces
 interface Category {
 	categoryId: number
@@ -128,6 +129,10 @@ let sortAlts: Alternative[] = [
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
+	{ id: 6, alt: 'Tidligste startdato' },
+	{ id: 7, alt: 'Seneste startdato' },
+	{ id: 8, alt: 'Tidligste sluttdato' },
+	{ id: 9, alt: 'Seneste sluttdato' },
 ]
 
 let searchWord = ref<string>('')
@@ -190,15 +195,20 @@ function search() {
 	//if(store.getters.loggedIn) { //TODO might be 'store.getters.loggedIn()'
 	let sortChosenString: string
 	/*
-  { id: 0, alt: 'Ingen sortering' },
+  	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
-	{ id: 5, alt: 'Eldste først' },*/
+	{ id: 5, alt: 'Eldste først' },
+	{ id: 6, alt: 'Tidligste startdato' },
+	{ id: 7, alt: 'Seneste startdato' },
+	{ id: 8, alt: 'Tidligste sluttdato' },
+	{ id: 9, alt: 'Seneste sluttdato' },
+	*/
 	switch (sortChosen.value) {
 		case 0: {
-			sortChosenString = 'none'
+			sortChosenString = 'loan-none'
 			break
 		}
 		case 1: {
@@ -214,15 +224,31 @@ function search() {
 			break
 		}
 		case 4: {
-			sortChosenString = 'newest'
+			sortChosenString = 'loan-newest'
 			break
 		}
 		case 5: {
-			sortChosenString = 'none'
+			sortChosenString = 'loan-none'
+			break
+		}
+		case 6: {
+			sortChosenString = 'loan-start-ascending'
+			break
+		}
+		case 7: {
+			sortChosenString = 'loan-start-descending'
+			break
+		}
+		case 8: {
+			sortChosenString = 'loan-end-ascending'
+			break
+		}
+		case 9: {
+			sortChosenString = 'loan-end-descending'
 			break
 		}
 		default: {
-			sortChosenString = 'none'
+			sortChosenString = 'loan-none'
 			break
 		}
 	}
@@ -231,9 +257,6 @@ function search() {
 	chosenTags.value.forEach(tag => {
 		chosenTagsIds.push(tag.categoryId)
 	})
-
-	console.log(store.state.user.id)
-	console.log(statusTag.value === Status.ACTIVE)
 
 	axios
 		.get('/item/search/' + searchWord.value.trim(), {
@@ -312,23 +335,6 @@ function loadMoreItems() {
 		search()
 	}
 }
-
-/*const displayedItems = computed(() => {
-	switch (selectedTag.value) {
-		case Status.ACTIVE:
-			return items.value
-				.filter(el => el.status === 'Active')
-				.filter(el =>
-					el.name.toLowerCase().includes(search.value.toLowerCase())
-				)
-		case Status.ARCHIVED:
-			return items.value
-				.filter(el => el.status === 'Archived')
-				.filter(el =>
-					el.name.toLowerCase().includes(search.value.toLowerCase())
-				)
-	}
-})*/
 </script>
 
 <template>
@@ -378,6 +384,7 @@ function loadMoreItems() {
 		<ItemList
 			:items="items"
 			:searchHits="searchHits"
+			redirect="my-loan"
 			@load-more-items="loadMoreItems"
 		>
 		</ItemList>

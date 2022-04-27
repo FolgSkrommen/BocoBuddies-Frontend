@@ -225,6 +225,7 @@ observer.observe(items[items.length-1])*/
 	<SearchbarAndButton
 		v-model="searchWord"
 		@search-and-reset="searchAndResetItems"
+		data-testid="searchbar-and-button"
 	></SearchbarAndButton>
 
 	<div class="py-10">
@@ -234,8 +235,8 @@ observer.observe(items[items.length-1])*/
 			v-model="chosenTags"
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
-			data-testid="categories-tag-chosen"
 			class="border-solid bg-gray-500 rounded"
+			data-testid="categories-tag-chosen"
 		></TagList>
 		<TagList
 			v-model="tagAlts"
@@ -247,10 +248,16 @@ observer.observe(items[items.length-1])*/
 	<ItemList
 		:items="items"
 		:searchHits="searchHits"
+		redirect="item"
 		@load-more-items="loadMoreItems"
+		data-testid="item-list"
 	>
 	</ItemList>
 
-	<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
+	<SortDropdown
+		:sortAlts="sortAlts"
+		v-model.number="sortChosen"
+		data-testid="sort-dropdown"
+	>
 	</SortDropdown>
 </template>
