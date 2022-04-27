@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import BaseInput from '../components/base/BaseInput.vue'
 import axios from 'axios'
 import { onMounted, ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
-import BaseBtn from '../components/base/BaseBtn.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
-import BaseDropdown from '../components/base/BaseDropdown.vue'
 import qs from 'qs'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -181,7 +178,6 @@ function categoryChosen(tag: Category) {
 		.catch(error => {
 			console.log(error)
 		})
-	//TODO get all subcategories and put them in tagAlts, also update items accordingly instead of what is done now
 }
 function categoryRemoved(tag: Category) {
 	chosenTags.value.forEach((value, index) => {
@@ -204,9 +200,7 @@ function categoryRemoved(tag: Category) {
 		.catch(error => {
 			console.log(error)
 		})
-	//TODO get last tag in chosenTags, based on this get all subcategories and update items accordingly
 }
-
 function loadMoreItems() {
 	if (items.value.length > 0) {
 		//Not allowed to load more items if no items
@@ -228,7 +222,6 @@ observer.observe(items[items.length-1])*/
 
 <template>
 	<h1 class="text-4xl font-bold">Hjem</h1>
-	sort chosen: {{ sortChosen }}
 
 	<SearchbarAndButton
 		v-model="searchWord"
