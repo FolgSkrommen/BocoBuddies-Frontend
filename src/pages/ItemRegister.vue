@@ -221,18 +221,6 @@ function submit() {
 				</select>
 			</div>
 
-			<div class="grid place-items-center">
-				<p class="font-bold text-lg">Available time</p>
-				<DatePicker
-					class="place-self-center"
-					v-model="range"
-					mode="dateTime"
-					is-range
-					locale="no"
-					is24hr
-				/>
-			</div>
-
 			<div v-for="(filterType, index) in filterTypes">
 				<BaseLabel :model-value="filterType.filterTypeName" />
 				<select
@@ -251,6 +239,18 @@ function submit() {
 						{{ value.value }}
 					</option>
 				</select>
+			</div>
+
+			<div class="grid place-items-center">
+				<p class="font-bold text-lg">Available time</p>
+				<DatePicker
+					class="place-self-center"
+					v-model="range"
+					mode="dateTime"
+					is-range
+					locale="no"
+					is24hr
+				/>
 			</div>
 			<div>
 				<BaseLabel model-value="Bilder" />
