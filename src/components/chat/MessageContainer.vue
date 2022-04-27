@@ -24,13 +24,13 @@ interface Chat {
 	chatName: string
 }
 
-interface Message {
+interface ChatData {
 	userId: string
 	messages: Array<MessageDTO>
 }
 
 interface Props {
-	chatData: Message
+	chatData: ChatData
 	modelValue: boolean
 	chat: Chat
 }
@@ -46,46 +46,55 @@ const decline = () => {
 }
 
 const { chatData, modelValue, chat } = defineProps<Props>()
+
+function styleType(received: boolean) {
+	switch (received) {
+		case true:
+			return 'bg-gray-200 text-black '
+		case false:
+			return 'bg-blue text-white justify-self-end'
+		default:
+			return 'bg-blue text-white'
+	}
+}
 </script>
 <template>
-	<div
-		class="bg-gray-100 border px-2 py-3 rounded w-full h-full overflow-auto"
-		id="box"
-	>
-		<Message
-			v-for="(message, i) in chatData.messages"
-			:id="i"
-			:receive="!message.receive"
-		>
-			<div v-if="message.type === 'CHAT'">
+	<div class="bg-gray-100 px-2 py-3 w-full h-full overflow-auto" id="box">
+		<div class="grid" v-for="(message, i) in chatData.messages">
+			<Message
+				v-if="message.type === 'CHAT'"
+				:id="i"
+				:receive="!message.receive"
+			>
 				<div>{{ message.message }}</div>
-			</div>
-			<div v-if="message.type === 'REQUEST'">
-				<div
-					class="bg-gray-200 text-black rounded-md w-fit place-self-end text-center"
-					v-if="message.receive"
-				>
-					<h2 class="text-xl">Forespørsel</h2>
-					<h3>{{ chat.itemId }}</h3>
-					<h3>{{ message.start }} - {{ message.stop }}</h3>
-					<div
-						v-if="modelValue === false"
-						class="grid gap-4 grid-cols-2"
-					>
-						<BaseBtn @click="decline">Avslå</BaseBtn>
+			</Message>
 
-						<BaseBtn @click="confirm">Bekreft</BaseBtn>
+			<div class="grid" v-else>
+				<div
+					class="w-2/3 rounded-lg border p-6 flex flex-col gap-3 text-center"
+					:class="styleType(message.receive)"
+				>
+					<h1
+						v-if="modelValue || message.type == 'ACCEPT'"
+						class="text-2xl"
+					>
+						Avtalt lån
+					</h1>
+					<h1 v-else class="text-2xl">Forespørsel</h1>
+
+					<h3>Fra: {{ message.start }}</h3>
+					<h3>Til: {{ message.stop }}</h3>
+
+					<div
+						v-if="message.receive && !modelValue"
+						class="flex gap-2"
+					>
+						<BaseBtn class="grow" @click="decline">Avslå</BaseBtn>
+
+						<BaseBtn class="grow" @click="confirm">Bekreft</BaseBtn>
 					</div>
 				</div>
-				<div
-					class="bg-blue border text-white px-4 py-3 rounded-lg my-5 w-fit self-auto text-center"
-					v-else
-				>
-					<h2 class="text-xl">Forespørsel</h2>
-					<h3>{{ chat.itemId }}</h3>
-					<h3>{{ message.start }} - {{ message.stop }}</h3>
-				</div>
 			</div>
-		</Message>
+		</div>
 	</div>
 </template>

@@ -475,8 +475,6 @@ function handleLoanRequest() {
 	}
 }
 
-const username = ref<string>('Brukernavn')
-
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -485,7 +483,6 @@ const loan = ref<Loan>()
 const currentMessage = ref<string>('')
 const loanStatus = ref(false)
 const loanPending = ref(false)
-const loanId = ref(-1)
 const chatData = ref<Message>()
 const chat = ref<Chat>()
 
