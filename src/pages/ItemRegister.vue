@@ -185,18 +185,6 @@ interface Item {
 function submit() {
 	//TODO: Handle error
 	if (!range.value) return
-	const item: Item = {
-		categoryId: currentCategory,
-		name: title.value,
-		description: description.value,
-		price: price.value,
-		priceUnit: 'WEEK',
-		address: address.value,
-		postalCode: postalCode.value.toString(),
-		startDate: range.value.start.toISOString(),
-		endDate: range.value.end.toISOString(),
-		FilterIdList: chosenFilters.value,
-	}
 
 	const formData = new FormData()
 
@@ -307,7 +295,7 @@ function submit() {
 					"
 				>
 					>
-					<option :key="-1" :value="null">Velg</option>
+					<option value="0">Velg</option>
 
 					<option
 						v-for="value in filterType.filterValues"

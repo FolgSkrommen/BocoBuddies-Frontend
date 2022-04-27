@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { store } from '../store'
 import {
-	HomeIcon,
-	ChatIcon,
+	SearchIcon,
+	ChatAlt2Icon,
 	UserIcon,
 	CollectionIcon,
 	PlusIcon,
@@ -13,7 +13,7 @@ import {
 	<nav class="bg-slate-900 w-full fixed bottom-0 z-50">
 		<div class="flex justify-between px-4 py-2 container mx-auto">
 			<router-link to="/">
-				<HomeIcon class="w-8 h-8 text-white" />
+				<SearchIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link to="/my-loans">
 				<CollectionIcon class="w-8 h-8 text-white" />
@@ -22,7 +22,7 @@ import {
 				<PlusIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link to="/chats">
-				<ChatIcon class="w-8 h-8 text-white" />
+				<ChatAlt2Icon class="w-8 h-8 text-white" />
 			</router-link>
 
 			<router-link to="/settings">
