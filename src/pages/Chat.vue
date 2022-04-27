@@ -497,7 +497,7 @@ const range = ref<Range>()
 const render = ref<number>(0)
 
 function reRenderChat() {
-	render.value++
+	window.scrollTo(0, document.body.scrollHeight)
 }
 </script>
 <template>
