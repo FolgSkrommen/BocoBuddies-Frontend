@@ -105,6 +105,14 @@ function updateCategories(categoryId: number, index: number) {
 		})
 }
 
+/* Filter */
+
+let chosenFilters: Ref<number[]> = ref([])
+function updateFilters(typeId: number, index: number) {
+	chosenFilters.value[index] = typeId
+	console.log(chosenFilters.value)
+}
+
 /* Images*/
 let imagePreview: Ref<string[]> = ref([])
 let imageFiles: Ref<File[]> = ref([])
@@ -123,6 +131,7 @@ function uploadImage(input: any) {
 
 interface Item {
 	categoryId: number
+	FilterIdList: number[]
 	name: string
 	description: string
 	price: number
@@ -146,30 +155,34 @@ function submit() {
 		postalCode: postalCode.value.toString(),
 		startDate: range.value.start.toISOString(),
 		endDate: range.value.end.toISOString(),
+		FilterIdList: chosenFilters.value,
 	}
-	console.log(item)
+
+	const formData = new FormData()
+
+	formData.append('categoryId', currentCategory.toString())
+	formData.append('name', title.value)
+	formData.append('description', description.value)
+	formData.append('price', price.value.toString())
+	formData.append('priceUnit', 'WEEK')
+	formData.append('address', address.value)
+	formData.append('postalCode', postalCode.value.toString())
+	formData.append('startDate', range.value.start.toISOString())
+	formData.append('endDate', range.value.end.toISOString())
+	chosenFilters.value.forEach(number => {
+		formData.append('filterIdList', number.toString())
+	})
+	formData.append('images', imageFiles.value[0])
+
+	console.table(formData)
 
 	axios
-		.post('/item/register', item)
+		.post('/item/register', formData)
 		.then(response => {
 			router.push('/')
 		})
 		.catch(error => {
 			alert(error.message)
-		})
-
-	axios
-		.post('/image', imageFiles, {
-			headers: {
-				'Content-Type':
-					'multipart/form-data; boundary=<calculated when request is sent>',
-			},
-		})
-		.then(response => {
-			console.log(response)
-		})
-		.catch(error => {
-			alert(error)
 		})
 }
 </script>
@@ -221,24 +234,15 @@ function submit() {
 				</select>
 			</div>
 
-			<div class="grid place-items-center">
-				<p class="font-bold text-lg">Available time</p>
-				<DatePicker
-					class="place-self-center"
-					v-model="range"
-					mode="dateTime"
-					is-range
-					locale="no"
-					is24hr
-				/>
-			</div>
-
 			<div v-for="(filterType, index) in filterTypes">
 				<BaseLabel :model-value="filterType.filterTypeName" />
 				<select
 					v-if="filterTypes"
 					:key="index"
 					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					@input="
+						event => updateFilters(parseInt((event.target as HTMLInputElement).value), index)
+					"
 				>
 					>
 					<option :key="-1" :value="null">Velg</option>
@@ -251,6 +255,18 @@ function submit() {
 						{{ value.value }}
 					</option>
 				</select>
+			</div>
+
+			<div class="grid place-items-center">
+				<p class="font-bold text-lg">Available time</p>
+				<DatePicker
+					class="place-self-center"
+					v-model="range"
+					mode="dateTime"
+					is-range
+					locale="no"
+					is24hr
+				/>
 			</div>
 			<div>
 				<BaseLabel model-value="Bilder" />

@@ -6,10 +6,6 @@ const emit = defineEmits(['update:modelValue', 'search-and-reset'])
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
-const updateValueAndSearch = (event: Event) => {
-	emit('update:modelValue', (event.target as HTMLInputElement).value)
-	emit('search-and-reset')
-}
 const search = () => {
 	emit('search-and-reset')
 }
@@ -24,7 +20,7 @@ const { modelValue } = defineProps<Props>()
 	<div class="flex">
 		<BaseInput
 			@keyup.enter="search"
-			@update="updateValue"
+			@input="updateValue"
 			v-model="modelValue"
 			:modelValue="modelValue"
 			data-testid="search-field"

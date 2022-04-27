@@ -361,6 +361,20 @@ onBeforeMount(async () => {
 			console.log(err)
 		})
 
+	if (chat.value?.itemId) {
+		await axios
+			.get('/item', {
+				params: {
+					id: chat.value?.itemId,
+				},
+			})
+			.then(response => {
+				item.value = response.data.item
+				console.log('DITT ITEM')
+				console.log(item.value)
+			})
+			.catch(error => {})
+	}
 	await axios
 		.get('/loan?chatId=' + chat.value?.chatId)
 		.then(res => {
@@ -415,19 +429,7 @@ onBeforeMount(async () => {
 			loanStatus.value = false
 			alert(err)
 		})
-	/**console.log(chat.value?.itemId)
-	if (chat.value?.itemId) {
-		await axios
-			.get('/item/' + chat.value?.itemId)
-			.then(response => {
-				console.log(response)
-			})
-			.catch(error => {
-				alert(error)
-			})
-	}*/
 
-	console.log(chatData.value?.messages)
 	await connect()
 })
 
@@ -468,7 +470,8 @@ const range = ref<Range>()
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
-		<h1 class="text-center text-4xl" v-if="chat">{{ chat.chatName }}</h1>
+		<h1 class="text-center text-4xl" v-if="item?.name">{{ item.name }}</h1>
+		<h1 class="text-center text-4xl" v-else>Chat</h1>
 		<h2 class="text-center text-xl" v-if="chatData">
 			{{ chatData.userId }}
 		</h2>
