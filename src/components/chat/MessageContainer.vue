@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, onMounted, PropType, ref } from 'vue'
+import {
+	computed,
+	onMounted,
+	onRenderTracked,
+	onRenderTriggered,
+	PropType,
+	ref,
+} from 'vue'
 import Message from './Message.vue'
 import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
@@ -34,6 +41,11 @@ interface Props {
 	modelValue: boolean
 	chat: Chat
 }
+
+onMounted(() => {
+	var myDiv = document.getElementById('box')
+	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
+})
 
 const emit = defineEmits(['update:modelValue'])
 

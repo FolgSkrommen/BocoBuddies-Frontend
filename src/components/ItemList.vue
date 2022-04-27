@@ -21,8 +21,9 @@ interface Props {
 	items: Array<Item>
 	searchHits: string
 	redirect: string
+	renderLoadButton?: boolean
 }
-const { items, searchHits, redirect } = defineProps<Props>()
+const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 </script>
 
 <template>
@@ -60,7 +61,10 @@ const { items, searchHits, redirect } = defineProps<Props>()
 			</router-link>
 		</div>
 		<div class="flex justify-center my-10">
-			<BaseBtn @click="loadMoreItems" data-testid="load-more-items-button"
+			<BaseBtn
+				@click="loadMoreItems"
+				v-if="renderLoadButton"
+				data-testid="load-more-items-button"
 				>Last inn flere</BaseBtn
 			>
 		</div>

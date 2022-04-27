@@ -38,7 +38,7 @@ let sortAlts: Alternative[] = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Nærmest' },
+	//{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
 ]
@@ -49,6 +49,8 @@ let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
 let currentPage = ref<number>(0)
+const amountPerPage: number = 1
+let renderLoadButton = ref<boolean>(true)
 
 //Mounted
 onMounted(() => {
@@ -140,7 +142,7 @@ function search() {
 			params: {
 				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
-				amount: 20,
+				amount: amountPerPage,
 				offset: currentPage.value,
 			},
 			paramsSerializer: params => {
@@ -155,6 +157,8 @@ function search() {
 				isAnItem(responseData[0])
 			)
 				items.value = items.value.concat(responseData)
+			if (responseData.length < amountPerPage)
+				renderLoadButton.value = false
 		})
 		.catch(error => {
 			//TODO error handling, tell user something went wrong
@@ -249,6 +253,7 @@ observer.observe(items[items.length-1])*/
 	<ItemList
 		:items="items"
 		:searchHits="searchHits"
+		:renderLoadButton="renderLoadButton"
 		redirect="item"
 		@load-more-items="loadMoreItems"
 		data-testid="item-list"

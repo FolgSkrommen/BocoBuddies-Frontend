@@ -22,8 +22,6 @@ interface Chat {
 	chatName: string
 }
 
-interface Item {}
-
 interface MessageDTO {
 	senderId?: string
 	message?: string
@@ -137,6 +135,7 @@ function sendMessage(event: any) {
  * When sending request via WS
  */
 async function sendLoanRequestWS() {
+	console.log(range.value)
 	if (chatData.value?.userId && chat.value?.chatId && range.value) {
 		let loanRequest: Loan = {
 			chatId: chat.value?.chatId,
@@ -456,6 +455,7 @@ onBeforeMount(async () => {
 		})
 
 	await connect()
+	reRenderChat()
 })
 
 function sendLoanRequest() {
@@ -494,10 +494,10 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
-const render = ref<boolean>(false)
+const render = ref<number>(0)
 
 function reRenderChat() {
-	render.value = !render.value
+	render.value++
 }
 </script>
 <template>
