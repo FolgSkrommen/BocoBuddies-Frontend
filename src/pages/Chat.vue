@@ -284,6 +284,7 @@ async function onLoanAccept(payload: any) {
 				)
 		}
 	}
+	reRenderChat()
 }
 
 /**
@@ -307,8 +308,7 @@ function onRequestReceived(payload: any) {
 	console.log(msg)
 	//Adds the received request to message array if receiver is not sender
 	if (msg.senderId != chatData.value?.userId) {
-		console.log(msg.senderId)
-		console.log(chatData.value?.userId)
+		console.log('LOOK HERE: ' + msg)
 		if (loan.value) {
 			console.log(request.loanId)
 			loan.value.loanId = request.loanId
@@ -334,6 +334,7 @@ function onRequestReceived(payload: any) {
 		console.log(msg.senderId)
 		console.log(chatData.value?.userId)
 	}
+	reRenderChat()
 }
 
 /**
@@ -357,6 +358,7 @@ function onMessageReceived(payload: any) {
 		console.log(msg.senderId)
 		console.log(chatData.value?.userId)
 	}
+	reRenderChat()
 }
 
 /**
@@ -432,6 +434,8 @@ onBeforeMount(async () => {
 					active: loan.value?.active,
 				}
 
+				if (msg.active && !msg.returned) msg.type = 'ACCEPT'
+
 				chatData.value?.messages.push(msg)
 				//Sorts chat by date
 				console.log(chatData.value?.messages)
@@ -455,6 +459,7 @@ onBeforeMount(async () => {
 })
 
 function sendLoanRequest() {
+	showLoginModal.value = !showLoginModal.value
 	if (!range.value) return
 	//TODO: add checks if from date is later than to etc
 	sendLoanRequestWS()
@@ -489,6 +494,11 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
+const render = ref<boolean>(false)
+
+function reRenderChat() {
+	render.value = !render.value
+}
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -500,6 +510,7 @@ const range = ref<Range>()
 			v-if="chatData && chat"
 			:chatData="chatData"
 			:chat="chat"
+			:key="render"
 			v-model="loanStatus"
 			data-testid="message-container"
 			@update:modelValue="handleLoanRequest"
