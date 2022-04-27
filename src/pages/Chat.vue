@@ -190,11 +190,11 @@ async function sendLoanAccept() {
 			let loanRequest: Loan = {
 				active: true,
 				chatId: loan.value?.chatId,
-				creationDate: loan.value?.creationDate,
-				end: loan.value?.end,
+				creationDate: new Date().toISOString(),
+				end: new Date().toISOString(),
 				loanId: loan.value?.loanId,
 				returned: false,
-				start: loan.value?.start,
+				start: new Date().toISOString(),
 			}
 
 			console.log(loanRequest)
@@ -208,7 +208,7 @@ async function sendLoanAccept() {
 				})
 
 			stompClient.value.send(
-				'/app/chat/sendLoanRequest',
+				'/app/chat/acceptLoan',
 				JSON.stringify(loanRequest)
 			)
 		}
@@ -216,6 +216,33 @@ async function sendLoanAccept() {
 		loanStatus.value = false
 		loanPending.value = true
 	}
+}
+
+async function sendLoanDecline() {
+	await axios
+		.delete('/loan?loanId=' + loan.value?.loanId)
+		.then(res => {})
+		.catch(err => {
+			alert(err)
+		})
+
+	console.log(stompClient.value, range.value, chat.value?.chatId)
+	if (stompClient.value && chat.value?.chatId) {
+		let loanAnswer: Loan = {
+			chatId: chat.value?.chatId,
+			item: chat.value?.itemId,
+			active: false,
+			returned: false,
+			start: new Date().toISOString(),
+			end: new Date().toISOString(),
+		}
+
+		stompClient.value.send(
+			'/app/chat/acceptLoan',
+			JSON.stringify(loanAnswer)
+		)
+	}
+	console.log('Not loaned true')
 }
 
 /**
@@ -236,23 +263,26 @@ async function onLoanAccept(payload: any) {
 		active: accept.active,
 	}
 
-	//If loan is accepted
-	if (msg.active && !msg.returned) {
-		loanStatus.value = true
-	}
+	if (msg.senderId != chatData.value?.userId) {
+		//If loan is accepted
+		if (msg.active && !msg.returned) {
+			console.log('Loan accepted')
+			loanStatus.value = true
+		}
 
-	//If loan is denied
-	if (!msg.active && loan.value?.loanId) {
-		loanStatus.value = false
-		loanPending.value = false
-		axios
-			.delete('/loan?loanId=' + loan.value?.loanId)
-			.then(res => {
-				alert('Successfully denied loan!')
-			})
-			.catch(err => {
-				alert(err)
-			})
+		//If loan is denied
+		console.log(msg.active, msg.returned)
+		if (!msg.active && !msg.returned) {
+			console.log('Loan denied')
+			loanStatus.value = false
+			loanPending.value = false
+			if (chatData.value)
+				chatData.value.messages = chatData.value?.messages.filter(
+					function (item, index, arr) {
+						return item.type !== 'REQUEST'
+					}
+				)
+		}
 	}
 }
 
@@ -375,6 +405,7 @@ onBeforeMount(async () => {
 			})
 			.catch(error => {})
 	}
+	//TODO /loan/chat?chatId=
 	await axios
 		.get('/loan?chatId=' + chat.value?.chatId)
 		.then(res => {
@@ -427,7 +458,6 @@ onBeforeMount(async () => {
 		.catch(err => {
 			loanPending.value = false
 			loanStatus.value = false
-			alert(err)
 		})
 
 	await connect()
@@ -443,7 +473,9 @@ function handleLoanRequest() {
 		console.log('Loaned')
 		sendLoanAccept()
 	} else {
-		console.log('Not loaned true')
+		loanStatus.value = false
+		loanPending.value = false
+		sendLoanDecline()
 	}
 }
 
