@@ -27,7 +27,7 @@ interface Loan {
 
 interface LoanResponse {
 	item: Item
-	lender: User
+	user: User
 	loan: Loan
 }
 
@@ -61,9 +61,9 @@ async function getLoan() {
 			},
 		})
 		const data: LoanResponse = res.data
-		console.log(data)
 		item.value = data.item
-		lender.value = data.lender
+		lender.value = data.user
+		loan.value = data.loan
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'
@@ -93,7 +93,7 @@ const showRateUserPopup = ref(false)
 					</p>
 				</div>
 				<DatePicker
-					class="place-self-center pointer-events-none -z-10"
+					class="place-self-center pointer-events-none"
 					v-model="range"
 					is-range
 					:contenteditable="false"

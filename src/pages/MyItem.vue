@@ -13,20 +13,24 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 
 const { params } = useRoute()
-const id = params.id as string
 
 interface Loan {
 	startDate: string
 	endDate: string
 	returned: boolean
 	active: boolean
+	creationDate: string
+	chatId: number
+	loanId: number
 }
 
 interface LoanResponse {
 	item: Item
-	loaner: User
+	user: User
 	loan: Loan
 }
+
+const id = params.id as string
 
 type Status = 'loading' | 'loaded' | 'error'
 
@@ -51,22 +55,22 @@ async function getLoan() {
 		const res = await axios.get('/loan', {
 			method: 'GET',
 			params: {
-				id,
+				loanId: id,
+				isLender: true,
 			},
 		})
 		const data: LoanResponse = res.data
-		console.log(data)
 		item.value = data.item
-		loaner.value = data.loaner
+		loaner.value = data.user
+		loan.value = data.loan
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'
 		errorMessage.value = error
 	}
 }
-
-const showRateUserPopup = ref(false)
 getLoan()
+const showRateUserPopup = ref(false)
 </script>
 
 <template>
@@ -97,7 +101,7 @@ getLoan()
 					</p>
 				</div>
 				<DatePicker
-					class="place-self-center pointer-events-none -z-10"
+					class="place-self-center pointer-events-none"
 					v-model="range"
 					is-range
 					:contenteditable="false"
