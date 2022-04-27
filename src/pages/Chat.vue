@@ -407,7 +407,7 @@ onBeforeMount(async () => {
 	}
 	//TODO /loan/chat?chatId=
 	await axios
-		.get('/loan?chatId=' + chat.value?.chatId)
+		.get('/loan/chat?chatId=' + chat.value?.chatId)
 		.then(res => {
 			console.log(res.data)
 			user.value = res.data.user

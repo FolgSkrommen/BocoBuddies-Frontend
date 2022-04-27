@@ -51,7 +51,7 @@ async function getLoan() {
 		const res = await axios.get('/loan', {
 			method: 'GET',
 			params: {
-				id,
+				loanId: id,
 			},
 		})
 		const data: LoanResponse = res.data
