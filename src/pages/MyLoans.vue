@@ -38,11 +38,6 @@ interface Item {
 	filters: Filter[]
 }*/
 
-enum Status {
-	ACTIVE = 'Active',
-	ARCHIVED = 'Archived',
-}
-
 /*interface LoanedItem {
 	id: number
 	name: string
@@ -96,6 +91,12 @@ const items = ref<LoanedItem[]>([
 		status: 'Archived',
 	},
 ])*/
+
+//Enums
+enum Status {
+	ACTIVE = 'Active',
+	ARCHIVED = 'Archived',
+}
 
 //Interfaces
 interface Category {
@@ -257,9 +258,6 @@ function search() {
 		chosenTagsIds.push(tag.categoryId)
 	})
 
-	console.log(store.state.user.id)
-	console.log(statusTag.value === Status.ACTIVE)
-
 	axios
 		.get('/item/search/' + searchWord.value.trim(), {
 			params: {
@@ -337,23 +335,6 @@ function loadMoreItems() {
 		search()
 	}
 }
-
-/*const displayedItems = computed(() => {
-	switch (selectedTag.value) {
-		case Status.ACTIVE:
-			return items.value
-				.filter(el => el.status === 'Active')
-				.filter(el =>
-					el.name.toLowerCase().includes(search.value.toLowerCase())
-				)
-		case Status.ARCHIVED:
-			return items.value
-				.filter(el => el.status === 'Archived')
-				.filter(el =>
-					el.name.toLowerCase().includes(search.value.toLowerCase())
-				)
-	}
-})*/
 </script>
 
 <template>
@@ -403,6 +384,7 @@ function loadMoreItems() {
 		<ItemList
 			:items="items"
 			:searchHits="searchHits"
+			redirect="my-loan"
 			@load-more-items="loadMoreItems"
 		>
 		</ItemList>

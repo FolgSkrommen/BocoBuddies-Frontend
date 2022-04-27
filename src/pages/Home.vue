@@ -248,6 +248,7 @@ observer.observe(items[items.length-1])*/
 	<ItemList
 		:items="items"
 		:searchHits="searchHits"
+		redirect="item"
 		@load-more-items="loadMoreItems"
 		data-testid="item-list"
 	>
