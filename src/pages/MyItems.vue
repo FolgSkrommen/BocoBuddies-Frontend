@@ -311,8 +311,8 @@ function loadMoreItems() {
 
 			<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
 			</SortDropdown>
-		</div>
 
-		<FloatingBtn to="/item/register" />
+			<FloatingBtn to="/item/register" />
+		</div>
 	</div>
 </template>
