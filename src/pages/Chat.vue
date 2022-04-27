@@ -284,6 +284,7 @@ async function onLoanAccept(payload: any) {
 				)
 		}
 	}
+	reRenderChat()
 }
 
 /**
@@ -334,6 +335,7 @@ function onRequestReceived(payload: any) {
 		console.log(msg.senderId)
 		console.log(chatData.value?.userId)
 	}
+	reRenderChat()
 }
 
 /**
@@ -357,6 +359,7 @@ function onMessageReceived(payload: any) {
 		console.log(msg.senderId)
 		console.log(chatData.value?.userId)
 	}
+	reRenderChat()
 }
 
 /**
@@ -432,6 +435,8 @@ onBeforeMount(async () => {
 					active: loan.value?.active,
 				}
 
+				if (msg.active && !msg.returned) msg.type = 'ACCEPT'
+
 				chatData.value?.messages.push(msg)
 				//Sorts chat by date
 				console.log(chatData.value?.messages)
@@ -447,7 +452,6 @@ onBeforeMount(async () => {
 			}
 		})
 		.catch(err => {
-			alert(err)
 			loanPending.value = false
 			loanStatus.value = false
 		})
@@ -472,20 +476,6 @@ function handleLoanRequest() {
 	}
 }
 
-function getDateAndTime(dateAndTime: Array<string>) {
-	return (
-		dateAndTime.at(2) +
-		'-' +
-		dateAndTime.at(1) +
-		'-' +
-		dateAndTime.at(0) +
-		' ' +
-		dateAndTime.at(3) +
-		':' +
-		dateAndTime.at(4)
-	)
-}
-
 const username = ref<string>('Brukernavn')
 
 const item = ref<Item>()
@@ -507,6 +497,11 @@ interface Range {
 	end: Date
 }
 const range = ref<Range>()
+const render = ref<boolean>(false)
+
+function reRenderChat() {
+	render.value = !render.value
+}
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -518,6 +513,7 @@ const range = ref<Range>()
 			v-if="chatData && chat"
 			:chatData="chatData"
 			:chat="chat"
+			:key="render"
 			v-model="loanStatus"
 			data-testid="message-container"
 			@update:modelValue="handleLoanRequest"
