@@ -14,6 +14,7 @@ import { useRoute } from 'vue-router'
 import { array } from 'yup'
 
 const { params } = useRoute()
+const id = parseInt(params.id as string)
 
 interface Loan {
 	startDate: string
@@ -30,8 +31,6 @@ interface LoanResponse {
 	user: User
 	loan: Loan
 }
-
-const id = params.id as string
 
 type Status = 'loading' | 'loaded' | 'error'
 

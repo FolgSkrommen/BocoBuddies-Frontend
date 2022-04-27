@@ -13,6 +13,7 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 
 const { params } = useRoute()
+const id = parseInt(params.id as string)
 
 interface Loan {
 	startDate: string
@@ -29,8 +30,6 @@ interface LoanResponse {
 	user: User
 	loan: Loan
 }
-
-const id = params.id as string
 
 type Status = 'loading' | 'loaded' | 'error'
 

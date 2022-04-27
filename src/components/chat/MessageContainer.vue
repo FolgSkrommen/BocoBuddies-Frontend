@@ -62,7 +62,7 @@ const { chatData, modelValue, chat } = defineProps<Props>()
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
-			return 'bg-gray-200 text-black '
+			return 'bg-gray-400 text-black '
 		case false:
 			return 'bg-blue text-white justify-self-end'
 		default:
@@ -71,7 +71,10 @@ function styleType(received: boolean) {
 }
 </script>
 <template>
-	<div class="bg-gray-100 px-2 py-3 w-full h-full overflow-auto" id="box">
+	<div
+		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
+		id="box"
+	>
 		<div class="grid" v-for="(message, i) in chatData.messages">
 			<Message
 				v-if="message.type === 'CHAT'"

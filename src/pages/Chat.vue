@@ -501,9 +501,15 @@ function reRenderChat() {
 }
 </script>
 <template>
-	<div class="h-96 flex-col w-full">
-		<h1 class="text-center text-4xl" v-if="item?.name">{{ item.name }}</h1>
-		<h1 class="text-center text-4xl" v-else>Chat</h1>
+	<div class="h-full flex-col w-full">
+		<div class="flex gap-2">
+			<RouterLink class="place-sel" to="/chats"> Back </RouterLink>
+			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
+			<h1 class="text-center text-4xl" v-if="item?.name">
+				{{ item.name }}
+			</h1>
+			<h1 class="text-center text-4xl" v-else>Chat</h1>
+		</div>
 
 		<MessageContainer
 			class="grow"
