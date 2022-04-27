@@ -437,7 +437,7 @@ onBeforeMount(async () => {
 
 				chatData.value?.messages.push(msg)
 				//Sorts chat by date
-				console.log(chatData.value?.messages)
+				console.log(loan.value)
 				chatData.value?.messages.sort(function (a, b) {
 					if (a.date && b.date)
 						return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
