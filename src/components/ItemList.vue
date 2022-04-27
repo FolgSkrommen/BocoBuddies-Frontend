@@ -29,7 +29,7 @@ const { items, searchHits, redirect } = defineProps<Props>()
 	<div>
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
-		<div class="grid gap-4 sm:grid-cols-3">
+		<div class="grid gap-4 sm:grid-cols-2">
 			<router-link
 				class="bg-slate-100 rounded-lg shadow-lg"
 				v-for="item in items"

@@ -252,8 +252,7 @@ observer.observe(items[items.length-1])*/
 		redirect="item"
 		@load-more-items="loadMoreItems"
 		data-testid="item-list"
-	>
-	</ItemList>
+	/>
 
 	<SortDropdown
 		:sortAlts="sortAlts"
