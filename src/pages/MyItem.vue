@@ -49,6 +49,31 @@ const range = computed(() => {
 	}
 })
 
+interface ItemResponse {
+	item: Item
+	lender: User
+}
+
+async function getItem() {
+	status.value = 'loading'
+	try {
+		const res = await axios.get('/item', {
+			method: 'GET',
+			params: {
+				id,
+			},
+		})
+		const data: ItemResponse = res.data
+		console.log(data)
+		item.value = data.item
+		loaner.value = data.lender
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
+}
+
 async function getLoan() {
 	status.value = 'loading'
 	try {
@@ -65,8 +90,7 @@ async function getLoan() {
 		loan.value = data.loan
 		status.value = 'loaded'
 	} catch (error) {
-		status.value = 'error'
-		errorMessage.value = error
+		getItem()
 	}
 }
 getLoan()
@@ -75,7 +99,7 @@ const showRateUserPopup = ref(false)
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
-	<div v-if="status === 'loaded' && loaner && item && loan">
+	<div v-if="status === 'loaded' && loaner && item">
 		<RateUserPopup
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
@@ -83,7 +107,8 @@ const showRateUserPopup = ref(false)
 		/>
 		<div class="grid gap-4">
 			<h1 class="text-4xl font-bold">{{ item.name }}</h1>
-			<div v-if="loan.active" class="grid gap-4">
+
+			<div v-if="loan && loan.active" class="grid gap-4">
 				<div v-if="loan.returned" class="grid gap-4">
 					<p class="font-bold text-lg">Objektet er returnert</p>
 					<BaseBtn
