@@ -43,7 +43,8 @@ interface Message {
 }
 
 interface Loan {
-	loanId: number
+	chatId: number
+	loanId?: number
 	item: number
 	loaner: number
 	start: string
@@ -138,7 +139,7 @@ function sendMessage(event: any) {
 async function sendLoanRequestWS() {
 	if (chatData.value?.userId && chat.value?.chatId && range.value) {
 		let loanRequest: Loan = {
-			loanId: chat.value?.chatId,
+			chatId: chat.value?.chatId,
 			item: chat.value?.itemId,
 			loaner: parseInt(chatData.value?.userId),
 			start: range.value.start.toISOString(),
@@ -185,6 +186,7 @@ async function sendLoanAccept() {
 	if (stompClient.value) {
 		if (loanId.value !== -1 && chat.value?.itemId && loan.value?.loanId) {
 			let loanAccept: Loan = {
+				chatId: chat.value?.chatId,
 				loanId: loan.value?.loanId,
 				item: chat.value?.itemId,
 				loaner: 0,
@@ -233,7 +235,6 @@ async function onLoanAccept(payload: any) {
 
 	//If loan is accepted
 	if (msg.active && !msg.returned) {
-		axios.put()
 		loanStatus.value = true
 	}
 
@@ -328,12 +329,14 @@ onBeforeMount(async () => {
 		})
 
 	await axios
-		.get('/loan')
+		.get('/loan?chatId=' + chat.value?.chatId)
 		.then(res => {
+			console.log(res.data)
 			user.value = res.data.user
 			item.value = res.data.item
 			loan.value = res.data.loan
 			if (loan.value) {
+				console.log('Log has value')
 				let msg: MessageDTO = {
 					senderId: loan.value?.loaner.toString(),
 					type: 'REQUEST',
