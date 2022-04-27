@@ -410,7 +410,6 @@ onBeforeMount(async () => {
 		.then(res => {
 			console.log(res.data)
 			user.value = res.data.user
-			item.value = res.data.item
 			if (chat.value?.chatId) {
 				loan.value = {
 					chatId: chat.value?.chatId,
