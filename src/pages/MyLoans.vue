@@ -126,7 +126,7 @@ let sortAlts: Alternative[] = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	{ id: 3, alt: 'Nærmest' },
+	//{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
 	{ id: 6, alt: 'Tidligste startdato' },
