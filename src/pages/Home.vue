@@ -228,14 +228,15 @@ observer.observe(items[items.length-1])*/
 		data-testid="searchbar-and-button"
 	></SearchbarAndButton>
 
-	<div class="py-10">
+	<div class="flex flex-col gap-2 py-10">
 		<!--Tag input component-->
 		<h2 class="text-2xl font-semibold">Kategorier</h2>
 		<TagList
 			v-model="chosenTags"
+			v-if="chosenTags.length > 0"
 			:removable="true"
 			@remove-tag-event="categoryRemoved"
-			class="border-solid bg-gray-500 rounded"
+			class="border-solid bg-gray-500 rounded p-3"
 			data-testid="categories-tag-chosen"
 		></TagList>
 		<TagList

@@ -19,7 +19,7 @@ const emit = defineEmits(['remove-tag-event', 'add-tag-event'])
 		<div
 			v-for="tag in modelValue"
 			:key="tag.categoryId"
-			class="bg-blue text-white p-1 px-2 flex gap-1 rounded-xl"
+			class="bg-blue text-white p-1 px-2 flex gap-1 rounded-xl hover:cursor-pointer"
 		>
 			<XCircleIcon
 				v-if="removable"
