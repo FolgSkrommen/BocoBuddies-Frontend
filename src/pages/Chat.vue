@@ -308,8 +308,7 @@ function onRequestReceived(payload: any) {
 	console.log(msg)
 	//Adds the received request to message array if receiver is not sender
 	if (msg.senderId != chatData.value?.userId) {
-		console.log(msg.senderId)
-		console.log(chatData.value?.userId)
+		console.log('LOOK HERE: ' + msg)
 		if (loan.value) {
 			console.log(request.loanId)
 			loan.value.loanId = request.loanId
@@ -460,6 +459,7 @@ onBeforeMount(async () => {
 })
 
 function sendLoanRequest() {
+	showLoginModal.value = !showLoginModal.value
 	if (!range.value) return
 	//TODO: add checks if from date is later than to etc
 	sendLoanRequestWS()
