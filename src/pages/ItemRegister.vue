@@ -3,6 +3,7 @@
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseBtn.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
+import { DatePicker } from 'v-calendar'
 
 import axios from 'axios'
 
@@ -30,6 +31,12 @@ let { value: price } = useField<number>('price')
 let { value: address } = useField<string>('address')
 let { value: postalCode } = useField<number>('postalCode')
 
+interface Range {
+	start: Date
+	end: Date
+}
+const range = ref<Range>()
+
 const notValid = computed(
 	() =>
 		!!errors.value.title ||
@@ -49,23 +56,34 @@ interface Category {
 	categoryName: String
 	categoryId: number
 	superCategoryId?: number
+	filterTypes?: FilterType[]
 }
 let categoryChoices: Ref<Array<Category[]>> = ref([])
 
 onMounted(() => {
 	axios.get('/category/main').then(response => {
 		categoryChoices.value.push(response.data)
-		console.log(categoryChoices.value)
-		console.log(response.data)
 	})
 })
-// 0:
+
+interface FilterValue {
+	id: number
+	value: string
+}
+
+interface FilterType {
+	filterTypeId: number
+	filterTypeName: string
+	filterValues: FilterValue[]
+}
+
 let currentCategory: number = -1
+
+let filterTypes: Ref<Array<FilterType>> = ref([])
 
 function updateCategories(categoryId: number, index: number) {
 	categoryChoices.value = categoryChoices.value.slice(0, index + 1)
 	currentCategory = categoryId
-	console.log(categoryId, index)
 	axios
 		.get('/category/sub', {
 			params: {
@@ -73,46 +91,61 @@ function updateCategories(categoryId: number, index: number) {
 			},
 		})
 		.then(response => {
-			console.log(response.data)
 			if (response.data.length > 0) {
 				categoryChoices.value.push(response.data)
+
+				categoryChoices.value[index].forEach(object => {
+					if (object.categoryId == categoryId) {
+						if (object.filterTypes) {
+							filterTypes.value = object.filterTypes
+						}
+					}
+				})
 			}
 		})
 }
 
 /* Images*/
-let imageList: Ref<string[]> = ref([])
+let imagePreview: Ref<string[]> = ref([])
+let imageFiles: Ref<File[]> = ref([])
 function uploadImage(input: any) {
 	let count = input.files.length
 	let index = 0
 
 	if (input.files) {
 		while (count--) {
-			imageList.value.push(URL.createObjectURL(input.files[index]))
+			imagePreview.value.push(URL.createObjectURL(input.files[index]))
+			imageFiles.value = input.files
 			index++
 		}
 	}
 }
 
 interface Item {
-	categoryId: string
+	categoryId: number
 	name: string
 	description: string
 	price: number
 	priceUnit: string
 	address: string
-	postalCode: number
+	postalCode: string
+	startDate: string
+	endDate: string
 }
 
 function submit() {
-	let item: Item = {
-		categoryId: currentCategory.toString(),
+	//TODO: Handle error
+	if (!range.value) return
+	const item: Item = {
+		categoryId: currentCategory,
 		name: title.value,
 		description: description.value,
 		price: price.value,
 		priceUnit: 'WEEK',
 		address: address.value,
-		postalCode: postalCode.value,
+		postalCode: postalCode.value.toString(),
+		startDate: range.value.start.toISOString(),
+		endDate: range.value.end.toISOString(),
 	}
 	console.log(item)
 
@@ -124,6 +157,20 @@ function submit() {
 		.catch(error => {
 			alert(error.message)
 		})
+
+	axios
+		.post('/image', imageFiles, {
+			headers: {
+				'Content-Type':
+					'multipart/form-data; boundary=<calculated when request is sent>',
+			},
+		})
+		.then(response => {
+			console.log(response)
+		})
+		.catch(error => {
+			alert(error)
+		})
 }
 </script>
 
@@ -131,7 +178,7 @@ function submit() {
 	<div class="">
 		<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
 
-		<form class="grid gap-y-6" @submit.prevent="submit()">
+		<form class="grid w-full gap-y-6" @submit.prevent="submit()">
 			<BaseInput
 				v-model.lazy="title"
 				label="Tittel *"
@@ -174,19 +221,49 @@ function submit() {
 				</select>
 			</div>
 
+			<div class="grid place-items-center">
+				<p class="font-bold text-lg">Available time</p>
+				<DatePicker
+					class="place-self-center"
+					v-model="range"
+					mode="dateTime"
+					is-range
+					locale="no"
+					is24hr
+				/>
+			</div>
+
+			<div v-for="(filterType, index) in filterTypes">
+				<BaseLabel :model-value="filterType.filterTypeName" />
+				<select
+					v-if="filterTypes"
+					:key="index"
+					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				>
+					>
+					<option :key="-1" :value="null">Velg</option>
+
+					<option
+						v-for="value in filterType.filterValues"
+						:key="value.id"
+						:value="value.id"
+					>
+						{{ value.value }}
+					</option>
+				</select>
+			</div>
 			<div>
 				<BaseLabel model-value="Bilder" />
 
 				<input
 					type="file"
-					accept="image/jpeg"
 					@input="event => uploadImage(event.target)"
 					multiple
 				/>
 
 				<ImageCarousel
-					v-if="imageList.length > 0"
-					:images="imageList"
+					v-if="imagePreview.length > 0"
+					:images="imagePreview"
 					class="h-52"
 				/>
 			</div>
