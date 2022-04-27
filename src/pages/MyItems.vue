@@ -47,10 +47,6 @@ let sortAlts: Alternative[] = [
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
-	{ id: 6, alt: 'Tidligste startdato' },
-	{ id: 7, alt: 'Seneste startdato' },
-	{ id: 8, alt: 'Tidligste sluttdato' },
-	{ id: 9, alt: 'Seneste sluttdato' },
 ]
 
 let searchWord = ref<string>('')
@@ -119,14 +115,10 @@ function search() {
 	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
-	{ id: 6, alt: 'Tidligste startdato' },
-	{ id: 7, alt: 'Seneste startdato' },
-	{ id: 8, alt: 'Tidligste sluttdato' },
-	{ id: 9, alt: 'Seneste sluttdato' },
 	*/
 	switch (sortChosen.value) {
 		case 0: {
-			sortChosenString = 'loan-none'
+			sortChosenString = 'none'
 			break
 		}
 		case 1: {
@@ -142,31 +134,15 @@ function search() {
 			break
 		}
 		case 4: {
-			sortChosenString = 'loan-newest'
+			sortChosenString = 'newest'
 			break
 		}
 		case 5: {
-			sortChosenString = 'loan-none'
-			break
-		}
-		case 6: {
-			sortChosenString = 'loan-start-ascending'
-			break
-		}
-		case 7: {
-			sortChosenString = 'loan-start-descending'
-			break
-		}
-		case 8: {
-			sortChosenString = 'loan-end-ascending'
-			break
-		}
-		case 9: {
-			sortChosenString = 'loan-end-descending'
+			sortChosenString = 'none'
 			break
 		}
 		default: {
-			sortChosenString = 'loan-none'
+			sortChosenString = 'none'
 			break
 		}
 	}
