@@ -13,13 +13,15 @@ import axios from 'axios'
 import { useRoute } from 'vue-router'
 
 const { params } = useRoute()
-const id = params.id as string
 
 interface Loan {
 	startDate: string
 	endDate: string
 	returned: boolean
 	active: boolean
+	creationDate: string
+	chatId: number
+	loanId: number
 }
 
 interface LoanResponse {
@@ -27,6 +29,8 @@ interface LoanResponse {
 	lender: User
 	loan: Loan
 }
+
+const id = params.id as string
 
 type Status = 'loading' | 'loaded' | 'error'
 
@@ -52,6 +56,7 @@ async function getLoan() {
 			method: 'GET',
 			params: {
 				loanId: id,
+				isLender: false,
 			},
 		})
 		const data: LoanResponse = res.data
@@ -64,9 +69,8 @@ async function getLoan() {
 		errorMessage.value = error
 	}
 }
-
-const showRateUserPopup = ref(false)
 getLoan()
+const showRateUserPopup = ref(false)
 </script>
 
 <template>

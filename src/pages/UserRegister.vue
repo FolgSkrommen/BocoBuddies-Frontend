@@ -14,7 +14,7 @@ const schema = yup.object({
 	lastName: yup.string().required('Etternavn er påkrevd'),
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
-	postalcode: yup.string().required('Postnummer er påkrevd').min(4),
+	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
 	phonenumber: yup.number().required('Telefon er påkrevd').min(8),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
@@ -28,7 +28,7 @@ const { value: firstName } = useField<string>('firstName')
 const { value: lastName } = useField<string>('lastName')
 const { value: email } = useField<string>('email')
 const { value: address } = useField<string>('address')
-const { value: postalcode } = useField<string>('postalcode')
+const { value: postalCode } = useField<string>('postalCode')
 const { value: phonenumber } = useField<string>('phonenumber')
 const { value: password } = useField<string>('password')
 
@@ -57,7 +57,7 @@ async function submit() {
 		email: email.value,
 		password: password.value,
 		address: address.value,
-		postalCode: postalcode.value,
+		postalCode: postalCode.value,
 		phoneNumber: phonenumber.value,
 	}
 	await axios
@@ -77,14 +77,14 @@ const notValid = computed(
 		!!errors.value.lastName ||
 		!!errors.value.email ||
 		!!errors.value.address ||
-		!!errors.value.postalcode ||
+		!!errors.value.postalCode ||
 		!!errors.value.phonenumber ||
 		!!errors.value.password ||
 		firstName.value == undefined ||
 		lastName.value == undefined ||
 		email.value == undefined ||
 		address.value == undefined ||
-		postalcode.value == undefined ||
+		postalCode.value == undefined ||
 		phonenumber.value == undefined ||
 		password.value == undefined ||
 		!passwordIsSame
@@ -139,10 +139,10 @@ const notValid = computed(
 				data-testid="address-input"
 			/>
 			<BaseInput
-				v-model="postalcode"
+				v-model="postalCode"
 				label="Postnummer"
-				:error="errors.postalcode"
-				data-testid="postalcode-input"
+				:error="errors.postalCode"
+				data-testid="postalCode-input"
 			/>
 
 			<BaseInput

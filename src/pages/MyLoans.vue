@@ -28,7 +28,7 @@ interface Item {
 	description: string
 	price: string
 	priceUnit: string
-	postalcode: string
+	postalCode: string
 	address: string
 	position: Position
 	images: string[]
