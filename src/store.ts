@@ -9,7 +9,7 @@ export interface User {
 	username: string
 	email: string
 	address: string
-	postalcode: string
+	postalCode: string
 	phonenumber: string
 	pictureUrl?: string
 	verified: boolean

@@ -18,7 +18,7 @@ export interface Item {
 	description: string
 	price: number
 	priceUnit: string
-	postalcode: string
+	postalCode: string
 	address: string
 	position: Position
 	images: string[]
@@ -93,7 +93,7 @@ const range = computed(() => ({
 		<div>
 			<p class="font-bold text-lg">Adresse</p>
 			<p>{{ item.address }}</p>
-			<p>{{ item.postalcode }}</p>
+			<p>{{ item.postalCode }}</p>
 		</div>
 	</div>
 </template>
