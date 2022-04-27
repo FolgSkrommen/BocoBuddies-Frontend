@@ -3,6 +3,7 @@
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseBtn.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
+import { DatePicker } from 'v-calendar'
 
 import axios from 'axios'
 
@@ -29,6 +30,12 @@ let { value: description } = useField<string>('description')
 let { value: price } = useField<number>('price')
 let { value: address } = useField<string>('address')
 let { value: postalCode } = useField<number>('postalCode')
+
+interface Range {
+	start: Date
+	end: Date
+}
+const range = ref<Range>()
 
 const notValid = computed(
 	() =>
@@ -115,24 +122,30 @@ function uploadImage(input: any) {
 }
 
 interface Item {
-	categoryId: string
+	categoryId: number
 	name: string
 	description: string
 	price: number
 	priceUnit: string
 	address: string
-	postalCode: number
+	postalCode: string
+	startDate: string
+	endDate: string
 }
 
 function submit() {
-	let item: Item = {
-		categoryId: currentCategory.toString(),
+	//TODO: Handle error
+	if (!range.value) return
+	const item: Item = {
+		categoryId: currentCategory,
 		name: title.value,
 		description: description.value,
 		price: price.value,
 		priceUnit: 'WEEK',
 		address: address.value,
-		postalCode: postalCode.value,
+		postalCode: postalCode.value.toString(),
+		startDate: range.value.start.toISOString(),
+		endDate: range.value.end.toISOString(),
 	}
 	console.log(item)
 
@@ -206,6 +219,18 @@ function submit() {
 						{{ category.categoryName }}
 					</option>
 				</select>
+			</div>
+
+			<div class="grid place-items-center">
+				<p class="font-bold text-lg">Available time</p>
+				<DatePicker
+					class="place-self-center"
+					v-model="range"
+					mode="dateTime"
+					is-range
+					locale="no"
+					is24hr
+				/>
 			</div>
 
 			<div v-for="(filterType, index) in filterTypes">
