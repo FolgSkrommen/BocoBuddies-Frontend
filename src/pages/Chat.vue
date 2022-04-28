@@ -497,11 +497,11 @@ const range = ref<Range>()
 const render = ref<number>(0)
 
 function reRenderChat() {
-	window.scrollTo(0, document.body.scrollHeight)
+	render.value++
 }
 </script>
 <template>
-	<div class="h-full flex-col w-full">
+	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<RouterLink class="place-sel" to="/chats"> Back </RouterLink>
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
