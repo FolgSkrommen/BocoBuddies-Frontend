@@ -80,7 +80,7 @@ async function getLoan() {
 			method: 'GET',
 			params: {
 				loanId: id,
-				isLender: true,
+				isLender: false,
 			},
 		})
 		const data: LoanResponse = res.data

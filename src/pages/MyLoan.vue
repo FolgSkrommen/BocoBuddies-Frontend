@@ -56,7 +56,7 @@ async function getLoan() {
 			method: 'GET',
 			params: {
 				loanId: id,
-				isLender: false,
+				isLender: true,
 			},
 		})
 		const data: LoanResponse = res.data
