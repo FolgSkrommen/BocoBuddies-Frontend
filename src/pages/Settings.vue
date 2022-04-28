@@ -3,9 +3,11 @@
 import { store } from '../store'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
-import { ref } from 'vue'
+import ImageCarousel from '../components/ImageCarousel.vue'
+import BasePopup from '../components/base/BasePopup.vue'
+import { onMounted, Ref, ref } from 'vue'
 import router from '../router'
-import { UserIcon } from '@heroicons/vue/solid'
+import axios from 'axios'
 
 const newEmail = ref('')
 const newPassword = ref('')
@@ -23,6 +25,37 @@ async function logout() {
 	await router.push('/')
 	console.log('logging out')
 }
+
+let imagePreview: Ref<string[]> = ref([])
+let imageFiles: Ref<File[]> = ref([])
+function uploadImage(input: any) {
+	let count = input.files.length
+	let index = 0
+	imagePreview.value.push(URL.createObjectURL(input.files[index]))
+	imageFiles.value = input.files
+}
+
+const showModal = ref(false)
+async function uploadPicture() {
+	const formData = new FormData()
+	formData.append('image', imageFiles.value[0])
+	await axios.post('/user/uploadProfilePicture', formData).then(response => {
+		showModal.value = !showModal.value
+	})
+}
+
+function closeModal() {
+	showModal.value = !showModal.value
+	location.reload()
+}
+
+let profilePicture = ''
+onMounted(() => {
+	axios.get('/user/getProfilePicture').then(response => {
+		profilePicture = response.data
+		console.log(profilePicture)
+	})
+})
 
 function deleteUser() {
 	//TODO: Implement
@@ -53,8 +86,24 @@ function deleteUser() {
 		</form>
 		<BaseBtn @click="logout" color="gray">Logout</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Delete user</BaseBtn>
+		<input
+			type="file"
+			@input="event => uploadImage(event.target)"
+			class="place-self-center"
+		/>
+		<ImageCarousel
+			v-if="imagePreview.length > 0"
+			:images="imagePreview"
+			class="h-52 place-self-center"
+		/>
+		<BaseBtn class="m-4 place-self-center" @click="uploadPicture"
+			>Upload</BaseBtn
+		>
 	</div>
 	<div v-else>
 		<p>No user</p>
 	</div>
+	<BasePopup v-show="showModal" @exit="closeModal"
+		>Profilbilde ditt er oppdatert!</BasePopup
+	>
 </template>
