@@ -21,10 +21,9 @@ build-job:
         - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         - echo $'' >> ~/.ssh/id_rsa
         - chmod 600 ~/.ssh/id_rsa # Required permission by ssh
+        - echo "$FRONTEND_ENV" > .env
         - ssh eposkk@35.228.176.246 echo "Hi, this is a test"
         - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@35.228.176.246:frontend
-        - ssh eposkk@35.228.176.246 touch frontend/.env
-        - ssh eposkk@35.228.176.246 echo "$FRONTEND_ENV" > frontend/.env
         - ssh eposkk@35.228.176.246 make -C frontend deploy
 
 #lint-job:
