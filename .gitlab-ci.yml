@@ -7,15 +7,11 @@ cache:
 
 build-job:
     stage: build
-    image: alpine:latest
+    image: ubuntu:latest
     only:
         refs:
             - main
     script:
-        - apk add --update npm
-        - npm install
-        - npm run build
-        - echo "Compile complete."
         - apt update
         - apt install rsync -y
         - apt install openssh-client -y
