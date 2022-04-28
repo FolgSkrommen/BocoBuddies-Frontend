@@ -55,6 +55,8 @@ let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
 let currentPage = ref<number>(0)
+const amountPerPage: number = 20
+let renderLoadButton = ref<boolean>(true)
 
 const statusTag = ref<Status>(Status.ACTIVE)
 //const search = ref('')
@@ -157,7 +159,7 @@ function search() {
 			params: {
 				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
-				amount: 20,
+				amount: amountPerPage,
 				offset: currentPage.value,
 				userId: store.state.user.id,
 				loan: false,
@@ -175,6 +177,8 @@ function search() {
 				isAnItem(responseData[0])
 			)
 				items.value = items.value.concat(responseData)
+			if (responseData.length < amountPerPage)
+				renderLoadButton.value = false
 		})
 		.catch(error => {
 			//TODO error handling, tell user something went wrong
@@ -280,6 +284,7 @@ function loadMoreItems() {
 			<ItemList
 				:items="items"
 				:searchHits="searchHits"
+				:renderLoadButton="renderLoadButton"
 				redirect="my-item"
 				@load-more-items="loadMoreItems"
 			>
