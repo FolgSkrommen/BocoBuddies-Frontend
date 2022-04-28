@@ -4,6 +4,7 @@ import { store } from '../store'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
+import BasePopup from '../components/base/BasePopup.vue'
 import { onMounted, Ref, ref } from 'vue'
 import router from '../router'
 import axios from 'axios'
@@ -34,13 +35,18 @@ function uploadImage(input: any) {
 	imageFiles.value = input.files
 }
 
+const showModal = ref(false)
 async function uploadPicture() {
 	const formData = new FormData()
 	formData.append('image', imageFiles.value[0])
 	await axios.post('/user/uploadProfilePicture', formData).then(response => {
-		alert('Profile picture updated')
-		location.reload()
+		showModal.value = !showModal.value
 	})
+}
+
+function closeModal() {
+	showModal.value = !showModal.value
+	location.reload()
 }
 
 let profilePicture = ''
@@ -93,9 +99,11 @@ function deleteUser() {
 		<BaseBtn class="m-4 place-self-center" @click="uploadPicture"
 			>Upload</BaseBtn
 		>
-		<img class="w-16 h-16 rounded-full" :src="profilePicture" />
 	</div>
 	<div v-else>
 		<p>No user</p>
 	</div>
+	<BasePopup v-show="showModal" @exit="closeModal"
+		>Profilbilde ditt er oppdatert!</BasePopup
+	>
 </template>
