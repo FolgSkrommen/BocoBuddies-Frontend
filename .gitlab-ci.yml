@@ -23,8 +23,8 @@ build-job:
         - chmod 600 ~/.ssh/id_rsa # Required permission by ssh
         - ssh eposkk@35.228.176.246 echo "Hi, this is a test"
         - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@35.228.176.246:frontend
-        - ssh eposkk@35.228.176.246 touch frontend/.env
-        - ssh eposkk@35.228.176.246 echo "VITE_IP='http://35.228.176.246:8001'" > frontend/.env
+        - ssh eposkk@35.228.176.246 touch ~/frontend/.env
+        - ssh eposkk@35.228.176.246 echo "VITE_IP='http://35.228.176.246:8001'" > ~/frontend/.env
         - ssh eposkk@35.228.176.246 make -C frontend deploy
 
 #lint-job:
