@@ -4,12 +4,10 @@
 
 <template>
 	<div class="flex w-full justify-left gap-4 mb-5">
-		<RouterLink
-			class="p-2 text-4xl active:bg-black"
-			:to="{ name: 'myItems' }"
+		<RouterLink class="p-4 text-4xl" :to="{ name: 'myItems' }"
 			>Mine gjenstander</RouterLink
 		>
-		<RouterLink class="p-2 text-4xl" :to="{ name: 'myLoans' }"
+		<RouterLink class="p-4 text-4xl" :to="{ name: 'myLoans' }"
 			>Mine lån</RouterLink
 		>
 	</div>
@@ -18,6 +16,8 @@
 
 <style scoped>
 .router-link-active {
-	background-color: aqua;
+	background-color: #004aad;
+	color: white;
+	border-radius: 10px;
 }
 </style>
