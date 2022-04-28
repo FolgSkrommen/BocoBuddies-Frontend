@@ -159,7 +159,7 @@ function search() {
 				sort: sortChosenString,
 				amount: 20,
 				offset: currentPage.value,
-				userId: store.state.user.id,
+				userId: store.state.user?.id,
 				loan: false,
 				active: statusTag.value === Status.ACTIVE,
 			},
@@ -233,8 +233,6 @@ function loadMoreItems() {
 
 <template>
 	<div>
-		<h1 class="text-4xl font-bold">Mine Gjenstander</h1>
-
 		<div v-if="!store.getters.loggedIn">
 			<p>Du må være logget inn for å se denne siden</p>
 		</div>
@@ -288,7 +286,7 @@ function loadMoreItems() {
 			<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
 			</SortDropdown>
 
-			<FloatingBtn to="/item/register" />
+			<!--<FloatingBtn to="/item/register" />-->
 		</div>
 	</div>
 </template>

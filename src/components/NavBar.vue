@@ -15,10 +15,10 @@ import {
 			<router-link to="/">
 				<SearchIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link v-if="store.getters.loggedIn" to="/my-loans">
+			<router-link v-if="store.getters.loggedIn" to="/overview/items">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link v-if="store.getters.loggedIn" to="/my-items">
+			<router-link v-if="store.getters.loggedIn" to="/item/register">
 				<PlusIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link v-if="store.getters.loggedIn" to="/chats">

@@ -338,7 +338,6 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<h1 class="text-4xl font-bold">Mine lån</h1>
 	<div v-if="!store.getters.loggedIn">
 		<p>Du må være logget inn for å se denne siden</p>
 	</div>
