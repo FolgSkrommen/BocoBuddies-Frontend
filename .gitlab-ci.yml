@@ -21,9 +21,9 @@ build-job:
         - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         - echo $'' >> ~/.ssh/id_rsa
         - chmod 600 ~/.ssh/id_rsa # Required permission by ssh
-        - ssh eposkk@34.78.38.166 echo "Hi, this is a test"
-        - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@34.78.38.166:frontend
-        - ssh eposkk@34.78.38.166 make -C frontend deploy
+        - ssh eposkk@34.88.12.63 echo "Hi, this is a test"
+        - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@34.88.12.63:frontend
+        - ssh eposkk@34.88.12.63 make -C frontend deploy
 
 #lint-job:
 #    stage: lint
