@@ -194,7 +194,8 @@ function getMainCategories() {
 		})
 }
 function search() {
-	//if(store.getters.loggedIn) { //TODO might be 'store.getters.loggedIn()'
+	if (!store.state.user) return
+
 	let sortChosenString: string
 	/*
   	{ id: 0, alt: 'Ingen sortering' },
@@ -291,7 +292,6 @@ function search() {
 			items.value = []
 			console.log(error.message)
 		})
-	//}
 }
 function searchAndResetItems() {
 	currentPage.value = 0

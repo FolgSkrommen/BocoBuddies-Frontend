@@ -8,6 +8,7 @@ import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
 import { store } from '../store'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
+import { userInfo } from 'os'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 //Enums
@@ -108,7 +109,8 @@ function getMainCategories() {
 		})
 }
 function search() {
-	//if(store.getters.loggedIn) { //TODO might be 'store.getters.loggedIn()'
+	if (!store.state.user) return
+
 	let sortChosenString: string
 	/*
   	{ id: 0, alt: 'Ingen sortering' },
@@ -161,7 +163,7 @@ function search() {
 				sort: sortChosenString,
 				amount: amountPerPage,
 				offset: currentPage.value,
-				userId: store.state.user?.id,
+				userId: store.state.user.id,
 				loan: false,
 				active: statusTag.value === Status.ACTIVE,
 			},
@@ -185,7 +187,6 @@ function search() {
 			items.value = []
 			console.log(error.message)
 		})
-	//}
 }
 function searchAndResetItems() {
 	currentPage.value = 0
