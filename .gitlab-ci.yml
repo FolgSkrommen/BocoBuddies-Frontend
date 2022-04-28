@@ -5,7 +5,7 @@ cache:
     paths:
         - /build
 
-build-deploy-job:
+build-job:
     stage: build
     image: alpine:latest
     only:
@@ -16,6 +16,18 @@ build-deploy-job:
         - npm install
         - npm run build
         - echo "Compile complete."
+        - apt update
+        - apt install rsync -y
+        - apt install openssh-client -y
+        - mkdir ~/.ssh
+        - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        - touch ~/.ssh/id_rsa
+        - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        - echo $'' >> ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa # Required permission by ssh
+        - ssh eposkk@34.78.38.166 echo "Hi, this is a test"
+        - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@34.78.38.166:frontend
+        - ssh eposkk@34.78.38.166 make -C frontend deploy
 
 #lint-job:
 #    stage: lint
