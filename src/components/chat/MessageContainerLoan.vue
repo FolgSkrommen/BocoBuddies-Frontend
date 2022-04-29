@@ -145,11 +145,11 @@ function styleType(received: boolean) {
 						class="flex gap-2"
 					>
 						<BaseBtn class="grow" @click="decline">Avslå</BaseBtn>
-
+						<!--
 						<BaseBtn class="grow" @click="negotiate"
 							>Motbud</BaseBtn
 						>
-
+            -->
 						<BaseBtn class="grow" @click="confirm">Bekreft</BaseBtn>
 					</div>
 				</div>
