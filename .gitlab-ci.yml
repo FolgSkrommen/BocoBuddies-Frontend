@@ -1,18 +1,22 @@
 stages: # List of stages for jobs, and their order of execution*
-    - build
+    - format_test_build
 
 cache:
     paths:
-        - /build
+        - /dist
 
 build-job:
-    stage: build
+    stage: format_test_build
     image: ubuntu:latest
     only:
         refs:
             - main
     script:
         - apt update
+        - apk add --update npm
+        - npm install
+        - npm run prettier
+        - npm run test
         - apt install rsync -y
         - apt install openssh-client -y
         - mkdir ~/.ssh
@@ -25,10 +29,3 @@ build-job:
         - ssh eposkk@35.228.176.246 echo "Hi, this is a test"
         - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@35.228.176.246:frontend
         - ssh eposkk@35.228.176.246 make -C frontend deploy
-
-#lint-job:
-#    stage: lint
-#    script:
-#        - apk add --update npm
-#        - npm install
-#        - npm run prettier
