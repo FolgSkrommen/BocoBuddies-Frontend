@@ -66,6 +66,13 @@ const status = ref<Status>()
 const errorMessage = ref()
 //const search = ref('')
 
+//Mounted
+if (store.getters.loggedIn) {
+	//Only needs to call these if user is logged in
+	getMainCategories()
+	search()
+}
+
 //Computed
 const searchHits = computed<string>(() =>
 	items.value.length == 1 ? `1 resultat` : `${items.value.length} resultater`
@@ -108,7 +115,7 @@ async function getMainCategories() {
 		errorMessage.value = error
 	}
 }
-getMainCategories()
+
 async function search() {
 	if (!store.state.user) return
 	status.value = 'loading'
@@ -185,7 +192,6 @@ async function search() {
 		items.value = []
 	}
 }
-search()
 function searchAndResetItems() {
 	currentPage.value = 0
 	items.value = []

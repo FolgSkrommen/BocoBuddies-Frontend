@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import Card from '../components/Card.vue'
 import axios from 'axios'
 import { store, User } from '../store'
@@ -27,31 +27,29 @@ interface Item {
 
 const chats = ref<Array<Chat>>([])
 
-onMounted(() => {
-	axios
-		.get('/chat/getByUser')
-		.then(res => {
-			chats.value = res.data
-			chats.value.forEach(chat => {
-				axios
-					.get('/item', { params: { id: chat.itemId } })
-					.then(response => {
-						chat.item = response.data.item
-					})
-			})
+axios
+	.get('/chat/getByUser')
+	.then(res => {
+		chats.value = res.data
+		chats.value.forEach(chat => {
+			axios
+				.get('/item', { params: { id: chat.itemId } })
+				.then(response => {
+					chat.item = response.data.item
+				})
 		})
-		.catch(err => {
-			//TODO proper error
-			alert(err)
-		})
-})
+	})
+	.catch(err => {
+		//TODO proper error
+		alert(err)
+	})
 </script>
 
 <template>
 	<div>
 		<h1 class="text-4xl my-4">Samtaler</h1>
 		<div class="grid gap-4">
-			<Card v-for="chat in chats">
+			<Card v-for="chat in chats" :key="chat.chatId">
 				<router-link :to="'/chat/' + chat.chatId">
 					<div class="grid grid-cols-3">
 						<img

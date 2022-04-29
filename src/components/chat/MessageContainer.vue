@@ -2,7 +2,6 @@
 import Card from '../components/Card.vue'
 import {
 	computed,
-	onMounted,
 	onRenderTracked,
 	onRenderTriggered,
 	PropType,

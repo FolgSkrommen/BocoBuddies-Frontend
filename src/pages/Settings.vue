@@ -5,7 +5,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import BasePopup from '../components/base/BasePopup.vue'
-import { onMounted, Ref, ref } from 'vue'
+import { Ref, ref } from 'vue'
 import router from '../router'
 import axios from 'axios'
 
@@ -50,11 +50,9 @@ function closeModal() {
 }
 
 let profilePicture = ''
-onMounted(() => {
-	axios.get('/user/getProfilePicture').then(response => {
-		profilePicture = response.data
-		console.log(profilePicture)
-	})
+axios.get('/user/getProfilePicture').then(response => {
+	profilePicture = response.data
+	console.log(profilePicture)
 })
 
 function deleteUser() {

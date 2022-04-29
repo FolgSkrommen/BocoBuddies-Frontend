@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -70,6 +70,13 @@ const errorMessage = ref()
 
 //const search = ref('')
 
+//Mounted
+if (store.getters.loggedIn) {
+	//Only needs to call these if user is logged in
+	getMainCategories()
+	search()
+}
+
 //Computed
 const searchHits = computed<string>(() =>
 	items.value.length == 1 ? `1 resultat` : `${items.value.length} resultater`
@@ -111,7 +118,6 @@ async function getMainCategories() {
 		errorMessage.value = error
 	}
 }
-getMainCategories()
 async function search() {
 	if (!store.state.user) return
 	status.value = 'loading'
@@ -208,7 +214,6 @@ async function search() {
 		items.value = []
 	}
 }
-search()
 function searchAndResetItems() {
 	currentPage.value = 0
 	items.value = []
