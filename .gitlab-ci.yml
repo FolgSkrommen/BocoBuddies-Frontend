@@ -13,7 +13,6 @@ build-job:
             - main
     script:
         - apt update
-        - apk add --update npm
         - npm install
         - npm run prettier
         - npm run test
