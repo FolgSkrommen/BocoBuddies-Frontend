@@ -60,6 +60,7 @@ function styleType(received: boolean) {
 	<div
 		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
+		data-testid="chat"
 	>
 		<div class="grid" v-for="(message, i) in chatData.messages">
 			<Message
@@ -69,7 +70,7 @@ function styleType(received: boolean) {
 			>
 				<div data-testid="message">{{ message.message }}</div>
 			</Message>
-			<div class="text-black text-lg">
+			<div class="text-black text-lg" data-testid="message-info">
 				{{ message.date }} - {{ message.senderId }}
 			</div>
 		</div>
