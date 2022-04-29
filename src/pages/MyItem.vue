@@ -11,6 +11,7 @@ import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import BaseBanner from '../components/base/BaseBanner.vue'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -98,6 +99,11 @@ const showRateUserPopup = ref(false)
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
 	<div v-if="status === 'loaded' && loaner && item">
 		<RateUserPopup
 			v-show="showRateUserPopup"
@@ -139,5 +145,4 @@ const showRateUserPopup = ref(false)
 			<ItemInfo :item="item" />
 		</div>
 	</div>
-	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>

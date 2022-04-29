@@ -15,6 +15,7 @@ import router from '../router'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import BaseLabel from '../components/base/BaseLabel.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -180,9 +181,16 @@ interface Item {
 	endDate: string
 }
 
-function submit() {
-	//TODO: Handle error
-	if (!range.value) return
+type Status = 'sending' | 'success' | 'error'
+const status = ref<Status>()
+const errorMessage = ref()
+async function registerItem() {
+	status.value = 'sending'
+	if (!range.value) {
+		status.value = 'error'
+		errorMessage.value = 'Range is not selected'
+		return
+	}
 
 	const formData = new FormData()
 
@@ -199,25 +207,25 @@ function submit() {
 		formData.append('filterIdList', number.toString())
 	})
 	formData.append('images', imageFiles.value[0])
-
-	console.table(formData)
-
-	axios
-		.post('/item/register', formData)
-		.then(response => {
-			router.push('/')
-		})
-		.catch(error => {
-			alert(error.message)
-		})
+	try {
+		await axios.post('/item/register', formData)
+		router.push('/')
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
 </script>
 
 <template>
 	<div class="">
+		<BaseBanner
+			v-if="status === 'error'"
+			type="error"
+			:message="errorMessage"
+		/>
 		<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
-
-		<form class="grid w-full gap-y-6" @submit.prevent="submit()">
+		<form class="grid w-full gap-y-6" @submit.prevent="registerItem">
 			<BaseInput
 				v-model.lazy="title"
 				label="Tittel *"
