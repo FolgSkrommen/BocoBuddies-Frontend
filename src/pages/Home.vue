@@ -82,16 +82,26 @@ function isAnItem(obj: any): obj is Item {
 		'postalCode' in obj
 	)
 }
-function getMainCategories() {
-	axios
-		.get('/category/main')
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			//console.log(error)
-		})
+type Status = 'loading' | 'loaded' | 'error'
+
+const status = ref<Status>()
+const errorMessage = ref()
+
+async function getMainCategories() {
+	status.value = 'loading'
+	try {
+		const res = await axios.get('/category/main')
+		const data: Category[] = res.data
+		tagAlts.value = data
+		console.log(tagAlts.value)
+
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
+getMainCategories()
 function search() {
 	let sortChosenString: string
 	/*

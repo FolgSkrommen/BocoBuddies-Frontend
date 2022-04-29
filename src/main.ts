@@ -5,7 +5,8 @@ import router from './router'
 import { store, key } from './store'
 import axios from 'axios'
 
-axios.defaults.baseURL = import.meta.env.VITE_IP
+//axios.defaults.baseURL = import.meta.env.VITE_IP
+axios.defaults.baseURL = 'http://localhost:8001'
 axios.defaults.headers.post = { 'Content-Type': 'application/json' }
 
 const userString = localStorage.getItem('userData')
