@@ -9,7 +9,8 @@ import SortDropdown from '../components/SortDropdown.vue'
 import { store } from '../store'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import { userInfo } from 'os'
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
 
 //Enums
 enum State {
@@ -245,62 +246,65 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<div>
-		<div v-if="!store.getters.loggedIn">
-			<p>Du må være logget inn for å se denne siden</p>
-		</div>
-		<div v-if="store.getters.loggedIn">
-			<div class="grid gap-4">
-				<div class="flex gap-4">
-					<button
-						class="px-2 py-1 rounded-lg"
-						:class="
-							stateTag === tag
-								? 'bg-blue text-white'
-								: 'bg-slate-300 text-slate-900'
-						"
-						@click="stateTag = tag"
-						v-for="tag in State"
-					>
-						{{ tag }}
-					</button>
-				</div>
-				<SearchbarAndButton
-					v-model="searchWord"
-					@search-and-reset="searchAndResetItems"
-				></SearchbarAndButton>
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
+	<div v-if="!store.getters.loggedIn">
+		<p>Du må være logget inn for å se denne siden</p>
+	</div>
+	<div v-if="store.getters.loggedIn">
+		<div class="grid gap-4">
+			<div class="flex gap-4">
+				<button
+					class="px-2 py-1 rounded-lg"
+					:class="
+						stateTag === tag
+							? 'bg-blue text-white'
+							: 'bg-slate-300 text-slate-900'
+					"
+					@click="stateTag = tag"
+					v-for="tag in State"
+				>
+					{{ tag }}
+				</button>
 			</div>
-
-			<div class="py-10">
-				<!--Tag input component-->
-				<h2 class="text-2xl font-semibold">Kategorier</h2>
-				<TagList
-					v-model="chosenTags"
-					:removable="true"
-					@remove-tag-event="categoryRemoved"
-					data-testid="categories-tag-chosen"
-					class="border-solid bg-gray-500 rounded"
-				></TagList>
-				<TagList
-					v-model="tagAlts"
-					@add-tag-event="categoryChosen"
-					data-testid="categories-tag-alts"
-				></TagList>
-			</div>
-
-			<ItemList
-				:items="items"
-				:searchHits="searchHits"
-				:renderLoadButton="renderLoadButton"
-				redirect="my-item"
-				@load-more-items="loadMoreItems"
-			>
-			</ItemList>
-
-			<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
-			</SortDropdown>
-
-			<FloatingBtn to="/item/register" />
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search-and-reset="searchAndResetItems"
+			></SearchbarAndButton>
 		</div>
+
+		<div class="py-10">
+			<!--Tag input component-->
+			<h2 class="text-2xl font-semibold">Kategorier</h2>
+			<TagList
+				v-model="chosenTags"
+				:removable="true"
+				@remove-tag-event="categoryRemoved"
+				data-testid="categories-tag-chosen"
+				class="border-solid bg-gray-500 rounded"
+			></TagList>
+			<TagList
+				v-model="tagAlts"
+				@add-tag-event="categoryChosen"
+				data-testid="categories-tag-alts"
+			></TagList>
+		</div>
+		<LoadingIndicator v-if="status === 'loading'" />
+		<ItemList
+			:items="items"
+			:searchHits="searchHits"
+			:renderLoadButton="renderLoadButton"
+			redirect="my-item"
+			@load-more-items="loadMoreItems"
+		>
+		</ItemList>
+
+		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
+		</SortDropdown>
+
+		<FloatingBtn to="/item/register" />
 	</div>
 </template>

@@ -7,6 +7,8 @@ import qs from 'qs'
 import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -231,6 +233,11 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
 	<h1 class="text-4xl font-bold">Hjem</h1>
 	<SearchbarAndButton
 		v-model="searchWord"
@@ -255,7 +262,7 @@ observer.observe(items[items.length-1])*/
 			data-testid="categories-tag-alts"
 		></TagList>
 	</div>
-
+	<LoadingIndicator v-if="status === 'loading'" />
 	<ItemList
 		:items="items"
 		:searchHits="searchHits"

@@ -7,8 +7,8 @@ import qs from 'qs'
 import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
 import { store } from '../store'
-
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
 
 //Enums
 enum State {
@@ -267,6 +267,11 @@ function loadMoreItems() {
 </script>
 
 <template>
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
 	<div v-if="!store.getters.loggedIn">
 		<p>Du må være logget inn for å se denne siden</p>
 	</div>
@@ -308,7 +313,7 @@ function loadMoreItems() {
 				data-testid="categories-tag-alts"
 			></TagList>
 		</div>
-
+		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
 			:items="items"
 			:searchHits="searchHits"
