@@ -4,9 +4,9 @@
 	"private": true,
 	"scripts": {
 		"build": "vue-tsc --noEmit && vite build",
-		"test:unit": "vue-cli-service test:unit",
 		"dev": "vite",
 		"test": "jest",
+		"coverage": "jest --coverage",
 		"prettier": "prettier --write . --ignore-path .gitignore",
 		"preview": "vite preview",
 		"prepare": "husky install"
