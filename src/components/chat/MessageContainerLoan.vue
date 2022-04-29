@@ -122,6 +122,7 @@ function styleType(received: boolean) {
 							message.type === 'ACCEPT'
 						"
 						class="text-2xl"
+						data-testid="accept-h"
 					>
 						Avtalt lån
 					</h1>
@@ -131,10 +132,13 @@ function styleType(received: boolean) {
 							message.type === 'RETURNED'
 						"
 						class="text-2xl"
+						data-testid="returned-h"
 					>
 						Lån tilbakelevert
 					</h1>
-					<h1 v-else class="text-2xl">Forespørsel</h1>
+					<h1 v-else class="text-2xl" data-testid="request-h">
+						Forespørsel
+					</h1>
 
 					<h3>Fra: {{ message.start }}</h3>
 					<h3>Til: {{ message.stop }}</h3>

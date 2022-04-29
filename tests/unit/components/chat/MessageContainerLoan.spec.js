@@ -33,6 +33,23 @@ describe('MessageContainerLoan', () => {
 		],
 	}
 
+	const chatDataAccept = {
+		userId: 1,
+		messages: [
+			{
+				senderId: 1,
+				message: 'Test message',
+				type: 'ACCEPT',
+				date: new Date().toString(),
+				receive: true,
+				chatId: '1',
+				start: 'Start',
+				end: 'End',
+				price: 100,
+			},
+		],
+	}
+
 	const chat = {
 		chatId: '1',
 		itemId: '2',
@@ -101,6 +118,131 @@ describe('MessageContainerLoan', () => {
 			)
 			expect(requestButtonDecline.exists()).toBe(true)
 			expect(requestButtonConfirm.exists()).toBe(true)
+		})
+
+		it('Request message is visible without buttons', () => {
+			loanStatus = 'PENDING'
+			chatDataRequest.messages[0].receive = false
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataRequest,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const requestButtonDecline = wrapper.find(
+				'[data-testid="decline-btn"]'
+			)
+			const requestButtonConfirm = wrapper.find(
+				'[data-testid="confirm-btn"]'
+			)
+			expect(requestButtonDecline.exists()).toBe(false)
+			expect(requestButtonConfirm.exists()).toBe(false)
+		})
+
+		it('Request message info is correct receive', () => {
+			loanStatus = 'PENDING'
+
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataRequest,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="request-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Forespørsel')
+		})
+
+		it('Request message info is correct send', () => {
+			loanStatus = 'PENDING'
+			chatDataRequest.messages[0].receive = false
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataRequest,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="request-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Forespørsel')
+		})
+
+		it('Accept header comes up when accepted receive', () => {
+			loanStatus = 'ACCEPTED'
+			//chatDataRequest.messages[0].receive = false
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataAccept,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="accept-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Avtalt lån')
+		})
+
+		it('Accept header comes up when accepted send', () => {
+			loanStatus = 'ACCEPTED'
+			chatDataRequest.messages[0].receive = false
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataAccept,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="accept-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Avtalt lån')
+		})
+
+		it('Returned header comes up when accepted receive', () => {
+			loanStatus = 'RETURNED'
+			//chatDataRequest.messages[0].receive = false
+			chatDataAccept.messages[0].type = 'RETURNED'
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataAccept,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="returned-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Lån tilbakelevert')
+		})
+
+		it('Returned header comes up when accepted send', () => {
+			loanStatus = 'RETURNED'
+			chatDataRequest.messages[0].receive = false
+			chatDataAccept.messages[0].type = 'RETURNED'
+			const wrapper = mount(MessageContainerLoan, {
+				props: {
+					chatData: chatDataAccept,
+					modelValue: loanStatus,
+					chat: chat,
+					item: item,
+				},
+			})
+			const request = wrapper.find('[data-testid="returned-h"]')
+
+			expect(request.exists()).toBe(true)
+			expect(request.element.textContent).toBe('Lån tilbakelevert')
 		})
 	})
 })
