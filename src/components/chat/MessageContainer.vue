@@ -26,14 +26,6 @@ interface ChatData {
 	messages: Array<MessageDTO>
 }
 
-type loanStatus =
-	| 'PENDING'
-	| 'ACCEPTED'
-	| 'DECLINED'
-	| 'COUNTER'
-	| 'NOT_SENT'
-	| 'UNDEFINED'
-
 interface Props {
 	chatData: ChatData
 }

@@ -108,7 +108,7 @@ function styleType(received: boolean) {
 				:id="i"
 				:receive="!message.receive"
 			>
-				<div>{{ message.message }}</div>
+				<div data-testid="message">{{ message.message }}</div>
 			</Message>
 
 			<div class="grid" v-else>
@@ -144,13 +144,23 @@ function styleType(received: boolean) {
 						v-if="message.receive && modelValue === 'PENDING'"
 						class="flex gap-2"
 					>
-						<BaseBtn class="grow" @click="decline">Avslå</BaseBtn>
+						<BaseBtn
+							class="grow"
+							@click="decline"
+							data-testid="decline-btn"
+							>Avslå</BaseBtn
+						>
 						<!--
 						<BaseBtn class="grow" @click="negotiate"
 							>Motbud</BaseBtn
 						>
             -->
-						<BaseBtn class="grow" @click="confirm">Bekreft</BaseBtn>
+						<BaseBtn
+							class="grow"
+							@click="confirm"
+							data-testid="confirm-btn"
+							>Bekreft</BaseBtn
+						>
 					</div>
 				</div>
 			</div>
