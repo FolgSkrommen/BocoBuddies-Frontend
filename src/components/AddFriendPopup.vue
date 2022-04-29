@@ -15,7 +15,6 @@ export interface User {
 	username: string
 	rating: number
 	pictureUrl: string
-	profilePicture?: string
 	trusted: boolean
 }
 

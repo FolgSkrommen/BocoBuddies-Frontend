@@ -35,8 +35,7 @@ async function getFriends() {
 				lastName: 'Doe',
 				username: 'john.doe',
 				rating: 1,
-				pictureUrl:
-					'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+				pictureUrl: 'https://i.stack.imgur.com/5Kgaq.jpg?s=192&g=1',
 				trusted: true,
 			},
 			{
@@ -46,7 +45,7 @@ async function getFriends() {
 				username: 'jane.doe',
 				rating: 4.5,
 				pictureUrl:
-					'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+					'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
 				trusted: true,
 			},
 			{
@@ -66,7 +65,7 @@ async function getFriends() {
 				username: 'jane.smith',
 				rating: 4.5,
 				pictureUrl:
-					'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+					'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
 				trusted: true,
 			},
 			{
@@ -117,7 +116,7 @@ async function getChats() {
 						username: 'johndoe',
 						rating: 4.5,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://randomuser.me/api/portraits/men/3.jpg',
 						trusted: true,
 					},
 					{
@@ -127,7 +126,7 @@ async function getChats() {
 						username: 'janey',
 						rating: 3.4,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
 						trusted: true,
 					},
 					{
@@ -153,7 +152,7 @@ async function getChats() {
 						username: 'johndoe',
 						rating: 4.5,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://randomuser.me/api/portraits/men/3.jpg',
 						trusted: true,
 					},
 				],
@@ -169,7 +168,7 @@ async function getChats() {
 						username: 'johndoe',
 						rating: 4.5,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://randomuser.me/api/portraits/men/3.jpg',
 						trusted: true,
 					},
 					{
@@ -179,7 +178,7 @@ async function getChats() {
 						username: 'janey',
 						rating: 3.4,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
 						trusted: true,
 					},
 				],
@@ -195,7 +194,7 @@ async function getChats() {
 						username: 'johndoe',
 						rating: 4.5,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://randomuser.me/api/portraits/men/3.jpg',
 						trusted: true,
 					},
 					{
@@ -205,7 +204,7 @@ async function getChats() {
 						username: 'janey',
 						rating: 3.4,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
 						trusted: true,
 					},
 					{
@@ -225,7 +224,7 @@ async function getChats() {
 						username: 'johanna',
 						rating: 4.2,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
 						trusted: true,
 					},
 				],
@@ -241,7 +240,7 @@ async function getChats() {
 						username: 'johndoe',
 						rating: 4.5,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://randomuser.me/api/portraits/men/3.jpg',
 						trusted: true,
 					},
 					{
@@ -251,7 +250,7 @@ async function getChats() {
 						username: 'janey',
 						rating: 3.4,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
 						trusted: true,
 					},
 					{
@@ -271,7 +270,7 @@ async function getChats() {
 						username: 'johanna',
 						rating: 4.2,
 						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
+							'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
 						trusted: true,
 					},
 					{
