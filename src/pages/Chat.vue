@@ -580,11 +580,7 @@ function test() {
 					>Forespør</BaseBtn
 				>
 				<BaseBtn
-					v-if="
-						lender?.userId != store.state.user?.id &&
-						loanStatusCode === 'RETURNED' &&
-						loanPending
-					"
+					v-if="loanStatus === 'RETURNED'"
 					@click="toggleShowRating"
 					data-testid="feedback-button"
 					class="grow bg-purple-500"
