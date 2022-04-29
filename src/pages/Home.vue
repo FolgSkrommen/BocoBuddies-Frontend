@@ -9,7 +9,6 @@ import SortDropdown from '../components/SortDropdown.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import AddFriendPopup from '../components/AddFriendPopup.vue'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -234,7 +233,6 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<AddFriendPopup></AddFriendPopup>
 	<BaseBanner
 		v-if="status === 'error'"
 		type="error"
