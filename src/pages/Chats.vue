@@ -55,7 +55,7 @@ onMounted(() => {
 				<router-link :to="'/chat/' + chat.chatId">
 					<div class="grid grid-cols-3">
 						<img
-							class="w-32 rounded-l-lg object-cover"
+							class="w-32 rounded-l-lg"
 							v-if="chat.item"
 							:src="chat.item.images[0]"
 							:alt="chat.item.name"

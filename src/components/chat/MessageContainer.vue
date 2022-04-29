@@ -42,10 +42,8 @@ interface Props {
 	chat: Chat
 }
 
-onMounted(() => {
-	var myDiv = document.getElementById('box')
-	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
-})
+var myDiv = document.getElementById('box')
+if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
 
 const emit = defineEmits(['update:modelValue'])
 

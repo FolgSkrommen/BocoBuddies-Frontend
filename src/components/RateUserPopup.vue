@@ -3,6 +3,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
 import BasePopup from '../components/base/BasePopup.vue'
 import { ref } from 'vue'
+import axios from 'axios'
 
 export interface User {
 	userId: number
@@ -18,6 +19,10 @@ interface Props {
 	user: User
 }
 
+interface Review {
+	//TODO
+}
+
 const { user } = defineProps<Props>()
 
 const emit = defineEmits(['exit'])
@@ -28,6 +33,7 @@ const comment = ref('')
 function handleRate() {
 	if (rating.value === -1) return
 	//TODO: ADD Method
+	//axios.post("/review", )
 	emit('exit')
 }
 </script>

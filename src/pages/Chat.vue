@@ -14,6 +14,7 @@ import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../components/base/BasePopup.vue'
+import RateUserPopup from '../components/RateUserPopup.vue'
 const route = useRoute()
 
 interface Chat {
@@ -408,6 +409,7 @@ onBeforeMount(async () => {
 		.get('/loan/chat?chatId=' + chat.value?.chatId)
 		.then(res => {
 			user.value = res.data.user
+			console.log(res.data)
 			if (chat.value?.chatId) {
 				loan.value = {
 					chatId: chat.value?.chatId,
@@ -416,6 +418,7 @@ onBeforeMount(async () => {
 					loanId: res.data.loan.loanId,
 					active: res.data.loan.active,
 					returned: res.data.loan.returned,
+					creationDate: res.data.value?.creationDate,
 				}
 			}
 
@@ -428,7 +431,7 @@ onBeforeMount(async () => {
 						chatData.value?.userId,
 					start: res.data.loan.startDate,
 					stop: res.data.loan.endDate,
-					date: loan.value?.creationDate,
+					date: res.data.value?.creationDate,
 					returned: loan.value?.returned,
 					active: loan.value?.active,
 				}
@@ -476,6 +479,10 @@ function handleLoanRequest() {
 	}
 }
 
+function toggleShowRating() {
+	showRateUserPopup.value = true
+}
+
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -495,7 +502,7 @@ interface Range {
 }
 const range = ref<Range>()
 const render = ref<number>(0)
-
+const showRateUserPopup = ref<boolean>(false)
 function reRenderChat() {
 	render.value++
 }
@@ -554,6 +561,7 @@ function reRenderChat() {
 						loanStatus &&
 						loanPending
 					"
+					@click="toggleShowRating"
 					data-testid="feedback-button"
 					class="grow bg-purple-500"
 					>Gi tilbakemelding</BaseBtn
