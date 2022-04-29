@@ -1,9 +1,12 @@
+import UserRegister from '@/pages/UserRegister'
+import { shallowMount } from '@vue/test-utils'
+import axios from 'axios'
+
 //return true
 it('is true', () => {
 	expect(true).toBe(true)
 })
 
-/* 
 describe('UserRegister', () => {
 	it('when loaded has the required elements', () => {
 		const wrapper = shallowMount(UserRegister)
@@ -46,16 +49,13 @@ describe('UserRegister', () => {
 		wrapper.vm.password = 'same1234'
 		wrapper.vm.passwordCheck = 'same1234'
 		expect(wrapper.vm.password).toBe(wrapper.vm.passwordCheck)
-		expect(wrapper.vm.passwordIsSame).toBe(true)
-		expect(wrapper.vm.passwordIsSame).not.toBe(false)
 	})
 	it('Passwords the different', () => {
 		const wrapper = shallowMount(UserRegister)
 
 		wrapper.vm.password = 'same1234Diff'
 		wrapper.vm.passwordCheck = 'same1234'
-		expect(wrapper.vm.passwordIsSame).toBe(false)
-		expect(wrapper.vm.passwordIsSame).not.toBe(true)
+		expect(wrapper.vm.password).not.toEqual(wrapper.vm.passwordCheck)
 	})
 	it('button disabled if form invalid', () => {
 		const wrapper = shallowMount(UserRegister)
@@ -103,7 +103,7 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.postalCode).toBe('7003')
 		expect(wrapper.vm.postalCode).not.toBe('Wrong value')
 
-		wrapper.vm.phoneNumber = 95444369
+		wrapper.vm.phonenumber = 95444369
 		expect(wrapper.vm.phonenumber).toBe(95444369)
 		expect(wrapper.vm.phonenumber).not.toBe(0)
 
@@ -124,10 +124,9 @@ describe('UserRegister', () => {
 			firstName: 'First',
 			lastName: 'Last',
 			password: '12345678',
-			phonenumber: 95444369,
+			phoneNumber: 95444369,
 			postalCode: '7003',
 			username: 'username',
 		})
 	})
 })
- */

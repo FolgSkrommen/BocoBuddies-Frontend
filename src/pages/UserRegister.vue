@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
-
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import axios, { AxiosError } from 'axios'
 import BaseButton from '../components/base/BaseBtn.vue'
 import { ref, computed } from 'vue'
-import router from '../router'
+//import router from '../router'
+import { useRouter } from 'vue-router'
 
 const schema = yup.object({
 	username: yup.string().required('Brukernavn er påkrevd'),
@@ -34,6 +36,12 @@ const { value: password } = useField<string>('password')
 
 const passwordCheck = ref('')
 
+type Status = 'loading' | 'loaded' | 'error'
+const status = ref<Status>()
+const errorMessage = ref()
+
+const router = useRouter()
+
 interface UserRegisterData {
 	firstName: string
 	lastName: string
@@ -57,15 +65,15 @@ async function submit() {
 		postalCode: postalCode.value,
 		phoneNumber: phonenumber.value,
 	}
-	await axios
-		.post('/user/register', data)
-		.then(response => {
-			console.log(response)
-			router.push('/login')
-		})
-		.catch(error => {
-			console.log(error)
-		})
+	status.value = 'loading'
+	try {
+		await axios.post('/user/register', data)
+		status.value = 'loaded'
+		router.push('/login')
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
 
 const notValid = computed(
@@ -89,6 +97,12 @@ const notValid = computed(
 </script>
 
 <template>
+	<LoadingIndicator v-if="status === 'loading'" />
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
 	<div class="text-center">
 		<h1 class="font-bold text-4xl my-8">Registrer deg</h1>
 
