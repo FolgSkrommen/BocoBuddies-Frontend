@@ -138,7 +138,7 @@ const showRateUserPopup = ref(false)
 					color="green"
 					locale="no"
 				/>
-				<UserCard :user="loaner" color="green" />
+				<UserCard :user="loaner" color="green" show-rating />
 				<BaseBtn>Gå til chat</BaseBtn>
 			</div>
 			<BaseBtn v-else color="red">Slett</BaseBtn>

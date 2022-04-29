@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from './pages/Home.vue'
 import Chat from './pages/Chat.vue'
 import Chats from './pages/Chats.vue'
+import Community from './pages/Community.vue'
 import Item from './pages/Item.vue'
 import Overview from './pages/Overview.vue'
 import MyItem from './pages/MyItem.vue'
@@ -20,6 +21,13 @@ const routes = [
 	{
 		path: '/',
 		component: Home,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/community',
+		component: Community,
 		meta: {
 			requiresAuth: false,
 		},

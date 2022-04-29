@@ -11,8 +11,9 @@ const search = () => {
 }
 interface Props {
 	modelValue: string
+	error?: string
 }
-const { modelValue } = defineProps<Props>()
+const { modelValue, error } = defineProps<Props>()
 </script>
 
 <template>
@@ -24,6 +25,7 @@ const { modelValue } = defineProps<Props>()
 			v-model="modelValue"
 			:modelValue="modelValue"
 			data-testid="search-field"
+			:error="error"
 		></BaseInput>
 		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
 	</div>
