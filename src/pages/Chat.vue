@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Card from '../components/Card.vue'
-import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
+import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
 import { store } from '../store'
 import MessageContainer from '../components/chat/MessageContainer.vue'
 import BaseInput from '../components/base/BaseInput.vue'
