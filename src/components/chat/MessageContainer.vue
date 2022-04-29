@@ -2,6 +2,7 @@
 import Card from '../components/Card.vue'
 import {
 	computed,
+	onMounted,
 	onRenderTracked,
 	onRenderTriggered,
 	PropType,
@@ -22,6 +23,7 @@ interface MessageDTO {
 	stop?: string
 	active?: boolean
 	returned?: boolean
+	price?: number
 }
 
 interface Chat {
@@ -35,23 +37,37 @@ interface ChatData {
 	messages: Array<MessageDTO>
 }
 
+type loanStatus =
+	| 'PENDING'
+	| 'ACCEPTED'
+	| 'DECLINED'
+	| 'COUNTER'
+	| 'NOT_SENT'
+	| 'UNDEFINED'
+
 interface Props {
 	chatData: ChatData
-	modelValue: boolean
+	modelValue: loanStatus
 	chat: Chat
 }
-
-var myDiv = document.getElementById('box')
-if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
+//DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAY BE AT BOTTOM)
+onMounted(() => {
+	var myDiv = document.getElementById('box')
+	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
+})
 
 const emit = defineEmits(['update:modelValue'])
 
 const confirm = () => {
-	emit('update:modelValue', true)
+	emit('update:modelValue', 'ACCEPTED')
 }
 
 const decline = () => {
-	emit('update:modelValue', false)
+	emit('update:modelValue', 'DECLINED')
+}
+
+const negotiate = () => {
+	emit('update:modelValue', 'COUNTER')
 }
 
 const { chatData, modelValue, chat } = defineProps<Props>()
@@ -87,21 +103,38 @@ function styleType(received: boolean) {
 					:class="styleType(message.receive)"
 				>
 					<h1
-						v-if="modelValue || message.type == 'ACCEPT'"
+						v-if="
+							modelValue === 'ACCEPTED' ||
+							message.type === 'ACCEPT'
+						"
 						class="text-2xl"
 					>
 						Avtalt lån
+					</h1>
+					<h1
+						v-if="
+							modelValue === 'RETURNED' ||
+							message.type === 'RETURNED'
+						"
+						class="text-2xl"
+					>
+						Lån tilbakelevert
 					</h1>
 					<h1 v-else class="text-2xl">Forespørsel</h1>
 
 					<h3>Fra: {{ message.start }}</h3>
 					<h3>Til: {{ message.stop }}</h3>
+					<h3>Price: {{ message.price }} per enhet</h3>
 
 					<div
-						v-if="message.receive && !modelValue"
+						v-if="message.receive && modelValue === 'PENDING'"
 						class="flex gap-2"
 					>
 						<BaseBtn class="grow" @click="decline">Avslå</BaseBtn>
+
+						<BaseBtn class="grow" @click="negotiate"
+							>Motbud</BaseBtn
+						>
 
 						<BaseBtn class="grow" @click="confirm">Bekreft</BaseBtn>
 					</div>
