@@ -535,16 +535,18 @@ function test() {
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
 			<h1 class="text-center text-4xl" v-if="item?.name">
 				{{ item.name }}
+				{{ item.price }}kr / {{ item.priceUnit }}
 			</h1>
 			<h1 class="text-center text-4xl" v-else>Chat</h1>
 		</div>
 
 		<MessageContainer
 			class="grow"
-			v-if="chatData && chat"
+			v-if="chatData && chat && item"
 			:chatData="chatData"
 			:chat="chat"
 			:key="render"
+			:item="item"
 			v-model="loanStatus"
 			data-testid="message-container"
 			@update:modelValue="handleLoanRequest"

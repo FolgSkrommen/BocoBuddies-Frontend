@@ -37,6 +37,19 @@ interface ChatData {
 	messages: Array<MessageDTO>
 }
 
+interface Item {
+	name: string
+	description: string
+	price: number
+	priceUnit: string
+	postalCode: string
+	address: string
+	images: string[]
+	availableFrom: string
+	availableTo: string
+	categories: string[]
+}
+
 type loanStatus =
 	| 'PENDING'
 	| 'ACCEPTED'
@@ -49,6 +62,7 @@ interface Props {
 	chatData: ChatData
 	modelValue: loanStatus
 	chat: Chat
+	item: Item
 }
 //DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAY BE AT BOTTOM)
 onMounted(() => {
@@ -70,7 +84,7 @@ const negotiate = () => {
 	emit('update:modelValue', 'COUNTER')
 }
 
-const { chatData, modelValue, chat } = defineProps<Props>()
+const { chatData, modelValue, chat, item } = defineProps<Props>()
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -124,7 +138,7 @@ function styleType(received: boolean) {
 
 					<h3>Fra: {{ message.start }}</h3>
 					<h3>Til: {{ message.stop }}</h3>
-					<h3>Price: {{ message.price }} per enhet</h3>
+					<h3>Price: {{ message.price }}kr / {{ item.priceUnit }}</h3>
 
 					<div
 						v-if="message.receive && modelValue === 'PENDING'"
