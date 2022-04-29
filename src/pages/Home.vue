@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -52,11 +52,6 @@ let currentPage = ref<number>(0)
 const amountPerPage: number = 20
 let renderLoadButton = ref<boolean>(true)
 
-//Mounted
-onMounted(() => {
-	search()
-})
-
 //Computed
 const searchHits = computed<string>(() =>
 	items.value.length == 1 ? `1 resultat` : `${items.value.length} resultater`
@@ -81,11 +76,10 @@ function isAnItem(obj: any): obj is Item {
 		'postalCode' in obj
 	)
 }
-type Status = 'loading' | 'loaded' | 'error'
 
+type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
 const errorMessage = ref()
-
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -101,7 +95,10 @@ async function getMainCategories() {
 	}
 }
 getMainCategories()
-function search() {
+
+async function search() {
+	status.value = 'loading'
+
 	let sortChosenString: string
 	/*
   { id: 0, alt: 'Ingen sortering' },
@@ -145,9 +142,8 @@ function search() {
 	chosenTags.value.forEach(tag => {
 		chosenTagsIds.push(tag.categoryId)
 	})
-
-	axios
-		.get('/item/search/' + searchWord.value.trim(), {
+	try {
+		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params: {
 				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
@@ -158,41 +154,40 @@ function search() {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
 			},
 		})
-		.then(response => {
-			let responseData: Item[] = response.data
-			if (
-				Array.isArray(responseData) &&
-				responseData.length > 0 &&
-				isAnItem(responseData[0])
-			)
-				items.value = items.value.concat(responseData)
-			if (responseData.length < amountPerPage)
-				renderLoadButton.value = false
-		})
-		.catch(error => {
-			//TODO error handling, tell user something went wrong
-			items.value = []
-			console.log(error.message)
-		})
+		const data: Item[] = res.data
+		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
+			items.value = items.value.concat(data)
+		if (data.length < amountPerPage) renderLoadButton.value = false
+
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+		items.value = []
+	}
 }
+search()
+
 function searchAndResetItems() {
 	currentPage.value = 0
 	items.value = []
 	search()
 }
-function categoryChosen(tag: Category) {
+async function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
 	searchAndResetItems()
-	axios
-		.get('category/sub?categoryId=' + tag.categoryId)
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
+	status.value = 'loading'
+	try {
+		const res = await axios.get('category/sub?categoryId=' + tag.categoryId)
+		const data: Category[] = res.data
+		tagAlts.value = data
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
-function categoryRemoved(tag: Category) {
+async function categoryRemoved(tag: Category) {
 	chosenTags.value.forEach((value, index) => {
 		if (value.categoryId == tag.categoryId)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
@@ -202,17 +197,19 @@ function categoryRemoved(tag: Category) {
 		getMainCategories()
 		return
 	}
-	axios
-		.get(
+	status.value = 'loading'
+	try {
+		const res = await axios.get(
 			'category/sub?categoryId=' +
 				chosenTags.value[chosenTags.value.length - 1].categoryId
 		)
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
+		const data: Category[] = res.data
+		tagAlts.value = data
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
 function loadMoreItems() {
 	if (items.value.length > 0) {

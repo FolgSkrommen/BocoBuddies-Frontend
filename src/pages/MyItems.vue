@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -12,7 +12,7 @@ import { userInfo } from 'os'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 //Enums
-enum Status {
+enum State {
 	ACTIVE = 'Active',
 	ARCHIVED = 'Archived',
 }
@@ -59,17 +59,12 @@ let currentPage = ref<number>(0)
 const amountPerPage: number = 20
 let renderLoadButton = ref<boolean>(true)
 
-const statusTag = ref<Status>(Status.ACTIVE)
-//const search = ref('')
+const stateTag = ref<State>(State.ACTIVE)
 
-//Mounted
-onMounted(() => {
-	if (store.getters.loggedIn) {
-		//Only needs to call these if user is logged in
-		getMainCategories()
-		search()
-	}
-})
+type Status = 'loading' | 'loaded' | 'error'
+const status = ref<Status>()
+const errorMessage = ref()
+//const search = ref('')
 
 //Computed
 const searchHits = computed<string>(() =>
@@ -80,7 +75,7 @@ const searchHits = computed<string>(() =>
 watch(sortChosen, () => {
 	searchAndResetItems()
 })
-watch(statusTag, () => {
+watch(stateTag, () => {
 	searchAndResetItems()
 })
 
@@ -98,18 +93,25 @@ function isAnItem(obj: any): obj is Item {
 		'postalCode' in obj
 	)
 }
-function getMainCategories() {
-	axios
-		.get('/category/main')
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
+
+async function getMainCategories() {
+	status.value = 'loading'
+	try {
+		const res = await axios.get('/category/main')
+		const data: Category[] = res.data
+		tagAlts.value = data
+		console.log(tagAlts.value)
+
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
-function search() {
+getMainCategories()
+async function search() {
 	if (!store.state.user) return
+	status.value = 'loading'
 
 	let sortChosenString: string
 	/*
@@ -156,8 +158,8 @@ function search() {
 		chosenTagsIds.push(tag.categoryId)
 	})
 
-	axios
-		.get('/item/search/' + searchWord.value.trim(), {
+	try {
+		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params: {
 				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
@@ -165,47 +167,45 @@ function search() {
 				offset: currentPage.value,
 				userId: store.state.user.id,
 				loan: false,
-				active: statusTag.value === Status.ACTIVE,
+				active: stateTag.value === State.ACTIVE,
 			},
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
 			},
 		})
-		.then(response => {
-			let responseData: Item[] = response.data
-			if (
-				Array.isArray(responseData) &&
-				responseData.length > 0 &&
-				isAnItem(responseData[0])
-			)
-				items.value = items.value.concat(responseData)
-			if (responseData.length < amountPerPage)
-				renderLoadButton.value = false
-		})
-		.catch(error => {
-			//TODO error handling, tell user something went wrong
-			items.value = []
-			console.log(error.message)
-		})
+		const data: Item[] = res.data
+		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
+			items.value = items.value.concat(data)
+		if (data.length < amountPerPage) renderLoadButton.value = false
+
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+		items.value = []
+	}
 }
+search()
 function searchAndResetItems() {
 	currentPage.value = 0
 	items.value = []
 	search()
 }
-function categoryChosen(tag: Category) {
+async function categoryChosen(tag: Category) {
 	chosenTags.value.push(tag)
 	searchAndResetItems()
-	axios
-		.get('category/sub?categoryId=' + tag.categoryId)
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
+	status.value = 'loading'
+	try {
+		const res = await axios.get('category/sub?categoryId=' + tag.categoryId)
+		const data: Category[] = res.data
+		tagAlts.value = data
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
-function categoryRemoved(tag: Category) {
+async function categoryRemoved(tag: Category) {
 	chosenTags.value.forEach((value, index) => {
 		if (value.categoryId == tag.categoryId)
 			chosenTags.value.splice(index, chosenTags.value.length - index)
@@ -215,17 +215,19 @@ function categoryRemoved(tag: Category) {
 		getMainCategories()
 		return
 	}
-	axios
-		.get(
+	status.value = 'loading'
+	try {
+		const res = await axios.get(
 			'category/sub?categoryId=' +
 				chosenTags.value[chosenTags.value.length - 1].categoryId
 		)
-		.then(response => {
-			tagAlts.value = response.data
-		})
-		.catch(error => {
-			console.log(error)
-		})
+		const data: Category[] = res.data
+		tagAlts.value = data
+		status.value = 'loaded'
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
 function loadMoreItems() {
 	if (items.value.length > 0) {
@@ -247,12 +249,12 @@ function loadMoreItems() {
 					<button
 						class="px-2 py-1 rounded-lg"
 						:class="
-							statusTag === tag
+							stateTag === tag
 								? 'bg-blue text-white'
 								: 'bg-slate-300 text-slate-900'
 						"
-						@click="statusTag = tag"
-						v-for="tag in Status"
+						@click="stateTag = tag"
+						v-for="tag in State"
 					>
 						{{ tag }}
 					</button>
