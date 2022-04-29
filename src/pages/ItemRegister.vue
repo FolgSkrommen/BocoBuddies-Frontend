@@ -218,146 +218,140 @@ async function registerItem() {
 </script>
 
 <template>
-	<div class="">
-		<BaseBanner
-			v-if="status === 'error'"
-			type="error"
-			:message="errorMessage"
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
+	<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
+	<form class="grid w-full gap-y-6" @submit.prevent="registerItem">
+		<BaseInput
+			v-model.lazy="title"
+			label="Tittel *"
+			:error="errors.title"
 		/>
-		<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
-		<form class="grid w-full gap-y-6" @submit.prevent="registerItem">
+		<BaseInput
+			v-model.lazy="description"
+			label="Beskrivelse *"
+			:error="errors.description"
+		/>
+		<div class="flex gap-4">
 			<BaseInput
-				v-model.lazy="title"
-				label="Tittel *"
-				:error="errors.title"
+				class="grow"
+				v-model.lazy="price"
+				type="number"
+				label="NOK *"
+				:error="errors.price"
 			/>
-			<BaseInput
-				v-model.lazy="description"
-				label="Beskrivelse *"
-				:error="errors.description"
-			/>
-			<div class="flex gap-4">
-				<BaseInput
-					class="grow"
-					v-model.lazy="price"
-					type="number"
-					label="NOK *"
-					:error="errors.price"
-				/>
 
-				<div class="grow">
-					<BaseLabel model-value="Per" />
+			<div class="grow">
+				<BaseLabel model-value="Per" />
 
-					<select
-						class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-						@input="
+				<select
+					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
+				>
+					<option
+						v-for="unit in priceUnits"
+						:key="unit.value"
+						:value="unit.value"
 					>
-						<option
-							v-for="unit in priceUnits"
-							:key="unit.value"
-							:value="unit.value"
-						>
-							{{ unit.name }}
-						</option>
-					</select>
-				</div>
+						{{ unit.name }}
+					</option>
+				</select>
 			</div>
+		</div>
 
-			<div>
-				<BaseLabel model-value="Kategori" />
+		<div>
+			<BaseLabel model-value="Kategori" />
 
-				<select
-					v-for="(categories, index) in categoryChoices"
-					v-if="categoryChoices"
-					:key="index"
-					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-					@input="
+			<select
+				v-for="(categories, index) in categoryChoices"
+				v-if="categoryChoices"
+				:key="index"
+				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
+			>
 				>
-					>
-					<option value="1">Velg</option>
+				<option value="1">Velg</option>
 
-					<option
-						v-for="category in categories"
-						:key="category.categoryId"
-						:value="category.categoryId"
-					>
-						{{ category.categoryName }}
-					</option>
-				</select>
-			</div>
+				<option
+					v-for="category in categories"
+					:key="category.categoryId"
+					:value="category.categoryId"
+				>
+					{{ category.categoryName }}
+				</option>
+			</select>
+		</div>
 
-			<div v-for="(filterType, index) in filterTypes">
-				<BaseLabel :model-value="filterType.filterTypeName" />
-				<select
-					v-if="filterTypes"
-					:key="index"
-					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
-					@input="
+		<div v-for="(filterType, index) in filterTypes">
+			<BaseLabel :model-value="filterType.filterTypeName" />
+			<select
+				v-if="filterTypes"
+				:key="index"
+				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				@input="
 						event => updateFilters(parseInt((event.target as HTMLInputElement).value), index)
 					"
-				>
-					>
-					<option value="0">Velg</option>
-
-					<option
-						v-for="value in filterType.filterValues"
-						:key="value.id"
-						:value="value.id"
-					>
-						{{ value.value }}
-					</option>
-				</select>
-			</div>
-
-			<div class="grid place-items-center">
-				<p class="font-bold text-lg">Available time</p>
-				<DatePicker
-					class="place-self-center"
-					v-model="range"
-					mode="dateTime"
-					is-range
-					locale="no"
-					is24hr
-				/>
-			</div>
-			<div>
-				<BaseLabel model-value="Bilder" />
-
-				<input
-					type="file"
-					@input="event => uploadImage(event.target)"
-					multiple
-				/>
-
-				<ImageCarousel
-					v-if="imagePreview.length > 0"
-					:images="imagePreview"
-					class="h-52"
-				/>
-			</div>
-
-			<BaseInput
-				v-model="address"
-				label="Adresse"
-				:error="errors.address"
-			/>
-
-			<BaseInput
-				v-model="postalCode"
-				label="Postnummer *"
-				:error="errors.postalCode"
-			/>
-
-			<BaseButton
-				class="m-4 place-self-center"
-				type="submit"
-				:disabled="notValid"
-				>Send</BaseButton
 			>
-		</form>
-	</div>
+				>
+				<option value="0">Velg</option>
+
+				<option
+					v-for="value in filterType.filterValues"
+					:key="value.id"
+					:value="value.id"
+				>
+					{{ value.value }}
+				</option>
+			</select>
+		</div>
+
+		<div class="grid place-items-center">
+			<p class="font-bold text-lg">Available time</p>
+			<DatePicker
+				class="place-self-center"
+				v-model="range"
+				mode="dateTime"
+				is-range
+				locale="no"
+				is24hr
+			/>
+		</div>
+		<div>
+			<BaseLabel model-value="Bilder" />
+
+			<input
+				type="file"
+				@input="event => uploadImage(event.target)"
+				multiple
+			/>
+
+			<ImageCarousel
+				v-if="imagePreview.length > 0"
+				:images="imagePreview"
+				class="h-52"
+			/>
+		</div>
+
+		<BaseInput v-model="address" label="Adresse" :error="errors.address" />
+
+		<BaseInput
+			v-model="postalCode"
+			label="Postnummer *"
+			:error="errors.postalCode"
+		/>
+
+		<BaseButton
+			class="m-4 place-self-center"
+			type="submit"
+			:disabled="notValid"
+			>Send</BaseButton
+		>
+	</form>
 </template>

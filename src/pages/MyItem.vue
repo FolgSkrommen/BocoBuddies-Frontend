@@ -8,9 +8,9 @@ import 'v-calendar/dist/style.css'
 import { computed, ref } from 'vue'
 import UserCard, { User } from '../components/UserCard.vue'
 import RateUserPopup from '../components/RateUserPopup.vue'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 
 const { params } = useRoute()
