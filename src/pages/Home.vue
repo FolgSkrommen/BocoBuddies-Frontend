@@ -54,7 +54,6 @@ let renderLoadButton = ref<boolean>(true)
 
 //Mounted
 onMounted(() => {
-	getMainCategories()
 	search()
 })
 
