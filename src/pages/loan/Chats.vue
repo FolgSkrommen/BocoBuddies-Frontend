@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import Card from '../components/Card.vue'
+import Card from '../../components/Card.vue'
 import axios from 'axios'
-import { store, User } from '../store'
+import { store, User } from '../../store'
 import { response } from 'express'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import BaseBanner from '../../components/base/BaseBanner.vue'
 
 interface Chat {
 	chatId: number

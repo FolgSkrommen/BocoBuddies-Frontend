@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
+import Card from '../../components/Card.vue'
 import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
-import { store } from '../store'
-import MessageContainer from '../components/chat/MessageContainer.vue'
-import BaseInput from '../components/base/BaseInput.vue'
+import { store } from '../../store'
+import MessageContainer from '../../components/chat/MessageContainerLoan.vue'
+import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
-import BaseBtn from '../components/base/BaseBtn.vue'
+import BaseBtn from '../../components/base/BaseBtn.vue'
 
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import BasePopup from '../components/base/BasePopup.vue'
-import RateUserPopup from '../components/RateUserPopup.vue'
+import BasePopup from '../../components/base/BasePopup.vue'
+import RateUserPopup from '../../components/RateUserPopup.vue'
 const route = useRoute()
 
 interface Chat {
@@ -523,10 +523,6 @@ const price = ref<number>(0)
 function reRenderChat() {
 	render.value++
 }
-
-function test() {
-	alert(loanStatus.value)
-}
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
@@ -599,7 +595,6 @@ function test() {
 					>Levert tilbake</BaseBtn
 				>
 			</div>
-			<button @click="test">Test</button>
 		</form>
 	</div>
 
