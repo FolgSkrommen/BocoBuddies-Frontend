@@ -2,12 +2,12 @@
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 
-const emit = defineEmits(['update:modelValue', 'search-and-reset'])
+const emit = defineEmits(['update:modelValue', 'search'])
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
 const search = () => {
-	emit('search-and-reset')
+	emit('search')
 }
 interface Props {
 	modelValue: string
