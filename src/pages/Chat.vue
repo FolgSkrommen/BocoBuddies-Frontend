@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
 import { computed, onBeforeMount, onMounted, Ref, ref, watch } from 'vue'
 import { store } from '../store'
-import MessageContainer from '../components/chat/MessageContainer.vue'
-import BaseInput from '../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
-import BaseBtn from '../components/base/BaseBtn.vue'
 
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import BasePopup from '../components/base/BasePopup.vue'
-import RateUserPopup from '../components/RateUserPopup.vue'
 const route = useRoute()
 
 interface Chat {

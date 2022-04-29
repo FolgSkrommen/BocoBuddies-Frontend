@@ -51,7 +51,7 @@ onMounted(() => {
 	<div>
 		<h1 class="text-4xl my-4">Samtaler</h1>
 		<div class="grid gap-4">
-			<Card v-for="chat in chats">
+			<Card v-for="chat in chats" :key="chat.chatId">
 				<router-link :to="'/chat/' + chat.chatId">
 					<div class="grid grid-cols-3">
 						<img

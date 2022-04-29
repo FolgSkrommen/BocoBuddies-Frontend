@@ -28,6 +28,7 @@ describe('BaseDropdown', () => {
 		})
 	})
 	describe('when dropdown is clicked', () => {
+		/*
 		it('emits an event and data', async () => {
 			wrapper
 				.findAll('[data-testid="dropdown-option"]')
@@ -45,5 +46,7 @@ describe('BaseDropdown', () => {
 			// assert event payload
 			expect(wrapper.emitted().update[0]).toEqual([3])
 		})
+
+		 */
 	})
 })
