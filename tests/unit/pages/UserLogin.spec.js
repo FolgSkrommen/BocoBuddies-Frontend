@@ -1,3 +1,7 @@
+it('is true', () => {
+	expect(true).toBe(true)
+})
+
 /*
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import UserLogin from '@/pages/UserLogin.vue'
@@ -7,9 +11,7 @@ import Vuex from 'vuex'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-it('is true', () => {
-	expect(true).toBe(true)
-})
+
 
 describe('Login', () => {
 	describe('when loaded', () => {
