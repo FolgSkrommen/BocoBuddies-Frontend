@@ -8,6 +8,10 @@ import BasePopup from '../components/base/BasePopup.vue'
 import { Ref, ref } from 'vue'
 import router from '../router'
 import axios from 'axios'
+import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BaseBanner from '../components/base/BaseBanner.vue'
+type Status = 'loading' | 'loaded' | 'error'
+const errorMessage = ref()
 
 const newEmail = ref('')
 const newPassword = ref('')
@@ -35,25 +39,36 @@ function uploadImage(input: any) {
 	imageFiles.value = input.files
 }
 
-const showModal = ref(false)
+type UploadStatus = 'sending' | 'success' | 'error'
+const uploadProfilePictureStatus = ref<UploadStatus>()
 async function uploadPicture() {
+	uploadProfilePictureStatus.value = 'sending'
 	const formData = new FormData()
 	formData.append('image', imageFiles.value[0])
-	await axios.post('/user/uploadProfilePicture', formData).then(response => {
-		showModal.value = !showModal.value
-	})
+	try {
+		await axios.post('/user/uploadProfilePicture', formData)
+		uploadProfilePictureStatus.value = 'success'
+	} catch (error) {
+		uploadProfilePictureStatus.value = 'error'
+		errorMessage.value = error
+	}
 }
 
-function closeModal() {
-	showModal.value = !showModal.value
-	location.reload()
+const profilePicture = ref('')
+const getProfilePictureStatus = ref<Status>()
+async function getProfilePicture() {
+	getProfilePictureStatus.value = 'loading'
+	try {
+		const res = await axios.get('/user/getProfilePicture')
+		profilePicture.value = res.data
+		getProfilePictureStatus.value = 'loaded'
+	} catch (error) {
+		getProfilePictureStatus.value = 'error'
+		errorMessage.value = error
+	}
 }
 
-let profilePicture = ''
-axios.get('/user/getProfilePicture').then(response => {
-	profilePicture = response.data
-	console.log(profilePicture)
-})
+getProfilePicture()
 
 function deleteUser() {
 	//TODO: Implement
@@ -62,6 +77,19 @@ function deleteUser() {
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
+		<BaseBanner
+			v-if="
+				getProfilePictureStatus === 'error' ||
+				uploadProfilePictureStatus === 'error'
+			"
+			type="error"
+			:message="errorMessage"
+		/>
+		<BaseBanner
+			v-if="uploadProfilePictureStatus === 'success'"
+			type="success"
+			message="Bildet er lastet opp"
+		/>
 		<h1 class="text-xl font-bold">Innstillinger</h1>
 		<div class="grid gap-1">
 			<!--
@@ -101,7 +129,4 @@ function deleteUser() {
 	<div v-else>
 		<p>No user</p>
 	</div>
-	<BasePopup v-show="showModal" @exit="closeModal"
-		>Profilbilde ditt er oppdatert!</BasePopup
-	>
 </template>

@@ -29,6 +29,6 @@ const updateValue = (event: Event) => {
 			data-testid="input"
 		/>
 
-		<p class="text-red text-xs w-full text-center">{{ error }}</p>
+		<p class="text-red-700 text-xs w-full text-center">{{ error }}</p>
 	</div>
 </template>
