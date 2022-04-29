@@ -241,7 +241,7 @@ observer.observe(items[items.length-1])*/
 	<h1 class="text-4xl font-bold">Hjem</h1>
 	<SearchbarAndButton
 		v-model="searchWord"
-		@search-and-reset="searchAndResetItems"
+		@search="searchAndResetItems"
 		data-testid="searchbar-and-button"
 	></SearchbarAndButton>
 
