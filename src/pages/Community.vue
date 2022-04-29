@@ -7,6 +7,7 @@ import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
 import { store } from '../store'
+import AddFriendPopup from '../components/AddFriendPopup.vue'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()
@@ -325,6 +326,18 @@ watch(view, () => {
 			break
 	}
 })
+const addingUser = ref(false)
+const createGC = ref(false)
+function add() {
+	switch (view.value) {
+		case View.FRIENDS:
+			addingUser.value = true
+			break
+		case View.CHATS:
+			createGC.value = true
+			break
+	}
+}
 </script>
 
 <template>
@@ -353,7 +366,11 @@ watch(view, () => {
 			<div class="grid gap-4">
 				<UserCard v-for="user in users" :user="user" />
 			</div>
-			<FloatingBtn />
+			<FloatingBtn @click="add" />
+			<AddFriendPopup
+				v-show="addingUser"
+				@exit="addingUser = false"
+			></AddFriendPopup>
 		</div>
 		<div v-if="view === 'Chats'">
 			<BaseBanner
@@ -390,7 +407,7 @@ watch(view, () => {
 					</Card>
 				</div>
 			</div>
-			<FloatingBtn />
+			<FloatingBtn @click="add" />
 		</div>
 	</div>
 </template>
