@@ -155,7 +155,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="request-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Forespørsel')
+			expect(request.element.textContent).toBe(' Forespørsel ')
 		})
 
 		it('Request message info is correct send', () => {
@@ -172,7 +172,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="request-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Forespørsel')
+			expect(request.element.textContent).toBe(' Forespørsel ')
 		})
 
 		it('Accept header comes up when accepted receive', () => {
@@ -189,7 +189,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toBe(' Avtalt lån ')
 		})
 
 		it('Accept header comes up when accepted send', () => {
@@ -206,7 +206,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toBe(' Avtalt lån ')
 		})
 
 		it('Returned header comes up when accepted receive', () => {
@@ -224,7 +224,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="returned-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Lån tilbakelevert')
+			expect(request.element.textContent).toBe(' Lån tilbakelevert ')
 		})
 
 		it('Returned header comes up when accepted send', () => {
@@ -242,7 +242,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="returned-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Lån tilbakelevert')
+			expect(request.element.textContent).toBe(' Lån tilbakelevert ')
 		})
 	})
 })
