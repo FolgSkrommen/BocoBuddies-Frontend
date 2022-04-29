@@ -8,6 +8,7 @@ import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
 import { store } from '../store'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
+import { userInfo } from 'os'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
 //Enums
@@ -55,6 +56,8 @@ let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
 let currentPage = ref<number>(0)
+const amountPerPage: number = 20
+let renderLoadButton = ref<boolean>(true)
 
 const statusTag = ref<Status>(Status.ACTIVE)
 //const search = ref('')
@@ -106,7 +109,8 @@ function getMainCategories() {
 		})
 }
 function search() {
-	//if(store.getters.loggedIn) { //TODO might be 'store.getters.loggedIn()'
+	if (!store.state.user) return
+
 	let sortChosenString: string
 	/*
   	{ id: 0, alt: 'Ingen sortering' },
@@ -157,7 +161,7 @@ function search() {
 			params: {
 				categories: chosenTagsIds[chosenTagsIds.length - 1],
 				sort: sortChosenString,
-				amount: 20,
+				amount: amountPerPage,
 				offset: currentPage.value,
 				userId: store.state.user.id,
 				loan: false,
@@ -175,13 +179,14 @@ function search() {
 				isAnItem(responseData[0])
 			)
 				items.value = items.value.concat(responseData)
+			if (responseData.length < amountPerPage)
+				renderLoadButton.value = false
 		})
 		.catch(error => {
 			//TODO error handling, tell user something went wrong
 			items.value = []
 			console.log(error.message)
 		})
-	//}
 }
 function searchAndResetItems() {
 	currentPage.value = 0
@@ -233,8 +238,6 @@ function loadMoreItems() {
 
 <template>
 	<div>
-		<h1 class="text-4xl font-bold">Mine Gjenstander</h1>
-
 		<div v-if="!store.getters.loggedIn">
 			<p>Du må være logget inn for å se denne siden</p>
 		</div>
@@ -280,6 +283,7 @@ function loadMoreItems() {
 			<ItemList
 				:items="items"
 				:searchHits="searchHits"
+				:renderLoadButton="renderLoadButton"
 				redirect="my-item"
 				@load-more-items="loadMoreItems"
 			>

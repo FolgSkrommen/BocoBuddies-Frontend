@@ -38,7 +38,7 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 			>
 				<div class="flex gap-2">
 					<img
-						class="w-32 rounded-l-lg"
+						class="w-32 rounded-l-lg object-cover"
 						:src="item.image"
 						:alt="item.name"
 					/>

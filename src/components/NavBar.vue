@@ -5,6 +5,7 @@ import {
 	ChatAlt2Icon,
 	UserIcon,
 	CollectionIcon,
+	UserGroupIcon,
 	PlusIcon,
 } from '@heroicons/vue/solid'
 </script>
@@ -15,11 +16,11 @@ import {
 			<router-link to="/">
 				<SearchIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link v-if="store.getters.loggedIn" to="/my-loans">
+			<router-link v-if="store.getters.loggedIn" to="/overview/items">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link v-if="store.getters.loggedIn" to="/my-items">
-				<PlusIcon class="w-8 h-8 text-white" />
+			<router-link v-if="store.getters.loggedIn" to="/item/register">
+				<UserGroupIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link v-if="store.getters.loggedIn" to="/chats">
 				<ChatAlt2Icon class="w-8 h-8 text-white" />

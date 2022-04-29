@@ -56,7 +56,7 @@ describe('Home', () => {
 			).toBe(true)
 			expect(
 				wrapper.find('[data-testid="categories-tag-chosen"]').exists()
-			).toBe(true)
+			).toBe(false)
 			expect(
 				wrapper.find('[data-testid="categories-tag-alts"]').exists()
 			).toBe(true)

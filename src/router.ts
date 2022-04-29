@@ -5,6 +5,7 @@ import Home from './pages/Home.vue'
 import Chat from './pages/Chat.vue'
 import Chats from './pages/Chats.vue'
 import Item from './pages/Item.vue'
+import Overview from './pages/Overview.vue'
 import MyItem from './pages/MyItem.vue'
 import MyLoan from './pages/MyLoan.vue'
 import ItemRegister from './pages/ItemRegister.vue'
@@ -66,19 +67,25 @@ const routes = [
 		},
 	},
 	{
-		path: '/my-items/',
-		component: MyItems,
+		path: '/overview',
+		component: Overview,
 		meta: {
 			requiresAuth: true,
 		},
+		children: [
+			{
+				path: 'items',
+				name: 'myItems',
+				component: MyItems,
+			},
+			{
+				path: 'loans',
+				name: 'myLoans',
+				component: MyLoans,
+			},
+		],
 	},
-	{
-		path: '/my-loans',
-		component: MyLoans,
-		meta: {
-			requiresAuth: true,
-		},
-	},
+
 	{
 		path: '/settings',
 		component: Settings,
