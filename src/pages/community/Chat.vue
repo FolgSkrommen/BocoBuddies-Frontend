@@ -82,16 +82,19 @@ function onError(err: any) {
 	console.log(err)
 }
 
-function sendMessage(event: any) {
-	if (stompClient.value) {
-		let chatMessage: MessageDTO = {
-			senderId: chatData.value?.userId,
-			message: currentMessage.value,
-			type: 'CHAT',
-			date: new Date().toDateString(),
-			receive: false,
-			chatId: chat.value?.chatId.toString(),
-		}
+async function sendMessage(event: any) {
+	if (!stompClient.value) return
+	let chatMessage: MessageDTO = {
+		senderId: chatData.value?.userId,
+		message: currentMessage.value,
+		type: 'CHAT',
+		date: new Date().toISOString(),
+		receive: false,
+		chatId: chat.value?.chatId.toString(),
+	}
+
+	try {
+		//const res = await axios.post("/message", chatMessage)
 
 		stompClient.value.send(
 			'/app/chat/sendMessage',
@@ -99,8 +102,9 @@ function sendMessage(event: any) {
 		)
 
 		chatData.value?.messages.push(chatMessage)
-		currentMessage.value = ''
-	}
+	} catch (error) {}
+
+	currentMessage.value = ''
 	event.preventDefault()
 }
 
