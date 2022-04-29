@@ -49,7 +49,7 @@ let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
 let currentPage = ref<number>(0)
-const amountPerPage: number = 1
+const amountPerPage: number = 6
 let renderLoadButton = ref<boolean>(true)
 
 //Mounted
