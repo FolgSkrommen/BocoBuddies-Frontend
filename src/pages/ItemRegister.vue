@@ -62,9 +62,21 @@ interface Category {
 }
 let categoryChoices: Ref<Array<Category[]>> = ref([])
 
-axios.get('/category/main').then(response => {
-	categoryChoices.value.push(response.data)
-})
+type GetStatus = 'loading' | 'loaded' | 'error'
+const getCategoriesStatus = ref<GetStatus>()
+getCategoriesStatus.value = 'loading'
+async function getCategories() {
+	try {
+		const res = await axios.get('/category/main')
+		categoryChoices.value.push(res.data)
+		getCategoriesStatus.value = 'loaded'
+	} catch (error) {
+		getCategoriesStatus.value = 'error'
+		errorMessage.value = error
+	}
+}
+
+getCategories()
 
 interface FilterValue {
 	id: number
@@ -81,31 +93,35 @@ let currentCategory: number = 0
 
 let filterTypes: Ref<Array<FilterType>> = ref([])
 
-function updateCategories(categoryId: number, index: number) {
+const updateCategoriesStatus = ref<GetStatus>()
+async function updateCategories(categoryId: number, index: number) {
+	updateCategoriesStatus.value = 'loading'
 	filterTypes.value = []
 	categoryChoices.value = categoryChoices.value.slice(0, index + 1)
 	currentCategory = categoryId
-	axios
-		.get('/category/sub', {
+	try {
+		const res = await axios.get('/category/sub', {
 			params: {
 				categoryId: categoryId,
 			},
 		})
-		.then(response => {
-			console.log(response.data)
-			if (response.data.length > 0) {
-				categoryChoices.value.push(response.data)
+		if (res.data.length > 0) {
+			categoryChoices.value.push(res.data)
+		}
+
+		categoryChoices.value[index].forEach(object => {
+			if (object.categoryId == categoryId) {
+				console.log(object.filterTypes)
+				if (object.filterTypes) {
+					filterTypes.value = object.filterTypes
+				}
 			}
 		})
-
-	categoryChoices.value[index].forEach(object => {
-		if (object.categoryId == categoryId) {
-			console.log(object.filterTypes)
-			if (object.filterTypes) {
-				filterTypes.value = object.filterTypes
-			}
-		}
-	})
+		updateCategoriesStatus.value = 'loaded'
+	} catch (error) {
+		updateCategoriesStatus.value = 'error'
+		errorMessage.value = error
+	}
 }
 
 /* Filter */
@@ -181,8 +197,8 @@ interface Item {
 	endDate: string
 }
 
-type Status = 'sending' | 'success' | 'error'
-const status = ref<Status>()
+type PostStatus = 'sending' | 'success' | 'error'
+const status = ref<PostStatus>()
 const errorMessage = ref()
 async function registerItem() {
 	status.value = 'sending'
@@ -219,7 +235,11 @@ async function registerItem() {
 
 <template>
 	<BaseBanner
-		v-if="status === 'error'"
+		v-if="
+			status === 'error' ||
+			getCategoriesStatus === 'error' ||
+			updateCategoriesStatus === 'error'
+		"
 		type="error"
 		:message="errorMessage"
 	/>

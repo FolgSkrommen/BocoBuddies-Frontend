@@ -5,9 +5,12 @@ import { store, User } from '../store'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import BaseButton from '../components/base/BaseBtn.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import router from '../router'
+import BaseBanner from '../components/base/BaseBanner.vue'
+
+const errorMessage = ref()
 
 const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
@@ -28,22 +31,24 @@ interface UserLoginData {
 	email: string
 	password: string
 }
-
-async function submit() {
+type Status = 'loading' | 'loaded' | 'error'
+const loginStatus = ref<Status>()
+async function logIn() {
+	loginStatus.value = 'loading'
 	const data: UserLoginData = {
 		email: email.value,
 		password: password.value,
 	}
 
-	await store
-		.dispatch('login', data)
-		.then(() => {
-			console.log('logged in')
-			router.push('/')
-		})
-		.catch(err => {
-			alert(err)
-		})
+	try {
+		await store.dispatch('login', data)
+		console.log('logged in')
+		loginStatus.value = 'loaded'
+		router.push('/')
+	} catch (error) {
+		loginStatus.value = 'error'
+		errorMessage.value = error
+	}
 }
 
 const notValid = computed(
@@ -56,10 +61,14 @@ const notValid = computed(
 </script>
 
 <template>
+	<BaseBanner
+		v-if="loginStatus === 'error'"
+		type="error"
+		:message="errorMessage"
+	/>
 	<div class="text-center">
 		<h1 class="font-bold text-4xl">Logg inn</h1>
-
-		<form @submit.prevent="submit()">
+		<form @submit.prevent="logIn()">
 			<BaseInput
 				data-testid="email-input"
 				v-model="email"

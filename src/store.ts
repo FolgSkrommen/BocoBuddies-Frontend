@@ -51,10 +51,9 @@ export const store = createStore<State>({
 		},
 	},
 	actions: {
-		login({ commit }, data) {
-			return axios.post('/user/login', data).then(response => {
-				commit('SET_USER_DATA', response.data)
-			})
+		async login({ commit }, data) {
+			const res = await axios.post('/user/login', data)
+			commit('SET_USER_DATA', res.data)
 		},
 		logout({ commit }) {
 			commit('CLEAR_USER_DATA')

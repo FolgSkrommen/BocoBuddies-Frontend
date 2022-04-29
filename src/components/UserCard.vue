@@ -9,15 +9,16 @@ export interface User {
 	username: string
 	rating: number
 	pictureUrl: string
-	profilePicture: string
+	profilePicture?: string
 	trusted: boolean
 }
 
 interface Props {
 	user: User
 	color?: 'green'
+	showRating?: boolean
 }
-const { user } = defineProps<Props>()
+const { user, color, showRating } = defineProps<Props>()
 </script>
 
 <template>
@@ -32,7 +33,7 @@ const { user } = defineProps<Props>()
 					{{ user.firstName }} {{ user.lastName }}
 				</p>
 				<p class="text-slate-500">@{{ user.username }}</p>
-				<div class="flex gap-2">
+				<div v-if="showRating" class="flex gap-2">
 					<StarIcon
 						v-for="icon in Math.floor(user.rating)"
 						class="h-6 w-6 text-yellow-400"

@@ -2,17 +2,18 @@
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 
-const emit = defineEmits(['update:modelValue', 'search-and-reset'])
+const emit = defineEmits(['update:modelValue', 'search'])
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
 const search = () => {
-	emit('search-and-reset')
+	emit('search')
 }
 interface Props {
 	modelValue: string
+	error?: string
 }
-const { modelValue } = defineProps<Props>()
+const { modelValue, error } = defineProps<Props>()
 </script>
 
 <template>
@@ -24,6 +25,7 @@ const { modelValue } = defineProps<Props>()
 			v-model="modelValue"
 			:modelValue="modelValue"
 			data-testid="search-field"
+			:error="error"
 		></BaseInput>
 		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
 	</div>

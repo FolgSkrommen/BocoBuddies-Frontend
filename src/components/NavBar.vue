@@ -12,14 +12,14 @@ import {
 
 <template>
 	<nav class="bg-slate-900 w-full fixed bottom-0 z-50">
-		<div class="flex justify-between px-4 py-2 container mx-auto">
+		<div class="flex justify-around px-4 py-2 container mx-auto">
 			<router-link to="/">
 				<SearchIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link v-if="store.getters.loggedIn" to="/overview/items">
 				<CollectionIcon class="w-8 h-8 text-white" />
 			</router-link>
-			<router-link v-if="store.getters.loggedIn" to="/item/register">
+			<router-link v-if="store.getters.loggedIn" to="/community">
 				<UserGroupIcon class="w-8 h-8 text-white" />
 			</router-link>
 			<router-link v-if="store.getters.loggedIn" to="/chats">
