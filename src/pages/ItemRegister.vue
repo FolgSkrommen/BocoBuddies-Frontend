@@ -8,7 +8,7 @@ import { DatePicker } from 'v-calendar'
 
 import axios from 'axios'
 
-import { computed, onMounted, Ref, ref } from 'vue'
+import { computed, Ref, ref } from 'vue'
 import router from '../router'
 
 //Form validation
@@ -61,10 +61,8 @@ interface Category {
 }
 let categoryChoices: Ref<Array<Category[]>> = ref([])
 
-onMounted(() => {
-	axios.get('/category/main').then(response => {
-		categoryChoices.value.push(response.data)
-	})
+axios.get('/category/main').then(response => {
+	categoryChoices.value.push(response.data)
 })
 
 interface FilterValue {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -52,10 +52,7 @@ let currentPage = ref<number>(0)
 const amountPerPage: number = 20
 let renderLoadButton = ref<boolean>(true)
 
-//Mounted
-onMounted(() => {
-	search()
-})
+search()
 
 //Computed
 const searchHits = computed<string>(() =>

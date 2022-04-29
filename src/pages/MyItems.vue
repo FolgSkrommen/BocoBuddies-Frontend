@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TagList from '../components/TagList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -63,13 +63,11 @@ const statusTag = ref<Status>(Status.ACTIVE)
 //const search = ref('')
 
 //Mounted
-onMounted(() => {
-	if (store.getters.loggedIn) {
-		//Only needs to call these if user is logged in
-		getMainCategories()
-		search()
-	}
-})
+if (store.getters.loggedIn) {
+	//Only needs to call these if user is logged in
+	getMainCategories()
+	search()
+}
 
 //Computed
 const searchHits = computed<string>(() =>
