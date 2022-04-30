@@ -26,7 +26,7 @@ import {
 				<ChatAlt2Icon class="w-8 h-8 text-white" />
 			</router-link>
 
-			<router-link to="/settings">
+			<router-link to="/user">
 				<UserIcon class="w-8 h-8 text-white" />
 			</router-link>
 		</div>

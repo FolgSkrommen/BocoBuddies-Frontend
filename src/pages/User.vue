@@ -2,29 +2,16 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { store } from '../store'
+import { store, User } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { CheckCircleIcon } from '@heroicons/vue/solid'
+import BaseBtn from '../components/base/BaseBtn.vue'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
 const errorMessage = ref()
-
-interface User {
-	id: number
-	firstName: string
-	lastName: string
-	username: string
-	email: string
-	address: string
-	postalcode: string
-	phonenumber: string
-	profilePicture?: string
-	verified: boolean
-	trusted: boolean
-}
 
 const user = ref<User>()
 
@@ -39,23 +26,20 @@ async function getUser() {
 				user: id,
 			},
 		})
-		const imageRes = await axios.get('/user/getProfilePicture', {
-			method: 'GET',
-			params: {
-				id,
-			},
-		})
 		const data = userRes.data as User
 		user.value = data
-		console.log(data)
 		getUserStatus.value = 'loaded'
 	} catch (error) {
 		getUserStatus.value = 'error'
 		errorMessage.value = error
 	}
 }
-
-getUser()
+if (id && id !== store.state.user?.id) {
+	getUser()
+} else {
+	user.value = store.state.user
+	getUserStatus.value = 'loaded'
+}
 </script>
 <template>
 	<BaseBanner
@@ -100,12 +84,13 @@ getUser()
 			</div>
 			<div v-if="user.address">
 				<p class="font-bold">Adresse</p>
-				<p>{{ user.address }} {{ user.postalcode }}</p>
+				<p>{{ user.address }} {{ user.postalCode }}</p>
 			</div>
-			<div v-if="user.phonenumber">
+			<div v-if="user.phoneNumber">
 				<p class="font-bold">Telefonnummer</p>
-				<p>{{ user.phonenumber }}</p>
+				<p>{{ user.phoneNumber }}</p>
 			</div>
+			<BaseBtn to="/settings" class="place-self-center">Edit</BaseBtn>
 		</div>
 	</div>
 </template>
