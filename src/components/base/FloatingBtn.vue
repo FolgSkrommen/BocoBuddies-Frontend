@@ -14,10 +14,10 @@ const { to } = defineProps<Props>()
 	>
 		<PlusIcon class="w-14 h-14 text-white" />
 	</router-link>
-	<div
+	<button
 		v-else
 		class="fixed bottom-20 right-8 p-1 rounded-full bg-blue shadow-xl"
 	>
 		<PlusIcon class="w-14 h-14 text-white" />
-	</div>
+	</button>
 </template>
