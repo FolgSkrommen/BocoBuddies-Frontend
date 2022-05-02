@@ -110,7 +110,7 @@ const showRateUserPopup = ref(false)
 			</div>
 			<ItemInfo :item="item" />
 		</div>
-		<UserCard :user="lender" />
+		<UserCard :user="lender" show-rating />
 	</div>
 	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>

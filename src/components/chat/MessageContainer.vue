@@ -2,6 +2,7 @@
 import Card from '../components/Card.vue'
 import {
 	computed,
+	onMounted,
 	onRenderTracked,
 	onRenderTriggered,
 	PropType,
@@ -18,16 +19,6 @@ interface MessageDTO {
 	date?: string
 	receive: boolean
 	chatId?: string
-	start?: string
-	stop?: string
-	active?: boolean
-	returned?: boolean
-}
-
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
 }
 
 interface ChatData {
@@ -37,24 +28,14 @@ interface ChatData {
 
 interface Props {
 	chatData: ChatData
-	modelValue: boolean
-	chat: Chat
 }
+//DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAY BE AT BOTTOM)
+onMounted(() => {
+	var myDiv = document.getElementById('box')
+	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
+})
 
-var myDiv = document.getElementById('box')
-if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
-
-const emit = defineEmits(['update:modelValue'])
-
-const confirm = () => {
-	emit('update:modelValue', true)
-}
-
-const decline = () => {
-	emit('update:modelValue', false)
-}
-
-const { chatData, modelValue, chat } = defineProps<Props>()
+const { chatData } = defineProps<Props>()
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -71,6 +52,7 @@ function styleType(received: boolean) {
 	<div
 		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
+		data-testid="chat"
 	>
 		<div class="grid" v-for="(message, i) in chatData.messages">
 			<Message
@@ -78,34 +60,10 @@ function styleType(received: boolean) {
 				:id="i"
 				:receive="!message.receive"
 			>
-				<div>{{ message.message }}</div>
+				<div data-testid="message">{{ message.message }}</div>
 			</Message>
-
-			<div class="grid" v-else>
-				<div
-					class="w-2/3 rounded-lg border p-6 flex flex-col gap-3 text-center"
-					:class="styleType(message.receive)"
-				>
-					<h1
-						v-if="modelValue || message.type == 'ACCEPT'"
-						class="text-2xl"
-					>
-						Avtalt lån
-					</h1>
-					<h1 v-else class="text-2xl">Forespørsel</h1>
-
-					<h3>Fra: {{ message.start }}</h3>
-					<h3>Til: {{ message.stop }}</h3>
-
-					<div
-						v-if="message.receive && !modelValue"
-						class="flex gap-2"
-					>
-						<BaseBtn class="grow" @click="decline">Avslå</BaseBtn>
-
-						<BaseBtn class="grow" @click="confirm">Bekreft</BaseBtn>
-					</div>
-				</div>
+			<div class="text-black text-lg" data-testid="message-info">
+				{{ message.date }} - {{ message.senderId }}
 			</div>
 		</div>
 	</div>

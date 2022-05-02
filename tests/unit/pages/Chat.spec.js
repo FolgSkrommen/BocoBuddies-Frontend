@@ -1,4 +1,4 @@
-describe('Chat', () => {
+describe('LoanChat.vue', () => {
 	describe('when loaded', () => {
 		it('has the required elements', () => {
 			/*

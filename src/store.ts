@@ -10,8 +10,8 @@ export interface User {
 	email: string
 	address: string
 	postalCode: string
-	phonenumber: string
-	pictureUrl?: string
+	phoneNumber: string
+	profilePicture?: string
 	verified: boolean
 	trusted: boolean
 }

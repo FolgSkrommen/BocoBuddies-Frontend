@@ -17,7 +17,7 @@ const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
-	phonenumber: yup.number().required('Telefon er påkrevd'),
+	phoneNumber: yup.number().required('Telefon er påkrevd'),
 	password: yup.string().required('Passord er påkrevd').min(8),
 })
 // Create a form context with the validation schema
@@ -31,7 +31,7 @@ const { value: lastName } = useField<string>('lastName')
 const { value: email } = useField<string>('email')
 const { value: address } = useField<string>('address')
 const { value: postalCode } = useField<string>('postalCode')
-const { value: phonenumber } = useField<string>('phonenumber')
+const { value: phoneNumber } = useField<string>('phoneNumber')
 const { value: password } = useField<string>('password')
 
 const passwordCheck = ref('')
@@ -63,7 +63,7 @@ async function submit() {
 		password: password.value,
 		address: address.value,
 		postalCode: postalCode.value,
-		phoneNumber: phonenumber.value,
+		phoneNumber: phoneNumber.value,
 	}
 	status.value = 'loading'
 	try {
@@ -83,14 +83,14 @@ const notValid = computed(
 		!!errors.value.email ||
 		!!errors.value.address ||
 		!!errors.value.postalCode ||
-		!!errors.value.phonenumber ||
+		!!errors.value.phoneNumber ||
 		!!errors.value.password ||
 		firstName.value == undefined ||
 		lastName.value == undefined ||
 		email.value == undefined ||
 		address.value == undefined ||
 		postalCode.value == undefined ||
-		phonenumber.value == undefined ||
+		phoneNumber.value == undefined ||
 		password.value == undefined ||
 		password.value != passwordCheck.value
 )
@@ -138,11 +138,11 @@ const notValid = computed(
 				data-testid="email-input"
 			/>
 			<BaseInput
-				v-model="phonenumber"
+				v-model="phoneNumber"
 				label="Telefon"
-				:error="errors.phonenumber"
+				:error="errors.phoneNumber"
 				type="number"
-				data-testid="phonenumber-input"
+				data-testid="phoneNumber-input"
 			/>
 
 			<BaseInput

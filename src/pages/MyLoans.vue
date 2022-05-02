@@ -110,8 +110,6 @@ async function getMainCategories() {
 		const res = await axios.get('/category/main')
 		const data: Category[] = res.data
 		tagAlts.value = data
-		console.log(tagAlts.value)
-
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'

@@ -9,6 +9,7 @@ import SortDropdown from '../components/SortDropdown.vue'
 import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
+import AddFriendPopup from '../components/AddFriendPopup.vue'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -88,8 +89,6 @@ async function getMainCategories() {
 		const res = await axios.get('/category/main')
 		const data: Category[] = res.data
 		tagAlts.value = data
-		console.log(tagAlts.value)
-
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'

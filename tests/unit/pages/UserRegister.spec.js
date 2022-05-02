@@ -21,7 +21,7 @@ describe('UserRegister', () => {
 			true
 		)
 		expect(wrapper.find('[data-testid="email-input"]').exists()).toBe(true)
-		expect(wrapper.find('[data-testid="phonenumber-input"]').exists()).toBe(
+		expect(wrapper.find('[data-testid="phoneNumber-input"]').exists()).toBe(
 			true
 		)
 		expect(wrapper.find('[data-testid="address-input"]').exists()).toBe(
@@ -103,9 +103,9 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.postalCode).toBe('7003')
 		expect(wrapper.vm.postalCode).not.toBe('Wrong value')
 
-		wrapper.vm.phonenumber = 95444369
-		expect(wrapper.vm.phonenumber).toBe(95444369)
-		expect(wrapper.vm.phonenumber).not.toBe(0)
+		wrapper.vm.phoneNumber = 95444369
+		expect(wrapper.vm.phoneNumber).toBe(95444369)
+		expect(wrapper.vm.phoneNumber).not.toBe(0)
 
 		wrapper.vm.password = '12345678'
 		expect(wrapper.vm.password).toBe('12345678')
