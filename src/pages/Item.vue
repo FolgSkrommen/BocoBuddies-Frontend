@@ -8,9 +8,10 @@ import UserCard from '../components/UserCard.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
-import { store, User } from '../store'
+import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { User } from '../api/schema'
 
 const { params } = useRoute()
 const router = useRouter()

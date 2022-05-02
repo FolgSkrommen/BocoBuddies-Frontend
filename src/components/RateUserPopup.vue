@@ -4,7 +4,7 @@ import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
 import BasePopup from '../components/base/BasePopup.vue'
 import { ref } from 'vue'
 import axios from 'axios'
-import { User } from '../store'
+import { User } from '../api/schema'
 
 interface Props {
 	user: User

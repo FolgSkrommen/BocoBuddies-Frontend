@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '../../components/Card.vue'
 import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
-import { store, User } from '../../store'
+import { store } from '../../store'
 import MessageContainer from '../../components/chat/MessageContainerLoan.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
@@ -15,6 +15,8 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../../components/base/BasePopup.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
+import { User } from '../../api/schema'
+
 const route = useRoute()
 
 interface Chat {

@@ -5,13 +5,14 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 import ItemInfo, { Item } from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
-import UserCard, { User } from '../components/UserCard.vue'
+import UserCard from '../components/UserCard.vue'
 import { computed, ref } from 'vue'
 import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { array } from 'yup'
+import { User } from '../api/schema'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)

@@ -7,7 +7,7 @@ import UserCard from '../components/UserCard.vue'
 import BaseBtn from './base/BaseBtn.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import { User } from '../store'
+import { User } from '../api/schema'
 
 const emit = defineEmits(['exit'])
 

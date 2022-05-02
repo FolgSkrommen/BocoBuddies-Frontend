@@ -6,8 +6,9 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
-import { store, User } from '../store'
+import { store } from '../store'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
+import { User } from '../api/schema'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()

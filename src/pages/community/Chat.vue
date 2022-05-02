@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import Card from '../../components/Card.vue'
 import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
-import { store, User } from '../../store'
+import { store } from '../../store'
 import MessageContainer from '../../components/chat/MessageContainer.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
+import { User } from '../../api/schema'
 
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
