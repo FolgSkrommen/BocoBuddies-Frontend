@@ -60,3 +60,16 @@ export interface Category {
 	superCategoryId?: number
 	filterTypes?: FilterType[]
 }
+
+export interface Chat {
+	chatId: number
+	chatName: string
+	itemId?: number
+	members: number[]
+}
+
+export interface FriendChat {
+	chatId: number
+	chatName: string
+	members: User[]
+}

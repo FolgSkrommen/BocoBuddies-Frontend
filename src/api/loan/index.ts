@@ -1,5 +1,8 @@
 import { Item, Loan, User } from '../schema'
 
+/**
+ * TOKEN
+ */
 export type PutLoanRequest = {
 	loanId: number
 	start: Date
@@ -20,10 +23,17 @@ export type PutLoanResponse = {
 	loaner: number
 }
 
+/**
+ * TOKEN
+ */
 export type DelLoanRequest = {
 	loanId: number
 }
+export type DelLoanResponse = null
 
+/**
+ * TOKEN
+ */
 export type PostLoanRequest = {
 	start: Date
 	end: Date
@@ -44,6 +54,9 @@ export type PostLoanResponse = {
 	creationDate: Date
 }
 
+/**
+ * TOKEN
+ */
 export type GetLoanRequest = {
 	loanId: number
 	isLender: boolean
