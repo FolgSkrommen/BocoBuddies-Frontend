@@ -1,5 +1,7 @@
 import { Item } from '../schema'
-
+/**
+ * TOKEN
+ */
 export type PostItemRegisterRequest = {
 	categoryId: number
 	name: string
