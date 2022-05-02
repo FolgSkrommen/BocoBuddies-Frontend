@@ -18,10 +18,11 @@ const users = ref<User[]>()
 
 const getFriendsStatus = ref<GetStatus>()
 async function getFriends() {
+	if (!store.state.user) return
 	getFriendsStatus.value = 'loading'
 	try {
 		const res = await axios.get('/user/friends', {
-			params: { userId: store.state.user?.id },
+			params: { userId: store.state.user.userId },
 		})
 		users.value = res.data.friends
 		console.log(users.value)
@@ -58,7 +59,7 @@ async function getChats() {
 			})
 		)
 
-		friendChats.value = newData
+		friendChats.value = dataWithoutUser
 		getChatsStatus.value = 'loaded'
 	} catch (error) {
 		errorMessage.value = error

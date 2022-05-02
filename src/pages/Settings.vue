@@ -43,6 +43,7 @@ function uploadImage(input: any) {
 type UploadStatus = 'sending' | 'success' | 'error'
 const uploadProfilePictureStatus = ref<UploadStatus>()
 async function uploadPicture() {
+	if (!store.state.user) return
 	uploadProfilePictureStatus.value = 'sending'
 	const formData = new FormData()
 	formData.append('image', imageFiles.value[0])
@@ -51,7 +52,7 @@ async function uploadPicture() {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
 		const res = await axios.get('/user', {
-			params: { user: store.state.user?.id },
+			params: { user: store.state.user.userId },
 		})
 		await store.dispatch('edit', res.data)
 		await router.push('/user')
@@ -59,6 +60,10 @@ async function uploadPicture() {
 		uploadProfilePictureStatus.value = 'error'
 		errorMessage.value = error
 	}
+}
+
+function sendVerificationEmail() {
+	//TODO: Implement
 }
 
 function deleteUser() {
