@@ -72,7 +72,7 @@ export interface Loan {
 }
 
 export interface Category {
-	categoryName: String
+	categoryName: string
 	categoryId: number
 	superCategoryId?: number
 	filterTypes?: FilterType[]

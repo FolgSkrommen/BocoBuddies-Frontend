@@ -240,14 +240,14 @@ observer.observe(items[items.length-1])*/
 			v-model="chosenCategories"
 			v-if="chosenCategories.length > 0"
 			:removable="true"
-			@remove-tag-event="categoryRemoved"
+			@remove-category-event="categoryRemoved"
 			class="border-solid bg-gray-500 rounded p-3"
-			data-testid="categories-tag-chosen"
+			data-testid="categories-category-chosen"
 		></CategoryList>
 		<CategoryList
 			v-model="tagAlts"
-			@add-tag-event="categoryChosen"
-			data-testid="categories-tag-alts"
+			@add-category-event="categoryChosen"
+			data-testid="categories-category-alts"
 		></CategoryList>
 	</div>
 	<LoadingIndicator v-if="status === 'loading'" />

@@ -37,7 +37,7 @@ async function getFriends() {
 		const res = await axios.get('/chat/search', {
 			params: {
 				searchString: searchString.value,
-				page: currentPage,
+				page: currentPage.value,
 				amount: amountPerPage,
 			},
 		})
