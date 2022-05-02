@@ -233,7 +233,8 @@ async function registerItem() {
 		router.push('/')
 	} catch (error) {
 		status.value = 'error'
-		errorMessage.value = error
+		console.log(error)
+		errorMessage.value = error.response.data
 	}
 }
 </script>

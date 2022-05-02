@@ -10,6 +10,9 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
+import BasePopup from '../components/base/BasePopup.vue'
+import VueCookies from 'vue-cookies'
+import AppVue from '../App.vue'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -50,6 +53,7 @@ let searchWord = ref<string>('')
 let tagAlts = ref<Array<Category>>([])
 let chosenTags = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
+let seenTutorial = ref<boolean>(false)
 
 let currentPage = ref<number>(0)
 const amountPerPage: number = 20
@@ -219,6 +223,22 @@ function loadMoreItems() {
 		search()
 	}
 }
+const seenVideoCookie = ('; ' + document.cookie)
+	.split(`; seenVideo=`)
+	.pop()
+	.split(';')[0]
+
+if (seenVideoCookie.includes('true')) {
+	seenTutorial = ref(true)
+}
+
+function setCookieSeen() {
+	document.cookie = 'seenVideo=true; max-age=31536000'
+	seenTutorial = ref(true)
+	location.reload()
+}
+
+console.log(seenTutorial)
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {
@@ -232,6 +252,17 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
+	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
+		><iframe
+			width="560"
+			height="315"
+			src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0"
+			title="YouTube video player"
+			frameborder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			allowfullscreen
+		></iframe
+	></BasePopup>
 	<BaseBanner
 		v-if="status === 'error'"
 		type="error"
