@@ -53,7 +53,7 @@ function loadMoreFriends() {
 		<LoadingIndicator v-if="status === 'loading'" />
 
 		<div class="grid gap-4">
-			<UserCard v-for="friend in friendResults" :user="friend" />
+			<!--<UserCard v-for="friend in friendResults" :user="friend" />-->
 			<BaseBtn @click="loadMoreFriends">Last inn flere</BaseBtn>
 		</div>
 	</BasePopup>

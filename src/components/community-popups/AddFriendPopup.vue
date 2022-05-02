@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import axios, { AxiosError } from 'axios'
 import { ref } from 'vue'
-import { User } from '../api/schema'
 import BasePopup from '../base/BasePopup.vue'
 import SearchbarAndButton from '../SearchbarAndButton.vue'
 import UserCard from '../UserCard.vue'
 import BaseBtn from '../base/BaseBtn.vue'
 import LoadingIndicator from '../base/LoadingIndicator.vue'
 import BaseBanner from '../base/BaseBanner.vue'
+import { User } from '../../api/schema'
 
 const emit = defineEmits(['exit'])
 
