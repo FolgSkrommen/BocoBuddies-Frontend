@@ -2,7 +2,7 @@
 import Card from '../components/Card.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import ItemInfo, { Item } from '../components/ItemInfo.vue'
+import ItemInfo from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
@@ -12,26 +12,11 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { array } from 'yup'
-import { User } from '../api/schema'
+import { Item, Loan, User } from '../api/schema'
+import { GetLoanRequest, GetLoanResponse } from '../api/loan'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
-
-interface Loan {
-	startDate: string
-	endDate: string
-	returned: boolean
-	active: boolean
-	creationDate: string
-	chatId: number
-	loanId: number
-}
-
-interface LoanResponse {
-	item: Item
-	user: User
-	loan: Loan
-}
 
 type Status = 'loading' | 'loaded' | 'error'
 
@@ -45,22 +30,22 @@ const loan = ref<Loan>()
 const range = computed(() => {
 	if (!loan.value) return
 	return {
-		start: new Date(loan.value.startDate),
-		end: new Date(loan.value.endDate),
+		start: new Date(loan.value.startTime),
+		end: new Date(loan.value.endTime),
 	}
 })
 
 async function getLoan() {
 	status.value = 'loading'
 	try {
+		const params: GetLoanRequest = {
+			loanId: id,
+			isLender: true,
+		}
 		const res = await axios.get('/loan', {
-			method: 'GET',
-			params: {
-				loanId: id,
-				isLender: true,
-			},
+			params,
 		})
-		const data: LoanResponse = res.data
+		const data: GetLoanResponse = res.data
 		item.value = data.item
 		lender.value = data.user
 		loan.value = data.loan

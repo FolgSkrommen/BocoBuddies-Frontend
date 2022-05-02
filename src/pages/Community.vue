@@ -7,7 +7,7 @@ import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
 import { store } from '../store'
-import { User } from '../api/schema'
+import { FriendChat, User } from '../api/schema'
 import AddFriendPopup from '../components/community-popups/AddFriendPopup.vue'
 import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
 
@@ -32,12 +32,6 @@ async function getFriends() {
 	}
 }
 
-interface FriendChat {
-	chatId: number
-	chatName: string
-	members: User[]
-}
-
 const friendChats = ref<FriendChat[]>()
 
 const getChatsStatus = ref<GetStatus>()
@@ -53,14 +47,13 @@ async function getChats() {
 		const data: FriendChat[] = res.data.friendChats
 
 		//NOTE: User will not be in the list of "members"
-		let newData: FriendChat[] = []
-		if (!data) return
+		let dataWithoutUser: FriendChat[] = []
 		data.forEach(({ chatId, chatName, members }) =>
-			newData.push({
+			dataWithoutUser.push({
 				chatId,
 				chatName,
 				members: members.filter(
-					({ id }) => id !== store.state.user?.id
+					({ userId }) => userId !== store.state.user?.userId
 				),
 			})
 		)

@@ -3,10 +3,10 @@ import { FriendChat } from '../schema'
 /**
  * TOKEN
  */
-export type GetSearchRequest = {
+export type GetChatSearchRequest = {
 	searchString: string
 	page: number
 	amount: number
 }
 
-export type GetSearchResponse = FriendChat[]
+export type GetChatSearchResponse = FriendChat[]

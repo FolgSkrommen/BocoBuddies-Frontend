@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { ref, computed, watch } from 'vue'
-import TagList from '../components/TagList.vue'
+import CategoryList from '../components/CategoryList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
 import ItemList from '../components/ItemList.vue'
@@ -10,30 +10,9 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
+import { Alternative, Category, Item } from '../api/schema'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-
-//Interfaces
-interface Category {
-	categoryId: number
-	categoryName: string
-	superCategoryId: number
-}
-interface Alternative {
-	id: number
-	alt: string
-}
-interface Item {
-	id: number
-	image: string
-	name: string
-	price: number
-	availableFrom: string
-	availableTo: string
-	priceUnit: string
-	address: string
-	postalCode: string
-}
 
 //Variables
 let sortChosen = ref(0)
@@ -48,7 +27,7 @@ let sortAlts: Alternative[] = [
 
 let searchWord = ref<string>('')
 let tagAlts = ref<Array<Category>>([])
-let chosenTags = ref<Array<Category>>([])
+let chosenCategories = ref<Array<Category>>([])
 let items = ref<Array<Item>>([])
 
 let currentPage = ref<number>(0)
@@ -139,14 +118,14 @@ async function search() {
 		}
 	}
 
-	let chosenTagsIds: Array<number> = []
-	chosenTags.value.forEach(tag => {
-		chosenTagsIds.push(tag.categoryId)
+	let chosenCategoriesIds: Array<number> = []
+	chosenCategories.value.forEach(tag => {
+		chosenCategoriesIds.push(tag.categoryId)
 	})
 	try {
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params: {
-				categories: chosenTagsIds[chosenTagsIds.length - 1],
+				categories: chosenCategoriesIds[chosenCategoriesIds.length - 1],
 				sort: sortChosenString,
 				amount: amountPerPage,
 				offset: currentPage.value,
@@ -175,7 +154,7 @@ function searchAndResetItems() {
 	search()
 }
 async function categoryChosen(tag: Category) {
-	chosenTags.value.push(tag)
+	chosenCategories.value.push(tag)
 	searchAndResetItems()
 	status.value = 'loading'
 	try {
@@ -189,12 +168,15 @@ async function categoryChosen(tag: Category) {
 	}
 }
 async function categoryRemoved(tag: Category) {
-	chosenTags.value.forEach((value, index) => {
+	chosenCategories.value.forEach((value, index) => {
 		if (value.categoryId == tag.categoryId)
-			chosenTags.value.splice(index, chosenTags.value.length - index)
+			chosenCategories.value.splice(
+				index,
+				chosenCategories.value.length - index
+			)
 	})
 	searchAndResetItems()
-	if (chosenTags.value.length < 1) {
+	if (chosenCategories.value.length < 1) {
 		getMainCategories()
 		return
 	}
@@ -202,7 +184,8 @@ async function categoryRemoved(tag: Category) {
 	try {
 		const res = await axios.get(
 			'category/sub?categoryId=' +
-				chosenTags.value[chosenTags.value.length - 1].categoryId
+				chosenCategories.value[chosenCategories.value.length - 1]
+					.categoryId
 		)
 		const data: Category[] = res.data
 		tagAlts.value = data
@@ -247,19 +230,19 @@ observer.observe(items[items.length-1])*/
 	<div class="flex flex-col gap-2 py-10">
 		<!--Tag input component-->
 		<h2 class="text-2xl font-semibold">Kategorier</h2>
-		<TagList
-			v-model="chosenTags"
-			v-if="chosenTags.length > 0"
+		<CategoryList
+			v-model="chosenCategories"
+			v-if="chosenCategories.length > 0"
 			:removable="true"
-			@remove-tag-event="categoryRemoved"
+			@remove-category-event="categoryRemoved"
 			class="border-solid bg-gray-500 rounded p-3"
-			data-testid="categories-tag-chosen"
-		></TagList>
-		<TagList
+			data-testid="categories-category-chosen"
+		></CategoryList>
+		<CategoryList
 			v-model="tagAlts"
-			@add-tag-event="categoryChosen"
-			data-testid="categories-tag-alts"
-		></TagList>
+			@add-category-event="categoryChosen"
+			data-testid="categories-category-alts"
+		></CategoryList>
 	</div>
 	<LoadingIndicator v-if="status === 'loading'" />
 	<ItemList

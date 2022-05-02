@@ -16,6 +16,7 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import BaseLabel from '../components/base/BaseLabel.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
+import { Category, FilterType } from '../api/schema'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -53,13 +54,6 @@ const notValid = computed(
 		postalCode.value == undefined
 )
 
-/*  Categories*/
-interface Category {
-	categoryName: String
-	categoryId: number
-	superCategoryId?: number
-	filterTypes?: FilterType[]
-}
 let categoryChoices: Ref<Array<Category[]>> = ref([])
 
 type GetStatus = 'loading' | 'loaded' | 'error'
@@ -77,17 +71,6 @@ async function getCategories() {
 }
 
 getCategories()
-
-interface FilterValue {
-	id: number
-	value: string
-}
-
-interface FilterType {
-	filterTypeId: number
-	filterTypeName: string
-	filterValues: FilterValue[]
-}
 
 let currentCategory: number = 0
 
@@ -181,20 +164,6 @@ let priceUnits: PriceUnit[] = [
 let currentPriceUnit: string
 function setPriceUnit(priceUnit: string) {
 	currentPriceUnit = priceUnit
-}
-
-/* Submit */
-interface Item {
-	categoryId: number
-	FilterIdList: number[]
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	address: string
-	postalCode: string
-	startDate: string
-	endDate: string
 }
 
 type PostStatus = 'sending' | 'success' | 'error'
@@ -329,8 +298,8 @@ async function registerItem() {
 
 				<option
 					v-for="value in filterType.filterValues"
-					:key="value.id"
-					:value="value.id"
+					:key="value.name"
+					:value="value.value"
 				>
 					{{ value.value }}
 				</option>
