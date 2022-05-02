@@ -45,10 +45,12 @@ async function getChats() {
 	}
 	try {
 		//TODO: Call
-		const data: FriendChat[] = []
+		const res = await axios.get('/chat/getByUser/community')
+		const data: FriendChat[] = res.data.friendChats
 
 		//NOTE: User will not be in the list of "members"
 		let newData: FriendChat[] = []
+		if (!data) return
 		data.forEach(({ chatId, chatName, members }) =>
 			newData.push({
 				chatId,
@@ -59,7 +61,7 @@ async function getChats() {
 			})
 		)
 
-		friendChats.value = data
+		friendChats.value = newData
 		getChatsStatus.value = 'loaded'
 	} catch (error) {
 		errorMessage.value = error
