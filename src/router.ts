@@ -15,7 +15,7 @@ import MyLoans from './pages/MyLoans.vue'
 import Settings from './pages/Settings.vue'
 import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
-import User from './pages/User.vue'
+import ConfirmEmail from './pages/ConfirmEmail.vue'
 import { store } from './store'
 
 const routes = [
@@ -126,6 +126,13 @@ const routes = [
 	{
 		path: '/register',
 		component: UserRegister,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/confirmEmail/:confirmEmailString',
+		component: ConfirmEmail,
 		meta: {
 			requiresAuth: false,
 		},
