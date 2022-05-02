@@ -61,10 +61,21 @@ function styleType(received: boolean) {
 				:receive="!message.receive"
 			>
 				<div data-testid="message">{{ message.message }}</div>
-				<div class="text-black text-lg" data-testid="message-info">
-					{{ message.date }} - {{ message.senderId }}
-				</div>
 			</Message>
+			<div
+				class="text-black text-lg place-self-end"
+				data-testid="message-info"
+				v-if="message.receive"
+			>
+				{{ message.date }} - {{ message.senderId }}
+			</div>
+			<div
+				class="text-black text-lg place-self-start"
+				data-testid="message-info"
+				v-else
+			>
+				{{ message.date }} - {{ message.senderId }}
+			</div>
 		</div>
 	</div>
 </template>
