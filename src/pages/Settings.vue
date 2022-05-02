@@ -23,7 +23,6 @@ if (store.state.user) {
 function updateUser() {
 	//TODO: Implement
 }
-
 async function logout() {
 	await store.dispatch('logout')
 	await router.push('/')
@@ -48,6 +47,10 @@ async function uploadPicture() {
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
+
+		await store.dispatch('edit')
+		console.log('edited')
+		await router.push('/user')
 	} catch (error) {
 		uploadProfilePictureStatus.value = 'error'
 		errorMessage.value = error
@@ -55,20 +58,6 @@ async function uploadPicture() {
 }
 
 const profilePicture = ref('')
-const getProfilePictureStatus = ref<Status>()
-async function getProfilePicture() {
-	getProfilePictureStatus.value = 'loading'
-	try {
-		const res = await axios.get('/user/getProfilePicture')
-		profilePicture.value = res.data
-		getProfilePictureStatus.value = 'loaded'
-	} catch (error) {
-		getProfilePictureStatus.value = 'error'
-		errorMessage.value = error
-	}
-}
-
-getProfilePicture()
 
 function deleteUser() {
 	//TODO: Implement
@@ -78,10 +67,7 @@ function deleteUser() {
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
 		<BaseBanner
-			v-if="
-				getProfilePictureStatus === 'error' ||
-				uploadProfilePictureStatus === 'error'
-			"
+			v-if="uploadProfilePictureStatus === 'error'"
 			type="error"
 			:message="errorMessage"
 		/>

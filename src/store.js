@@ -16,8 +16,9 @@ export const store = createStore({
 			console.log(data)
 			state.user = data.user
 			localStorage.setItem('userData', JSON.stringify(data))
-			axios.defaults.headers.common['authorization'] =
-				'Bearer ' + data.token
+		},
+		SET_TOKEN(state, data) {
+			axios.defaults.headers.common['authorization'] = 'Bearer ' + data
 		},
 		//TODO: Fjern asynkron kode i mutations
 		async CLEAR_USER_DATA(state) {
@@ -29,9 +30,16 @@ export const store = createStore({
 		async login({ commit }, data) {
 			const res = await axios.post('/user/login', data)
 			commit('SET_USER_DATA', res.data)
+			commit('SET_TOKEN', res.data.token)
 		},
 		logout({ commit }) {
 			commit('CLEAR_USER_DATA')
+		},
+		async edit({ commit }) {
+			const res = await axios.get('/user', {
+				params: { user: store.state.user?.id },
+			})
+			commit('SET_USER_DATA', res.data)
 		},
 	},
 })
