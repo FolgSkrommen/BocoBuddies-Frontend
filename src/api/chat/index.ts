@@ -9,7 +9,7 @@ export type GetChatRequest = {
 export type GetChatResponse = Chat
 
 export type PutChatRequest = Chat
-export type PutChatResponse = null
+export type PutChatResponse = undefined
 
 /**
  * TOKEN

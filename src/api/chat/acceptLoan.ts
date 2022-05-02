@@ -8,4 +8,4 @@ export type WSAcceptLoanRequest = {
 	loanId: number
 }
 
-export type WSAcceptLoanResponse = null
+export type WSAcceptLoanResponse = undefined

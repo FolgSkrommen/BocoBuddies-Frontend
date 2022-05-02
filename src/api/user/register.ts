@@ -3,7 +3,7 @@ import { User } from '../schema'
 /**
  * TOKEN
  */
-export type UserRegisterRequest = {
+export type PostUserRegisterRequest = {
 	firstName: string
 	lastName: string
 	username: string
@@ -15,4 +15,4 @@ export type UserRegisterRequest = {
 	profilePicture?: string
 }
 
-export type UserRegisterResponse = User
+export type PostUserRegisterResponse = User

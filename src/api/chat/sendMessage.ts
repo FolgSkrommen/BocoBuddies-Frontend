@@ -4,4 +4,4 @@ export type WSSendMessageRequest = {
 	message: string
 }
 
-export type WSSendMessageesponse = null
+export type WSSendMessageesponse = undefined

@@ -29,7 +29,7 @@ export type PutLoanResponse = {
 export type DelLoanRequest = {
 	loanId: number
 }
-export type DelLoanResponse = null
+export type DelLoanResponse = undefined
 
 /**
  * TOKEN

@@ -8,4 +8,4 @@ export type WSSendLoanRequestRequest = {
 	loanId: number
 }
 
-export type WSSendLoanRequestesponse = null
+export type WSSendLoanRequestesponse = undefined

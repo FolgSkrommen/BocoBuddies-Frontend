@@ -6,6 +6,9 @@ type GetReviewRequest = {
 
 type GetReviewResponse = Review
 
+/**
+ * TOKEN
+ */
 type PostReviewRequest = Review
 
 type PostReviewResponse = undefined

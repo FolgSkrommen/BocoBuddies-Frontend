@@ -7,6 +7,7 @@ export type GetUserFriendsRequest = {
 export type GetUserFriendsResponse = User[]
 
 /**
+ * TOKEN
  * Used for sending friend requests
  */
 export type PostUserFriendsRequest = {
@@ -16,6 +17,7 @@ export type PostUserFriendsRequest = {
 export type PostUserFriendsResponse = boolean
 
 /**
+ * TOKEN
  * Used for accepting friend requests
  */
 export type PutUserFriendsRequest = {
@@ -25,6 +27,7 @@ export type PutUserFriendsRequest = {
 export type PutUserFriendsResponse = boolean
 
 /**
+ * TOKEN
  * Used for deleting friend requests or declining friend requests
  */
 export type DelUserFriendsRequest = {
