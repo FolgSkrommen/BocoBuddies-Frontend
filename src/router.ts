@@ -16,7 +16,7 @@ import Settings from './pages/Settings.vue'
 import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
 import ConfirmEmail from './pages/ConfirmEmail.vue'
-import User from '../pages/User.vue'
+import User from './pages/User.vue'
 import { store } from './store'
 
 const routes = [
