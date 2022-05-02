@@ -11,17 +11,12 @@ import FloatingBtn from '../components/base/FloatingBtn.vue'
 import { userInfo } from 'os'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import { Category, Item } from '../api/schema'
+import { Alternative, Category, Item } from '../api/schema'
 
 //Enums
 enum State {
 	ACTIVE = 'Active',
 	ARCHIVED = 'Archived',
-}
-
-interface Alternative {
-	id: number
-	alt: string
 }
 
 //Variables
@@ -155,7 +150,7 @@ async function search() {
 				sort: sortChosenString,
 				amount: amountPerPage,
 				offset: currentPage.value,
-				userId: store.state.user.id,
+				userId: store.state.user.userId,
 				loan: false,
 				active: stateTag.value === State.ACTIVE,
 			},

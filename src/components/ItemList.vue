@@ -23,7 +23,7 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 			<router-link
 				class="bg-slate-100 rounded-lg shadow-lg"
 				v-for="item in items"
-				:to="`/${redirect}/${item.id}`"
+				:to="`/${redirect}/${item.itemId}`"
 			>
 				<div class="flex gap-2">
 					<img

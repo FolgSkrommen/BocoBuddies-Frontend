@@ -14,5 +14,9 @@ export type PutChatResponse = undefined
 /**
  * TOKEN
  */
-export type PostChatRequest = Chat
+export type PostChatRequest = {
+	chatName: string
+	itemId: number
+	members: number[]
+}
 export type PostChatResponse = Chat

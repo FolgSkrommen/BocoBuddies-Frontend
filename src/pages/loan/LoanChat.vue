@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import Card from '../../components/Card.vue'
-import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { store } from '../../store'
 import MessageContainer from '../../components/chat/MessageContainerLoan.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
@@ -9,33 +8,20 @@ import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 
 //@ts-ignore
-import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../../components/base/BasePopup.vue'
-import RateUserPopup from '../../components/RateUserPopup.vue'
-import { Chat, Item, MessageDTO, User } from '../../api/schema'
+import { Chat, Item, Loan, Message, User } from '../../api/schema'
+import {
+	PostLoanRequest,
+	PostLoanResponse,
+	PutLoanRequest,
+} from '../../api/loan'
+import { GetChatResponse } from '../../api/chat'
+import { GetMessageResponse } from '../../api/message'
 
 const route = useRoute()
-
-interface Message {
-	userId: string
-	messages: Array<MessageDTO>
-}
-
-interface Loan {
-	chatId: number
-	loanId?: number
-	item?: number
-	loaner?: number
-	start: string
-	end: string
-	active?: boolean
-	returned?: boolean
-	creationDate?: string
-	price: number
-}
 
 type loanStatusCode =
 	| 'PENDING'
@@ -50,11 +36,11 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new SockJS('http://localhost:8001/ws')
+	socket = new WebSocket('ws://localhost:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
-
+const messages = ref<Message[]>([])
 /**
  * Listens to two ws channels. One for receiving loan, one for receiving message
  */
@@ -81,15 +67,15 @@ function onError(err: any) {
 }
 
 async function sendMessage(event: any) {
-	if (!stompClient.value) return
+	if (!stompClient.value || !store.state.user || !chat.value) return
 
-	let chatMessage: MessageDTO = {
-		senderId: chatData.value?.userId,
+	let chatMessage: Message = {
+		senderId: store.state.user.userId,
 		message: currentMessage.value,
 		type: 'CHAT',
 		date: new Date().toISOString(),
 		receive: false,
-		chatId: chat.value?.chatId.toString(),
+		chatId: chat.value.chatId,
 	}
 	try {
 		//const res = await axios.post("/message", chatMessage)
@@ -99,7 +85,7 @@ async function sendMessage(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		chatData.value?.messages.push(chatMessage)
+		messages.value.push(chatMessage)
 	} catch (error) {}
 	currentMessage.value = ''
 
@@ -112,37 +98,30 @@ async function sendMessage(event: any) {
 async function sendLoanRequestWS() {
 	console.log(range.value)
 	if (!stompClient.value) return
-	if (!chatData.value?.userId || !chat.value?.chatId || !range.value) return
+	if (!store.state.user || !chat.value?.chatId || !range.value) return
 
-	let loanRequest: Loan = {
-		chatId: chat.value?.chatId,
-		item: chat.value?.itemId,
-		loaner: parseInt(chatData.value?.userId),
-		start: range.value.start.toISOString(),
-		end: range.value.end.toISOString(),
+	const body: PostLoanRequest = {
+		chatId: chat.value.chatId,
+		itemId: chat.value.itemId,
+		loaner: store.state.user.userId,
+		startTime: range.value.start.toISOString(),
+		endTime: range.value.end.toISOString(),
 		price: price.value,
+		active: false,
+		returned: false,
+		creationDate: new Date().toISOString(),
 	}
-	console.log(chatData.value?.userId)
 	try {
-		const res = await axios.post('/loan', loanRequest)
-
-		console.log(res.data)
-		loanRequest = res.data
-		loan.value = res.data
-
-		let test = loanRequest
-		test.chatId = chat.value?.chatId
-		console.log(test)
-
+		const res = await axios.post('/loan', {
+			data: body,
+		})
+		loan.value = res.data as PostLoanResponse
 		stompClient.value.send(
 			'/app/chat/sendLoanRequest',
-			JSON.stringify(test)
+			JSON.stringify(body)
 		)
 
-		loanRequest = res.data
-		console.log(loanRequest)
-
-		let loanRequestMessage: MessageDTO = {
+		let loanRequestMessage: Message = {
 			type: 'REQUEST',
 			receive: false,
 			senderId: res.data.loaner.toString(),
@@ -150,25 +129,27 @@ async function sendLoanRequestWS() {
 			stop: range.value.end.toISOString(),
 			price: price.value,
 		}
-		chatData.value?.messages.push(loanRequestMessage)
+		messages.value.push(loanRequestMessage)
 	} catch (error) {
 		//TODO add error
 	}
 }
 
 async function sendLoanAccept() {
-	if (!stompClient.value) return
-	if (!chat.value?.itemId || !loan.value?.loanId) return
+	if (!stompClient.value || !chat.value || !loan.value || !store.state.user)
+		return
 
-	let loanRequest: Loan = {
+	let loanRequest: PutLoanRequest = {
 		active: true,
 		chatId: loan.value?.chatId,
 		creationDate: new Date().toISOString(),
-		end: new Date().toISOString(),
+		endTime: new Date().toISOString(),
+		startTime: new Date().toISOString(),
 		loanId: loan.value?.loanId,
 		returned: loanStatus.value === 'RETURNED',
-		start: new Date().toISOString(),
 		price: price.value,
+		loaner: store.state.user.userId,
+		itemId: loan.value.itemId,
 	}
 	console.log(loanRequest)
 	try {
@@ -193,19 +174,20 @@ async function sendLoanAccept() {
 async function sendLoanCounterOffer() {}
 
 async function sendLoanDecline() {
-	if (!stompClient.value) return
-	if (!chat.value?.chatId) return
+	if (!stompClient.value || !chat.value || !store.state.user) return
 	try {
 		const res = axios.delete('/loan?loanId=' + loan.value?.loanId)
 
 		let loanAnswer: Loan = {
-			chatId: chat.value?.chatId,
-			item: chat.value?.itemId,
+			chatId: chat.value.chatId,
+			itemId: chat.value.itemId,
 			active: false,
 			returned: false,
-			start: new Date().toISOString(),
-			end: new Date().toISOString(),
+			startTime: new Date().toISOString(),
+			endTime: new Date().toISOString(),
 			price: 0,
+			loaner: store.state.user.userId,
+			creationDate: new Date().toISOString(),
 		}
 
 		stompClient.value.send(
@@ -222,10 +204,12 @@ async function sendLoanDecline() {
  * @param payload
  */
 async function onLoanAccept(payload: any) {
+	if (!store.state.user) return
+
 	console.log(payload)
 	let accept = JSON.parse(payload.body)
 
-	let msg: MessageDTO = {
+	let msg: Message = {
 		senderId: accept.loaner,
 		type: 'ACCEPT',
 		receive: true,
@@ -236,7 +220,7 @@ async function onLoanAccept(payload: any) {
 		price: accept.price,
 	}
 
-	if (msg.senderId != chatData.value?.userId) {
+	if (msg.senderId != store.state.user.userId) {
 		//If loan is accepted
 		if (msg.active && !msg.returned) {
 			console.log('Loan accepted')
@@ -249,12 +233,9 @@ async function onLoanAccept(payload: any) {
 			console.log('Loan denied')
 			loanStatus.value = 'NOT_SENT'
 			loanPending.value = false
-			if (chatData.value)
-				chatData.value.messages = chatData.value?.messages.filter(
-					function (item, index, arr) {
-						return item.type !== 'REQUEST'
-					}
-				)
+			messages.value = messages.value.filter(
+				({ type }) => type !== 'REQUEST'
+			)
 		}
 	}
 	reRenderChat()
@@ -265,10 +246,10 @@ async function onLoanAccept(payload: any) {
  * @param payload
  */
 function onRequestReceived(payload: any) {
-	console.log(payload)
 	let request = JSON.parse(payload.body)
+	if (!store.state.user || !chat.value) return
 
-	let msg: MessageDTO = {
+	let msg: Message = {
 		senderId: request.loaner,
 		type: 'REQUEST',
 		receive: true,
@@ -279,35 +260,34 @@ function onRequestReceived(payload: any) {
 		price: request.price,
 	}
 
-	console.log(msg)
 	//Adds the received request to message array if receiver is not sender
-	if (msg.senderId != chatData.value?.userId) {
+	if (msg.senderId != store.state.user.userId) {
 		console.log('LOOK HERE: ' + msg)
 		if (loan.value) {
 			console.log(request.loanId)
 			loan.value.loanId = request.loanId
 			loan.value.loaner = request.loaner
-			loan.value.start = request.start
-			loan.value.end = request.end
+			loan.value.startTime = request.start
+			loan.value.endTime = request.end
 			loan.value.returned = request.returned
 			loan.value.active = request.active
-		} else if (chat.value?.chatId) {
+		} else if (chat.value.chatId) {
 			loan.value = {
-				chatId: chat.value?.chatId,
-				start: request.start,
-				end: request.end,
+				chatId: chat.value.chatId,
+				startTime: request.start,
+				endTime: request.end,
 				loanId: request.loanId,
 				active: request.active,
 				returned: request.returned,
 				price: request.price,
+				creationDate: request.creationDate,
+				itemId: chat.value.itemId,
+				loaner: request.loaner,
 			}
 		}
 		loanPending.value = true
 		loanStatus.value = 'PENDING'
-		chatData.value?.messages.push(msg)
-	} else {
-		console.log(msg.senderId)
-		console.log(chatData.value?.userId)
+		messages.value.push(msg)
 	}
 	reRenderChat()
 }
@@ -317,21 +297,23 @@ function onRequestReceived(payload: any) {
  * @param payload
  */
 function onMessageReceived(payload: any) {
+	if (!store.state.user) return
+
 	let message = JSON.parse(payload.body)
 
-	let msg: MessageDTO = {
+	let msg: Message = {
 		senderId: message.senderId,
 		message: message.message,
 		type: 'CHAT',
 		date: message.date,
 		receive: true,
-		chatId: chat.value?.chatId.toString(),
+		chatId: chat.value?.chatId,
 	}
-	if (msg.senderId != chatData.value?.userId) {
-		chatData.value?.messages.push(msg)
+	if (msg.senderId != store.state.user.userId) {
+		messages.value.push(msg)
 	} else {
 		console.log(msg.senderId)
-		console.log(chatData.value?.userId)
+		console.log(store.state.user.userId)
 	}
 	reRenderChat()
 }
@@ -343,21 +325,24 @@ onBeforeMount(async () => {
 	loanStatus.value = 'UNDEFINED'
 	try {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
-		chat.value = res.data
+		chat.value = res.data as GetChatResponse
 	} catch (error) {
-		//TODO add error
+		//TODO: FIx this shit
 		alert(error)
 	}
 
 	try {
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
-		chatData.value = res.data
-		chatData.value?.messages.forEach(m => {
-			m.receive = m.senderId != chatData.value?.userId
+		const data = res.data as GetMessageResponse
+		messages.value = data.messages
+		messages.value.forEach(m => {
+			if (!store.state.user) return
+			m.receive = m.senderId != store.state.user.userId
 			m.type = 'CHAT'
 		})
-		chatData.value?.messages.reverse()
+		messages.value.reverse()
 	} catch (error) {
+		//TODO: FIx this shit
 		alert(error)
 	}
 
@@ -378,25 +363,27 @@ onBeforeMount(async () => {
 		user.value = res.data.user
 		console.log(res.data)
 
-		if (chat.value?.chatId) {
+		if (chat.value) {
 			loan.value = {
-				chatId: chat.value?.chatId,
-				start: res.data.loan.startDate,
-				end: res.data.loan.endDate,
+				chatId: chat.value.chatId,
+				startTime: res.data.loan.startDate,
+				endTime: res.data.loan.endDate,
 				loanId: res.data.loan.loanId,
 				active: res.data.loan.active,
 				returned: res.data.loan.returned,
 				creationDate: res.data.value?.creationDate,
 				price: res.data.loan.price,
+				itemId: chat.value.itemId,
+				loaner: res.data.loan.loaner,
 			}
 		}
 
-		if (loan.value) {
-			let msg: MessageDTO = {
+		if (loan.value && store.state.user) {
+			let msg: Message = {
 				senderId: res.data.user.userId.toString(),
 				type: 'REQUEST',
 				receive:
-					res.data.user.userId.toString() != chatData.value?.userId,
+					res.data.user.userId.toString() != store.state.user.userId,
 				start: res.data.loan.startDate,
 				stop: res.data.loan.endDate,
 				date: res.data.value?.creationDate,
@@ -407,19 +394,7 @@ onBeforeMount(async () => {
 
 			if (msg.active && !msg.returned) msg.type = 'ACCEPT'
 			if (msg.active && msg.returned) msg.type = 'RETURNED'
-			chatData.value?.messages.push(msg)
-			//Sorts chat by date
-			console.log(loan.value)
-			/*
-      Not working
-      chatData.value?.messages.sort(function (a, b) {
-				if (a.date && b.date)
-					return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
-
-				return -1
-			})
-       */
-			console.log(chatData.value?.messages)
+			messages.value.push(msg)
 			loanPending.value = true
 			loanStatus.value = 'PENDING'
 			if (loan.value?.active) loanStatus.value = 'ACCEPTED'
@@ -470,7 +445,6 @@ const loan = ref<Loan>()
 const loanStatus = ref<loanStatusCode>('UNDEFINED')
 const currentMessage = ref<string>('')
 const loanPending = ref(false)
-const chatData = ref<Message>()
 const chat = ref<Chat>()
 
 const showLoginModal = ref(false)
@@ -490,7 +464,7 @@ function reRenderChat() {
 <template>
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
-			<RouterLink class="place-sel" to="/chats"> Back </RouterLink>
+			<router-link class="place-sel" to="/chats"> Back </router-link>
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
 			<h1 class="text-center text-4xl" v-if="item?.name">
 				{{ item.name }}
@@ -501,8 +475,8 @@ function reRenderChat() {
 
 		<MessageContainer
 			class="grow"
-			v-if="chatData && chat && item"
-			:chatData="chatData"
+			v-if="messages && chat && item"
+			:messages="messages"
 			:chat="chat"
 			:key="render"
 			:item="item"
@@ -531,8 +505,8 @@ function reRenderChat() {
 			<div class="flex my-4">
 				<BaseBtn
 					v-if="
-						lender?.id != store.state.user?.id &&
-						loanStatus === 'NOT_SENT'
+						lender?.userId != store.state.user?.userId &&
+						loanStatus === 'PENDING'
 					"
 					class="grow bg-green-600"
 					:disabled="loanPending || loanStatus === 'PENDING'"
@@ -549,7 +523,7 @@ function reRenderChat() {
 				>
 				<BaseBtn
 					v-if="
-						lender?.id === store.state.user?.id &&
+						lender?.userId === store.state.user?.userId &&
 						loanStatus === 'ACCEPTED'
 					"
 					@click="sendLoanReturned"

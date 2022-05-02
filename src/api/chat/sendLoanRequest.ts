@@ -1,4 +1,4 @@
-export type WSSendLoanRequestRequest = {
+export type WSChatSendLoanRequestRequest = {
 	startDate: string
 	endDate: string
 	returned: boolean
@@ -8,4 +8,4 @@ export type WSSendLoanRequestRequest = {
 	loanId: number
 }
 
-export type WSSendLoanRequestesponse = undefined
+export type WSChatSendLoanRequestesponse = undefined

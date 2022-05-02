@@ -10,12 +10,7 @@ import {
 } from 'vue'
 import Message from './Message.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-import { Chat, Item, MessageDTO } from '../../api/schema'
-
-interface ChatData {
-	userId: string
-	messages: Array<MessageDTO>
-}
+import { Chat, Item, Message as MessageInterface } from '../../api/schema'
 
 type loanStatus =
 	| 'PENDING'
@@ -27,7 +22,7 @@ type loanStatus =
 	| 'RETURNED'
 
 interface Props {
-	chatData: ChatData
+	messages: MessageInterface[]
 	modelValue: loanStatus
 	chat: Chat
 	item: Item
@@ -52,7 +47,7 @@ const negotiate = () => {
 	emit('update:modelValue', 'RETURNED')
 }
 
-const { chatData, modelValue, chat, item } = defineProps<Props>()
+const { messages, modelValue, chat, item } = defineProps<Props>()
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -70,7 +65,7 @@ function styleType(received: boolean) {
 		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
 	>
-		<div class="grid" v-for="(message, i) in chatData.messages">
+		<div class="grid" v-for="(message, i) in messages">
 			<Message
 				v-if="message.type === 'CHAT'"
 				:id="i"

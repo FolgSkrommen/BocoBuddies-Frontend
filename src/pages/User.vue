@@ -36,7 +36,7 @@ async function getUser() {
 		errorMessage.value = error
 	}
 }
-if (id && id !== store.state.user?.id) {
+if (store.state.user && id && id !== store.state.user.userId) {
 	getUser()
 } else {
 	user.value = store.state.user
@@ -73,7 +73,7 @@ if (id && id !== store.state.user?.id) {
 		<p>@{{ user.username }}</p>
 		<CheckCircleIcon class="h-8 w-8 text-blue" v-if="user.trusted" />
 		<div
-			v-if="store.state.user && user.id === store.state.user.id"
+			v-if="store.state.user && user.userId === store.state.user.userId"
 			class="grid gap-4"
 		>
 			<div>

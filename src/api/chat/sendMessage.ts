@@ -1,7 +1,7 @@
-export type WSSendMessageRequest = {
+export type WSChatSendMessageRequest = {
 	chatId: number
 	senderId: number
 	message: string
 }
 
-export type WSSendMessageesponse = undefined
+export type WSChatSendMessageesponse = undefined

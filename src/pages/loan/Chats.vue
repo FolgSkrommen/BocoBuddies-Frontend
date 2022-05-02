@@ -7,6 +7,7 @@ import { response } from 'express'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import { Chat, User } from '../../api/schema'
+import { GetChatByUserMarketResponse } from '../../api/chat/getByUser/market'
 
 const chats = ref<Array<Chat>>([])
 
@@ -18,8 +19,8 @@ async function getChats() {
 	status.value = 'loading'
 	try {
 		const res = await axios.get('/chat/getByUser/market')
-		chats.value = res.data.chats
-		console.log(res.data)
+		const data = res.data as GetChatByUserMarketResponse
+		chats.value = data
 		chats.value.forEach(chat => {
 			axios
 				.get('/item', { params: { id: chat.itemId } })

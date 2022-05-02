@@ -9,20 +9,13 @@ import SortDropdown from '../components/SortDropdown.vue'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import { GetLoanRequest } from '../api/loan'
-import { GetSearchRequest } from '../api/chat/search'
 import { GetItemSearchRequest } from '../api/item/search'
-import { Category, Item } from '../api/schema'
+import { Alternative, Category, Item } from '../api/schema'
 
 //Enums
 enum State {
 	ACTIVE = 'Active',
 	ARCHIVED = 'Archived',
-}
-
-interface Alternative {
-	id: number
-	alt: string
 }
 
 //Variables
@@ -178,7 +171,7 @@ async function search() {
 			sort: sortChosenString,
 			amount: amountPerPage,
 			offset: currentPage.value,
-			userId: store.state.user.id,
+			userId: store.state.user.userId,
 			loan: true,
 			active: stateTag.value === State.ACTIVE,
 		}

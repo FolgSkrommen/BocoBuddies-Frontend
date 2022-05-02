@@ -10,15 +10,9 @@ import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
-import { Category, Item } from '../api/schema'
+import { Alternative, Category, Item } from '../api/schema'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-
-//Interfaces
-interface Alternative {
-	id: number
-	alt: string
-}
 
 //Variables
 let sortChosen = ref(0)

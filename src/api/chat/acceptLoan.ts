@@ -1,4 +1,4 @@
-export type WSAcceptLoanRequest = {
+export type WSChatAcceptLoanRequest = {
 	startDate: string
 	endDate: string
 	returned: boolean
@@ -8,4 +8,4 @@ export type WSAcceptLoanRequest = {
 	loanId: number
 }
 
-export type WSAcceptLoanResponse = undefined
+export type WSChatAcceptLoanResponse = undefined

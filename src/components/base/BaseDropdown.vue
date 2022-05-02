@@ -1,8 +1,6 @@
 <script setup lang="ts">
-export interface Alternative {
-	alt: string
-	id: number
-}
+import { Alternative } from '../../api/schema'
+
 interface Props {
 	modelValue: number
 	alternatives: Alternative[]

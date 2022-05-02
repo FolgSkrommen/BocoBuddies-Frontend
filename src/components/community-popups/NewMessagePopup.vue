@@ -10,10 +10,6 @@ import axios from 'axios'
 import { store } from '../../store'
 import { FriendChat } from '../../api/schema'
 
-interface Response {
-	friendChats: FriendChat[]
-}
-
 const emit = defineEmits(['exit'])
 
 type Status = 'loading' | 'loaded' | 'error'

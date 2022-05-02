@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import BaseDropdown, { Alternative } from '../components/base/BaseDropdown.vue'
+import { Alternative } from '../api/schema'
+import BaseDropdown from '../components/base/BaseDropdown.vue'
 
 interface Props {
 	sortAlts: Array<Alternative>

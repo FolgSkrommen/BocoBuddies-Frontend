@@ -72,11 +72,6 @@ async function getCategories() {
 
 getCategories()
 
-interface FilterValue {
-	id: number
-	value: string
-}
-
 let currentCategory: number = 0
 
 let filterTypes: Ref<Array<FilterType>> = ref([])
@@ -169,20 +164,6 @@ let priceUnits: PriceUnit[] = [
 let currentPriceUnit: string
 function setPriceUnit(priceUnit: string) {
 	currentPriceUnit = priceUnit
-}
-
-/* Submit */
-interface Item {
-	categoryId: number
-	FilterIdList: number[]
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	address: string
-	postalCode: string
-	startDate: string
-	endDate: string
 }
 
 type PostStatus = 'sending' | 'success' | 'error'
