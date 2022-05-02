@@ -8,27 +8,7 @@ import UserCard from '../UserCard.vue'
 import NewGCPopup from './NewGCPopup.vue'
 import axios from 'axios'
 import { store } from '../../store'
-
-interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	profilePicture?: string
-	trusted: boolean
-}
-
-interface FriendChat {
-	chatId: number
-	chatName: string
-	members: User[]
-}
-
-interface Response {
-	friendChats: FriendChat[]
-}
+import { FriendChat } from '../../api/schema'
 
 const emit = defineEmits(['exit'])
 
@@ -53,7 +33,7 @@ async function getFriends() {
 		const res = await axios.get('/chat/search', {
 			params: {
 				searchString: searchString.value,
-				page: currentPage,
+				page: currentPage.value,
 				amount: amountPerPage,
 			},
 		})

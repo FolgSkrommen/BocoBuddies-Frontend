@@ -2,31 +2,8 @@
 import { computed } from 'vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { Calendar, DatePicker } from 'v-calendar'
+import { Item, Position } from '../api/schema'
 
-export interface Filter {
-	name: string
-	value: string
-}
-
-export interface Position {
-	lat: number
-	lng: number
-}
-
-export interface Item {
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	postalCode: string
-	address: string
-	position: Position
-	images: string[]
-	availableFrom: string
-	availableTo: string
-	categories: string[]
-	filters: Filter[]
-}
 interface Props {
 	item: Item
 }

@@ -1,6 +1,7 @@
 import { shallowMount, RouterLinkStub, flushPromises } from '@vue/test-utils'
-import Home from '@/pages/Home.vue'
+import Home from '../../../src/pages/Home.vue'
 import axios from 'axios'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('Home', () => {
 	describe('when entered', () => {
@@ -26,7 +27,7 @@ describe('Home', () => {
 			},
 		]
 
-		jest.spyOn(axios, 'get')
+		vi.spyOn(axios, 'get')
 			.mockResolvedValue(mockCategoryList)
 			.mockResolvedValue(mockItemList)
 
@@ -37,7 +38,7 @@ describe('Home', () => {
 				},
 			}
 			const mockRouter = {
-				push: jest.fn(),
+				push: vi.fn(),
 			}
 			const wrapper = shallowMount(Home, {
 				stubs: { RouterLink: RouterLinkStub },
@@ -73,34 +74,4 @@ describe('Home', () => {
 			expect(wrapper.vm.sortChosen).toBe(0)
 		})
 	})
-
-	//OLD TESTS
-	/*describe('when a user searches for items', () => {
-		describe('user pushes search button', () => {
-			it('does not search if no word is typed', async () => {
-				const wrapper = shallowMount(Home)
-				await wrapper
-					.find('[data-testid="search-button"]')
-					.trigger('click')
-				expect(wrapper.vm.items.length).toBe(0)
-			})
-			it('does search if word is typed', () => {
-				const wrapper = shallowMount(Home)
-				let searchString = 'sko'
-				wrapper.vm.searchWord = searchString
-
-				expect(wrapper.vm.searchWord).toEqual('sko')
-				//TODO implement test
-			})
-		})
-		describe('user pushes enter', () => {
-			it('does not search if no word is typed', async () => {
-				const wrapper = shallowMount(Home)
-				await wrapper
-					.find('[data-testid="search-field"]')
-					.trigger('keypress', { key: 'Enter' })
-				expect(wrapper.vm.items.length).toBe(0)
-			})
-		})
-	})*/
 })

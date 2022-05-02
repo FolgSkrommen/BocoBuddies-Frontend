@@ -7,7 +7,7 @@ import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
 import { store } from '../store'
-import { User } from '../api/schema'
+import { FriendChat, User } from '../api/schema'
 import AddFriendPopup from '../components/community-popups/AddFriendPopup.vue'
 import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
 
@@ -18,10 +18,11 @@ const users = ref<User[]>()
 
 const getFriendsStatus = ref<GetStatus>()
 async function getFriends() {
+	if (!store.state.user) return
 	getFriendsStatus.value = 'loading'
 	try {
 		const res = await axios.get('/user/friends', {
-			params: { userId: store.state.user?.id },
+			params: { userId: store.state.user.userId },
 		})
 		users.value = res.data.friends
 		console.log(users.value)
@@ -30,12 +31,6 @@ async function getFriends() {
 		errorMessage.value = error
 		getFriendsStatus.value = 'error'
 	}
-}
-
-interface FriendChat {
-	chatId: number
-	chatName: string
-	members: User[]
 }
 
 const friendChats = ref<FriendChat[]>()
@@ -53,19 +48,18 @@ async function getChats() {
 		const data: FriendChat[] = res.data.friendChats
 
 		//NOTE: User will not be in the list of "members"
-		let newData: FriendChat[] = []
-		if (!data) return
+		let dataWithoutUser: FriendChat[] = []
 		data.forEach(({ chatId, chatName, members }) =>
-			newData.push({
+			dataWithoutUser.push({
 				chatId,
 				chatName,
 				members: members.filter(
-					({ id }) => id !== store.state.user?.id
+					({ userId }) => userId !== store.state.user?.userId
 				),
 			})
 		)
 
-		friendChats.value = newData
+		friendChats.value = dataWithoutUser
 		getChatsStatus.value = 'loaded'
 	} catch (error) {
 		errorMessage.value = error

@@ -1,5 +1,5 @@
 export interface User {
-	id: number
+	userId: number
 	firstName: string
 	lastName: string
 	username: string
@@ -21,13 +21,6 @@ export interface Review {
 	date: string
 }
 
-export interface Message {
-	senderId: number
-	chatId: number
-	message: string
-	date: string
-}
-
 export interface Filter {
 	name: string
 	value: string
@@ -45,6 +38,7 @@ export interface Position {
 }
 
 export interface Item {
+	itemId: number
 	name: string
 	description: string
 	price: number
@@ -60,17 +54,20 @@ export interface Item {
 }
 
 export interface Loan {
-	startDate: string
-	endDate: string
-	returned: boolean
-	active: boolean
-	creationDate: string
+	loanId?: number
+	itemId: number
 	chatId: number
-	loanId: number
+	loaner: number
+	startTime: string
+	endTime: string
+	active: boolean
+	returned: boolean
+	creationDate: string
+	price: number
 }
 
 export interface Category {
-	categoryName: String
+	categoryName: string
 	categoryId: number
 	superCategoryId?: number
 	filterTypes?: FilterType[]
@@ -78,13 +75,32 @@ export interface Category {
 
 export interface Chat {
 	chatId: number
+	itemId: number
 	chatName: string
-	itemId?: number
-	members: number[]
+	item?: Item
 }
 
 export interface FriendChat {
 	chatId: number
 	chatName: string
 	members: User[]
+}
+
+export interface Message {
+	senderId?: number
+	message?: string
+	type: string
+	date?: string
+	receive: boolean
+	chatId?: number
+	start?: string
+	stop?: string
+	active?: boolean
+	returned?: boolean
+	price?: number
+}
+
+export interface Alternative {
+	id: number
+	alt: string
 }

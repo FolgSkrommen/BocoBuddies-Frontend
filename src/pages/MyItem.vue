@@ -2,7 +2,7 @@
 import Card from '../components/Card.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import ItemInfo, { Item } from '../components/ItemInfo.vue'
+import ItemInfo from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import { computed, ref } from 'vue'
@@ -12,26 +12,12 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import { User } from '../api/schema'
+import { Item, Loan, User } from '../api/schema'
+import { GetLoanRequest, GetLoanResponse } from '../api/loan'
+import { GetItemRequest, GetItemResponse } from '../api/item'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
-
-interface Loan {
-	startDate: string
-	endDate: string
-	returned: boolean
-	active: boolean
-	creationDate: string
-	chatId: number
-	loanId: number
-}
-
-interface LoanResponse {
-	item: Item
-	user: User
-	loan: Loan
-}
 
 type Status = 'loading' | 'loaded' | 'error'
 
@@ -45,26 +31,21 @@ const loan = ref<Loan>()
 const range = computed(() => {
 	if (!loan.value) return
 	return {
-		start: new Date(loan.value.startDate),
-		end: new Date(loan.value.endDate),
+		start: new Date(loan.value.startTime),
+		end: new Date(loan.value.endTime),
 	}
 })
-
-interface ItemResponse {
-	item: Item
-	lender: User
-}
 
 async function getItem() {
 	status.value = 'loading'
 	try {
+		const params: GetItemRequest = {
+			id,
+		}
 		const res = await axios.get('/item', {
-			method: 'GET',
-			params: {
-				id,
-			},
+			params,
 		})
-		const data: ItemResponse = res.data
+		const data: GetItemResponse = res.data
 		console.log(data)
 		item.value = data.item
 		loaner.value = data.lender
@@ -77,15 +58,15 @@ async function getItem() {
 
 async function getLoan() {
 	status.value = 'loading'
+	const params: GetLoanRequest = {
+		loanId: id,
+		isLender: false,
+	}
 	try {
 		const res = await axios.get('/loan', {
-			method: 'GET',
-			params: {
-				loanId: id,
-				isLender: false,
-			},
+			params,
 		})
-		const data: LoanResponse = res.data
+		const data: GetLoanResponse = res.data
 		item.value = data.item
 		loaner.value = data.user
 		loan.value = data.loan

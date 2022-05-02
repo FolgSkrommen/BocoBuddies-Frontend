@@ -9,46 +9,8 @@ import {
 	ref,
 } from 'vue'
 import Message from './Message.vue'
-import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-	start?: string
-	stop?: string
-	active?: boolean
-	returned?: boolean
-	price?: number
-}
-
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
-}
-
-interface ChatData {
-	userId: string
-	messages: Array<MessageDTO>
-}
-
-interface Item {
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	postalCode: string
-	address: string
-	images: string[]
-	availableFrom: string
-	availableTo: string
-	categories: string[]
-}
+import { Chat, Item, Message as MessageInterface } from '../../api/schema'
 
 type loanStatus =
 	| 'PENDING'
@@ -57,9 +19,10 @@ type loanStatus =
 	| 'COUNTER'
 	| 'NOT_SENT'
 	| 'UNDEFINED'
+	| 'RETURNED'
 
 interface Props {
-	chatData: ChatData
+	messages: MessageInterface[]
 	modelValue: loanStatus
 	chat: Chat
 	item: Item
@@ -84,7 +47,7 @@ const negotiate = () => {
 	emit('update:modelValue', 'RETURNED')
 }
 
-const { chatData, modelValue, chat, item } = defineProps<Props>()
+const { messages, modelValue, chat, item } = defineProps<Props>()
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -102,7 +65,7 @@ function styleType(received: boolean) {
 		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
 	>
-		<div class="grid" v-for="(message, i) in chatData.messages">
+		<div class="grid" v-for="(message, i) in messages">
 			<Message
 				v-if="message.type === 'CHAT'"
 				:id="i"

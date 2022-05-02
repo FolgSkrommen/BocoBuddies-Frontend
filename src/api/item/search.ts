@@ -5,7 +5,7 @@ import { Item } from '../schema'
  */
 export type GetItemSearchRequest = {
 	categories?: number[]
-	sort: number
+	sort: string
 	amount: number
 	offset: number
 	userId?: number

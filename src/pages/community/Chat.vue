@@ -7,10 +7,8 @@ import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
-import { User } from '../../api/schema'
+import { Chat, Message, User } from '../../api/schema'
 
-//@ts-ignore
-import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
@@ -18,25 +16,7 @@ import BasePopup from '../../components/base/BasePopup.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
 const route = useRoute()
 
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
-}
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-}
-
-interface Message {
-	userId: string
-	messages: Array<MessageDTO>
-}
+const messages = ref<Message[]>([])
 
 type loanStatusCode =
 	| 'PENDING'
@@ -51,7 +31,7 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new SockJS('http://localhost:8001/ws')
+	socket = new WebSocket('ws://localhost:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -74,14 +54,14 @@ function onError(err: any) {
 }
 
 async function sendMessage(event: any) {
-	if (!stompClient.value) return
-	let chatMessage: MessageDTO = {
-		senderId: chatData.value?.userId,
+	if (!stompClient.value || !store.state.user || !chat.value) return
+	let chatMessage: Message = {
+		senderId: store.state.user.userId,
 		message: currentMessage.value,
 		type: 'CHAT',
 		date: new Date().toISOString(),
 		receive: false,
-		chatId: chat.value?.chatId.toString(),
+		chatId: chat.value.chatId,
 	}
 
 	try {
@@ -92,7 +72,7 @@ async function sendMessage(event: any) {
 			JSON.stringify(chatMessage)
 		)
 
-		chatData.value?.messages.push(chatMessage)
+		messages.value.push(chatMessage)
 	} catch (error) {}
 
 	currentMessage.value = ''
@@ -104,21 +84,22 @@ async function sendMessage(event: any) {
  * @param payload
  */
 function onMessageReceived(payload: any) {
+	if (!store.state.user || !chat.value) return
 	let message = JSON.parse(payload.body)
 
-	let msg: MessageDTO = {
+	let msg: Message = {
 		senderId: message.senderId,
 		message: message.message,
 		type: 'CHAT',
 		date: message.date,
 		receive: true,
-		chatId: chat.value?.chatId.toString(),
+		chatId: chat.value.chatId,
 	}
-	if (msg.senderId != chatData.value?.userId) {
-		chatData.value?.messages.push(msg)
+	if (msg.senderId != store.state.user.userId) {
+		messages.value.push(msg)
 	} else {
 		console.log(msg.senderId)
-		console.log(chatData.value?.userId)
+		console.log(store.state.user.userId)
 	}
 	reRenderChat()
 }
@@ -137,23 +118,23 @@ onBeforeMount(async () => {
 
 	try {
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
-		chatData.value = res.data
-		chatData.value?.messages.forEach(m => {
-			m.receive = m.senderId != chatData.value?.userId
+		messages.value = res.data
+		messages.value.forEach(m => {
+			if (!store.state.user) return
+			m.receive = m.senderId != store.state.user.userId
 			m.type = 'CHAT'
 		})
-		chatData.value?.messages.reverse()
+		messages.value.reverse()
 	} catch (error) {
 		alert(error)
 	}
 
-	await connect()
+	//await connect()
 	reRenderChat()
 })
 
 const user = ref<User>()
 const currentMessage = ref<string>('')
-const chatData = ref<Message>()
 const chat = ref<Chat>()
 const showLoginModal = ref(false)
 const render = ref<number>(0)
@@ -165,7 +146,7 @@ function reRenderChat() {
 <template>
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
-			<RouterLink class="place-sel" to="/community"> Back </RouterLink>
+			<router-link class="place-sel" to="/community"> Back </router-link>
 			<h1 class="text-center text-4xl" v-if="chat && chat.chatName">
 				{{ chat.chatName }}}
 			</h1>
@@ -174,8 +155,8 @@ function reRenderChat() {
 
 		<MessageContainer
 			class="grow"
-			v-if="chatData"
-			:chatData="chatData"
+			v-if="messages.length > 0"
+			:messages="messages"
 			:key="render"
 			data-testid="message-container"
 		/>

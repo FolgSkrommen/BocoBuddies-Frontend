@@ -1,14 +1,14 @@
 import { Review } from '../schema'
 
-type GetReviewRequest = {
+export type GetReviewRequest = {
 	reviewId: number
 }
 
-type GetReviewResponse = Review
+export type GetReviewResponse = Review
 
 /**
  * TOKEN
  */
-type PostReviewRequest = Review
+export type PostReviewRequest = Review
 
-type PostReviewResponse = undefined
+export type PostReviewResponse = undefined

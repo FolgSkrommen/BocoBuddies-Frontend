@@ -9,25 +9,11 @@ import {
 	ref,
 } from 'vue'
 import Message from './Message.vue'
-import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-}
-
-interface ChatData {
-	userId: string
-	messages: Array<MessageDTO>
-}
+import { Message as MessageInterface } from '../../api/schema'
 
 interface Props {
-	chatData: ChatData
+	messages: MessageInterface[]
 }
 //DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAY BE AT BOTTOM)
 onMounted(() => {
@@ -35,7 +21,7 @@ onMounted(() => {
 	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
 })
 
-const { chatData } = defineProps<Props>()
+const { messages } = defineProps<Props>()
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -54,7 +40,7 @@ function styleType(received: boolean) {
 		id="box"
 		data-testid="chat"
 	>
-		<div class="grid" v-for="(message, i) in chatData.messages">
+		<div class="grid" v-for="(message, i) in messages">
 			<Message
 				v-if="message.type === 'CHAT'"
 				:id="i"

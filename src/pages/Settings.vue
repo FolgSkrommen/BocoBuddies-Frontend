@@ -10,6 +10,7 @@ import router from '../router'
 import axios from 'axios'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
+import { PostUserRegisterRequest } from '../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()
 
@@ -17,7 +18,7 @@ const newEmail = ref('')
 const newPassword = ref('')
 
 if (store.state.user) {
-	newEmail.value = store.state.user.email
+	newEmail.value = store.state.user.email as string
 }
 
 function updateUser() {
@@ -42,14 +43,16 @@ function uploadImage(input: any) {
 type UploadStatus = 'sending' | 'success' | 'error'
 const uploadProfilePictureStatus = ref<UploadStatus>()
 async function uploadPicture() {
+	if (!store.state.user) return
 	uploadProfilePictureStatus.value = 'sending'
 	const formData = new FormData()
 	formData.append('image', imageFiles.value[0])
+	//TODO: Typescript for dette
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
 		const res = await axios.get('/user', {
-			params: { user: store.state.user?.id },
+			params: { user: store.state.user.userId },
 		})
 		await store.dispatch('edit', res.data)
 		await router.push('/user')
@@ -59,29 +62,9 @@ async function uploadPicture() {
 	}
 }
 
-const profilePicture = ref('')
-const getProfilePictureStatus = ref<Status>()
-async function getProfilePicture() {
-	getProfilePictureStatus.value = 'loading'
-	try {
-		const res = await axios.get('/user/getProfilePicture')
-		profilePicture.value = res.data
-		getProfilePictureStatus.value = 'loaded'
-	} catch (error) {
-		getProfilePictureStatus.value = 'error'
-		errorMessage.value = error
-	}
+function sendVerificationEmail() {
+	//TODO: Implement
 }
-
-async function sendVerificationEmail() {
-	try {
-		const res = await axios.post('/verify/sendVerificationEmail')
-	} catch (error) {
-		console.log(error)
-	}
-}
-
-getProfilePicture()
 
 function deleteUser() {
 	//TODO: Implement
@@ -90,11 +73,6 @@ function deleteUser() {
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<BaseBanner
-			v-if="uploadProfilePictureStatus === 'error'"
-			type="error"
-			:message="errorMessage"
-		/>
 		<BaseBanner
 			v-if="uploadProfilePictureStatus === 'success'"
 			type="success"

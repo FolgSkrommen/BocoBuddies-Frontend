@@ -1,10 +1,7 @@
 <script setup lang="ts">
+import { Alternative } from '../api/schema'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 
-interface Alternative {
-	id: number
-	alt: string
-}
 interface Props {
 	sortAlts: Array<Alternative>
 	modelValue: number
