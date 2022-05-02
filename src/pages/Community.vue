@@ -6,8 +6,10 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
-import { store, User } from '../store'
+import { store } from '../store'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
+import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
+import { User } from '../api/schema'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()
@@ -87,14 +89,14 @@ watch(view, () => {
 	}
 })
 const addingUser = ref(false)
-const createGC = ref(false)
+const createChat = ref(false)
 function add() {
 	switch (view.value) {
 		case View.FRIENDS:
 			addingUser.value = true
 			break
 		case View.CHATS:
-			createGC.value = true
+			createChat.value = true
 			break
 	}
 }
@@ -141,33 +143,41 @@ function add() {
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="{ chatId, chatName, members } in friendChats">
-					<Card>
-						<div class="flex gap-4 w-full">
-							<div
-								class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
-							>
-								<img
-									v-for="user in members.slice(0, 4)"
-									class="rounded-full object-cover"
-									:src="user.profilePicture"
-								/>
-							</div>
-							<div class="grid gap-2">
-								<p class="font-bold text-lg">{{ chatName }}</p>
-								<div class="flex gap-2 flex-wrap">
-									<p
-										v-for="member in members"
-										class="text-slate-500"
-									>
-										{{ member.firstName }}
+					<router-link :to="'/community/chat/' + chatId">
+						<Card>
+							<div class="flex gap-4 w-full">
+								<div
+									class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
+								>
+									<img
+										v-for="user in members.slice(0, 4)"
+										class="rounded-full object-cover"
+										:src="user.profilePicture"
+									/>
+								</div>
+								<div class="grid gap-2">
+									<p class="font-bold text-lg">
+										{{ chatName }}
 									</p>
+									<div class="flex gap-2 flex-wrap">
+										<p
+											v-for="member in members"
+											class="text-slate-500"
+										>
+											{{ member.firstName }}
+										</p>
+									</div>
 								</div>
 							</div>
-						</div>
-					</Card>
+						</Card>
+					</router-link>
 				</div>
 			</div>
 			<FloatingBtn @click="add" />
+			<NewMessagePopup
+				v-show="createChat"
+				@exit="createChat = false"
+			></NewMessagePopup>
 		</div>
 	</div>
 </template>

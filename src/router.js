@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 //Check out: https://router.vuejs.org/guide/#javascript
-
 import Home from './pages/Home.vue'
 import LoanChat from './pages/loan/LoanChat.vue'
 import Chats from './pages/loan/Chats.vue'
@@ -20,7 +19,6 @@ import User from './pages/User.vue'
 import VerifyUser from './pages/VerifyUser.vue'
 import Chat from './pages/community/Chat.vue'
 import { store } from './store'
-
 const routes = [
 	{
 		path: '/',
@@ -125,7 +123,6 @@ const routes = [
 			},
 		],
 	},
-
 	{
 		path: '/settings',
 		component: Settings,
@@ -155,16 +152,13 @@ const routes = [
 		},
 	},
 ]
-
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
 })
-
 router.beforeEach((to, from, next) => {
 	const loggedIn = store.getters.loggedIn
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
 	if (requiresAuth && !loggedIn) {
 		return next('/login')
 	}
@@ -173,5 +167,5 @@ router.beforeEach((to, from, next) => {
 	}
 	return next()
 })
-
 export default router
+//# sourceMappingURL=router.js.map

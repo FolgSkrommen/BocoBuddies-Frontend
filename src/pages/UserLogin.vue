@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
-import { store, User } from '../store'
-
+import { store } from '../store'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import BaseButton from '../components/base/BaseBtn.vue'
@@ -9,6 +8,7 @@ import { computed, ref } from 'vue'
 import axios from 'axios'
 import router from '../router'
 import BaseBanner from '../components/base/BaseBanner.vue'
+import { User } from '../api/schema'
 
 const errorMessage = ref()
 
