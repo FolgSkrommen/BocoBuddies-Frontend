@@ -15,8 +15,23 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
 
-## Running tests
+# Software Engineering Scrum Project, Frontend
+This is the frontend part of the software engineering scrum project. It consits of a vue project that uses vite to compile.
+
+## How to run tests
 
 -   clone the project
 -   open the project in a terminal 
 -   run the command 'npm run test'
+
+## Group members
+ Anders Heftøy Carlsen, 
+ Mats Sollid Eide, 
+ Adrian Wist Hakvåg, 
+ Eivind Strand Harboe, 
+ Olav Finne Præsteng Larsen, 
+ Erlend Matre, 
+ Even Malm Nordgaard, 
+ Erlend Ravn Ryan, 
+ William Gjerberg Tresselt
+
