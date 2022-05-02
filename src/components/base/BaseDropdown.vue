@@ -1,12 +1,13 @@
 <script setup lang="ts">
+export interface Alternative {
+	alt: string
+	id: number
+}
 interface Props {
 	modelValue: number
 	alternatives: Alternative[]
 }
-interface Alternative {
-	alt: string
-	id: number
-}
+
 let { modelValue, alternatives } = defineProps<Props>()
 
 const emit = defineEmits(['update:modelValue', 'sort-clicked'])

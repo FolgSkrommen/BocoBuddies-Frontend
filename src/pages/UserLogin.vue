@@ -9,6 +9,7 @@ import axios from 'axios'
 import router from '../router'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { User } from '../api/schema'
+import { PostUserLoginRequest } from '../api/user/login'
 
 const errorMessage = ref()
 
@@ -27,19 +28,14 @@ const { errors } = useForm({
 const { value: email } = useField<string>('email')
 const { value: password } = useField<string>('password')
 
-interface UserLoginData {
-	email: string
-	password: string
-}
 type Status = 'loading' | 'loaded' | 'error'
 const loginStatus = ref<Status>()
 async function logIn() {
 	loginStatus.value = 'loading'
-	const data: UserLoginData = {
+	const data: PostUserLoginRequest = {
 		email: email.value,
 		password: password.value,
 	}
-
 	try {
 		await store.dispatch('login', data)
 		console.log('logged in')

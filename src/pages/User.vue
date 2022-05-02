@@ -8,6 +8,7 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import { CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import { User } from '../api/schema'
+import { GetUserRequest } from '../api/user'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -21,11 +22,11 @@ const getUserStatus = ref<GetStatus>()
 async function getUser() {
 	getUserStatus.value = 'loading'
 	try {
+		const params: GetUserRequest = {
+			user: id,
+		}
 		const userRes = await axios.get('/user', {
-			method: 'GET',
-			params: {
-				user: id,
-			},
+			params,
 		})
 		const data = userRes.data as User
 		user.value = data
