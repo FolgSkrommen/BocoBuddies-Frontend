@@ -222,7 +222,12 @@ async function registerItem() {
 	chosenFilters.value.forEach(number => {
 		formData.append('filterIdList', number.toString())
 	})
-	formData.append('images', imageFiles.value[0])
+	if (!imageFiles.value[0]) {
+		formData.append('images', new Blob())
+		console.log('Bilde listen er tom')
+	} else {
+		formData.append('images', imageFiles.value[0])
+	}
 	try {
 		await axios.post('/item/register', formData)
 		router.push('/')
