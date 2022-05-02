@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import axios, { AxiosError } from 'axios'
 import { ref } from 'vue'
-import BasePopup from '../components/base/BasePopup.vue'
-import SearchbarAndButton from './SearchbarAndButton.vue'
-import UserCard from '../components/UserCard.vue'
-import BaseBtn from './base/BaseBtn.vue'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
-import { User } from '../store'
+import BasePopup from '../base/BasePopup.vue'
+import SearchbarAndButton from '../SearchbarAndButton.vue'
+import UserCard from '../UserCard.vue'
+import BaseBtn from '../base/BaseBtn.vue'
+import LoadingIndicator from '../base/LoadingIndicator.vue'
+import BaseBanner from '../base/BaseBanner.vue'
 
 const emit = defineEmits(['exit'])
 
 const searchString = ref<string>('')
 const amount: number = 20
-const page = ref<number>(0)
+const page = ref<number>(1)
 
 const friendResults = ref<User[]>([])
 
