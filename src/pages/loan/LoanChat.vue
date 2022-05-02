@@ -15,8 +15,6 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../../components/base/BasePopup.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
-import { User } from '../../api/schema'
-
 const route = useRoute()
 
 interface Chat {

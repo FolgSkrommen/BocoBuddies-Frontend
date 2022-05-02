@@ -6,27 +6,7 @@ import { store } from '../../store'
 import { response } from 'express'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
-import { User } from '../../api/schema'
-
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
-	item?: Item
-}
-
-interface Item {
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	postalCode: string
-	address: string
-	images: string[]
-	availableFrom: string
-	availableTo: string
-	categories: string[]
-}
+import { Chat, User } from '../../api/schema'
 
 const chats = ref<Array<Chat>>([])
 

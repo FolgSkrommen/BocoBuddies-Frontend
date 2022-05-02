@@ -45,6 +45,7 @@ export interface Position {
 }
 
 export interface Item {
+	id: number
 	name: string
 	description: string
 	price: number
@@ -67,6 +68,7 @@ export interface Loan {
 	creationDate: string
 	chatId: number
 	loanId: number
+	price: number
 }
 
 export interface Category {
@@ -78,9 +80,9 @@ export interface Category {
 
 export interface Chat {
 	chatId: number
+	itemId: number
 	chatName: string
-	itemId?: number
-	members: number[]
+	item?: Item
 }
 
 export interface FriendChat {
