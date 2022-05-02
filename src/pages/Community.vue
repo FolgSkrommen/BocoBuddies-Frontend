@@ -380,30 +380,34 @@ function add() {
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="{ chatId, chatName, members } in friendChats">
-					<Card>
-						<div class="flex gap-4 w-full">
-							<div
-								class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
-							>
-								<img
-									v-for="user in members.slice(0, 4)"
-									class="rounded-full object-cover"
-									:src="user.pictureUrl"
-								/>
-							</div>
-							<div class="grid gap-2">
-								<p class="font-bold text-lg">{{ chatName }}</p>
-								<div class="flex gap-2 flex-wrap">
-									<p
-										v-for="member in members"
-										class="text-slate-500"
-									>
-										{{ member.firstName }}
+					<router-link :to="'/community/chat/' + chatId">
+						<Card>
+							<div class="flex gap-4 w-full">
+								<div
+									class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
+								>
+									<img
+										v-for="user in members.slice(0, 4)"
+										class="rounded-full object-cover"
+										:src="user.pictureUrl"
+									/>
+								</div>
+								<div class="grid gap-2">
+									<p class="font-bold text-lg">
+										{{ chatName }}
 									</p>
+									<div class="flex gap-2 flex-wrap">
+										<p
+											v-for="member in members"
+											class="text-slate-500"
+										>
+											{{ member.firstName }}
+										</p>
+									</div>
 								</div>
 							</div>
-						</div>
-					</Card>
+						</Card>
+					</router-link>
 				</div>
 			</div>
 			<FloatingBtn @click="add" />
