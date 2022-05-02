@@ -17,6 +17,7 @@
 		"@types/google.maps": "^3.48.6",
 		"axios": "^0.26.1",
 		"qs": "^6.10.3",
+		"sockjs-client": "^1.6.0",
 		"v-calendar": "^3.0.0-alpha.8",
 		"vee-validate": "^4.5.11",
 		"vue": "^3.2.25",
