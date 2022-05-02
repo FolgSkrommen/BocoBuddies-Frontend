@@ -10,9 +10,10 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
-import { GetChatResponse, PostChatRequest, PostChatResponse } from '../api/chat'
+import { PostChatRequest, PostChatResponse } from '../api/chat'
 
 const { params } = useRoute()
 const router = useRouter()

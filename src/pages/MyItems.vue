@@ -263,13 +263,13 @@ function loadMoreItems() {
 			<CategoryList
 				v-model="chosenCategories"
 				:removable="true"
-				@remove-tag-event="categoryRemoved"
+				@remove-category-event="categoryRemoved"
 				data-testid="categories-tag-chosen"
 				class="border-solid bg-gray-500 rounded"
 			></CategoryList>
 			<CategoryList
 				v-model="tagAlts"
-				@add-tag-event="categoryChosen"
+				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
 			></CategoryList>
 		</div>

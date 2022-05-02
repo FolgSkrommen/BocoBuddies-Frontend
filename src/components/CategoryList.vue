@@ -19,11 +19,11 @@ const emit = defineEmits(['remove-category-event', 'add-category-event'])
 		>
 			<XCircleIcon
 				v-if="removable"
-				@click="$emit('remove-category-event', category)"
+				@click="emit('remove-category-event', category)"
 				class="h-6 w-6 place-self-center"
 			></XCircleIcon>
 			<span
-				@click="$emit('add-category-event', category)"
+				@click="emit('add-category-event', category)"
 				class="text-lg truncate"
 				>{{ category.categoryName }}</span
 			>
