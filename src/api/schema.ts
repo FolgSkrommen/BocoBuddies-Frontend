@@ -12,3 +12,38 @@ export interface User {
 	trusted: boolean
 	rating: number
 }
+
+export interface Filter {
+	name: string
+	value: string
+}
+
+export interface Position {
+	lat: number
+	lng: number
+}
+
+export interface Item {
+	name: string
+	description: string
+	price: number
+	priceUnit: string
+	postalCode: string
+	address: string
+	position: Position
+	images: string[]
+	availableFrom: string
+	availableTo: string
+	categories: string[]
+	filters: Filter[]
+}
+
+export interface Loan {
+	startDate: string
+	endDate: string
+	returned: boolean
+	active: boolean
+	creationDate: string
+	chatId: number
+	loanId: number
+}
