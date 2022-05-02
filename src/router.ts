@@ -19,6 +19,7 @@ import ConfirmEmail from './pages/ConfirmEmail.vue'
 import User from './pages/User.vue'
 import VerifyUser from './pages/VerifyUser.vue'
 import Chat from './pages/community/Chat.vue'
+import FAQ from './pages/FAQ.vue'
 import { store } from './store'
 
 const routes = [
@@ -150,6 +151,13 @@ const routes = [
 	{
 		path: '/confirmEmail/:confirmEmailString',
 		component: ConfirmEmail,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/faq',
+		component: FAQ,
 		meta: {
 			requiresAuth: false,
 		},

@@ -59,6 +59,30 @@ async function uploadPicture() {
 	}
 }
 
+const profilePicture = ref('')
+const getProfilePictureStatus = ref<Status>()
+async function getProfilePicture() {
+	getProfilePictureStatus.value = 'loading'
+	try {
+		const res = await axios.get('/user/getProfilePicture')
+		profilePicture.value = res.data
+		getProfilePictureStatus.value = 'loaded'
+	} catch (error) {
+		getProfilePictureStatus.value = 'error'
+		errorMessage.value = error
+	}
+}
+
+async function sendVerificationEmail() {
+	try {
+		const res = await axios.post('/verify/sendVerificationEmail')
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+getProfilePicture()
+
 function deleteUser() {
 	//TODO: Implement
 }
@@ -97,6 +121,12 @@ function deleteUser() {
 		</form>
 		<BaseBtn @click="logout" color="gray">Logout</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Delete user</BaseBtn>
+		<BaseBtn
+			v-if="!store.state.user.verified"
+			@click="sendVerificationEmail"
+			color="blue"
+			>Send new verification email</BaseBtn
+		>
 		<input
 			type="file"
 			@input="event => uploadImage(event.target)"
