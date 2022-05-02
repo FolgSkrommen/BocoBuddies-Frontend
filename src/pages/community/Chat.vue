@@ -175,7 +175,7 @@ function reRenderChat() {
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<RouterLink class="place-sel" to="/chats"> Back </RouterLink>
-			<h1 class="text-center text-4xl" v-if="chat.chatName">
+			<h1 class="text-center text-4xl" v-if="chat && chat.chatName">
 				{{ chat.chatName }}}
 			</h1>
 			<h1 class="text-center text-4xl" v-else>Chat</h1>
