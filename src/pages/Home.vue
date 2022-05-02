@@ -271,7 +271,7 @@ observer.observe(items[items.length-1])*/
 		<CategoryList
 			v-model="tagAlts"
 			@add-category-event="categoryChosen"
-			data-testid="categories-category-alts"
+			data-testid="categories-tag-alts"
 		></CategoryList>
 	</div>
 	<LoadingIndicator v-if="status === 'loading'" />

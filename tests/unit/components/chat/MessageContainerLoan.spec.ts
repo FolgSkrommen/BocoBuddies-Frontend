@@ -3,53 +3,44 @@ import MessageContainerLoan from '../../../../src/components/chat/MessageContain
 import { describe, expect, it } from 'vitest'
 
 describe('MessageContainerLoan', () => {
-	const chatDataMessage = {
-		userId: 1,
-		messages: [
-			{
-				senderId: 1,
-				message: 'Test message',
-				type: 'CHAT',
-				date: new Date().toString(),
-				receive: true,
-				chatId: '1',
-			},
-		],
-	}
+	const chatDataMessage = [
+		{
+			senderId: 1,
+			message: 'Test message',
+			type: 'CHAT',
+			date: new Date().toString(),
+			receive: true,
+			chatId: '1',
+		},
+	]
 
-	const chatDataRequest = {
-		userId: 1,
-		messages: [
-			{
-				senderId: 1,
-				message: 'Test message',
-				type: 'REQUEST',
-				date: new Date().toString(),
-				receive: true,
-				chatId: '1',
-				start: 'Start',
-				end: 'End',
-				price: 100,
-			},
-		],
-	}
+	const chatDataRequest = [
+		{
+			senderId: 1,
+			message: 'Test message',
+			type: 'REQUEST',
+			date: new Date().toString(),
+			receive: true,
+			chatId: '1',
+			start: 'Start',
+			end: 'End',
+			price: 100,
+		},
+	]
 
-	const chatDataAccept = {
-		userId: 1,
-		messages: [
-			{
-				senderId: 1,
-				message: 'Test message',
-				type: 'ACCEPT',
-				date: new Date().toString(),
-				receive: true,
-				chatId: '1',
-				start: 'Start',
-				end: 'End',
-				price: 100,
-			},
-		],
-	}
+	const chatDataAccept = [
+		{
+			senderId: 1,
+			message: 'Test message',
+			type: 'ACCEPT',
+			date: new Date().toString(),
+			receive: true,
+			chatId: '1',
+			start: 'Start',
+			end: 'End',
+			price: 100,
+		},
+	]
 
 	const chat = {
 		chatId: '1',
@@ -76,7 +67,7 @@ describe('MessageContainerLoan', () => {
 		it('Component exists', () => {
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataMessage,
+					messages: chatDataMessage,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -88,16 +79,14 @@ describe('MessageContainerLoan', () => {
 		it('Chat message is visible', () => {
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataMessage,
+					messages: chatDataMessage,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
 				},
 			})
 			const message = wrapper.find('[data-testid="message"]')
-			expect(wrapper.props().chatData.messages[0].message).toBe(
-				'Test message'
-			)
+			expect(wrapper.props().messages[0].message).toBe('Test message')
 			expect(message.exists()).toBe(true)
 			expect(message.element.textContent).toBe('Test message')
 		})
@@ -105,7 +94,7 @@ describe('MessageContainerLoan', () => {
 			loanStatus = 'PENDING'
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataRequest,
+					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -123,10 +112,10 @@ describe('MessageContainerLoan', () => {
 
 		it('Request message is visible without buttons', () => {
 			loanStatus = 'PENDING'
-			chatDataRequest.messages[0].receive = false
+			chatDataRequest[0].receive = false
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataRequest,
+					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -147,7 +136,7 @@ describe('MessageContainerLoan', () => {
 
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataRequest,
+					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -156,15 +145,14 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="request-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe(' Forespørsel ')
 		})
 
 		it('Request message info is correct send', () => {
 			loanStatus = 'PENDING'
-			chatDataRequest.messages[0].receive = false
+			chatDataRequest[0].receive = false
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataRequest,
+					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -181,7 +169,7 @@ describe('MessageContainerLoan', () => {
 			//chatDataRequest.messages[0].receive = false
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataAccept,
+					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -195,10 +183,10 @@ describe('MessageContainerLoan', () => {
 
 		it('Accept header comes up when accepted send', () => {
 			loanStatus = 'ACCEPTED'
-			chatDataRequest.messages[0].receive = false
+			chatDataRequest[0].receive = false
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataAccept,
+					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -213,10 +201,10 @@ describe('MessageContainerLoan', () => {
 		it('Returned header comes up when accepted receive', () => {
 			loanStatus = 'RETURNED'
 			//chatDataRequest.messages[0].receive = false
-			chatDataAccept.messages[0].type = 'RETURNED'
+			chatDataAccept[0].type = 'RETURNED'
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataAccept,
+					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,
@@ -230,11 +218,11 @@ describe('MessageContainerLoan', () => {
 
 		it('Returned header comes up when accepted send', () => {
 			loanStatus = 'RETURNED'
-			chatDataRequest.messages[0].receive = false
-			chatDataAccept.messages[0].type = 'RETURNED'
+			chatDataRequest[0].receive = false
+			chatDataAccept[0].type = 'RETURNED'
 			const wrapper = mount(MessageContainerLoan, {
 				props: {
-					chatData: chatDataAccept,
+					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
 					item: item,

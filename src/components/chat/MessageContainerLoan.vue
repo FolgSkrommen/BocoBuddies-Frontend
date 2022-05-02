@@ -27,7 +27,7 @@ interface Props {
 	chat: Chat
 	item: Item
 }
-//DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAY BE AT BOTTOM)
+//DO NOT REMOVE NEEDED FOR REFRESHING CHAT (TO ALWAYS BE AT BOTTOM)
 onMounted(() => {
 	var myDiv = document.getElementById('box')
 	if (myDiv) myDiv.scrollTop = myDiv.scrollHeight
