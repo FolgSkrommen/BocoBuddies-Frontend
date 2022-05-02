@@ -4,16 +4,7 @@ import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
 import BasePopup from '../components/base/BasePopup.vue'
 import { ref } from 'vue'
 import axios from 'axios'
-
-export interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
-}
+import { User } from '../store'
 
 interface Props {
 	user: User
@@ -42,7 +33,7 @@ function handleRate() {
 	<BasePopup @exit="emit('exit')">
 		<img
 			class="w-16 h-16 rounded-full place-self-center"
-			:src="user.pictureUrl"
+			:src="user.profilePicture"
 			:alt="user.username"
 		/>
 		<p class="place-self-center font-bold text-lg">

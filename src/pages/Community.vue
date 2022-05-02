@@ -6,21 +6,11 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
-import { store } from '../store'
+import { store, User } from '../store'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()
-
-interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
-}
 
 const users = ref<User[]>()
 
@@ -29,57 +19,7 @@ async function getFriends() {
 	getFriendsStatus.value = 'loading'
 	try {
 		//TODO: Call
-		const friends: User[] = [
-			{
-				userId: 1,
-				firstName: 'John',
-				lastName: 'Doe',
-				username: 'john.doe',
-				rating: 1,
-				pictureUrl: 'https://i.stack.imgur.com/5Kgaq.jpg?s=192&g=1',
-				trusted: true,
-			},
-			{
-				userId: 2,
-				firstName: 'Jane',
-				lastName: 'Doe',
-				username: 'jane.doe',
-				rating: 4.5,
-				pictureUrl:
-					'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
-				trusted: true,
-			},
-			{
-				userId: 3,
-				firstName: 'John',
-				lastName: 'Smith',
-				username: 'john.smith',
-				rating: 3,
-				pictureUrl:
-					'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
-				trusted: true,
-			},
-			{
-				userId: 4,
-				firstName: 'Jane',
-				lastName: 'Smith',
-				username: 'jane.smith',
-				rating: 4.5,
-				pictureUrl:
-					'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
-				trusted: true,
-			},
-			{
-				userId: 5,
-				firstName: 'John',
-				lastName: 'Doe',
-				username: 'john.doe',
-				rating: 4.5,
-				pictureUrl: 'https://randomuser.me/api/portraits/men/3.jpg',
-				trusted: true,
-			},
-		]
-		users.value = friends
+		//users.value = friends
 		getFriendsStatus.value = 'loaded'
 	} catch (error) {
 		errorMessage.value = error
@@ -105,188 +45,7 @@ async function getChats() {
 	}
 	try {
 		//TODO: Call
-		const data: FriendChat[] = [
-			{
-				chatId: 1,
-				chatName: 'Chat 1',
-				members: [
-					{
-						userId: 1,
-						firstName: 'John',
-						lastName: 'Doe',
-						username: 'johndoe',
-						rating: 4.5,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-					{
-						userId: 2,
-						firstName: 'Jane',
-						lastName: 'Janeson',
-						username: 'janey',
-						rating: 3.4,
-						pictureUrl:
-							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
-						trusted: true,
-					},
-					{
-						userId: 3,
-						firstName: 'Johan',
-						lastName: 'Johanson',
-						username: 'johan',
-						rating: 4.2,
-						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
-						trusted: true,
-					},
-				],
-			},
-			{
-				chatId: 2,
-				chatName: 'Chat 2',
-				members: [
-					{
-						userId: 1,
-						firstName: 'John',
-						lastName: 'Doe',
-						username: 'johndoe',
-						rating: 4.5,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-				],
-			},
-			{
-				chatId: 3,
-				chatName: 'Chat 3',
-				members: [
-					{
-						userId: 1,
-						firstName: 'John',
-						lastName: 'Doe',
-						username: 'johndoe',
-						rating: 4.5,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-					{
-						userId: 2,
-						firstName: 'Jane',
-						lastName: 'Janeson',
-						username: 'janey',
-						rating: 3.4,
-						pictureUrl:
-							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
-						trusted: true,
-					},
-				],
-			},
-			{
-				chatId: 4,
-				chatName: 'Chat 4',
-				members: [
-					{
-						userId: 1,
-						firstName: 'John',
-						lastName: 'Doe',
-						username: 'johndoe',
-						rating: 4.5,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-					{
-						userId: 2,
-						firstName: 'Jane',
-						lastName: 'Janeson',
-						username: 'janey',
-						rating: 3.4,
-						pictureUrl:
-							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
-						trusted: true,
-					},
-					{
-						userId: 3,
-						firstName: 'Johan',
-						lastName: 'Johanson',
-						username: 'johan',
-						rating: 4.2,
-						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
-						trusted: true,
-					},
-					{
-						userId: 4,
-						firstName: 'Johanna',
-						lastName: 'Johansson',
-						username: 'johanna',
-						rating: 4.2,
-						pictureUrl:
-							'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
-						trusted: true,
-					},
-				],
-			},
-			{
-				chatId: 5,
-				chatName: 'Chat 5',
-				members: [
-					{
-						userId: 1,
-						firstName: 'John',
-						lastName: 'Doe',
-						username: 'johndoe',
-						rating: 4.5,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-					{
-						userId: 2,
-						firstName: 'Jane',
-						lastName: 'Janeson',
-						username: 'janey',
-						rating: 3.4,
-						pictureUrl:
-							'https://mooreks.co.uk/wp-content/uploads/2015/01/Dinah-Regan-1513-1.jpg',
-						trusted: true,
-					},
-					{
-						userId: 3,
-						firstName: 'Johan',
-						lastName: 'Johanson',
-						username: 'johan',
-						rating: 4.2,
-						pictureUrl:
-							'https://static.generated.photos/vue-static/face-generator/landing/demo-previews/sex.jpg',
-						trusted: true,
-					},
-					{
-						userId: 4,
-						firstName: 'Johanna',
-						lastName: 'Johansson',
-						username: 'johanna',
-						rating: 4.2,
-						pictureUrl:
-							'https://i1.sndcdn.com/artworks-FMJtFdT1qYskUjoP-y0ixOw-t500x500.jpg',
-						trusted: true,
-					},
-					{
-						userId: 5,
-						firstName: 'Johan',
-						lastName: 'Johansson',
-						username: 'johan',
-						rating: 4.2,
-						pictureUrl:
-							'https://randomuser.me/api/portraits/men/3.jpg',
-						trusted: true,
-					},
-				],
-			},
-		]
+		const data: FriendChat[] = []
 
 		//NOTE: User will not be in the list of "members"
 		let newData: FriendChat[] = []
@@ -295,7 +54,7 @@ async function getChats() {
 				chatId,
 				chatName,
 				members: members.filter(
-					({ userId }) => userId !== store.state.user?.id
+					({ id }) => id !== store.state.user?.id
 				),
 			})
 		)
@@ -388,7 +147,7 @@ function add() {
 								<img
 									v-for="user in members.slice(0, 4)"
 									class="rounded-full object-cover"
-									:src="user.pictureUrl"
+									:src="user.profilePicture"
 								/>
 							</div>
 							<div class="grid gap-2">

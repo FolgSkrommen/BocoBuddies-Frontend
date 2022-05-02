@@ -17,6 +17,7 @@ import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
 import ConfirmEmail from './pages/ConfirmEmail.vue'
 import User from './pages/User.vue'
+import VerifyUser from './pages/VerifyUser.vue'
 import { store } from './store'
 
 const routes = [
@@ -46,6 +47,13 @@ const routes = [
 		component: User,
 		meta: {
 			requiresAuth: true,
+		},
+	},
+	{
+		path: '/verify-user/',
+		component: VerifyUser,
+		meta: {
+			requiresAuth: false,
 		},
 	},
 	{

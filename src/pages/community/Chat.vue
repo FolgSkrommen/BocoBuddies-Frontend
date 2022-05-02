@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '../../components/Card.vue'
 import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
-import { store } from '../../store'
+import { store, User } from '../../store'
 import MessageContainer from '../../components/chat/MessageContainer.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
@@ -35,16 +35,6 @@ interface MessageDTO {
 interface Message {
 	userId: string
 	messages: Array<MessageDTO>
-}
-
-interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
 }
 
 type loanStatusCode =

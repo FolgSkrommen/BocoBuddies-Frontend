@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import Card from '../components/Card.vue'
-
-export interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
-}
+import { User } from '../store'
 
 interface Props {
 	user: User
@@ -25,7 +16,7 @@ const { user, color, showRating } = defineProps<Props>()
 		<div class="flex gap-4 w-full justify-between">
 			<img
 				class="w-16 h-16 rounded-full object-cover"
-				:src="user.pictureUrl"
+				:src="user.profilePicture"
 			/>
 			<div class="grid gap-2">
 				<p class="font-bold text-lg">
