@@ -56,14 +56,15 @@ getChats()
 
 <template>
 	<div>
-		<LoadingIndicator v-if="status === 'loading'" />
+		<LoadingIndicator v-if="status === 'loading'" data-testid="loader" />
 		<BaseBanner
 			v-if="status === 'error'"
 			type="error"
 			:message="errorMessage"
+			data-testid="error"
 		/>
 		<div v-if="status === 'loaded'">
-			<h1 class="text-4xl my-4">Samtaler</h1>
+			<h1 class="text-4xl my-4" data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId">

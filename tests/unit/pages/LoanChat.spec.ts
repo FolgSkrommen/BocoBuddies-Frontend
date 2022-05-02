@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
-import Chat from '../../../src/pages/community/Chat.vue'
+import Chat from '../../../src/pages/loan/LoanChat.vue'
 import axios from 'axios'
 
 describe('when loaded', () => {
@@ -84,5 +84,12 @@ describe('when loaded', () => {
 		const wrapper = mount(Chat)
 		expect(axios.get).toHaveBeenCalledTimes(3)
 		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
+	})
+
+	it('Popup is shown when showLoginModal true', async () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.find('[data-testid="base-popup"]').isVisible()).toBe(
+			false
+		)
 	})
 })

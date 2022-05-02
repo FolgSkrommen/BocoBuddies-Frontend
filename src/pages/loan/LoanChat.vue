@@ -219,8 +219,6 @@ async function sendLoanAccept() {
 	}
 }
 
-async function sendLoanCounterOffer() {}
-
 async function sendLoanDecline() {
 	if (!stompClient.value) return
 	if (!chat.value?.chatId) return
@@ -540,7 +538,11 @@ function reRenderChat() {
 			@update:modelValue="handleLoanRequest"
 		/>
 
-		<form class="my-2" v-on:submit.prevent="sendMessage">
+		<form
+			class="my-2"
+			v-on:submit.prevent="sendMessage"
+			data-testid="message-form"
+		>
 			<div class="flex gap-2 content-center min-h-fit">
 				<base-input
 					class="grow"
@@ -590,7 +592,11 @@ function reRenderChat() {
 		</form>
 	</div>
 
-	<BasePopup v-show="showLoginModal" @exit="showLoginModal = false">
+	<BasePopup
+		v-show="showLoginModal"
+		@exit="showLoginModal = false"
+		data-testid="base-popup"
+	>
 		<DatePicker
 			class="place-self-center"
 			v-model="range"
