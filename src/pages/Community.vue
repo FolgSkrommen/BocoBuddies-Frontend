@@ -6,8 +6,10 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import axios from 'axios'
 import FloatingBtn from '../components/base/FloatingBtn.vue'
 import Card from '../components/Card.vue'
-import { store, User } from '../store'
+import { store } from '../store'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
+import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
+import { User } from '../api/schema'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const errorMessage = ref()
@@ -85,14 +87,14 @@ watch(view, () => {
 	}
 })
 const addingUser = ref(false)
-const createGC = ref(false)
+const createChat = ref(false)
 function add() {
 	switch (view.value) {
 		case View.FRIENDS:
 			addingUser.value = true
 			break
 		case View.CHATS:
-			createGC.value = true
+			createChat.value = true
 			break
 	}
 }
@@ -170,6 +172,10 @@ function add() {
 				</div>
 			</div>
 			<FloatingBtn @click="add" />
+			<NewMessagePopup
+				v-show="createChat"
+				@exit="createChat = false"
+			></NewMessagePopup>
 		</div>
 	</div>
 </template>

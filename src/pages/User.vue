@@ -2,11 +2,12 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { store, User } from '../store'
+import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
+import { User } from '../api/schema'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
