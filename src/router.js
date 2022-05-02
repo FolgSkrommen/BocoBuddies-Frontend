@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 //Check out: https://router.vuejs.org/guide/#javascript
 import Home from './pages/Home.vue'
-import Chat from './pages/loan/LoanChat.vue'
+import LoanChat from './pages/loan/LoanChat.vue'
 import Chats from './pages/loan/Chats.vue'
 import Community from './pages/Community.vue'
 import Item from './pages/Item.vue'
@@ -16,6 +16,8 @@ import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
 import ConfirmEmail from './pages/ConfirmEmail.vue'
 import User from './pages/User.vue'
+import VerifyUser from './pages/VerifyUser.vue'
+import Chat from './pages/community/Chat.vue'
 import { store } from './store'
 const routes = [
 	{
@@ -28,6 +30,13 @@ const routes = [
 	{
 		path: '/community',
 		component: Community,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/community/chat/:id',
+		component: Chat,
 		meta: {
 			requiresAuth: true,
 		},
@@ -47,6 +56,13 @@ const routes = [
 		},
 	},
 	{
+		path: '/verify-user/',
+		component: VerifyUser,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
 		path: '/chats',
 		component: Chats,
 		meta: {
@@ -55,7 +71,7 @@ const routes = [
 	},
 	{
 		path: '/chat/:id',
-		component: Chat,
+		component: LoanChat,
 		meta: {
 			requiresAuth: true,
 		},
