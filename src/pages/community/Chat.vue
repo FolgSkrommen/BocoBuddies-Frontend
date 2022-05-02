@@ -7,7 +7,7 @@ import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
-import { User } from '../../api/schema'
+import { MessageDTO, User } from '../../api/schema'
 
 //@ts-ignore
 import SockJS from 'sockjs-client/dist/sockjs'
@@ -22,15 +22,6 @@ interface Chat {
 	chatId: number
 	itemId: number
 	chatName: string
-}
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
 }
 
 interface Message {

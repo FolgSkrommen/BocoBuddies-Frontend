@@ -9,17 +9,8 @@ import {
 	ref,
 } from 'vue'
 import Message from './Message.vue'
-import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-}
+import { MessageDTO } from '../../api/schema'
 
 interface ChatData {
 	userId: string

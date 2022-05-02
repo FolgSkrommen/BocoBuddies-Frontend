@@ -5,16 +5,7 @@ import BaseBtn from '../base/BaseBtn.vue'
 import SearchbarAndButton from '../SearchbarAndButton.vue'
 import LoadingIndicator from '../base/LoadingIndicator.vue'
 import UserCard from '../UserCard.vue'
-
-export interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
-}
+import { User } from '../../api/schema'
 
 const emit = defineEmits(['exit'])
 

@@ -45,6 +45,7 @@ export interface Position {
 }
 
 export interface Item {
+	id: number
 	name: string
 	description: string
 	price: number
@@ -80,11 +81,25 @@ export interface Chat {
 	chatId: number
 	chatName: string
 	itemId?: number
-	members: number[]
+	members?: number[]
 }
 
 export interface FriendChat {
 	chatId: number
 	chatName: string
 	members: User[]
+}
+
+export interface MessageDTO {
+	senderId?: string
+	message?: string
+	type: string
+	date?: string
+	receive: boolean
+	chatId?: string
+	start?: string
+	stop?: string
+	active?: boolean
+	returned?: boolean
+	price?: number
 }

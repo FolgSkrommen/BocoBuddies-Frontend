@@ -1,17 +1,6 @@
 <script setup lang="ts">
+import { Item } from '../api/schema'
 import BaseBtn from '../components/base/BaseBtn.vue'
-
-interface Item {
-	id: number
-	image: string
-	name: string
-	price: number
-	availableFrom: string
-	availableTo: string
-	priceUnit: string
-	address: string
-	postalCode: string
-}
 
 const emit = defineEmits(['load-more-items'])
 const loadMoreItems = () => {
@@ -39,7 +28,7 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 				<div class="flex gap-2">
 					<img
 						class="w-32 rounded-l-lg object-cover"
-						:src="item.image"
+						:src="item.images[0]"
 						:alt="item.name"
 					/>
 					<div class="p-2 grid">

@@ -9,45 +9,12 @@ import {
 	ref,
 } from 'vue'
 import Message from './Message.vue'
-import Receipt from './Receipt.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-	start?: string
-	stop?: string
-	active?: boolean
-	returned?: boolean
-	price?: number
-}
-
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
-}
+import { Chat, Item, MessageDTO } from '../../api/schema'
 
 interface ChatData {
 	userId: string
 	messages: Array<MessageDTO>
-}
-
-interface Item {
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	postalCode: string
-	address: string
-	images: string[]
-	availableFrom: string
-	availableTo: string
-	categories: string[]
 }
 
 type loanStatus =
@@ -57,6 +24,7 @@ type loanStatus =
 	| 'COUNTER'
 	| 'NOT_SENT'
 	| 'UNDEFINED'
+	| 'RETURNED'
 
 interface Props {
 	chatData: ChatData

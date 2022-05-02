@@ -8,23 +8,7 @@ import UserCard from '../UserCard.vue'
 import NewGCPopup from './NewGCPopup.vue'
 import axios from 'axios'
 import { store } from '../../store'
-
-interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	profilePicture?: string
-	trusted: boolean
-}
-
-interface FriendChat {
-	chatId: number
-	chatName: string
-	members: User[]
-}
+import { FriendChat } from '../../api/schema'
 
 interface Response {
 	friendChats: FriendChat[]

@@ -15,29 +15,9 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../../components/base/BasePopup.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
-import { User } from '../../api/schema'
+import { Chat, Item, MessageDTO, User } from '../../api/schema'
 
 const route = useRoute()
-
-interface Chat {
-	chatId: number
-	itemId: number
-	chatName: string
-}
-
-interface MessageDTO {
-	senderId?: string
-	message?: string
-	type: string
-	date?: string
-	receive: boolean
-	chatId?: string
-	start?: string
-	stop?: string
-	active?: boolean
-	returned?: boolean
-	price?: number
-}
 
 interface Message {
 	userId: string
@@ -55,19 +35,6 @@ interface Loan {
 	returned?: boolean
 	creationDate?: string
 	price: number
-}
-
-interface Item {
-	name: string
-	description: string
-	price: number
-	priceUnit: string
-	postalCode: string
-	address: string
-	images: string[]
-	availableFrom: string
-	availableTo: string
-	categories: string[]
 }
 
 type loanStatusCode =
