@@ -120,7 +120,7 @@ const routes = [
 			},
 			{
 				path: 'loans',
-				name: 'myLoans',
+				name: 'Ωs',
 				component: MyLoans,
 			},
 		],

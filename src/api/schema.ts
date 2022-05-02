@@ -3,14 +3,29 @@ export interface User {
 	firstName: string
 	lastName: string
 	username: string
-	email: string
-	address: string
-	postalCode: string
-	phoneNumber: string
+	email?: string
+	address?: string
+	postalCode?: string
+	phoneNumber?: string
 	profilePicture?: string
 	verified: boolean
 	trusted: boolean
 	rating: number
+}
+
+export interface Review {
+	loanId: number
+	isOwner: boolean
+	rating: number
+	description: string
+	date: string
+}
+
+export interface Message {
+	senderId: number
+	chatId: number
+	message: string
+	date: string
 }
 
 export interface Filter {
@@ -18,7 +33,7 @@ export interface Filter {
 	value: string
 }
 
-interface FilterType {
+export interface FilterType {
 	filterTypeId: number
 	filterTypeName: string
 	filterValues: Filter[]

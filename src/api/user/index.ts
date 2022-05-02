@@ -1,18 +1,27 @@
-export interface UserParams {
+import { User } from '../schema'
+
+export type GetUserRequest = {
 	user: number
 }
 
-export interface UserResponse {
-	id: number
+export type GetUserResponse = User
+
+export type DelUserRequest = {
+	password: string
+}
+
+export type DelUserResponse = boolean
+
+export type PutUserRequest = {
 	firstName: string
 	lastName: string
 	username: string
 	email: string
+	password: string
 	address: string
-	postalCode: string
-	phoneNumber: string
+	postalcode: string
+	phonenumber: string
 	profilePicture?: string
-	verified: boolean
-	trusted: boolean
-	rating: number
 }
+
+export type PutUserResponse = User
