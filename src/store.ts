@@ -2,7 +2,6 @@ import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import axios from 'axios'
 import { User } from './api/schema'
-import { UserParams } from './api/user'
 
 export interface State {
 	user?: User
@@ -39,7 +38,7 @@ export const store = createStore<State>({
 		},
 	},
 	actions: {
-		async login({ commit }, data: UserParams) {
+		async login({ commit }, data) {
 			const res = await axios.post('/user/login', data)
 			commit('SET_USER_DATA', res.data)
 		},
