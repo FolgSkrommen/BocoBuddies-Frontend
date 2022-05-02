@@ -8,8 +8,6 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 
-//@ts-ignore
-import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
@@ -81,8 +79,8 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new SockJS('http://localhost:8001/ws')
-	stompClient.value = Stomp.over(socket)
+	socket = new WebSocket('ws://localhost:8001/ws')
+	stompClient.value = Stomp.client(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
 

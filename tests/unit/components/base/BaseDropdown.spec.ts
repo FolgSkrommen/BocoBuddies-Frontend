@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, VueWrapper } from '@vue/test-utils'
 import { describe, expect, it, beforeEach } from 'vitest'
 import BaseDropdown from '../../../../src/components/base/BaseDropdown.vue'
 
 let wrapper: any
 
 beforeEach(async () => {
-	wrapper = shallowMount(BaseDropdown, {
+	wrapper = await shallowMount(BaseDropdown, {
 		props: {
 			modelValue: 1,
 			alternatives: [
@@ -19,7 +19,7 @@ beforeEach(async () => {
 })
 describe('BaseDropdown', () => {
 	describe('when dropdown is initiated', () => {
-		it('exists and modelValue is 1', async () => {
+		it('exists and modelValue is 1', () => {
 			expect(
 				wrapper.find('[data-testid="dropdown-container"]').exists()
 			).toBe(true)

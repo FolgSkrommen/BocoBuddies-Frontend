@@ -14,11 +14,10 @@
 	"dependencies": {
 		"@headlessui/vue": "^1.5.0",
 		"@heroicons/vue": "^1.0.6",
-		"sockjs-client": "^1.6.0",
-		"@types/sockjs-client": "^1.5.1",
 		"@types/google.maps": "^3.48.6",
 		"axios": "^0.26.1",
 		"qs": "^6.10.3",
+		"sockjs-client": "^1.6.0",
 		"v-calendar": "^3.0.0-alpha.8",
 		"vee-validate": "^4.5.11",
 		"vue": "^3.2.25",
