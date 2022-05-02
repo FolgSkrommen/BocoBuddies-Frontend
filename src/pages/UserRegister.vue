@@ -9,6 +9,7 @@ import BaseButton from '../components/base/BaseBtn.vue'
 import { ref, computed } from 'vue'
 //import router from '../router'
 import { useRouter } from 'vue-router'
+import { PostUserRegisterRequest } from '../api/user/register'
 
 const schema = yup.object({
 	username: yup.string().required('Brukernavn er påkrevd'),
@@ -42,20 +43,8 @@ const errorMessage = ref()
 
 const router = useRouter()
 
-interface UserRegisterData {
-	firstName: string
-	lastName: string
-	username: string
-	email: string
-	password: string
-	address: string
-	postalCode: string
-	phoneNumber: string
-	profilePcture?: string
-}
-
 async function submit() {
-	const data: UserRegisterData = {
+	const data: PostUserRegisterRequest = {
 		firstName: firstName.value,
 		lastName: lastName.value,
 		username: username.value,
