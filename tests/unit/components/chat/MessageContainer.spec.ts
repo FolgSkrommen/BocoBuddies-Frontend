@@ -1,5 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import MessageContainer from '@/components/chat/MessageContainer.vue'
+import MessageContainer from '../../../../src/components/chat/MessageContainer.vue'
+import { describe, expect, it } from 'vitest'
 
 describe('MessageContainerLoan', () => {
 	describe('when loaded', () => {

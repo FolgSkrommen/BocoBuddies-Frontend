@@ -7,7 +7,6 @@ import * as yup from 'yup'
 import axios, { AxiosError } from 'axios'
 import BaseButton from '../components/base/BaseBtn.vue'
 import { ref, computed } from 'vue'
-//import router from '../router'
 import { useRouter } from 'vue-router'
 
 const schema = yup.object({
@@ -69,7 +68,7 @@ async function submit() {
 	try {
 		await axios.post('/user/register', data)
 		status.value = 'loaded'
-		router.push('/login')
+		await router.push('/login')
 	} catch (error) {
 		status.value = 'error'
 		errorMessage.value = error

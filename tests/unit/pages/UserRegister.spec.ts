@@ -1,11 +1,8 @@
-import UserRegister from '@/pages/UserRegister'
+import UserRegister from '../../../src/pages/UserRegister.vue'
 import { shallowMount } from '@vue/test-utils'
-import axios from 'axios'
+import { expect, it, describe, vi } from 'vitest'
 
-//return true
-it('is true', () => {
-	expect(true).toBe(true)
-})
+import axios from 'axios'
 
 describe('UserRegister', () => {
 	it('when loaded has the required elements', () => {
@@ -74,9 +71,10 @@ describe('UserRegister', () => {
 
 	// Following lines tell Jest to mock any call to `axios.get`
 	// and to return `mockPostList` instead
-	jest.spyOn(axios, 'post')
 
-	it('register api is called when all fialds are valid and submit is clicked', () => {
+	vi.spyOn(axios, 'post')
+
+	it('register api is called when all fields are valid and submit is clicked', () => {
 		const wrapper = shallowMount(UserRegister)
 
 		wrapper.vm.username = 'username'

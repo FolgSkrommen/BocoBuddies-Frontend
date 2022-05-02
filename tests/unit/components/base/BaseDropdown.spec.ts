@@ -1,10 +1,12 @@
-import { shallowMount, mount } from '@vue/test-utils'
-import BaseDropdown from '@/components/base/BaseDropdown.vue'
+import { shallowMount } from '@vue/test-utils'
+import { describe, expect, it, beforeEach } from 'vitest'
+import BaseDropdown from '../../../../src/components/base/BaseDropdown.vue'
 
-let wrapper
-beforeEach(() => {
+let wrapper: any
+
+beforeEach(async () => {
 	wrapper = shallowMount(BaseDropdown, {
-		propsData: {
+		props: {
 			modelValue: 1,
 			alternatives: [
 				{ id: 1, alt: 'Alt1' },
@@ -16,7 +18,7 @@ beforeEach(() => {
 	return wrapper
 })
 describe('BaseDropdown', () => {
-	describe('when dropwodn is initiated', () => {
+	describe('when dropdown is initiated', () => {
 		it('exists and modelValue is 1', async () => {
 			expect(
 				wrapper.find('[data-testid="dropdown-container"]').exists()
@@ -28,7 +30,6 @@ describe('BaseDropdown', () => {
 		})
 	})
 	describe('when dropdown is clicked', () => {
-		/*
 		it('emits an event and data', async () => {
 			wrapper
 				.findAll('[data-testid="dropdown-option"]')
@@ -46,7 +47,5 @@ describe('BaseDropdown', () => {
 			// assert event payload
 			expect(wrapper.emitted().update[0]).toEqual([3])
 		})
-
-		 */
 	})
 })

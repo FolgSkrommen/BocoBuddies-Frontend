@@ -1,6 +1,7 @@
 import { shallowMount, RouterLinkStub, flushPromises } from '@vue/test-utils'
-import Home from '@/pages/Home.vue'
+import Home from '../../../src/pages/Home.vue'
 import axios from 'axios'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('Home', () => {
 	describe('when entered', () => {
@@ -26,7 +27,7 @@ describe('Home', () => {
 			},
 		]
 
-		jest.spyOn(axios, 'get')
+		vi.spyOn(axios, 'get')
 			.mockResolvedValue(mockCategoryList)
 			.mockResolvedValue(mockItemList)
 
@@ -37,7 +38,7 @@ describe('Home', () => {
 				},
 			}
 			const mockRouter = {
-				push: jest.fn(),
+				push: vi.fn(),
 			}
 			const wrapper = shallowMount(Home, {
 				stubs: { RouterLink: RouterLinkStub },

@@ -8,8 +8,7 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 
-//@ts-ignore
-import SockJS from 'sockjs-client/dist/sockjs'
+import SockJS from 'sockjs-client'
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'

@@ -1,5 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import BaseInput from '@/components/base/BaseInput.vue'
+import { describe, expect, it } from 'vitest'
+
+import BaseInput from '../../../../src/components/base/BaseInput.vue'
 
 describe('BaseInput', () => {
 	describe('when loaded', () => {

@@ -7,8 +7,10 @@ import * as yup from 'yup'
 import BaseButton from '../components/base/BaseBtn.vue'
 import { computed, ref } from 'vue'
 import axios from 'axios'
-import router from '../router'
+import { useRouter } from 'vue-router'
 import BaseBanner from '../components/base/BaseBanner.vue'
+
+let router = useRouter()
 
 const errorMessage = ref()
 
@@ -44,7 +46,7 @@ async function logIn() {
 		await store.dispatch('login', data)
 		console.log('logged in')
 		loginStatus.value = 'loaded'
-		router.push('/')
+		await router.push('/')
 	} catch (error) {
 		loginStatus.value = 'error'
 		errorMessage.value = error
