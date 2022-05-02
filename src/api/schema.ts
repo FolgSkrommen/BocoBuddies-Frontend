@@ -90,3 +90,17 @@ export interface FriendChat {
 	chatName: string
 	members: User[]
 }
+
+export interface MessageDTO {
+	senderId?: string
+	message?: string
+	type: string
+	date?: string
+	receive: boolean
+	chatId?: string
+	start?: string
+	stop?: string
+	active?: boolean
+	returned?: boolean
+	price?: number
+}
