@@ -81,7 +81,7 @@ const decline = () => {
 }
 
 const negotiate = () => {
-	emit('update:modelValue', 'COUNTER')
+	emit('update:modelValue', 'RETURNED')
 }
 
 const { chatData, modelValue, chat, item } = defineProps<Props>()
@@ -154,11 +154,6 @@ function styleType(received: boolean) {
 							data-testid="decline-btn"
 							>Avslå</BaseBtn
 						>
-						<!--
-						<BaseBtn class="grow" @click="negotiate"
-							>Motbud</BaseBtn
-						>
-            -->
 						<BaseBtn
 							class="grow"
 							@click="confirm"
