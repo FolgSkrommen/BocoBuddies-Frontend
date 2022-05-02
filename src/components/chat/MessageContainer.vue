@@ -62,7 +62,18 @@ function styleType(received: boolean) {
 			>
 				<div data-testid="message">{{ message.message }}</div>
 			</Message>
-			<div class="text-black text-lg" data-testid="message-info">
+			<div
+				class="text-black text-lg place-self-end"
+				data-testid="message-info"
+				v-if="message.receive"
+			>
+				{{ message.date }} - {{ message.senderId }}
+			</div>
+			<div
+				class="text-black text-lg place-self-start"
+				data-testid="message-info"
+				v-else
+			>
 				{{ message.date }} - {{ message.senderId }}
 			</div>
 		</div>

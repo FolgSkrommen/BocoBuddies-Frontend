@@ -33,6 +33,12 @@ export interface Filter {
 	value: string
 }
 
+interface FilterType {
+	filterTypeId: number
+	filterTypeName: string
+	filterValues: Filter[]
+}
+
 export interface Position {
 	lat: number
 	lng: number
@@ -51,4 +57,21 @@ export interface Item {
 	availableTo: string
 	categories: string[]
 	filters: Filter[]
+}
+
+export interface Loan {
+	startDate: string
+	endDate: string
+	returned: boolean
+	active: boolean
+	creationDate: string
+	chatId: number
+	loanId: number
+}
+
+export interface Category {
+	categoryName: String
+	categoryId: number
+	superCategoryId?: number
+	filterTypes?: FilterType[]
 }
