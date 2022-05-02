@@ -35,6 +35,7 @@ interface UserLoginData {
 }
 type Status = 'loading' | 'loaded' | 'error'
 const loginStatus = ref<Status>()
+
 async function logIn() {
 	loginStatus.value = 'loading'
 	const data: UserLoginData = {
