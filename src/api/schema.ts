@@ -33,7 +33,7 @@ export interface Filter {
 	value: string
 }
 
-interface FilterType {
+export interface FilterType {
 	filterTypeId: number
 	filterTypeName: string
 	filterValues: Filter[]
