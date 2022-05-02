@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import UserCard, { User } from '../components/UserCard.vue'
+import UserCard from '../components/UserCard.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BasePopup from '../components/base/BasePopup.vue'
 import router from '../router'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { User } from '../api/schema'
 
 const { params } = useRoute()
 let confirmEmailString: string

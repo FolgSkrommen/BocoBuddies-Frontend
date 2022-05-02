@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import Card from '../components/Card.vue'
-import { User } from '../store'
+import { User } from '../api/schema'
 
 interface Props {
 	user: User
