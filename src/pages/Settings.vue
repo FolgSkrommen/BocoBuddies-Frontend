@@ -50,6 +50,11 @@ async function uploadPicture() {
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
+		const res = await axios.get('/user', {
+			params: { user: store.state.user?.id },
+		})
+		await store.dispatch('edit', res.data)
+		await router.push('/user')
 	} catch (error) {
 		uploadProfilePictureStatus.value = 'error'
 		errorMessage.value = error
@@ -89,6 +94,12 @@ function deleteUser() {
 		</form>
 		<BaseBtn @click="logout" color="gray">Logout</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Delete user</BaseBtn>
+		<BaseBtn
+			v-if="!store.state.user.verified"
+			@click="sendVerificationEmail"
+			color="blue"
+			>Send new verification email</BaseBtn
+		>
 		<input
 			type="file"
 			@input="event => uploadImage(event.target)"

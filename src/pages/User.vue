@@ -93,6 +93,7 @@ if (store.state.user && id && id !== store.state.user.userId) {
 				<p>{{ user.phoneNumber }}</p>
 			</div>
 			<BaseBtn to="/settings" class="place-self-center">Edit</BaseBtn>
+			<BaseBtn to="/faq" class="place-self-center">FAQ</BaseBtn>
 		</div>
 	</div>
 </template>

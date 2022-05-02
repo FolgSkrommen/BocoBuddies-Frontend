@@ -51,7 +51,7 @@ function styleType(received: boolean) {
 			<div
 				class="text-black text-lg place-self-end"
 				data-testid="message-info"
-				v-if="message.receive"
+				v-if="!message.receive"
 			>
 				{{ message.date }} - {{ message.senderId }}
 			</div>
