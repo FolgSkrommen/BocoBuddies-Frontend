@@ -14,6 +14,7 @@ export interface User {
 	profilePicture?: string
 	verified: boolean
 	trusted: boolean
+	rating: number
 }
 
 export interface State {

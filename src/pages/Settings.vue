@@ -92,13 +92,12 @@ function deleteUser() {
 		/>
 		<h1 class="text-xl font-bold">Innstillinger</h1>
 		<div class="grid gap-1">
-			<!--
-				<img
-				class="rounded-full min-w-1/2 min-h-1/2"
-				:src="store.state.user.pictureUrl"
-				:alt="store.state.user.email"
+			<img
+				v-if="store.state.user.profilePicture"
+				:src="store.state.user.profilePicture"
+				alt=""
+				class="w-32 h-32 object-cover rounded-full"
 			/>
-			-->
 
 			<div class="flex gap-2 text-lg font-bold">
 				<p>{{ store.state.user.firstName }}</p>

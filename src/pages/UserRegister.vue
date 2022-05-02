@@ -51,7 +51,7 @@ interface UserRegisterData {
 	address: string
 	postalCode: string
 	phoneNumber: string
-	pictureUrl?: string
+	profilePcture?: string
 }
 
 async function submit() {

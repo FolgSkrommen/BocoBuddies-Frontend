@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from '../../components/Card.vue'
 import { computed, onBeforeMount, Ref, ref, watch } from 'vue'
-import { store } from '../../store'
+import { store, User } from '../../store'
 import MessageContainer from '../../components/chat/MessageContainerLoan.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
@@ -66,16 +66,6 @@ interface Item {
 	availableFrom: string
 	availableTo: string
 	categories: string[]
-}
-
-interface User {
-	userId: number
-	firstName: string
-	lastName: string
-	username: string
-	rating: number
-	pictureUrl: string
-	trusted: boolean
 }
 
 type loanStatusCode =
@@ -572,7 +562,7 @@ function reRenderChat() {
 			<div class="flex my-4">
 				<BaseBtn
 					v-if="
-						lender?.userId != store.state.user?.id &&
+						lender?.id != store.state.user?.id &&
 						loanStatus === 'NOT_SENT'
 					"
 					class="grow bg-green-600"
@@ -590,7 +580,7 @@ function reRenderChat() {
 				>
 				<BaseBtn
 					v-if="
-						lender?.userId === store.state.user?.id &&
+						lender?.id === store.state.user?.id &&
 						loanStatus === 'ACCEPTED'
 					"
 					@click="sendLoanReturned"
