@@ -2,7 +2,7 @@
 import Card from '../components/Card.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import ItemInfo, { Item } from '../components/ItemInfo.vue'
+import ItemInfo from '../components/ItemInfo.vue'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
 import { ref } from 'vue'
@@ -11,7 +11,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { User } from '../api/schema'
+import { Item, User } from '../api/schema'
 
 const { params } = useRoute()
 const router = useRouter()

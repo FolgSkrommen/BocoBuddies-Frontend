@@ -2,7 +2,7 @@
 import Card from '../components/Card.vue'
 import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import ItemInfo, { Item } from '../components/ItemInfo.vue'
+import ItemInfo from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
@@ -12,7 +12,7 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { array } from 'yup'
-import { User } from '../api/schema'
+import { Item, User } from '../api/schema'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
