@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import Chat from '../../../src/pages/community/Chat.vue'
 
 describe('when loaded', () => {
 	it('has the required elements', async () => {
-		const wrapper = shallowMount(Chat)
+		const wrapper = mount(Chat)
 		expect(wrapper.find('[data-testid="message-container"]').exists()).toBe(
 			true
 		)

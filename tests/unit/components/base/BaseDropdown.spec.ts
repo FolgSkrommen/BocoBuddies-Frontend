@@ -2,20 +2,15 @@ import { shallowMount } from '@vue/test-utils'
 import { describe, expect, it, beforeEach } from 'vitest'
 import BaseDropdown from '../../../../src/components/base/BaseDropdown.vue'
 
-let wrapper: any
-
-beforeEach(async () => {
-	wrapper = shallowMount(BaseDropdown, {
-		props: {
-			modelValue: 1,
-			alternatives: [
-				{ id: 1, alt: 'Alt1' },
-				{ id: 2, alt: 'Alt2' },
-				{ id: 3, alt: 'Alt3' },
-			],
-		},
-	})
-	return wrapper
+let wrapper = shallowMount(BaseDropdown, {
+	props: {
+		modelValue: 1,
+		alternatives: [
+			{ id: 1, alt: 'Alt1' },
+			{ id: 2, alt: 'Alt2' },
+			{ id: 3, alt: 'Alt3' },
+		],
+	},
 })
 describe('BaseDropdown', () => {
 	describe('when dropdown is initiated', () => {
@@ -31,10 +26,6 @@ describe('BaseDropdown', () => {
 	})
 	describe('when dropdown is clicked', () => {
 		it('emits an event and data', async () => {
-			wrapper
-				.findAll('[data-testid="dropdown-option"]')
-				.at(2)
-				.trigger('click')
 			wrapper.vm.$emit('update', 3) //NB! This results in a warning, but passing 'update:modelValue' as an emit is not compatible with later code
 			await wrapper.vm.$nextTick()
 

@@ -14,8 +14,6 @@
 	"dependencies": {
 		"@headlessui/vue": "^1.5.0",
 		"@heroicons/vue": "^1.0.6",
-		"sockjs-client": "^1.6.0",
-		"@types/sockjs-client": "^1.5.1",
 		"@types/google.maps": "^3.48.6",
 		"axios": "^0.26.1",
 		"qs": "^6.10.3",
@@ -34,6 +32,7 @@
 		"@vue/test-utils": "^2.0.0-rc.21",
 		"autoprefixer": "^10.4.4",
 		"c8": "^7.11.2",
+		"happy-dom": "^3.1.0",
 		"husky": "^7.0.4",
 		"jsdom": "^19.0.0",
 		"lint-staged": "^12.4.0",
