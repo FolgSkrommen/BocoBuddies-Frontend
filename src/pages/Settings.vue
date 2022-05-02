@@ -23,6 +23,7 @@ if (store.state.user) {
 function updateUser() {
 	//TODO: Implement
 }
+
 async function logout() {
 	await store.dispatch('logout')
 	await router.push('/')
@@ -47,17 +48,16 @@ async function uploadPicture() {
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
-
-		await store.dispatch('edit')
-		console.log('edited')
+		const res = await axios.get('/user', {
+			params: { user: store.state.user?.id },
+		})
+		await store.dispatch('edit', res.data)
 		await router.push('/user')
 	} catch (error) {
 		uploadProfilePictureStatus.value = 'error'
 		errorMessage.value = error
 	}
 }
-
-const profilePicture = ref('')
 
 function deleteUser() {
 	//TODO: Implement
