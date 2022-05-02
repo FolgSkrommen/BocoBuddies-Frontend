@@ -5,6 +5,9 @@ import Chat from '../../../src/pages/community/Chat.vue'
 describe('when loaded', () => {
 	it('has the required elements', async () => {
 		const wrapper = mount(Chat)
+		expect(wrapper.find('[data-testid="message-container"]').exists()).toBe(
+			true
+		)
 
 		expect(wrapper.exists()).toBe(true)
 

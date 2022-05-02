@@ -70,7 +70,7 @@ const notValid = computed(
 	/>
 	<div class="text-center">
 		<h1 class="font-bold text-4xl">Logg inn</h1>
-		<form @submit.prevent="logIn()">
+		<form data-testid="login-form" @submit.prevent="logIn()">
 			<BaseInput
 				data-testid="email-input"
 				v-model="email"
@@ -86,12 +86,20 @@ const notValid = computed(
 				:error="errors.password"
 			/>
 
-			<BaseButton class="m-4" type="submit" :disabled="notValid"
+			<BaseButton
+				data-testid="submit-button"
+				class="m-4"
+				type="submit"
+				:disabled="notValid"
 				>Submit</BaseButton
 			>
 		</form>
 
-		<router-link class="text-blue underline" to="/register">
+		<router-link
+			data-testid="register-link"
+			class="text-blue underline"
+			to="/register"
+		>
 			Har du ikke bruker? Klikk her!
 		</router-link>
 	</div>
