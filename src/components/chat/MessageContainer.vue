@@ -61,10 +61,10 @@ function styleType(received: boolean) {
 				:receive="!message.receive"
 			>
 				<div data-testid="message">{{ message.message }}</div>
+				<div class="text-black text-lg" data-testid="message-info">
+					{{ message.date }} - {{ message.senderId }}
+				</div>
 			</Message>
-			<div class="text-black text-lg" data-testid="message-info">
-				{{ message.date }} - {{ message.senderId }}
-			</div>
 		</div>
 	</div>
 </template>
