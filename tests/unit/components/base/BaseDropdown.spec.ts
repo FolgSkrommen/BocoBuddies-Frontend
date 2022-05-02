@@ -27,7 +27,7 @@ describe('BaseDropdown', () => {
 	describe('when dropdown is clicked', () => {
 		it('emits an event and data', async () => {
 			wrapper.vm.$emit('update', 3) //NB! This results in a warning, but passing 'update:modelValue' as an emit is not compatible with later code
-			await wrapper.vm.$nextTick()
+			await wrapper.vm.$forceUpdate()
 
 			// assert event has been emitted
 			expect(wrapper.emitted().update).toBeTruthy()

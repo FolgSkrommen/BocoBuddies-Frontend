@@ -230,7 +230,7 @@ async function registerItem() {
 	}
 	try {
 		await axios.post('/item/register', formData)
-		router.push('/')
+		await router.push('/')
 	} catch (error) {
 		status.value = 'error'
 		errorMessage.value = error
@@ -248,20 +248,29 @@ async function registerItem() {
 		type="error"
 		:message="errorMessage"
 	/>
-	<h1 class="font-bold text-4xl place-self-center">Ny gjenstand</h1>
-	<form class="grid w-full gap-y-6" @submit.prevent="registerItem">
+	<h1 data-testid="header" class="font-bold text-4xl place-self-center">
+		Ny gjenstand
+	</h1>
+	<form
+		data-testid="form"
+		class="grid w-full gap-y-6"
+		@submit.prevent="registerItem"
+	>
 		<BaseInput
+			data-testid="title-input"
 			v-model.lazy="title"
 			label="Tittel *"
 			:error="errors.title"
 		/>
 		<BaseInput
+			data-testid="description-input"
 			v-model.lazy="description"
 			label="Beskrivelse *"
 			:error="errors.description"
 		/>
 		<div class="flex gap-4">
 			<BaseInput
+				data-testid="price-input"
 				class="grow"
 				v-model.lazy="price"
 				type="number"
@@ -273,12 +282,14 @@ async function registerItem() {
 				<BaseLabel model-value="Per" />
 
 				<select
+					data-testid="priceUnit-selector"
 					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
 				>
 					<option
+						data-testid="price-unit-option"
 						v-for="unit in priceUnits"
 						:key="unit.value"
 						:value="unit.value"
@@ -340,6 +351,7 @@ async function registerItem() {
 		<div class="grid place-items-center">
 			<p class="font-bold text-lg">Available time</p>
 			<DatePicker
+				data-testid="date-picker"
 				class="place-self-center"
 				v-model="range"
 				mode="dateTime"
@@ -353,6 +365,7 @@ async function registerItem() {
 
 			<input
 				type="file"
+				data-testid="image-input"
 				@input="event => uploadImage(event.target)"
 				multiple
 			/>
@@ -364,15 +377,22 @@ async function registerItem() {
 			/>
 		</div>
 
-		<BaseInput v-model="address" label="Adresse" :error="errors.address" />
+		<BaseInput
+			data-testid="address-input"
+			v-model="address"
+			label="Adresse"
+			:error="errors.address"
+		/>
 
 		<BaseInput
+			data-testid="postalCode-input"
 			v-model="postalCode"
 			label="Postnummer *"
 			:error="errors.postalCode"
 		/>
 
 		<BaseButton
+			data-testid="submit-button"
 			class="m-4 place-self-center"
 			type="submit"
 			:disabled="notValid"
