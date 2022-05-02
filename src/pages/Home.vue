@@ -11,7 +11,6 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
 import BasePopup from '../components/base/BasePopup.vue'
-import VueCookies from 'vue-cookies'
 import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
 
