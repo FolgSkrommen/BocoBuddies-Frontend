@@ -1,5 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import MessageContainerLoan from '@/components/chat/MessageContainerLoan.vue'
+import MessageContainerLoan from '../../../../src/components/chat/MessageContainerLoan.vue'
+import { describe, expect, it } from 'vitest'
 
 describe('MessageContainerLoan', () => {
 	const chatDataMessage = {

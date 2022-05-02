@@ -1,5 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import Message from '@/components/chat/Message.vue'
+import Message from '../../../../src/components/chat/Message.vue'
+import { describe, expect, it } from 'vitest'
 
 describe('Message', () => {
 	describe('when loaded', () => {

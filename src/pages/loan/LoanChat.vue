@@ -7,7 +7,6 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 
-//@ts-ignore
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
@@ -170,8 +169,6 @@ async function sendLoanAccept() {
 		//TODO add error
 	}
 }
-
-async function sendLoanCounterOffer() {}
 
 async function sendLoanDecline() {
 	if (!stompClient.value || !chat.value || !store.state.user) return
@@ -485,7 +482,11 @@ function reRenderChat() {
 			@update:modelValue="handleLoanRequest"
 		/>
 
-		<form class="my-2" v-on:submit.prevent="sendMessage">
+		<form
+			class="my-2"
+			v-on:submit.prevent="sendMessage"
+			data-testid="message-form"
+		>
 			<div class="flex gap-2 content-center min-h-fit">
 				<base-input
 					class="grow"
@@ -535,7 +536,11 @@ function reRenderChat() {
 		</form>
 	</div>
 
-	<BasePopup v-show="showLoginModal" @exit="showLoginModal = false">
+	<BasePopup
+		v-show="showLoginModal"
+		@exit="showLoginModal = false"
+		data-testid="base-popup"
+	>
 		<DatePicker
 			class="place-self-center"
 			v-model="range"
