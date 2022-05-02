@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import BasePopup from '../components/base/BasePopup.vue'
-import SearchbarAndButton from './SearchbarAndButton.vue'
-import UserCard from '../components/UserCard.vue'
-import BaseBtn from './base/BaseBtn.vue'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import BasePopup from '../base/BasePopup.vue'
+import BaseBtn from '../base/BaseBtn.vue'
+import SearchbarAndButton from '../SearchbarAndButton.vue'
+import LoadingIndicator from '../base/LoadingIndicator.vue'
+import UserCard from '../UserCard.vue'
 
 export interface User {
 	userId: number
@@ -42,8 +42,7 @@ function loadMoreFriends() {
 
 <template>
 	<BasePopup @exit="emit('exit')">
-		<h1 class="text-2xl font-bold">Ny melding til</h1>
-		<BaseBtn @click="gcToggle = true">Gruppechat</BaseBtn>
+		<h1 class="text-2xl font-bold">Ny gruppechat med</h1>
 		<!--GCPopup component here-->
 		<SearchbarAndButton
 			v-model="searchString"
