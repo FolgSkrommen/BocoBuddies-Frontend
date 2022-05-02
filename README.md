@@ -17,6 +17,6 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 
 ## Running tests
 
--   clone project
+-   clone the project
 -   open the project in a terminal 
 -   run the command 'npm run test'
