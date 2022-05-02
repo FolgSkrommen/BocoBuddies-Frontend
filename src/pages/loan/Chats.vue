@@ -36,8 +36,9 @@ const errorMessage = ref()
 async function getChats() {
 	status.value = 'loading'
 	try {
-		const res = await axios.get('/chat/getByUser')
-		chats.value = res.data
+		const res = await axios.get('/chat/getByUser/market')
+		chats.value = res.data.chats
+		console.log(res.data)
 		chats.value.forEach(chat => {
 			axios
 				.get('/item', { params: { id: chat.itemId } })
