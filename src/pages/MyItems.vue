@@ -227,13 +227,16 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<div v-if="!store.getters.loggedIn">
-		<p>Du må være logget inn for å se denne siden</p>
-	</div>
 	<div v-if="store.getters.loggedIn">
 		<div class="grid gap-4">
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search-and-reset="searchAndResetItems"
+			></SearchbarAndButton>
+
 			<div class="flex gap-4">
 				<button
+					class="flex-1"
 					:class="
 						stateTag === tag
 							? 'bg-blue-500 text-white'
@@ -245,23 +248,20 @@ function loadMoreItems() {
 					{{ tag }}
 				</button>
 			</div>
-			<SearchbarAndButton
-				v-model="searchWord"
-				@search-and-reset="searchAndResetItems"
-			></SearchbarAndButton>
 		</div>
 
-		<div class="py-10">
+		<div class="mt-3">
 			<!--Tag input component-->
-			<h2>Kategorier</h2>
 			<CategoryList
+				v-if="chosenCategories.length > 0"
 				v-model="chosenCategories"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
 				data-testid="categories-tag-chosen"
-				class="border-solid bg-slate-500 rounded"
+				class="border-solid bg-slate-300 rounded p-1"
 			></CategoryList>
 			<CategoryList
+				class="mt-1"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
@@ -269,16 +269,19 @@ function loadMoreItems() {
 		</div>
 		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
+			v-if="items.length > 0"
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
 			redirect="my-item"
 			@load-more-items="loadMoreItems"
-		>
-		</ItemList>
+		/>
 
-		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
-		</SortDropdown>
+		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
+			Du har ingen gjenstander
+		</h3>
+
+		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen" />
 
 		<FloatingBtn to="/item/register" />
 	</div>

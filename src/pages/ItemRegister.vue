@@ -21,8 +21,8 @@ import { store } from '../store'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
-	description: yup.string().required('Fornavn er påkrevd'),
-	price: yup.string().required('Etternavn er påkrevd'),
+	description: yup.string().required('Beskrivelse er påkrevd'),
+	price: yup.string().required('Pris er påkrevd'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
 })
@@ -208,12 +208,12 @@ async function registerItem() {
 </script>
 
 <template>
-	<h1 data-testid="header">Ny gjenstand</h1>
 	<form
 		data-testid="form"
 		class="grid w-full gap-y-6"
 		@submit.prevent="registerItem"
 	>
+		<h1 data-testid="header">Ny gjenstand</h1>
 		<BaseInput
 			data-testid="title-input"
 			v-model.lazy="title"
@@ -241,7 +241,7 @@ async function registerItem() {
 
 				<select
 					data-testid="priceUnit-selector"
-					class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
@@ -265,7 +265,7 @@ async function registerItem() {
 				v-for="(categories, index) in categoryChoices"
 				v-if="categoryChoices"
 				:key="index"
-				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 				@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"

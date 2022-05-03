@@ -6,7 +6,11 @@ import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
 import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
+import {
+	ChevronRightIcon,
+	ChevronLeftIcon,
+	EmojiSadIcon,
+} from '@heroicons/vue/outline'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
@@ -257,7 +261,6 @@ observer.observe(items[items.length-1])*/
 
 		<div class="flex flex-col gap-2 pb-3">
 			<!--Tag input component-->
-			<h2>Kategorier</h2>
 			<CategoryList
 				v-model="chosenCategories"
 				v-if="chosenCategories.length > 0"
@@ -276,6 +279,7 @@ observer.observe(items[items.length-1])*/
 
 	<LoadingIndicator v-if="status === 'loading'" />
 	<ItemList
+		v-if="items.length > 0"
 		:items="items"
 		:searchHits="searchHits"
 		:renderLoadButton="renderLoadButton"
@@ -284,10 +288,11 @@ observer.observe(items[items.length-1])*/
 		data-testid="item-list"
 	/>
 
+	<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">Ingen resultater</h2>
+
 	<SortDropdown
 		:sortAlts="sortAlts"
 		v-model.number="sortChosen"
 		data-testid="sort-dropdown"
-	>
-	</SortDropdown>
+	/>
 </template>

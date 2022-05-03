@@ -92,13 +92,13 @@ if (store.state.user && id && id !== store.state.user.userId) {
 
 			<!-- User name and lastname-->
 			<div>
-				<p class="text-4xl font-bold">
+				<h2 class="font-bold">
 					{{ user.firstName }} {{ user.lastName }}
-				</p>
+				</h2>
 
 				<!-- User rating -->
 				<div
-					class="flex items-center border w-fit p-1 border-gray-500 rounded"
+					class="flex items-center border w-fit p-1 bg-white border-gray-500 rounded"
 				>
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p
@@ -116,8 +116,8 @@ if (store.state.user && id && id !== store.state.user.userId) {
 			class="grid gap-4"
 		>
 			<div class="flex gap-2">
-				<BaseBtn to="/settings">Instillinger</BaseBtn>
-				<BaseBtn to="/faq">FAQ</BaseBtn>
+				<BaseBtn class="flex-1" to="/settings">Instillinger</BaseBtn>
+				<BaseBtn class="flex-1" to="/faq">FAQ</BaseBtn>
 			</div>
 
 			<div>
