@@ -10,6 +10,8 @@ import { store } from '../store'
 import { FriendChat, User } from '../api/schema'
 import AddFriendPopup from '../components/community-popups/AddFriendPopup.vue'
 import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
+import { Payload } from 'vuex'
+import ChatCard from '../components/ChatCard.vue'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 
@@ -24,7 +26,6 @@ async function getFriends() {
 			params: { userId: store.state.user.userId },
 		})
 		users.value = res.data
-		console.log(users.value)
 		getFriendsStatus.value = 'loaded'
 	} catch (error: any) {
 		store.dispatch('error', error.message)
@@ -64,6 +65,11 @@ async function getChats() {
 		store.dispatch('error', error.message)
 		getChatsStatus.value = 'error'
 	}
+}
+function navigateToUser(e: Event) {
+	console.log(e)
+
+	//router.push('/user/'+e)
 }
 
 enum View {
@@ -109,13 +115,18 @@ function add() {
 				"
 				@click="view = tag"
 			>
-				{{ tag }}
+				{{ tag === 'Friends' ? 'Venner' : 'Samtaler' }}
 			</button>
 		</div>
 		<div v-if="view === 'Friends'">
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
-				<UserCard v-for="user in users" :user="user" />
+				<UserCard
+					v-for="user in users"
+					:user="user"
+					:to="'/user/' + user.userId"
+					@click="navigateToUser"
+				/>
 			</div>
 			<FloatingBtn @click="add" />
 			<AddFriendPopup
@@ -126,35 +137,11 @@ function add() {
 		<div v-if="view === 'Chats'">
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
-				<div v-for="{ chatId, chatName, members } in friendChats">
-					<router-link :to="'/community/chat/' + chatId">
-						<Card>
-							<div class="flex gap-4 w-full">
-								<div
-									class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
-								>
-									<img
-										v-for="user in members.slice(0, 4)"
-										class="rounded-full object-cover"
-										:src="user.profilePicture"
-									/>
-								</div>
-								<div class="grid gap-2">
-									<p class="font-bold text-lg">
-										{{ chatName }}
-									</p>
-									<div class="flex gap-2 flex-wrap">
-										<p
-											v-for="member in members"
-											class="text-slate-500"
-										>
-											{{ member.firstName }}
-										</p>
-									</div>
-								</div>
-							</div>
-						</Card>
-					</router-link>
+				<div v-for="friendChat in friendChats">
+					<ChatCard
+						:to="'/community/chat/' + friendChat.chatId"
+						:friendChat="friendChat"
+					></ChatCard>
 				</div>
 			</div>
 			<FloatingBtn @click="add" />
