@@ -104,7 +104,7 @@ async function sendLoanRequestWS() {
 		itemId: chat.value.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
-		endTime: range.value.end.toISOString(),
+		end: range.value.end.toISOString(),
 		price: price.value,
 		active: false,
 		returned: false,
@@ -142,7 +142,7 @@ async function sendLoanAccept() {
 		active: true,
 		chatId: loan.value?.chatId,
 		creationDate: new Date().toISOString(),
-		endTime: new Date().toISOString(),
+		end: new Date().toISOString(),
 		start: new Date().toISOString(),
 		loanId: loan.value.loanId,
 		returned: loanStatus.value === 'RETURNED',
@@ -181,7 +181,7 @@ async function sendLoanDecline() {
 			active: false,
 			returned: false,
 			start: new Date().toISOString(),
-			endTime: new Date().toISOString(),
+			end: new Date().toISOString(),
 			price: 0,
 			loaner: store.state.user.userId,
 			creationDate: new Date().toISOString(),
@@ -265,14 +265,14 @@ function onRequestReceived(payload: any) {
 			loan.value.loanId = request.loanId
 			loan.value.loaner = request.loaner
 			loan.value.start = request.start
-			loan.value.endTime = request.end
+			loan.value.end = request.end
 			loan.value.returned = request.returned
 			loan.value.active = request.active
 		} else if (chat.value.chatId) {
 			loan.value = {
 				chatId: chat.value.chatId,
 				start: request.start,
-				endTime: request.end,
+				end: request.end,
 				loanId: request.loanId,
 				active: request.active,
 				returned: request.returned,
@@ -364,7 +364,7 @@ onBeforeMount(async () => {
 			loan.value = {
 				chatId: chat.value.chatId,
 				start: res.data.loan.startDate,
-				endTime: res.data.loan.endDate,
+				end: res.data.loan.endDate,
 				loanId: res.data.loan.loanId,
 				active: res.data.loan.active,
 				returned: res.data.loan.returned,

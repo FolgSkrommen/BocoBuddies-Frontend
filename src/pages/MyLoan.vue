@@ -31,7 +31,7 @@ const range = computed(() => {
 	if (!loan.value) return
 	return {
 		start: new Date(loan.value.start),
-		end: new Date(loan.value.endTime),
+		end: new Date(loan.value.end),
 	}
 })
 

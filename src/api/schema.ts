@@ -60,7 +60,7 @@ export interface Loan {
 	chatId: number
 	loaner: number
 	start: string
-	endTime: string
+	end: string
 	active: boolean
 	returned: boolean
 	creationDate: string
