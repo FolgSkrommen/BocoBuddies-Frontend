@@ -5,9 +5,9 @@ import { useRoute } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import { CheckCircleIcon } from '@heroicons/vue/solid'
+import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
-import { User } from '../api/schema'
+import { User, Review } from '../api/schema'
 import { GetUserRequest } from '../api/user'
 
 const { params } = useRoute()
@@ -17,10 +17,30 @@ const errorMessage = ref()
 
 const user = ref<User>()
 
+const reviews = ref<Review[]>()
+
+async function getReviews() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: user.value?.userId,
+				isReciever: true,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		reviews.value = data
+	} catch (error) {
+		getUserStatus.value = 'error'
+		errorMessage.value = error
+	}
+}
+
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
+
 async function getUser() {
 	getUserStatus.value = 'loading'
+
 	try {
 		const params: GetUserRequest = {
 			user: id,
@@ -43,6 +63,7 @@ if (store.state.user && id && id !== store.state.user.userId) {
 	getUserStatus.value = 'loaded'
 }
 </script>
+
 <template>
 	<BaseBanner
 		v-if="getUserStatus === 'error'"
@@ -54,28 +75,58 @@ if (store.state.user && id && id !== store.state.user.userId) {
 		v-if="getUserStatus === 'loaded' && user"
 		class="grid gap-4 place-items-center text-center"
 	>
-		<img
-			v-if="user.profilePicture"
-			:src="user.profilePicture"
-			alt=""
-			class="w-32 h-32 object-cover rounded-full"
-		/>
-		<span
-			v-else
-			class="w-32 h-32 object-cover rounded-full bg-slate-900 text-white grid place-items-center text-4xl"
-		>
-			{{ user.username[0].toUpperCase() }}
-			{{ user.lastName[0].toUpperCase() }}
-		</span>
-		<p class="text-4xl font-bold">
-			{{ user.firstName }} {{ user.lastName }}
-		</p>
-		<p>@{{ user.username }}</p>
-		<CheckCircleIcon class="h-8 w-8 text-blue" v-if="user.trusted" />
+		<!--Username at top-->
+		<div class="flex items-center text-2xl font-bold">
+			@{{ user.username }}
+			<CheckCircleIcon class="h-5 w-5 text-blue" />
+		</div>
+
+		<div class="flex gap-4">
+			<!-- Profile picture or initals-->
+			<img
+				v-if="user.profilePicture"
+				:src="user.profilePicture"
+				alt=""
+				class="w-32 h-32 object-cover rounded-full"
+			/>
+			<span
+				v-else
+				class="w-32 h-32 object-cover rounded-full bg-slate-900 text-white grid place-items-center text-4xl"
+			>
+				{{ user.username[0].toUpperCase() }}
+				{{ user.lastName[0].toUpperCase() }}
+			</span>
+
+			<!-- User name and lastname-->
+			<div>
+				<p class="text-4xl font-bold">
+					{{ user.firstName }} {{ user.lastName }}
+				</p>
+
+				<!-- User rating -->
+				<div
+					class="flex items-center border w-fit p-1 border-gray-500 rounded"
+				>
+					<StarIcon class="w-5 h-5 text-yellow-500" />
+					<p
+						class="ml-2 text-sm font-bold text-gray-900 dark:text-white"
+					>
+						{{ user.rating }}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!--Seeing your own profile page-->
 		<div
 			v-if="store.state.user && user.userId === store.state.user.userId"
 			class="grid gap-4"
 		>
+			<div class="flex gap-2">
+				<BaseBtn to="/settings" class="grow">Instillinger</BaseBtn>
+				<BaseBtn to="/faq" class="grow">FAQ</BaseBtn>
+			</div>
+
 			<div>
 				<p class="font-bold">E-post</p>
 				<p>{{ user.email }}</p>
@@ -92,8 +143,19 @@ if (store.state.user && id && id !== store.state.user.userId) {
 				<p class="font-bold">Telefonnummer</p>
 				<p>{{ user.phoneNumber }}</p>
 			</div>
-			<BaseBtn to="/settings" class="place-self-center">Edit</BaseBtn>
-			<BaseBtn to="/faq" class="place-self-center">FAQ</BaseBtn>
+		</div>
+
+		<!--Seeing another users profile page-->
+		<div v-else class="w-full">
+			<div class="flex gap-2 justify-items-stretch">
+				<BaseBtn to="/settings" class="">Gjenstander</BaseBtn>
+				<BaseBtn to="/faq" class="" @click="getReviews"
+					>Tilbakemeldinger</BaseBtn
+				>
+				<BaseBtn to="/faq" class="">Buddies</BaseBtn>
+			</div>
+
+			<div v-for="review in reviews">{{ review.description }}</div>
 		</div>
 	</div>
 </template>
