@@ -18,8 +18,7 @@ import BasePopup from '../components/base/BasePopup.vue'
 import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
 import { store } from '../store'
-
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { GetItemSearchRequest } from '../api/item/search'
 
 //Variables
 let sortChosen = ref(0)
@@ -115,14 +114,15 @@ async function search() {
 		chosenCategoriesIds.push(tag.categoryId)
 	})
 	try {
+		const params: GetItemSearchRequest = {
+			categories: chosenCategoriesIds.slice(-1),
+			sort: sortChosenString,
+			amount: amountPerPage,
+			offset: currentPage.value,
+			useAuth: false,
+		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
-			params: {
-				categories: chosenCategoriesIds[chosenCategoriesIds.length - 1],
-				sort: sortChosenString,
-				amount: amountPerPage,
-				offset: currentPage.value,
-				useAuth: false,
-			},
+			params,
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
 			},

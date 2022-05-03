@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import NavBar from './components/NavBar.vue'
 import BaseBanner from './components/base/BaseBanner.vue'
 import { store } from './store'

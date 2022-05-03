@@ -19,6 +19,7 @@ async function getChats() {
 		const res = await axios.get('/chat/getByUser/market')
 		const data = res.data as GetChatByUserMarketResponse
 		chats.value = data
+
 		chats.value.forEach(chat => {
 			axios
 				.get('/item', { params: { itemId: chat.item?.itemId } })

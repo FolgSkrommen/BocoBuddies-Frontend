@@ -20,6 +20,7 @@ type loanStatus =
 	| 'NOT_SENT'
 	| 'UNDEFINED'
 	| 'RETURNED'
+	| 'REVIEWED'
 
 interface Props {
 	messages: MessageInterface[]
@@ -43,11 +44,13 @@ const decline = () => {
 	emit('update:modelValue', 'DECLINED')
 }
 
-const negotiate = () => {
-	emit('update:modelValue', 'RETURNED')
-}
-
 const { messages, modelValue, chat, item } = defineProps<Props>()
+
+function getProperDateTime(dateTime: string) {
+	let time = dateTime.substring(11, 16)
+	let date = dateTime.substring(0, 10)
+	return date + ' - ' + time
+}
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -102,8 +105,8 @@ function styleType(received: boolean) {
 						Forespørsel
 					</h1>
 
-					<h3>Fra: {{ message.start }}</h3>
-					<h3>Til: {{ message.stop }}</h3>
+					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
+					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
 					<h3>Price: {{ message.price }}kr / {{ item.priceUnit }}</h3>
 
 					<div

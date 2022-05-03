@@ -40,7 +40,7 @@ async function getItem() {
 	status.value = 'loading'
 	try {
 		const params: GetItemRequest = {
-			id,
+			itemId: id,
 		}
 		const res = await axios.get('/item', {
 			params,

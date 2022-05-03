@@ -18,6 +18,7 @@ import BaseLabel from '../components/base/BaseLabel.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Category, FilterType } from '../api/schema'
 import { store } from '../store'
+import { PostItemRegisterRequest } from '../api/item/register'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -110,15 +111,15 @@ async function updateCategories(categoryId: number, index: number) {
 
 /* Filter */
 
-let chosenFilters: Ref<number[]> = ref([])
+let chosenFilters = ref<number[]>([])
 function updateFilters(typeId: number, index: number) {
 	chosenFilters.value[index] = typeId
 	console.log(chosenFilters.value)
 }
 
 /* Images*/
-let imagePreview: Ref<string[]> = ref([])
-let imageFiles: Ref<File[]> = ref([])
+const imagePreview = ref<string[]>([])
+const imageFiles = ref<File[]>([])
 function uploadImage(input: any) {
 	let count = input.files.length
 	let index = 0
@@ -191,13 +192,17 @@ async function registerItem() {
 	chosenFilters.value.forEach(number => {
 		formData.append('filterIdList', number.toString())
 	})
-	if (!imageFiles.value[0]) {
+	if (!imageFiles.value.length) {
+		//TODO: Filter funker ikke, fiks dette, muligens endre fra formdata til interface
 		formData.append('images', new Blob())
 		console.log('Bilde listen er tom')
 	} else {
-		formData.append('images', imageFiles.value[0])
+		for (let i = 0; i < imageFiles.value.length; i++) {
+			formData.append('images', imageFiles.value[i])
+		}
 	}
 	try {
+		console.log(formData.getAll('images'))
 		await axios.post('/item/register', formData)
 		await router.push('/')
 	} catch (error: any) {

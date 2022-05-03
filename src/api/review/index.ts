@@ -9,6 +9,12 @@ export type GetReviewResponse = Review
 /**
  * TOKEN
  */
-export type PostReviewRequest = Review
+export type PostReviewRequest = {
+	loanId: number
+	isOwner: boolean
+	rating: number
+	description: string
+	date: string
+}
 
 export type PostReviewResponse = undefined
