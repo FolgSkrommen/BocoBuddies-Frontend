@@ -19,6 +19,7 @@ import {
 } from '../../api/loan'
 import { GetChatResponse } from '../../api/chat'
 import { GetMessageResponse } from '../../api/message'
+import BaseLabel from '../../components/base/BaseLabel.vue'
 
 const route = useRoute()
 
@@ -67,7 +68,7 @@ function onError(err: any) {
 
 async function sendMessage(event: any) {
 	if (!stompClient.value || !store.state.user || !chat.value) return
-
+	console.log(!stompClient.value || !store.state.user || !chat.value)
 	let chatMessage: Message = {
 		senderId: store.state.user.userId,
 		message: currentMessage.value,
@@ -77,7 +78,7 @@ async function sendMessage(event: any) {
 		chatId: chat.value.chatId,
 	}
 	try {
-		//const res = await axios.post("/message", chatMessage)
+		const data = axios.post('/message', chatMessage)
 
 		stompClient.value.send(
 			'/app/chat/sendMessage',
@@ -95,10 +96,9 @@ async function sendMessage(event: any) {
  * When sending request via WS
  */
 async function sendLoanRequestWS() {
-	console.log(range.value)
 	if (!stompClient.value) return
+	console.log(!store.state.user || !chat.value?.chatId || !range.value)
 	if (!store.state.user || !chat.value?.chatId || !range.value) return
-
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
 		itemId: chat.value.itemId,
@@ -416,8 +416,12 @@ function sendLoanRequest() {
 	showLoginModal.value = !showLoginModal.value
 	if (!range.value) return
 	//TODO: add checks if from date is later than to etc
-	sendLoanRequestWS()
-	loanPending.value = true
+	try {
+		sendLoanRequestWS()
+		loanPending.value = true
+	} catch (err) {
+		//TODO
+	}
 }
 function handleLoanRequest() {
 	if (loanStatus.value === 'ACCEPTED') {
@@ -507,10 +511,10 @@ function reRenderChat() {
 				<BaseBtn
 					v-if="
 						lender?.userId != store.state.user?.userId &&
-						loanStatus === 'PENDING'
+						loanStatus === 'NOT_SENT'
 					"
 					class="grow bg-green-600"
-					:disabled="loanPending || loanStatus === 'PENDING'"
+					:disabled="loanPending || loanStatus !== 'NOT_SENT'"
 					data-testid="rent-button"
 					@click="showLoginModal = true"
 					>Forespør</BaseBtn
@@ -549,6 +553,7 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 		/>
+		<BaseLabel modelValue="Pris"></BaseLabel>
 		<BaseInput v-model="price"></BaseInput>
 		<div class="flex justify-between">
 			<BaseBtn @click="showLoginModal = false" color="gray"
