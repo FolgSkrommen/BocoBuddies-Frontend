@@ -282,7 +282,7 @@ function loadMoreItems() {
 
 		<div class="py-10">
 			<!--Tag input component-->
-			<h2 class="text-2xl font-semibold">Kategorier</h2>
+			<h2>Kategorier</h2>
 			<CategoryList
 				v-model="chosenCategories"
 				:removable="true"

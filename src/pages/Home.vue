@@ -259,7 +259,7 @@ observer.observe(items[items.length-1])*/
 
 	<div class="flex flex-col gap-2 py-10">
 		<!--Tag input component-->
-		<h2 class="text-2xl font-semibold">Kategorier</h2>
+		<h2>Kategorier</h2>
 		<CategoryList
 			v-model="chosenCategories"
 			v-if="chosenCategories.length > 0"

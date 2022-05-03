@@ -62,7 +62,7 @@ getChats()
 								<h1 class="text-4xl">
 									{{ chat.item?.name }}
 								</h1>
-								<h2 class="text-xl">
+								<h2>
 									{{ chat.item?.description }}
 								</h2>
 							</div>
