@@ -18,6 +18,7 @@ import BaseLabel from '../components/base/BaseLabel.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Category, FilterType } from '../api/schema'
 import { store } from '../store'
+import { PostItemRegisterRequest } from '../api/item/register'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
