@@ -153,6 +153,7 @@ async function search() {
 				userId: store.state.user.userId,
 				loan: false,
 				active: stateTag.value === State.ACTIVE,
+				useAuth: false,
 			},
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
