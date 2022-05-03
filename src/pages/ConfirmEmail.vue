@@ -5,6 +5,7 @@ import router from '../router'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { ref } from 'vue'
+import { store } from '../store'
 
 const { params } = useRoute()
 let confirmEmailString: string
@@ -26,6 +27,9 @@ async function verify() {
 	} catch (error) {}
 	console.log(res)
 	router.push('/')
+	await store.dispatch('logout')
+	await router.push('/')
+	console.log('logging out')
 }
 </script>
 
@@ -36,6 +40,7 @@ async function verify() {
 	<div v-else>
 		<h2>Hei!</h2>
 		<h3>Klikk knappen for å verifisere deg selv!</h3>
+		<h3>Vennligst log inn igjen etter at du har verifisert deg selv</h3>
 		<BaseBtn @click="verify">Verifiser!</BaseBtn>
 	</div>
 	<BasePopup v-show="fail" @exit="fail = false"

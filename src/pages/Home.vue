@@ -17,6 +17,7 @@ import AddFriendPopup from '../components/AddFriendPopup.vue'
 import BasePopup from '../components/base/BasePopup.vue'
 import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
+import { store } from '../store'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -54,8 +55,8 @@ watch(sortChosen, () => {
 //Functions
 function isAnItem(obj: any): obj is Item {
 	return (
-		'id' in obj &&
-		'image' in obj &&
+		'itemId' in obj &&
+		'images' in obj &&
 		'name' in obj &&
 		'price' in obj &&
 		'availableFrom' in obj &&
@@ -68,7 +69,6 @@ function isAnItem(obj: any): obj is Item {
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -76,9 +76,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 	}
 }
 getMainCategories()
@@ -136,6 +136,7 @@ async function search() {
 				sort: sortChosenString,
 				amount: amountPerPage,
 				offset: currentPage.value,
+				useAuth: false,
 			},
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
@@ -145,11 +146,12 @@ async function search() {
 		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
 			items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
+		console.log(data)
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 		items.value = []
 	}
 }
@@ -169,9 +171,8 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
-		status.value = 'error'
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -197,9 +198,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -209,7 +210,7 @@ function loadMoreItems() {
 		search()
 	}
 }
-/* const seenVideoCookie = ('; ' + document.cookie)
+const seenVideoCookie = ('; ' + document.cookie)
 	.split(`; seenVideo=`)
 	.pop()
 	.split(';')[0]
@@ -217,7 +218,7 @@ function loadMoreItems() {
 if (seenVideoCookie.includes('true')) {
 	seenTutorial = ref(true)
 }
- */
+
 function setCookieSeen() {
 	document.cookie = 'seenVideo=true; max-age=31536000'
 	seenTutorial = ref(true)
@@ -238,8 +239,9 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<!-- 	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
-		><iframe
+	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
+		><h4>Velkommen til Boco-Buddies</h4>
+		<iframe
 			width="560"
 			height="315"
 			src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0"
@@ -248,13 +250,7 @@ observer.observe(items[items.length-1])*/
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
 		></iframe
-	></BasePopup> -->
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
-
+	></BasePopup>
 	<div class="flex flex-col gap-2">
 		<h1>Hjem</h1>
 		<SearchbarAndButton

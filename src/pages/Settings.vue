@@ -12,7 +12,6 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { PostUserRegisterRequest } from '../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
-const errorMessage = ref()
 
 const newEmail = ref('')
 const newPassword = ref('')
@@ -56,14 +55,18 @@ async function uploadPicture() {
 		})
 		await store.dispatch('edit', res.data)
 		await router.push('/user')
-	} catch (error) {
+	} catch (error: any) {
 		uploadProfilePictureStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
-function sendVerificationEmail() {
-	//TODO: Implement
+async function sendVerificationEmail() {
+	try {
+		const res = await axios.post('/verify/sendVerificationEmail')
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 function deleteUser() {
@@ -73,11 +76,6 @@ function deleteUser() {
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<BaseBanner
-			v-if="uploadProfilePictureStatus === 'success'"
-			type="success"
-			message="Bildet er lastet opp"
-		/>
 		<h1>Innstillinger</h1>
 		<div class="grid gap-1">
 			<img

@@ -17,7 +17,7 @@ const status = ref<Status>()
 const errorMessage = ref()
 
 const searchString = ref('')
-const currentPage = ref<number>(0)
+const currentPage = ref<number>(1)
 const amountPerPage: number = 20
 
 const gcToggle = ref(false)

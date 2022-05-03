@@ -13,8 +13,6 @@ import { PostUserLoginRequest } from '../api/user/login'
 
 let router = useRouter()
 
-const errorMessage = ref()
-
 const schema = yup.object({
 	email: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
 	password: yup
@@ -44,9 +42,9 @@ async function logIn() {
 		console.log('logged in')
 		loginStatus.value = 'loaded'
 		await router.push('/')
-	} catch (error) {
+	} catch (error: any) {
 		loginStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -60,11 +58,6 @@ const notValid = computed(
 </script>
 
 <template>
-	<BaseBanner
-		v-if="loginStatus === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<div class="text-center">
 		<h1>Logg inn</h1>
 		<form data-testid="login-form" @submit.prevent="logIn()">

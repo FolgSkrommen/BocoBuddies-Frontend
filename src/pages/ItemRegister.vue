@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import BaseLabel from '../components/base/BaseLabel.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Category, FilterType } from '../api/schema'
+import { store } from '../store'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -64,9 +65,9 @@ async function getCategories() {
 		const res = await axios.get('/category/main')
 		categoryChoices.value.push(res.data)
 		getCategoriesStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		getCategoriesStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -101,9 +102,9 @@ async function updateCategories(categoryId: number, index: number) {
 			}
 		})
 		updateCategoriesStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		updateCategoriesStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -168,12 +169,11 @@ function setPriceUnit(priceUnit: string) {
 
 type PostStatus = 'sending' | 'success' | 'error'
 const status = ref<PostStatus>()
-const errorMessage = ref()
 async function registerItem() {
 	status.value = 'sending'
 	if (!range.value) {
 		status.value = 'error'
-		errorMessage.value = 'Range is not selected'
+		store.commit('error', 'Range is not selected')
 		return
 	}
 
@@ -200,25 +200,14 @@ async function registerItem() {
 	try {
 		await axios.post('/item/register', formData)
 		await router.push('/')
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		console.log(error)
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 </script>
 
 <template>
-	<BaseBanner
-		v-if="
-			status === 'error' ||
-			getCategoriesStatus === 'error' ||
-			updateCategoriesStatus === 'error'
-		"
-		type="error"
-		:message="errorMessage"
-	/>
-
 	<form
 		data-testid="form"
 		class="grid w-full gap-y-6"

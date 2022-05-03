@@ -13,8 +13,6 @@ import { GetUserRequest } from '../api/user'
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
-const errorMessage = ref()
-
 const user = ref<User>()
 
 const reviews = ref<Review[]>()
@@ -29,9 +27,9 @@ async function getReviews() {
 		})
 		const data = reviewsRes.data as Review[]
 		reviews.value = data
-	} catch (error) {
+	} catch (error: any) {
 		getUserStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -51,9 +49,9 @@ async function getUser() {
 		const data = userRes.data as User
 		user.value = data
 		getUserStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		getUserStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 if (store.state.user && id && id !== store.state.user.userId) {
@@ -65,11 +63,6 @@ if (store.state.user && id && id !== store.state.user.userId) {
 </script>
 
 <template>
-	<BaseBanner
-		v-if="getUserStatus === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
