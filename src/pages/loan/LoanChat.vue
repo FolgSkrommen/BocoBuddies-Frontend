@@ -218,6 +218,7 @@ async function sendLoanDecline() {
 			'/app/chat/acceptLoan',
 			JSON.stringify(loanAnswer)
 		)
+		messages.value = messages.value.filter(({ type }) => type !== 'REQUEST')
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
