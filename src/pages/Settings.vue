@@ -78,7 +78,7 @@ function deleteUser() {
 			type="success"
 			message="Bildet er lastet opp"
 		/>
-		<h1 class="text-xl font-bold">Innstillinger</h1>
+		<h1>Innstillinger</h1>
 		<div class="grid gap-1">
 			<img
 				v-if="store.state.user.profilePicture"

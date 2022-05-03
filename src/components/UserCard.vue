@@ -32,7 +32,7 @@ const { user, color, showRating } = defineProps<Props>()
 			</div>
 			<span class="flex-grow"></span>
 			<CheckCircleIcon
-				class="h-8 w-8 justify-self-start text-blue"
+				class="h-8 w-8 justify-self-start text-blue-500"
 				v-if="user.trusted"
 			/>
 		</div>

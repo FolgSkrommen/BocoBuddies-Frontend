@@ -11,32 +11,27 @@ const { color } = defineProps<Props>()
 const colorClass = computed(() => {
 	switch (color) {
 		case 'blue':
-			return 'bg-blue text-white'
+			return 'bg-blue-600 text-white'
 		case 'red':
 			return 'bg-red-400 text-white'
 		case 'gray':
-			return 'bg-slate-400 text-white'
+			return 'bg-slate-300 text-slate-900'
 		default:
-			return 'bg-blue text-white'
+			return 'bg-blue-600 text-white'
 	}
 })
 </script>
 
 <template>
 	<router-link
-		class="w-fit p-2 text-xl rounded-lg self-end place-self-end shadow-lg disabled:shadow-none disabled:bg-slate-300 disabled:text-slate-500"
+		class="py-2 px-4 rounded-xl bg-blue-500 text-white;"
 		:class="colorClass"
 		v-if="to"
 		:to="to"
 	>
 		<slot></slot>
 	</router-link>
-	<button
-		v-else
-		class="w-fit p-2 text-xl rounded-lg self-end place-self-end shadow-lg disabled:shadow-none disabled:bg-slate-300 disabled:text-slate-500"
-		:class="colorClass"
-		:type="type ?? 'button'"
-	>
+	<button v-else :class="colorClass" :type="type ?? 'button'">
 		<slot></slot>
 	</button>
 </template>

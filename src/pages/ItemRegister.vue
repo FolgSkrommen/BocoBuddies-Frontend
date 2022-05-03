@@ -203,7 +203,7 @@ async function registerItem() {
 	} catch (error) {
 		status.value = 'error'
 		console.log(error)
-		errorMessage.value = error.response.data
+		errorMessage.value = error
 	}
 }
 </script>
@@ -218,9 +218,7 @@ async function registerItem() {
 		type="error"
 		:message="errorMessage"
 	/>
-	<h1 data-testid="header" class="font-bold text-4xl place-self-center">
-		Ny gjenstand
-	</h1>
+	<h1 data-testid="header">Ny gjenstand</h1>
 	<form
 		data-testid="form"
 		class="grid w-full gap-y-6"
@@ -253,7 +251,7 @@ async function registerItem() {
 
 				<select
 					data-testid="priceUnit-selector"
-					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
@@ -277,7 +275,7 @@ async function registerItem() {
 				v-for="(categories, index) in categoryChoices"
 				v-if="categoryChoices"
 				:key="index"
-				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
 				@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
@@ -300,7 +298,7 @@ async function registerItem() {
 			<select
 				v-if="filterTypes"
 				:key="index"
-				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
 				@input="
 						event => updateFilters(parseInt((event.target as HTMLInputElement).value), index)
 					"

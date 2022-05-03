@@ -32,7 +32,7 @@ const range = computed(() => {
 	if (!loan.value) return
 	return {
 		start: new Date(loan.value.start),
-		end: new Date(loan.value.endTime),
+		end: new Date(loan.value.end),
 	}
 })
 
@@ -93,7 +93,7 @@ const showRateUserPopup = ref(false)
 			:user="loaner"
 		/>
 		<div class="grid gap-4">
-			<h1 class="text-4xl font-bold">{{ item.name }}</h1>
+			<h1>{{ item.name }}</h1>
 
 			<div v-if="loan && loan.active" class="grid gap-4">
 				<div v-if="loan.returned" class="grid gap-4">

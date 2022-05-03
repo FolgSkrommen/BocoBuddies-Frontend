@@ -76,7 +76,6 @@ export interface Category {
 
 export interface Chat {
 	chatId: number
-	itemId: number
 	chatName: string
 	item?: Item
 }

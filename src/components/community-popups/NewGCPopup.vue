@@ -33,7 +33,7 @@ function loadMoreFriends() {
 
 <template>
 	<BasePopup @exit="emit('exit')">
-		<h1 class="text-2xl font-bold">Ny gruppechat med</h1>
+		<h1>Ny gruppechat med</h1>
 		<!--GCPopup component here-->
 		<SearchbarAndButton
 			v-model="searchString"

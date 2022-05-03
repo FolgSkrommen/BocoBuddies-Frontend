@@ -103,10 +103,9 @@ function add() {
 		<div class="flex gap-4">
 			<button
 				v-for="tag in View"
-				class="px-2 py-1 rounded-lg"
 				:class="
 					view === tag
-						? 'bg-blue text-white'
+						? 'bg-blue-500 text-white'
 						: 'bg-slate-300 text-slate-900'
 				"
 				@click="view = tag"

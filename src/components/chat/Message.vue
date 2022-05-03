@@ -11,13 +11,13 @@ const { receive } = defineProps<Props>()
 <template>
 	<div class="grid">
 		<div
-			class="bg-blue text-white px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-end"
+			class="bg-blue-500 text-white px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-end"
 			v-if="receive"
 		>
 			<slot></slot>
 		</div>
 		<div
-			class="bg-gray-400 text-black px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-start"
+			class="bg-slate-400 text-black px-4 py-3 rounded-full overflow-auto my-5 max-w-[80%] place-self-start"
 			v-else
 		>
 			<slot></slot>

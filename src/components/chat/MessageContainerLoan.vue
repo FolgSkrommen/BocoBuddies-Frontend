@@ -52,17 +52,17 @@ const { messages, modelValue, chat, item } = defineProps<Props>()
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
-			return 'bg-gray-400 text-black '
+			return 'bg-slate-400 text-black '
 		case false:
-			return 'bg-blue text-white justify-self-end'
+			return 'bg-blue-500 text-white justify-self-end'
 		default:
-			return 'bg-blue text-white'
+			return 'bg-blue-500 text-white'
 	}
 }
 </script>
 <template>
 	<div
-		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
+		class="border bg-slate-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
 	>
 		<div class="grid" v-for="(message, i) in messages">
@@ -94,7 +94,6 @@ function styleType(received: boolean) {
 							modelValue === 'RETURNED' ||
 							message.type === 'RETURNED'
 						"
-						class="text-2xl"
 						data-testid="returned-h"
 					>
 						Lån tilbakelevert
