@@ -162,7 +162,7 @@ let priceUnits: PriceUnit[] = [
 	},
 ]
 
-let currentPriceUnit: string
+let currentPriceUnit: string = 'HOUR'
 function setPriceUnit(priceUnit: string) {
 	currentPriceUnit = priceUnit
 }

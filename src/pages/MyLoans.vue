@@ -69,20 +69,6 @@ watch(stateTag, () => {
 	searchAndResetItems()
 })
 
-//Functions
-function isAnItem(obj: any): obj is Item {
-	return (
-		'itemId' in obj &&
-		'images' in obj &&
-		'name' in obj &&
-		'price' in obj &&
-		'availableFrom' in obj &&
-		'availableTo' in obj &&
-		'priceUnit' in obj &&
-		'address' in obj &&
-		'postalCode' in obj
-	)
-}
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -182,8 +168,7 @@ async function search() {
 			},
 		})
 		const data: Item[] = res.data
-		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
-			items.value = items.value.concat(data)
+		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
