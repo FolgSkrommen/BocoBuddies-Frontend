@@ -220,35 +220,53 @@ if (!seenHomeCookie.includes('true')) {
 	const seenHomeTutorial = (document.cookie =
 		'seenMyItemsTutorial=true; max-age=31536000')
 }
+
+const showCategoryPicker = ref(false)
 </script>
 
 <template>
 	<div v-if="store.getters.loggedIn">
-		<div class="grid gap-1">
+		<div class="grid gap-2">
 			<!--Tag input component-->
 			<SearchbarAndButton
 				v-model="searchWord"
 				@search-and-reset="searchAndResetItems"
 			></SearchbarAndButton>
-			<CategoryList
-				color="bg-slate-500"
-				v-if="chosenCategories.length > 0"
-				v-model="chosenCategories"
-				class="py-1"
-				:removable="true"
-				@remove-category-event="categoryRemoved"
-				data-testid="categories-tag-chosen"
-			></CategoryList>
 
-			<CategoryList
-				color="bg-blue-500"
-				class=""
-				v-model="tagAlts"
-				@add-category-event="categoryChosen"
-				data-testid="categories-tag-alts"
-			></CategoryList>
+			<div v-if="showCategoryPicker" class="grid gap-2">
+				<CategoryList
+					color="bg-slate-500"
+					v-if="chosenCategories.length > 0"
+					v-model="chosenCategories"
+					class="py-1"
+					:removable="true"
+					@remove-category-event="categoryRemoved"
+					data-testid="categories-tag-chosen"
+				></CategoryList>
 
-			<input class="h-8 w-8" type="checkbox" v-model="activeSelected" />
+				<CategoryList
+					color="bg-blue-500"
+					class=""
+					v-model="tagAlts"
+					@add-category-event="categoryChosen"
+					data-testid="categories-tag-alts"
+				></CategoryList>
+			</div>
+
+			<div class="flex">
+				<div class="flex">
+					<label>Aktive</label>
+					<input
+						class="h-8 w-8"
+						type="checkbox"
+						v-model="activeSelected"
+					/>
+				</div>
+
+				<button @click="showCategoryPicker = !showCategoryPicker">
+					Categories
+				</button>
+			</div>
 		</div>
 
 		<LoadingIndicator v-if="status === 'loading'" />

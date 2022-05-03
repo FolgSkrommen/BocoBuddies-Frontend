@@ -9,7 +9,6 @@ import router from '../router'
 import axios from 'axios'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
-import ImageUpload from '../components/ImageUpload.vue'
 import { PostUserRegisterRequest } from '../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
 
@@ -130,8 +129,6 @@ if (!seenHomeCookie.includes('true')) {
 			>Send ny verfikasjon på epost</BaseBtn
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
-
-		<ImageUpload></ImageUpload>
 
 		<input
 			type="file"
