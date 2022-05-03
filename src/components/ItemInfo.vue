@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
-import { Calendar, DatePicker } from 'v-calendar'
+import { DatePicker } from 'v-calendar'
 import { Item, Position } from '../api/schema'
+import axios from 'axios'
 import { GoogleMap, Circle } from 'vue3-google-map'
 
 interface Props {
 	item: Item
 }
+
+let listOfFilterWithValue = ref<any[]>([])
 
 const { item } = defineProps<Props>()
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
@@ -24,6 +27,29 @@ const range = computed(() => ({
 	start: new Date(item.availableFrom),
 	end: new Date(item.availableTo),
 }))
+let filterTypes = ref<string[]>([])
+async function getFilterTypeName() {
+	try {
+		let sendObject: any = {
+			list: [],
+		}
+		item.filters.forEach(filter => {
+			sendObject.list.push(filter.id)
+		})
+		const res = await axios.post('/category/getFilterName', sendObject)
+		filterTypes = res.data
+		res.data.forEach((nameOfFilter: any) => {
+			let object = {
+				filter: item.filters.pop().value,
+				name: nameOfFilter,
+			}
+			listOfFilterWithValue.value.push(object)
+		})
+	} catch (err) {
+		console.log(err)
+	}
+}
+getFilterTypeName()
 </script>
 
 <template>
@@ -46,12 +72,12 @@ const range = computed(() => ({
 				</div>
 			</div>
 		</div>
-		<div v-if="item.filters.length > 0">
+		<div v-if="listOfFilterWithValue.length > 0">
 			<p class="font-bold text-lg">Filtere</p>
 			<div class="grid gap-2">
-				<div v-for="filter in item.filters" class="flex gap-2">
-					<p class="font-bold">{{ filter.name }}:</p>
-					<p>{{ filter.value }}</p>
+				<div v-for="filter in listOfFilterWithValue" class="flex gap-2">
+					<p class="">{{ filter.name }}:</p>
+					<p>{{ filter.filter }}</p>
 				</div>
 			</div>
 		</div>
