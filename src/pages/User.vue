@@ -123,8 +123,8 @@ if (store.state.user && id && id !== store.state.user.userId) {
 			class="grid gap-4"
 		>
 			<div class="flex gap-2">
-				<BaseBtn to="/settings" class="grow">Instillinger</BaseBtn>
-				<BaseBtn to="/faq" class="grow">FAQ</BaseBtn>
+				<BaseBtn to="/settings">Instillinger</BaseBtn>
+				<BaseBtn to="/faq">FAQ</BaseBtn>
 			</div>
 
 			<div>

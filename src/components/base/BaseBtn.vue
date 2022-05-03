@@ -15,7 +15,7 @@ const colorClass = computed(() => {
 		case 'red':
 			return 'bg-red-400 text-white'
 		case 'gray':
-			return 'bg-slate-400 text-white'
+			return 'bg-slate-300 text-slate-900'
 		default:
 			return 'bg-blue-500 text-white'
 	}
@@ -24,7 +24,7 @@ const colorClass = computed(() => {
 
 <template>
 	<router-link
-		class="w-fit p-2 text-xl rounded-lg self-end place-self-end shadow-lg disabled:shadow-none disabled:bg-slate-300 disabled:text-slate-500"
+		class="py-2 px-4 rounded-xl bg-blue-500 text-white;"
 		:class="colorClass"
 		v-if="to"
 		:to="to"
