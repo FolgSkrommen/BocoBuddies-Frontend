@@ -21,6 +21,7 @@ import { GetChatResponse } from '../../api/chat'
 import { GetMessageResponse } from '../../api/message'
 import BaseLabel from '../../components/base/BaseLabel.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
+import RateUserPopup from '../../components/RateUserPopup.vue'
 
 const route = useRoute()
 
@@ -348,6 +349,7 @@ onBeforeMount(async () => {
 	try {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data as GetChatResponse
+		console.log(res.data)
 	} catch (error) {
 		status.value = 'error'
 		errorMessage.value = error
@@ -357,6 +359,7 @@ onBeforeMount(async () => {
 		console.log('/message?chatId=' + chat.value?.chatId)
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
 		const data = res.data as GetMessageResponse
+		console.log(res.data)
 		messages.value = data.messages
 		messages.value.forEach(m => {
 			if (!store.state.user) return
@@ -370,12 +373,14 @@ onBeforeMount(async () => {
 	}
 
 	try {
+		console.log(chat.value?.item)
 		if (!chat.value?.item) return
 		const res = await axios.get('/item', {
 			params: {
 				id: chat.value.item.itemId,
 			},
 		})
+		console.log(res.data)
 
 		item.value = res.data.item
 		lender.value = res.data.lender
@@ -488,7 +493,7 @@ interface LoanRangePrice {
 }
 const range = ref<LoanRangePrice>()
 const render = ref<number>(0)
-const showRateUserPopup = ref<boolean>(false)
+const showRateUserPopup = ref<boolean>(true)
 const price = ref<number>(0)
 const errorMessage = ref()
 function reRenderChat() {
@@ -573,7 +578,7 @@ function reRenderChat() {
 					@click="sendLoanReturned"
 					data-testid="feedback-button"
 					class="grow bg-purple-500"
-					>Levert tilbake</BaseBtn
+					>Levert tilbake?</BaseBtn
 				>
 			</div>
 		</form>
