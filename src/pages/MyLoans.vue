@@ -46,7 +46,6 @@ const stateTag = ref<State>(State.ACTIVE)
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 
 //const search = ref('')
 
@@ -73,8 +72,8 @@ watch(stateTag, () => {
 //Functions
 function isAnItem(obj: any): obj is Item {
 	return (
-		'id' in obj &&
-		'image' in obj &&
+		'itemId' in obj &&
+		'images' in obj &&
 		'name' in obj &&
 		'price' in obj &&
 		'availableFrom' in obj &&
@@ -91,9 +90,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 async function search() {
@@ -188,9 +187,9 @@ async function search() {
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 		items.value = []
 	}
 }
@@ -208,9 +207,9 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -236,9 +235,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -251,18 +250,15 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
-	<div v-if="!store.getters.loggedIn">
-		<p>Du må være logget inn for å se denne siden</p>
-	</div>
 	<div v-if="store.getters.loggedIn">
 		<div class="grid gap-4">
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search-and-reset="searchAndResetItems"
+			></SearchbarAndButton>
 			<div class="flex gap-4">
 				<button
+					class="flex-1"
 					:class="
 						stateTag === tag
 							? 'bg-blue-500 text-white'
@@ -274,16 +270,12 @@ function loadMoreItems() {
 					{{ tag }}
 				</button>
 			</div>
-			<SearchbarAndButton
-				v-model="searchWord"
-				@search-and-reset="searchAndResetItems"
-			></SearchbarAndButton>
 		</div>
 
-		<div class="py-10">
+		<div class="mt-3">
 			<!--Tag input component-->
-			<h2>Kategorier</h2>
 			<CategoryList
+				v-if="chosenCategories.length > 0"
 				v-model="chosenCategories"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
@@ -291,6 +283,7 @@ function loadMoreItems() {
 				class="border-solid bg-slate-500 rounded"
 			></CategoryList>
 			<CategoryList
+				class="mt-1"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
@@ -298,15 +291,18 @@ function loadMoreItems() {
 		</div>
 		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
+			v-if="items.length > 0"
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
 			redirect="my-loan"
 			@load-more-items="loadMoreItems"
-		>
-		</ItemList>
+		/>
 
-		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
-		</SortDropdown>
+		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
+			Du har aldri lånt noe
+		</h3>
+
+		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen" />
 	</div>
 </template>

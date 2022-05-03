@@ -6,13 +6,18 @@ import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
 import ItemList from '../components/ItemList.vue'
 import SortDropdown from '../components/SortDropdown.vue'
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/solid'
+import {
+	ChevronRightIcon,
+	ChevronLeftIcon,
+	EmojiSadIcon,
+} from '@heroicons/vue/outline'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import AddFriendPopup from '../components/AddFriendPopup.vue'
 import BasePopup from '../components/base/BasePopup.vue'
 import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
+import { store } from '../store'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -50,8 +55,8 @@ watch(sortChosen, () => {
 //Functions
 function isAnItem(obj: any): obj is Item {
 	return (
-		'id' in obj &&
-		'image' in obj &&
+		'itemId' in obj &&
+		'images' in obj &&
 		'name' in obj &&
 		'price' in obj &&
 		'availableFrom' in obj &&
@@ -64,7 +69,6 @@ function isAnItem(obj: any): obj is Item {
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -72,9 +76,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 	}
 }
 getMainCategories()
@@ -142,11 +146,12 @@ async function search() {
 		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
 			items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
+		console.log(data)
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 		items.value = []
 	}
 }
@@ -166,9 +171,8 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
-		status.value = 'error'
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -194,9 +198,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -247,12 +251,6 @@ observer.observe(items[items.length-1])*/
 			allowfullscreen
 		></iframe
 	></BasePopup>
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
-
 	<div class="flex flex-col gap-2">
 		<h1>Hjem</h1>
 		<SearchbarAndButton
@@ -263,7 +261,6 @@ observer.observe(items[items.length-1])*/
 
 		<div class="flex flex-col gap-2 pb-3">
 			<!--Tag input component-->
-			<h2>Kategorier</h2>
 			<CategoryList
 				v-model="chosenCategories"
 				v-if="chosenCategories.length > 0"
@@ -282,6 +279,7 @@ observer.observe(items[items.length-1])*/
 
 	<LoadingIndicator v-if="status === 'loading'" />
 	<ItemList
+		v-if="items.length > 0"
 		:items="items"
 		:searchHits="searchHits"
 		:renderLoadButton="renderLoadButton"
@@ -290,10 +288,11 @@ observer.observe(items[items.length-1])*/
 		data-testid="item-list"
 	/>
 
+	<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">Ingen resultater</h2>
+
 	<SortDropdown
 		:sortAlts="sortAlts"
 		v-model.number="sortChosen"
 		data-testid="sort-dropdown"
-	>
-	</SortDropdown>
+	/>
 </template>

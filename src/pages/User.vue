@@ -13,8 +13,6 @@ import { GetUserRequest } from '../api/user'
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
-const errorMessage = ref()
-
 const user = ref<User>()
 
 const reviews = ref<Review[]>()
@@ -29,9 +27,9 @@ async function getReviews() {
 		})
 		const data = reviewsRes.data as Review[]
 		reviews.value = data
-	} catch (error) {
+	} catch (error: any) {
 		getUserStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -51,9 +49,9 @@ async function getUser() {
 		const data = userRes.data as User
 		user.value = data
 		getUserStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		getUserStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 if (store.state.user && id && id !== store.state.user.userId) {
@@ -65,11 +63,6 @@ if (store.state.user && id && id !== store.state.user.userId) {
 </script>
 
 <template>
-	<BaseBanner
-		v-if="getUserStatus === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
@@ -99,13 +92,13 @@ if (store.state.user && id && id !== store.state.user.userId) {
 
 			<!-- User name and lastname-->
 			<div>
-				<p class="text-4xl font-bold">
+				<h2 class="font-bold">
 					{{ user.firstName }} {{ user.lastName }}
-				</p>
+				</h2>
 
 				<!-- User rating -->
 				<div
-					class="flex items-center border w-fit p-1 border-gray-500 rounded"
+					class="flex items-center border w-fit p-1 bg-white border-gray-500 rounded"
 				>
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p
@@ -123,8 +116,8 @@ if (store.state.user && id && id !== store.state.user.userId) {
 			class="grid gap-4"
 		>
 			<div class="flex gap-2">
-				<BaseBtn to="/settings">Instillinger</BaseBtn>
-				<BaseBtn to="/faq">FAQ</BaseBtn>
+				<BaseBtn class="flex-1" to="/settings">Instillinger</BaseBtn>
+				<BaseBtn class="flex-1" to="/faq">FAQ</BaseBtn>
 			</div>
 
 			<div>
