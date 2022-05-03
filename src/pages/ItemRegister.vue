@@ -110,7 +110,7 @@ async function updateCategories(categoryId: number, index: number) {
 
 /* Filter */
 
-let chosenFilters: Ref<number[]> = ref([])
+let chosenFilters = ref<number[]>([])
 function updateFilters(typeId: number, index: number) {
 	chosenFilters.value[index] = typeId
 	console.log(chosenFilters.value)
@@ -192,6 +192,7 @@ async function registerItem() {
 		formData.append('filterIdList', number.toString())
 	})
 	if (!imageFiles.value[0]) {
+		//TODO: Filter funker ikke, fiks dette, muligens endre fra formdata til interface
 		formData.append('images', new Blob())
 		console.log('Bilde listen er tom')
 	} else {
