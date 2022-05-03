@@ -252,7 +252,9 @@ async function onLoanAccept(payload: any) {
 			console.log('Loan accepted')
 			loanStatus.value = 'ACCEPTED'
 		}
-
+		if (msg.active && msg.returned) {
+			loanStatus.value = 'RETURNED'
+		}
 		//If loan is denied
 		console.log(msg.active, msg.returned)
 		if (!msg.active && !msg.returned) {
@@ -532,6 +534,14 @@ function userReviewed() {
 	showRateUserPopup.value = false
 }
 
+function getPriceUnit(unit: string) {
+	if (unit === 'DAY') return 'Dag'
+	if (unit === 'HOUR') return 'Time'
+	if (unit === 'MONTH') return 'Måned'
+	if (unit === 'WEEK') return 'Uke'
+	if (unit === 'YEAR') return 'År'
+}
+
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -575,7 +585,7 @@ function reRenderChat() {
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
 			<h1 v-if="item?.name">
 				{{ item.name }}
-				{{ item.price }}kr / {{ item.priceUnit }}
+				{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
 			</h1>
 			<h1 v-else>Chat</h1>
 		</div>
@@ -617,7 +627,7 @@ function reRenderChat() {
 				<BaseBtn
 					v-if="
 						lender?.userId !== store.state.user?.userId &&
-						loanStatus === 'NOT_SENT'
+						(loanStatus === 'PENDING' || loanStatus === 'NOT_SENT')
 					"
 					class="grow bg-green-600"
 					:disabled="loanPending || loanStatus !== 'NOT_SENT'"
