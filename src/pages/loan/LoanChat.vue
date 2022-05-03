@@ -115,7 +115,7 @@ async function sendLoanRequestWS() {
 
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
-		itemId: chat.value.item.itemId,
+		item: chat.value.item.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
 		end: range.value.end.toISOString(),
