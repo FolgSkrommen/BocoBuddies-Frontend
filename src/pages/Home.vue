@@ -132,6 +132,7 @@ async function search() {
 				sort: sortChosenString,
 				amount: amountPerPage,
 				offset: currentPage.value,
+				useAuth: false,
 			},
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
@@ -204,7 +205,7 @@ function loadMoreItems() {
 		search()
 	}
 }
-/* const seenVideoCookie = ('; ' + document.cookie)
+const seenVideoCookie = ('; ' + document.cookie)
 	.split(`; seenVideo=`)
 	.pop()
 	.split(';')[0]
@@ -212,7 +213,7 @@ function loadMoreItems() {
 if (seenVideoCookie.includes('true')) {
 	seenTutorial = ref(true)
 }
- */
+
 function setCookieSeen() {
 	document.cookie = 'seenVideo=true; max-age=31536000'
 	seenTutorial = ref(true)
@@ -233,8 +234,9 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<!-- 	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
-		><iframe
+	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
+		><h4>Velkommen til Boco-Buddies</h4>
+		<iframe
 			width="560"
 			height="315"
 			src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0"
@@ -243,8 +245,7 @@ observer.observe(items[items.length-1])*/
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
 		></iframe
-	></BasePopup> -->
-
+	></BasePopup>
 	<div class="flex flex-col gap-2">
 		<h1>Hjem</h1>
 		<SearchbarAndButton

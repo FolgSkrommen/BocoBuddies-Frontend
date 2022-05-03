@@ -61,8 +61,12 @@ async function uploadPicture() {
 	}
 }
 
-function sendVerificationEmail() {
-	//TODO: Implement
+async function sendVerificationEmail() {
+	try {
+		const res = await axios.post('/verify/sendVerificationEmail')
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 function deleteUser() {

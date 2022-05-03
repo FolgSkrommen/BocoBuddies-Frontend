@@ -173,6 +173,7 @@ async function search() {
 			userId: store.state.user.userId,
 			loan: true,
 			active: stateTag.value === State.ACTIVE,
+			useAuth: true,
 		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params,

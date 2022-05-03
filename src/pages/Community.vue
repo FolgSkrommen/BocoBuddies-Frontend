@@ -23,7 +23,7 @@ async function getFriends() {
 		const res = await axios.get('/user/friends', {
 			params: { userId: store.state.user.userId },
 		})
-		users.value = res.data.friends
+		users.value = res.data
 		console.log(users.value)
 		getFriendsStatus.value = 'loaded'
 	} catch (error: any) {
@@ -44,7 +44,7 @@ async function getChats() {
 	}
 	try {
 		const res = await axios.get('/chat/getByUser/community')
-		const data: FriendChat[] = res.data.friendChats
+		const data: FriendChat[] = res.data
 
 		//NOTE: User will not be in the list of "members"
 		let dataWithoutUser: FriendChat[] = []

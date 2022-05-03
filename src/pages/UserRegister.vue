@@ -105,12 +105,14 @@ const notValid = computed(
 				label="Fornavn"
 				:error="errors.firstName"
 				data-testid="firstName-input"
+				type="firstName"
 			/>
 			<BaseInput
 				v-model.lazy="lastName"
 				label="Etternavn"
 				:error="errors.lastName"
 				data-testid="lastName-input"
+				type="lastName"
 			/>
 
 			<BaseInput
