@@ -12,6 +12,7 @@ const search = () => {
 interface Props {
 	modelValue: string
 	error?: string
+	label?: string
 }
 const { modelValue, error } = defineProps<Props>()
 </script>
@@ -26,6 +27,7 @@ const { modelValue, error } = defineProps<Props>()
 			:modelValue="modelValue"
 			data-testid="search-field"
 			:error="error"
+			:label="label"
 		></BaseInput>
 		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
 	</div>
