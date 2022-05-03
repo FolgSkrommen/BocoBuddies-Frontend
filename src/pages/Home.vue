@@ -130,7 +130,6 @@ async function search() {
 		const data: Item[] = res.data
 		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
-		console.log(data)
 
 		status.value = 'loaded'
 	} catch (error: any) {
