@@ -66,15 +66,9 @@ if (store.state.user && id && id !== store.state.user.userId) {
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
-		class="grid gap-4 place-items-center text-center"
+		class="grid gap-2 place-items-center text-center"
 	>
-		<!--Username at top-->
-		<div class="flex items-center text-2xl font-bold">
-			@{{ user.username }}
-			<CheckCircleIcon class="h-5 w-5 text-blue-500" />
-		</div>
-
-		<div class="flex gap-4">
+		<div class="flex gap-4 justify-start w-full">
 			<!-- Profile picture or initals-->
 			<img
 				v-if="user.profilePicture"
@@ -91,11 +85,17 @@ if (store.state.user && id && id !== store.state.user.userId) {
 			</span>
 
 			<!-- User name and lastname-->
-			<div>
+			<div class="flex flex-col gap-2">
 				<h2 class="font-bold">
 					{{ user.firstName }} {{ user.lastName }}
 				</h2>
-
+				<div class="flex items-center text-xl">
+					@{{ user.username }}
+					<CheckCircleIcon
+						v-if="user.verified"
+						class="h-5 w-5 text-blue-500"
+					/>
+				</div>
 				<!-- User rating -->
 				<div
 					class="flex items-center border w-fit p-1 bg-white border-gray-500 rounded"

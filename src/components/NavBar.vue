@@ -27,7 +27,13 @@ import {
 			</router-link>
 
 			<router-link to="/user">
-				<UserIcon class="w-8 h-8 text-white" />
+				<img
+					v-if="store.state.user"
+					class="rounded-full object-fill w-8 h-8"
+					:src="store.state.user?.profilePicture"
+					alt="Profil"
+				/>
+				<UserIcon v-else class="w-8 h-8 text-white" />
 			</router-link>
 		</div>
 	</nav>

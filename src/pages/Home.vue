@@ -235,7 +235,6 @@ observer.observe(items[items.length-1])*/
 		></iframe
 	></BasePopup> -->
 	<div class="flex flex-col gap-2">
-		<h1>Hjem</h1>
 		<SearchbarAndButton
 			v-model="searchWord"
 			@search="searchAndResetItems"
@@ -252,11 +251,19 @@ observer.observe(items[items.length-1])*/
 				class="border-solid bg-slate-300 rounded p-2"
 				data-testid="categories-category-chosen"
 			></CategoryList>
+
 			<CategoryList
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
 			></CategoryList>
+
+			<SortDropdown
+				class="grow"
+				:sortAlts="sortAlts"
+				v-model.number="sortChosen"
+				data-testid="sort-dropdown"
+			/>
 		</div>
 	</div>
 
@@ -272,10 +279,4 @@ observer.observe(items[items.length-1])*/
 	/>
 
 	<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">Ingen resultater</h2>
-
-	<SortDropdown
-		:sortAlts="sortAlts"
-		v-model.number="sortChosen"
-		data-testid="sort-dropdown"
-	/>
 </template>

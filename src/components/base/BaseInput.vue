@@ -19,7 +19,7 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<BaseLabel :model-value="label" />
+		<BaseLabel v-if="label" :model-value="label" />
 
 		<input
 			:class="disabled ? 'bg-slate-300 shadow-none' : ''"

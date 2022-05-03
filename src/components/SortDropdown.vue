@@ -19,7 +19,7 @@ const { modelValue, sortAlts } = defineProps<Props>()
 	<BaseDropdown
 		:alternatives="sortAlts"
 		v-model.number="modelValue"
-		class="bottom-12 fixed w-fit mb-2 inset-x-0 mx-auto"
+		class="w-full"
 		data-testid="sort-dropdown"
 		@input="updateValue"
 	/>
