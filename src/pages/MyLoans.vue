@@ -151,7 +151,6 @@ async function search() {
 	})
 
 	try {
-		//TODO: Legg til useAuth: true? Sjekk dette!
 		const params: GetItemSearchRequest = {
 			categories: chosenCategoriesIds.slice(-1),
 			sort: sortChosenString,
