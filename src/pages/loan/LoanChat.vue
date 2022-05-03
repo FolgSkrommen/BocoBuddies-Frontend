@@ -115,7 +115,7 @@ async function sendLoanRequestWS() {
 
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
-		itemId: chat.value.item.itemId,
+		item: chat.value.item.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
 		end: range.value.end.toISOString(),
@@ -484,8 +484,8 @@ function sendLoanRequest() {
 	}
 
 	if (
-		range.value?.start.toISOString() > item.value?.availableFrom ||
-		range.value?.start.toISOString() < item.value?.availableTo
+		range.value?.start.toISOString() < item.value?.availableFrom ||
+		range.value?.start.toISOString() > item.value?.availableTo
 	) {
 		status.value = 'error'
 		store.dispatch('error', 'Hold startdato innenfor oppgitt intervall')
