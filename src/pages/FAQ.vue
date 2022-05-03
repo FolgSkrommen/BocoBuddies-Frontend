@@ -11,11 +11,7 @@
 						<p
 							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
-							<img
-								class="rounded-full"
-								src="src/resources/BoCo Full Logo.png"
-								alt=""
-							/>
+							<img class="rounded-full" src="/logo.png" alt="" />
 						</p>
 					</div>
 					<div
