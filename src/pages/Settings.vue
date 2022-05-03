@@ -95,15 +95,15 @@ function deleteUser() {
 		<form class="grid gap-4" @submit.prevent="updateUser">
 			<BaseInput label="Email" v-model="newEmail" />
 			<BaseInput label="Password" v-model="newPassword" />
-			<BaseBtn type="submit">Change user</BaseBtn>
+			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
 		</form>
-		<BaseBtn @click="logout" color="gray">Logout</BaseBtn>
-		<BaseBtn @click="deleteUser" color="red">Delete user</BaseBtn>
+		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
+		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
 		<BaseBtn
 			v-if="!store.state.user.verified"
 			@click="sendVerificationEmail"
 			color="blue"
-			>Send new verification email</BaseBtn
+			>Send ny verfikasjon på epost</BaseBtn
 		>
 		<input
 			type="file"
@@ -116,7 +116,7 @@ function deleteUser() {
 			class="h-52 place-self-center"
 		/>
 		<BaseBtn class="m-4 place-self-center" @click="uploadPicture"
-			>Upload</BaseBtn
+			>Last opp</BaseBtn
 		>
 	</div>
 	<div v-else>
