@@ -73,8 +73,8 @@ watch(stateTag, () => {
 //Functions
 function isAnItem(obj: any): obj is Item {
 	return (
-		'id' in obj &&
-		'image' in obj &&
+		'itemId' in obj &&
+		'images' in obj &&
 		'name' in obj &&
 		'price' in obj &&
 		'availableFrom' in obj &&
