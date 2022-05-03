@@ -484,8 +484,8 @@ function sendLoanRequest() {
 	}
 
 	if (
-		range.value?.start.toISOString() > item.value?.availableFrom ||
-		range.value?.start.toISOString() < item.value?.availableTo
+		range.value?.start.toISOString() < item.value?.availableFrom ||
+		range.value?.start.toISOString() > item.value?.availableTo
 	) {
 		status.value = 'error'
 		store.dispatch('error', 'Hold startdato innenfor oppgitt intervall')

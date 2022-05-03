@@ -27,6 +27,7 @@ async function getChats() {
 					chat.item = response.data.item
 				})
 		})
+
 		status.value = 'loaded'
 	} catch (error: any) {
 		status.value = 'error'
