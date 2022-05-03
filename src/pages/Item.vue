@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
-import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import ItemInfo from '../components/ItemInfo.vue'
 import 'v-calendar/dist/style.css'
@@ -10,14 +8,13 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
 import { PostChatRequest, PostChatResponse } from '../api/chat'
 
 const { params } = useRoute()
 const router = useRouter()
-const id = parseInt(params.id as string)
+const itemId = parseInt(params.id as string)
 type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
@@ -29,7 +26,7 @@ const lender = ref<User>()
 async function getItem() {
 	status.value = 'loading'
 	const params: GetItemRequest = {
-		itemId: id,
+		itemId: itemId,
 	}
 	try {
 		const res = await axios.get('/item', {
@@ -55,12 +52,10 @@ async function createChat() {
 	try {
 		const body: PostChatRequest = {
 			chatName: `${item.value.name}: ${lender.value.firstName} ${lender.value.lastName}`,
-			itemId: id,
+			itemId: itemId,
 			members: [store.state.user.userId, lender.value.userId],
 		}
-		const res = await axios.post('/chat', {
-			data: body,
-		})
+		const res = await axios.post('/chat', body)
 		const data = res.data as PostChatResponse
 		router.push(`/chat/${data.chatId}`)
 	} catch (error) {

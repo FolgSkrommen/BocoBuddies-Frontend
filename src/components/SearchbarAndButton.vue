@@ -18,7 +18,7 @@ const { modelValue, error } = defineProps<Props>()
 
 <template>
 	<!--Text search input component-->
-	<div class="flex gap-2 w-full">
+	<div class="flex w-full">
 		<BaseInput
 			class="grow"
 			@keyup.enter="search"
@@ -30,6 +30,6 @@ const { modelValue, error } = defineProps<Props>()
 			placeholder="Søk"
 			:error="error"
 		></BaseInput>
-		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
+		<Button @click="search" data-testid="search-button">Søk</Button>
 	</div>
 </template>

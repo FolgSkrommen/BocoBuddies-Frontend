@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { store } from '../store'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
