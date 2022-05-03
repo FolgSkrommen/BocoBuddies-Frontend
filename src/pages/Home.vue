@@ -205,7 +205,7 @@ function loadMoreItems() {
 		search()
 	}
 }
-const seenVideoCookie = ('; ' + document.cookie)
+/* const seenVideoCookie = ('; ' + document.cookie)
 	.split(`; seenVideo=`)
 	.pop()
 	.split(';')[0]
@@ -213,7 +213,7 @@ const seenVideoCookie = ('; ' + document.cookie)
 if (seenVideoCookie.includes('true')) {
 	seenTutorial = ref(true)
 }
-
+ */
 function setCookieSeen() {
 	document.cookie = 'seenVideo=true; max-age=31536000'
 	seenTutorial = ref(true)
@@ -250,7 +250,7 @@ observer.observe(items[items.length-1])*/
 		type="error"
 		:message="errorMessage"
 	/>
-	<h1 class="text-4xl font-bold">Hjem</h1>
+	<h1>Hjem</h1>
 	<SearchbarAndButton
 		v-model="searchWord"
 		@search="searchAndResetItems"
@@ -265,7 +265,7 @@ observer.observe(items[items.length-1])*/
 			v-if="chosenCategories.length > 0"
 			:removable="true"
 			@remove-category-event="categoryRemoved"
-			class="border-solid bg-gray-500 rounded p-3"
+			class="border-solid bg-slate-500 rounded p-3"
 			data-testid="categories-category-chosen"
 		></CategoryList>
 		<CategoryList

@@ -4,12 +4,12 @@
 
 <template>
 	<div class="flex w-full justify-left gap-4 mb-5">
-		<router-link class="p-4 text-4xl" :to="{ name: 'myItems' }"
-			>Mine gjenstander</router-link
-		>
-		<router-link class="p-4 text-4xl" :to="{ name: 'myLoans' }"
-			>Mine lån</router-link
-		>
+		<router-link :to="{ name: 'myItems' }">
+			<button>Mine gjenstander</button>
+		</router-link>
+		<router-link :to="{ name: 'myLoans' }">
+			<button>Mine lån</button>
+		</router-link>
 	</div>
 	<router-view />
 </template>

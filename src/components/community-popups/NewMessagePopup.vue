@@ -59,7 +59,7 @@ function loadMoreFriends() {
 
 <template>
 	<BasePopup @exit="emit('exit')">
-		<h1 class="text-2xl font-bold">Ny melding til</h1>
+		<h1>Ny melding til</h1>
 		<BaseBtn @click="gcToggle = true">Gruppechat</BaseBtn>
 		<NewGCPopup @exit="gcToggle = false" v-show="gcToggle"></NewGCPopup>
 		<!--GCPopup component here-->

@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
 	<div class="grid">
-		<label class="text-gray-800 text-left" data-testid="label">
+		<label class="text-slate-800 text-left" data-testid="label">
 			{{ modelValue }}
 		</label>
 	</div>

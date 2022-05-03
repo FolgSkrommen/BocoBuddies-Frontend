@@ -239,10 +239,9 @@ function loadMoreItems() {
 		<div class="grid gap-4">
 			<div class="flex gap-4">
 				<button
-					class="px-2 py-1 rounded-lg"
 					:class="
 						stateTag === tag
-							? 'bg-blue text-white'
+							? 'bg-blue-500 text-white'
 							: 'bg-slate-300 text-slate-900'
 					"
 					@click="stateTag = tag"
@@ -265,7 +264,7 @@ function loadMoreItems() {
 				:removable="true"
 				@remove-category-event="categoryRemoved"
 				data-testid="categories-tag-chosen"
-				class="border-solid bg-gray-500 rounded"
+				class="border-solid bg-slate-500 rounded"
 			></CategoryList>
 			<CategoryList
 				v-model="tagAlts"

@@ -463,11 +463,11 @@ function reRenderChat() {
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
-			<h1 class="text-center text-4xl" v-if="item?.name">
+			<h1 v-if="item?.name">
 				{{ item.name }}
 				{{ item.price }}kr / {{ item.priceUnit }}
 			</h1>
-			<h1 class="text-center text-4xl" v-else>Chat</h1>
+			<h1 v-else>Chat</h1>
 		</div>
 
 		<MessageContainer

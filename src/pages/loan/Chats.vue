@@ -46,7 +46,7 @@ getChats()
 			data-testid="error"
 		/>
 		<div v-if="status === 'loaded'">
-			<h1 class="text-4xl my-4" data-testid="header">Samtaler</h1>
+			<h1 data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId">
@@ -59,10 +59,10 @@ getChats()
 							/>
 
 							<div class="flex-col">
-								<h1 class="text-4xl">
+								<h1>
 									{{ chat.item?.name }}
 								</h1>
-								<h2 class="text-xl">
+								<h2>
 									{{ chat.item?.description }}
 								</h2>
 							</div>

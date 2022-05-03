@@ -78,7 +78,7 @@ if (store.state.user && id && id !== store.state.user.userId) {
 		<!--Username at top-->
 		<div class="flex items-center text-2xl font-bold">
 			@{{ user.username }}
-			<CheckCircleIcon class="h-5 w-5 text-blue" />
+			<CheckCircleIcon class="h-5 w-5 text-blue-500" />
 		</div>
 
 		<div class="flex gap-4">
@@ -109,7 +109,7 @@ if (store.state.user && id && id !== store.state.user.userId) {
 				>
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p
-						class="ml-2 text-sm font-bold text-gray-900 dark:text-white"
+						class="ml-2 text-sm font-bold text-slate-900 dark:text-white"
 					>
 						{{ user.rating }}
 					</p>

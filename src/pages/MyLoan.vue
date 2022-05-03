@@ -68,7 +68,7 @@ const showRateUserPopup = ref(false)
 			:user="lender"
 		/>
 		<div class="grid gap-4">
-			<h1 class="text-4xl font-bold">{{ item.name }}</h1>
+			<h1>{{ item.name }}</h1>
 			<div v-if="!loan.returned" class="grid gap-4">
 				<div>
 					<p class="font-bold text-lg">Låneperiode</p>

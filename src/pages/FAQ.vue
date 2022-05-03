@@ -9,7 +9,7 @@
 				<div class="sm:text-center flex flex-col mb-16">
 					<div class="sm:mx-auto mb-6">
 						<p
-							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-blue-50 text-blue-600"
+							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
 							<img
 								class="rounded-full"
@@ -19,14 +19,14 @@
 						</p>
 					</div>
 					<div
-						class="max-w-lg font-sans sm:text-4xl md:mx-auto text-gray-900 mr-auto mb-6 ml-auto pb-0"
+						class="max-w-lg font-sans sm:text-4xl md:mx-auto text-slate-900 mr-auto mb-6 ml-auto pb-0"
 					>
 						<div class="">
 							<p class="relative inline-block text-2xl ml-0">
 								<svg
 									viewbox="0 0 52 24"
 									fill="currentColor"
-									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-gray-300 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-slate-300 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
 								>
 									<defs>
 										<pattern
@@ -47,7 +47,7 @@
 								</svg>
 							</p>
 							<p
-								class="relative font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mr-0 text-gray-900"
+								class="relative font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
 							>
 								FAQ
 							</p>
@@ -56,7 +56,7 @@
 							class="font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mb-0 ml-0"
 						></p>
 					</div>
-					<p class="md:text-lg text-base text-gray-700">
+					<p class="md:text-lg text-base text-slate-700">
 						Her kan du finne svar på alle mulige spørsmål du kunne
 						finne på å stille
 					</p>
@@ -76,7 +76,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Dobbeltsjekk at du bruker tiktig brukernavn og
 								passord kombinasjon
 							</p>
@@ -91,7 +91,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Trykk på “Har du ikke bruker? Klikk her!” under
 								påloggingsknappen på innloggingsiden
 							</p>
@@ -106,7 +106,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Sjekk at du er logget inn, dersom du er logget
 								inn dobbelt sjekk at du har verfisert brukeren
 								din via email lenken.&nbsp;
@@ -122,7 +122,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Klikk på send ny verifiserings mail på
 								profilsiden din
 							</p>
@@ -147,7 +147,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Klikk på pluss ikonet under dine gjenstander
 							</p>
 						</div>
@@ -161,7 +161,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Det er helt gratis!!! For nå 😊
 							</p>
 						</div>
@@ -175,7 +175,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Klikk på “endre” under annonsen det gjelder
 							</p>
 						</div>
@@ -189,7 +189,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Klikk på annonsen din og bla ned til slett
 								knappen
 							</p>
@@ -214,7 +214,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Klikk på pluss knappen under vennefanen. Søk
 								deretter på brukernavnet til den du vil legge
 								til
@@ -230,7 +230,7 @@
 							</p>
 						</div>
 						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-gray-700">
+							<p class="text-2xl text-slate-700">
 								Du kan enten opprette chatter med venner. Da er
 								det bare å klikke pluss ikonet under chatter og
 								velge hvem du vil chatte med. Du kan også

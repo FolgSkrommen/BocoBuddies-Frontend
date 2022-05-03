@@ -92,7 +92,7 @@ const notValid = computed(
 		:message="errorMessage"
 	/>
 	<div class="text-center">
-		<h1 class="font-bold text-4xl my-8">Registrer deg</h1>
+		<h1>Registrer deg</h1>
 
 		<form
 			class="grid gap-y-8"

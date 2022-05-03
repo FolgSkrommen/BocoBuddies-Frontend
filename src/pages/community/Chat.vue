@@ -147,10 +147,8 @@ function reRenderChat() {
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
-			<h1 class="text-center text-4xl" v-if="chat && chat.chatName">
-				{{ chat.chatName }}}
-			</h1>
-			<h1 class="text-center text-4xl" v-else>Chat</h1>
+			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}}</h1>
+			<h1 v-else>Chat</h1>
 		</div>
 
 		<MessageContainer

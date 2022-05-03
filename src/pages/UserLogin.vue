@@ -66,7 +66,7 @@ const notValid = computed(
 		:message="errorMessage"
 	/>
 	<div class="text-center">
-		<h1 class="font-bold text-4xl">Logg inn</h1>
+		<h1>Logg inn</h1>
 		<form data-testid="login-form" @submit.prevent="logIn()">
 			<BaseInput
 				data-testid="email-input"
@@ -94,7 +94,7 @@ const notValid = computed(
 
 		<router-link
 			data-testid="register-link"
-			class="text-blue underline"
+			class="text-blue-500 underline"
 			to="/register"
 		>
 			Har du ikke bruker? Klikk her!

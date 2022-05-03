@@ -20,7 +20,6 @@ const updateValue = (event: Event) => {
 		<BaseLabel :model-value="label" />
 
 		<input
-			class="bg-gray-500 rounded-xl p-3 shadow-lg"
 			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
