@@ -26,6 +26,8 @@ const { modelValue, error } = defineProps<Props>()
 			v-model="modelValue"
 			:modelValue="modelValue"
 			data-testid="search-field"
+			type="search"
+			placeholder="Søk"
 			:error="error"
 		></BaseInput>
 		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
