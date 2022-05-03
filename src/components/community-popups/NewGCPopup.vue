@@ -30,7 +30,7 @@ const friendInGC = ref<User[]>([])
 async function searchForFriends() {
 	status.value = 'loading'
 	try {
-		const res = await axios.get('/user/search', {
+		const res = await axios.get('/user/search/friends', {
 			params: {
 				searchString: searchString.value,
 				page: page.value,
