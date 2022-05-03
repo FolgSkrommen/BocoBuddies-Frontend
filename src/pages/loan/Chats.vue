@@ -22,7 +22,7 @@ async function getChats() {
 
 		chats.value.forEach(chat => {
 			axios
-				.get('/item', { params: { id: chat.item?.itemId } })
+				.get('/item', { params: { itemId: chat.item?.itemId } })
 				.then(response => {
 					chat.item = response.data.item
 				})

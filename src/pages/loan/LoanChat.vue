@@ -377,7 +377,7 @@ onBeforeMount(async () => {
 		if (!chat.value?.item) return
 		const res = await axios.get('/item', {
 			params: {
-				id: chat.value.item.itemId,
+				itemId: chat.value.item.itemId,
 			},
 		})
 

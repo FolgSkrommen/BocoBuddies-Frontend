@@ -42,9 +42,7 @@ async function getItem() {
 			itemId: id,
 		}
 		const res = await axios.get('/item', {
-			params: {
-				id: id,
-			},
+			params,
 		})
 		const data: GetItemResponse = res.data
 		console.log(data)
