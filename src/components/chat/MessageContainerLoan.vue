@@ -20,6 +20,7 @@ type loanStatus =
 	| 'NOT_SENT'
 	| 'UNDEFINED'
 	| 'RETURNED'
+	| 'REVIEWED'
 
 interface Props {
 	messages: MessageInterface[]
@@ -43,11 +44,21 @@ const decline = () => {
 	emit('update:modelValue', 'DECLINED')
 }
 
-const negotiate = () => {
-	emit('update:modelValue', 'RETURNED')
+const { messages, modelValue, chat, item } = defineProps<Props>()
+
+function getProperDateTime(dateTime: string) {
+	let time = dateTime.substring(11, 16)
+	let date = dateTime.substring(0, 10)
+	return date + ' - ' + time
 }
 
-const { messages, modelValue, chat, item } = defineProps<Props>()
+function getPriceUnit(unit: string) {
+	if (unit === 'DAY') return 'Dag'
+	if (unit === 'HOUR') return 'Time'
+	if (unit === 'MONTH') return 'Måned'
+	if (unit === 'WEEK') return 'Uke'
+	if (unit === 'YEAR') return 'År'
+}
 
 function styleType(received: boolean) {
 	switch (received) {
@@ -90,7 +101,7 @@ function styleType(received: boolean) {
 						Avtalt lån
 					</h1>
 					<h1
-						v-if="
+						v-else-if="
 							modelValue === 'RETURNED' ||
 							message.type === 'RETURNED'
 						"
@@ -102,10 +113,14 @@ function styleType(received: boolean) {
 						Forespørsel
 					</h1>
 
-					<h3>Fra: {{ message.start }}</h3>
-					<h3>Til: {{ message.stop }}</h3>
-					<h3>Price: {{ message.price }}kr / {{ item.priceUnit }}</h3>
-
+					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
+					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
+					<h3>{{ item.address }}</h3>
+					<h3>{{ item.postalCode }}</h3>
+					<h3>
+						Pris: {{ message.price }}kr /
+						{{ getPriceUnit(item.priceUnit) }}
+					</h3>
 					<div
 						v-if="message.receive && modelValue === 'PENDING'"
 						class="flex gap-2"

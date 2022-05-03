@@ -22,6 +22,7 @@ import { GetMessageResponse } from '../../api/message'
 import BaseLabel from '../../components/base/BaseLabel.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
+import UserCard from '../../components/UserCard.vue'
 
 const route = useRoute()
 
@@ -33,6 +34,7 @@ type loanStatusCode =
 	| 'NOT_SENT'
 	| 'RETURNED'
 	| 'UNDEFINED'
+	| 'REVIEWED'
 
 //WEBSOCKET
 const stompClient = ref<Client>()
@@ -113,7 +115,7 @@ async function sendLoanRequestWS() {
 
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
-		itemId: chat.value.item.itemId,
+		item: chat.value.item.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
 		end: range.value.end.toISOString(),
@@ -216,6 +218,7 @@ async function sendLoanDecline() {
 			'/app/chat/acceptLoan',
 			JSON.stringify(loanAnswer)
 		)
+		messages.value = messages.value.filter(({ type }) => type !== 'REQUEST')
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
@@ -249,7 +252,9 @@ async function onLoanAccept(payload: any) {
 			console.log('Loan accepted')
 			loanStatus.value = 'ACCEPTED'
 		}
-
+		if (msg.active && msg.returned) {
+			loanStatus.value = 'RETURNED'
+		}
 		//If loan is denied
 		console.log(msg.active, msg.returned)
 		if (!msg.active && !msg.returned) {
@@ -374,7 +379,7 @@ onBeforeMount(async () => {
 		if (!chat.value?.item) return
 		const res = await axios.get('/item', {
 			params: {
-				id: chat.value.item.itemId,
+				itemId: chat.value.item.itemId,
 			},
 		})
 
@@ -434,6 +439,19 @@ onBeforeMount(async () => {
 		loanStatus.value = 'NOT_SENT'
 	}
 
+	if (loan.value?.returned) {
+		try {
+			console.log('Here')
+			const res = await axios.get('/review/hasReviewed', {
+				params: {
+					loanId: loan.value?.loanId,
+				},
+			})
+			console.log(res.data)
+			hasReviewed.value = res.data
+		} catch (error) {}
+	}
+
 	await connect()
 	await reRenderChat()
 })
@@ -444,8 +462,40 @@ function sendLoanReturned() {
 }
 
 function sendLoanRequest() {
-	showLoginModal.value = !showLoginModal.value
 	if (!range.value) return
+	if (range.value?.end < range.value?.start) {
+		status.value = 'error'
+		store.dispatch('error', 'Sluttdato kan ikke vær før startdato')
+		return
+	}
+
+	if (price.value < 0) {
+		status.value = 'error'
+		store.dispatch('error', 'Pris kan ikke være negativ')
+		return
+	}
+
+	if (!item.value) return
+
+	if (
+		range.value?.end.toISOString() > item.value?.availableTo ||
+		range.value?.end.toISOString() < item.value?.availableFrom
+	) {
+		status.value = 'error'
+		store.dispatch('error', 'Hold sluttdato innenfor oppgitt intervall')
+		return
+	}
+
+	if (
+		range.value?.start.toISOString() < item.value?.availableFrom ||
+		range.value?.start.toISOString() > item.value?.availableTo
+	) {
+		status.value = 'error'
+		store.dispatch('error', 'Hold startdato innenfor oppgitt intervall')
+		return
+	}
+
+	showLoginModal.value = !showLoginModal.value
 	//TODO: add checks if from date is later than to etc
 	try {
 		sendLoanRequestWS()
@@ -470,6 +520,28 @@ function toggleShowRating() {
 	showRateUserPopup.value = true
 }
 
+function getUserToReview() {
+	if (!store.state.user) return
+	if (store.state.user.userId === user.value?.userId) {
+		return lender.value
+	} else {
+		return user.value
+	}
+}
+
+function userReviewed() {
+	loanStatus.value = 'REVIEWED'
+	showRateUserPopup.value = false
+}
+
+function getPriceUnit(unit: string) {
+	if (unit === 'DAY') return 'Dag'
+	if (unit === 'HOUR') return 'Time'
+	if (unit === 'MONTH') return 'Måned'
+	if (unit === 'WEEK') return 'Uke'
+	if (unit === 'YEAR') return 'År'
+}
+
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -491,7 +563,7 @@ const range = ref<LoanRangePrice>()
 const render = ref<number>(0)
 const showRateUserPopup = ref<boolean>(false)
 const price = ref<number>(0)
-
+const hasReviewed = ref<boolean>(false)
 console.log(lender)
 function reRenderChat() {
 	render.value++
@@ -500,10 +572,12 @@ function reRenderChat() {
 <template>
 	<div class="h-96 flex-col w-full">
 		<RateUserPopup
-			v-if="lender"
+			v-if="lender && loan && getUserToReview()"
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
-			:user="lender"
+			:user="getUserToReview()"
+			:loan="loan"
+			@confirm="userReviewed()"
 		></RateUserPopup>
 
 		<div class="flex gap-2">
@@ -511,7 +585,7 @@ function reRenderChat() {
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
 			<h1 v-if="item?.name">
 				{{ item.name }}
-				{{ item.price }}kr / {{ item.priceUnit }}
+				{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
 			</h1>
 			<h1 v-else>Chat</h1>
 		</div>
@@ -553,7 +627,7 @@ function reRenderChat() {
 				<BaseBtn
 					v-if="
 						lender?.userId !== store.state.user?.userId &&
-						loanStatus === 'NOT_SENT'
+						(loanStatus === 'PENDING' || loanStatus === 'NOT_SENT')
 					"
 					class="grow bg-green-600"
 					:disabled="loanPending || loanStatus !== 'NOT_SENT'"
@@ -562,7 +636,7 @@ function reRenderChat() {
 					>Forespør</BaseBtn
 				>
 				<BaseBtn
-					v-if="loanStatus === 'RETURNED'"
+					v-if="loanStatus === 'RETURNED' && !hasReviewed"
 					@click="toggleShowRating"
 					data-testid="feedback-button"
 					class="grow bg-purple-500"
@@ -580,6 +654,13 @@ function reRenderChat() {
 				>
 			</div>
 		</form>
+
+		<UserCard
+			v-if="getUserToReview()"
+			:user="getUserToReview()"
+			color="green"
+			show-rating
+		/>
 	</div>
 
 	<BasePopup

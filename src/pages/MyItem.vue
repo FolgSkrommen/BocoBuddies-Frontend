@@ -11,7 +11,6 @@ import RateUserPopup from '../components/RateUserPopup.vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
 import { Item, Loan, User } from '../api/schema'
 import { GetLoanRequest, GetLoanResponse } from '../api/loan'
 import { GetItemRequest, GetItemResponse } from '../api/item'
@@ -40,7 +39,7 @@ async function getItem() {
 	status.value = 'loading'
 	try {
 		const params: GetItemRequest = {
-			id,
+			itemId: id,
 		}
 		const res = await axios.get('/item', {
 			params,

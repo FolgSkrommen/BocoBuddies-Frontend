@@ -12,13 +12,14 @@ const search = () => {
 interface Props {
 	modelValue: string
 	error?: string
+	label?: string
 }
 const { modelValue, error } = defineProps<Props>()
 </script>
 
 <template>
 	<!--Text search input component-->
-	<div class="flex gap-2 w-full">
+	<div class="flex w-full">
 		<BaseInput
 			class="grow"
 			@keyup.enter="search"
@@ -29,7 +30,8 @@ const { modelValue, error } = defineProps<Props>()
 			type="search"
 			placeholder="Søk"
 			:error="error"
+			:label="label"
 		></BaseInput>
-		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
+		<Button @click="search" data-testid="search-button">Søk</Button>
 	</div>
 </template>

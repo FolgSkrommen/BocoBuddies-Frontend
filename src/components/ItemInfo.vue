@@ -3,12 +3,14 @@ import { computed } from 'vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import { Item, Position } from '../api/schema'
+import { GoogleMap, Circle } from 'vue3-google-map'
 
 interface Props {
 	item: Item
 }
 
-let { item } = defineProps<Props>()
+const { item } = defineProps<Props>()
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 function randomCenter(position: Position) {
 	const newPosition: Position = {
@@ -72,5 +74,19 @@ const range = computed(() => ({
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalCode }}</p>
 		</div>
+		<GoogleMap
+			v-if="item.position && apiKey?.length > 0"
+			:api-key="apiKey"
+			style="width: 100%; height: 500px"
+			:center="item.position"
+			:zoom="14"
+		>
+			<Circle
+				:options="{
+					center: randomCenter(item.position),
+					radius: 400,
+				}"
+			/>
+		</GoogleMap>
 	</div>
 </template>

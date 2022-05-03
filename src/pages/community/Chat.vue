@@ -112,8 +112,7 @@ onBeforeMount(async () => {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data
 	} catch (error) {
-		//TODO add error
-		alert(error)
+		store.dispatch('addError', error)
 	}
 
 	try {
@@ -126,7 +125,7 @@ onBeforeMount(async () => {
 		})
 		messages.value.reverse()
 	} catch (error) {
-		alert(error)
+		store.dispatch('addError', error)
 	}
 
 	//await connect()

@@ -22,11 +22,12 @@ async function getChats() {
 
 		chats.value.forEach(chat => {
 			axios
-				.get('/item', { params: { id: chat.item?.itemId } })
+				.get('/item', { params: { itemId: chat.item?.itemId } })
 				.then(response => {
 					chat.item = response.data.item
 				})
 		})
+
 		status.value = 'loaded'
 	} catch (error: any) {
 		status.value = 'error'

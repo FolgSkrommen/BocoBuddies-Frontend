@@ -20,8 +20,6 @@ import { Alternative, Category, Item } from '../api/schema'
 import { store } from '../store'
 import { GetItemSearchRequest } from '../api/item/search'
 
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-
 //Variables
 let sortChosen = ref(0)
 let sortAlts: Alternative[] = [
@@ -248,7 +246,6 @@ observer.observe(items[items.length-1])*/
 		></iframe
 	></BasePopup> -->
 	<div class="flex flex-col gap-2">
-		<h1>Hjem</h1>
 		<SearchbarAndButton
 			v-model="searchWord"
 			@search="searchAndResetItems"
@@ -258,18 +255,28 @@ observer.observe(items[items.length-1])*/
 		<div class="flex flex-col gap-2 pb-3">
 			<!--Tag input component-->
 			<CategoryList
+				color="bg-slate-500"
 				v-model="chosenCategories"
 				v-if="chosenCategories.length > 0"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
-				class="border-solid bg-slate-300 rounded p-2"
+				class=""
 				data-testid="categories-category-chosen"
 			></CategoryList>
+
 			<CategoryList
+				color="bg-blue-500"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
 			></CategoryList>
+
+			<SortDropdown
+				class="grow"
+				:sortAlts="sortAlts"
+				v-model.number="sortChosen"
+				data-testid="sort-dropdown"
+			/>
 		</div>
 	</div>
 
@@ -285,10 +292,4 @@ observer.observe(items[items.length-1])*/
 	/>
 
 	<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">Ingen resultater</h2>
-
-	<SortDropdown
-		:sortAlts="sortAlts"
-		v-model.number="sortChosen"
-		data-testid="sort-dropdown"
-	/>
 </template>
