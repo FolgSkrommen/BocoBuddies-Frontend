@@ -151,6 +151,7 @@ async function search() {
 	})
 
 	try {
+		//TODO: Legg til useAuth: true? Sjekk dette!
 		const params: GetItemSearchRequest = {
 			categories: chosenCategoriesIds.slice(-1),
 			sort: sortChosenString,
@@ -159,6 +160,7 @@ async function search() {
 			userId: store.state.user.userId,
 			loan: true,
 			active: stateTag.value === State.ACTIVE,
+			useAuth: true,
 		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params,
