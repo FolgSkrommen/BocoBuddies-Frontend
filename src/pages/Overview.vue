@@ -1,6 +1,4 @@
-<script setup lang="ts">
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-</script>
+<script setup lang="ts"></script>
 
 <template>
 	<div class="flex w-full justify-left gap-2 mb-5">

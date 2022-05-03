@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
-import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import ItemInfo from '../components/ItemInfo.vue'
 import 'v-calendar/dist/style.css'
@@ -10,7 +8,6 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
 import { PostChatRequest, PostChatResponse } from '../api/chat'
@@ -58,9 +55,7 @@ async function createChat() {
 			itemId: id,
 			members: [store.state.user.userId, lender.value.userId],
 		}
-		const res = await axios.post('/chat', {
-			data: body,
-		})
+		const res = await axios.post('/chat', body)
 		const data = res.data as PostChatResponse
 		router.push(`/chat/${data.chatId}`)
 	} catch (error) {

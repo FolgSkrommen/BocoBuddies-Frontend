@@ -20,8 +20,6 @@ import { Alternative, Category, Item } from '../api/schema'
 import { store } from '../store'
 import { GetItemSearchRequest } from '../api/item/search'
 
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-
 //Variables
 let sortChosen = ref(0)
 let sortAlts: Alternative[] = [
