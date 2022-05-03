@@ -19,6 +19,8 @@ import {
 } from '../../api/loan'
 import { GetChatResponse } from '../../api/chat'
 import { GetMessageResponse } from '../../api/message'
+import BaseLabel from '../../components/base/BaseLabel.vue'
+import BaseBanner from '../../components/base/BaseBanner.vue'
 
 const route = useRoute()
 
@@ -67,7 +69,7 @@ function onError(err: any) {
 
 async function sendMessage(event: any) {
 	if (!stompClient.value || !store.state.user || !chat.value) return
-
+	console.log(!stompClient.value || !store.state.user || !chat.value)
 	let chatMessage: Message = {
 		senderId: store.state.user.userId,
 		message: currentMessage.value,
@@ -77,7 +79,7 @@ async function sendMessage(event: any) {
 		chatId: chat.value.chatId,
 	}
 	try {
-		//const res = await axios.post("/message", chatMessage)
+		const data = axios.post('/message', chatMessage)
 
 		stompClient.value.send(
 			'/app/chat/sendMessage',
@@ -85,7 +87,10 @@ async function sendMessage(event: any) {
 		)
 
 		messages.value.push(chatMessage)
-	} catch (error) {}
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 	currentMessage.value = ''
 
 	event.preventDefault()
@@ -117,10 +122,10 @@ async function sendLoanRequestWS() {
 		creationDate: new Date().toISOString(),
 	}
 	try {
-		const res = await axios.post('/loan', {
-			data: body,
-		})
+		console.log(body)
+		const res = await axios.post('/loan', body)
 		loan.value = res.data as PostLoanResponse
+		body.loanId = loan.value.loanId
 		stompClient.value.send(
 			'/app/chat/sendLoanRequest',
 			JSON.stringify(body)
@@ -136,7 +141,8 @@ async function sendLoanRequestWS() {
 		}
 		messages.value.push(loanRequestMessage)
 	} catch (error) {
-		//TODO add error
+		status.value = 'error'
+		errorMessage.value = error
 	}
 }
 
@@ -177,7 +183,8 @@ async function sendLoanAccept() {
 
 		loanPending.value = true
 	} catch (error) {
-		//TODO add error
+		status.value = 'error'
+		errorMessage.value = error
 	}
 }
 
@@ -209,7 +216,8 @@ async function sendLoanDecline() {
 			JSON.stringify(loanAnswer)
 		)
 	} catch (error) {
-		//TODO add error
+		status.value = 'error'
+		errorMessage.value = error
 	}
 }
 
@@ -341,11 +349,12 @@ onBeforeMount(async () => {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data as GetChatResponse
 	} catch (error) {
-		//TODO: FIx this shit
-		alert(error)
+		status.value = 'error'
+		errorMessage.value = error
 	}
 
 	try {
+		console.log('/message?chatId=' + chat.value?.chatId)
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
 		const data = res.data as GetMessageResponse
 		messages.value = data.messages
@@ -356,8 +365,8 @@ onBeforeMount(async () => {
 		})
 		messages.value.reverse()
 	} catch (error) {
-		//TODO: FIx this shit
-		alert(error)
+		status.value = 'error'
+		errorMessage.value = error
 	}
 
 	try {
@@ -370,7 +379,10 @@ onBeforeMount(async () => {
 
 		item.value = res.data.item
 		lender.value = res.data.lender
-	} catch (error) {}
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 
 	try {
 		const res = await axios.get('/loan/chat?chatId=' + chat.value?.chatId)
@@ -381,8 +393,8 @@ onBeforeMount(async () => {
 		if (chat.value) {
 			loan.value = {
 				chatId: chat.value.chatId,
-				start: res.data.loan.startDate,
-				end: res.data.loan.endDate,
+				start: res.data.loan.start,
+				end: res.data.loan.end,
 				loanId: res.data.loan.loanId,
 				active: res.data.loan.active,
 				returned: res.data.loan.returned,
@@ -399,8 +411,8 @@ onBeforeMount(async () => {
 				type: 'REQUEST',
 				receive:
 					res.data.user.userId.toString() != store.state.user.userId,
-				start: res.data.loan.startDate,
-				stop: res.data.loan.endDate,
+				start: res.data.loan.start,
+				stop: res.data.loan.end,
 				date: res.data.value?.creationDate,
 				returned: loan.value?.returned,
 				active: loan.value?.active,
@@ -434,8 +446,13 @@ function sendLoanRequest() {
 	showLoginModal.value = !showLoginModal.value
 	if (!range.value) return
 	//TODO: add checks if from date is later than to etc
-	sendLoanRequestWS()
-	loanPending.value = true
+	try {
+		sendLoanRequestWS()
+		loanPending.value = true
+	} catch (error) {
+		status.value = 'error'
+		errorMessage.value = error
+	}
 }
 function handleLoanRequest() {
 	if (loanStatus.value === 'ACCEPTED') {
@@ -456,7 +473,8 @@ const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
 const loan = ref<Loan>()
-
+const status = ref<Status>()
+type Status = 'loading' | 'loaded' | 'error'
 const loanStatus = ref<loanStatusCode>('UNDEFINED')
 const currentMessage = ref<string>('')
 const loanPending = ref(false)
@@ -472,11 +490,18 @@ const range = ref<LoanRangePrice>()
 const render = ref<number>(0)
 const showRateUserPopup = ref<boolean>(false)
 const price = ref<number>(0)
+const errorMessage = ref()
 function reRenderChat() {
 	render.value++
 }
 </script>
 <template>
+	<BaseBanner
+		v-if="status === 'error'"
+		type="error"
+		:message="errorMessage"
+		data-testid="error"
+	/>
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>
@@ -524,11 +549,11 @@ function reRenderChat() {
 			<div class="flex my-4">
 				<BaseBtn
 					v-if="
-						lender?.userId != store.state.user?.userId &&
-						loanStatus === 'PENDING'
+						lender?.userId !== store.state.user?.userId &&
+						loanStatus === 'NOT_SENT'
 					"
 					class="grow bg-green-600"
-					:disabled="loanPending || loanStatus === 'PENDING'"
+					:disabled="loanPending || loanStatus !== 'NOT_SENT'"
 					data-testid="rent-button"
 					@click="showLoginModal = true"
 					>Forespør</BaseBtn
@@ -567,6 +592,7 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 		/>
+		<BaseLabel modelValue="Pris"></BaseLabel>
 		<BaseInput v-model="price"></BaseInput>
 		<div class="flex justify-between">
 			<BaseBtn @click="showLoginModal = false" color="gray"
