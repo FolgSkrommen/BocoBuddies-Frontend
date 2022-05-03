@@ -62,7 +62,7 @@ async function createChat() {
 			data: body,
 		})
 		const data = res.data as PostChatResponse
-		router.push(`/chat/${data}`)
+		router.push(`/chat/${data.chatId}`)
 	} catch (error) {
 		console.log(error)
 	}

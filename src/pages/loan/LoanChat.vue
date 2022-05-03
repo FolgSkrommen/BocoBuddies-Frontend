@@ -21,6 +21,7 @@ import { GetChatResponse } from '../../api/chat'
 import { GetMessageResponse } from '../../api/message'
 import BaseLabel from '../../components/base/BaseLabel.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
+import RateUserPopup from '../../components/RateUserPopup.vue'
 
 const route = useRoute()
 
@@ -491,6 +492,7 @@ const render = ref<number>(0)
 const showRateUserPopup = ref<boolean>(false)
 const price = ref<number>(0)
 
+console.log(lender)
 function reRenderChat() {
 	render.value++
 }
