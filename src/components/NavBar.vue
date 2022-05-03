@@ -29,7 +29,7 @@ import {
 			<router-link to="/user">
 				<img
 					v-if="store.state.user"
-					class="rounded-full object-fill w-8 h-8"
+					class="rounded-full object-cover w-8 h-8"
 					:src="store.state.user?.profilePicture"
 					alt="Profil"
 				/>

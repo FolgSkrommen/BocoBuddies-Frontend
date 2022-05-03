@@ -5,6 +5,7 @@ import { Category } from '../api/schema'
 interface Props {
 	modelValue: Category[]
 	removable?: boolean
+	color: String
 }
 let { modelValue, removable } = defineProps<Props>()
 const emit = defineEmits(['remove-category-event', 'add-category-event'])
@@ -16,6 +17,7 @@ const emit = defineEmits(['remove-category-event', 'add-category-event'])
 			v-for="category in modelValue"
 			:key="category.categoryId"
 			class="bg-blue-500 text-white p-1 px-2 flex gap-1 rounded-full hover:cursor-pointer"
+			:class="color"
 		>
 			<XCircleIcon
 				v-if="removable"
@@ -24,7 +26,7 @@ const emit = defineEmits(['remove-category-event', 'add-category-event'])
 			></XCircleIcon>
 			<span
 				@click="emit('add-category-event', category)"
-				class="truncate"
+				class="truncate font-light"
 				>{{ category.categoryName }}</span
 			>
 		</div>

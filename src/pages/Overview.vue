@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-	<div class="flex w-full justify-left gap-2 mb-5">
+	<div class="flex w-full justify-left gap-1 mb-1">
 		<router-link class="flex-1" :to="{ name: 'myItems' }">
 			Mine gjenstander
 		</router-link>

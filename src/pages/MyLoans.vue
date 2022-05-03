@@ -260,14 +260,15 @@ function loadMoreItems() {
 		<div class="mt-3">
 			<!--Tag input component-->
 			<CategoryList
+				color="bg-slate-500"
 				v-if="chosenCategories.length > 0"
 				v-model="chosenCategories"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
 				data-testid="categories-tag-chosen"
-				class="border-solid bg-slate-500 rounded"
 			></CategoryList>
 			<CategoryList
+				color="bg-blue-500"
 				class="mt-1"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"

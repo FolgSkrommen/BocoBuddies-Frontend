@@ -244,15 +244,17 @@ observer.observe(items[items.length-1])*/
 		<div class="flex flex-col gap-2 pb-3">
 			<!--Tag input component-->
 			<CategoryList
+				color="bg-slate-500"
 				v-model="chosenCategories"
 				v-if="chosenCategories.length > 0"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
-				class="border-solid bg-slate-300 rounded p-2"
+				class=""
 				data-testid="categories-category-chosen"
 			></CategoryList>
 
 			<CategoryList
+				color="bg-blue-500"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
