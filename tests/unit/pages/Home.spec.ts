@@ -52,6 +52,7 @@ describe('Home', () => {
 			expect(
 				wrapper.findAll('[data-testid="categories-tag-alts"]')
 			).toHaveLength(1)
+
 			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
 			).toBe(true)

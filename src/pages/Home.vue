@@ -234,7 +234,7 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
+	<!-- 	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
 		><iframe
 			width="560"
 			height="315"
@@ -244,7 +244,7 @@ observer.observe(items[items.length-1])*/
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
 		></iframe
-	></BasePopup>
+	></BasePopup> -->
 	<BaseBanner
 		v-if="status === 'error'"
 		type="error"
@@ -271,7 +271,7 @@ observer.observe(items[items.length-1])*/
 		<CategoryList
 			v-model="tagAlts"
 			@add-category-event="categoryChosen"
-			data-testid="categories-category-alts"
+			data-testid="categories-tag-alts"
 		></CategoryList>
 	</div>
 	<LoadingIndicator v-if="status === 'loading'" />
