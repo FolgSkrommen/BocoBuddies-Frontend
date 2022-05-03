@@ -48,21 +48,6 @@ watch(sortChosen, () => {
 	searchAndResetItems()
 })
 
-//Functions
-function isAnItem(obj: any): obj is Item {
-	return (
-		'id' in obj &&
-		'image' in obj &&
-		'name' in obj &&
-		'price' in obj &&
-		'availableFrom' in obj &&
-		'availableTo' in obj &&
-		'priceUnit' in obj &&
-		'address' in obj &&
-		'postalCode' in obj
-	)
-}
-
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
 async function getMainCategories() {
@@ -139,8 +124,7 @@ async function search() {
 			},
 		})
 		const data: Item[] = res.data
-		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
-			items.value = items.value.concat(data)
+		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
@@ -205,7 +189,7 @@ function loadMoreItems() {
 		search()
 	}
 }
-const seenVideoCookie = ('; ' + document.cookie)
+/* const seenVideoCookie = ('; ' + document.cookie)
 	.split(`; seenVideo=`)
 	.pop()
 	.split(';')[0]
@@ -220,7 +204,7 @@ function setCookieSeen() {
 	location.reload()
 }
 
-console.log(seenTutorial)
+console.log(seenTutorial) */
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {
@@ -234,7 +218,7 @@ observer.observe(items[items.length-1])*/
 </script>
 
 <template>
-	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
+	<!-- 	<BasePopup v-show="!seenTutorial" @exit="setCookieSeen"
 		><h4>Velkommen til Boco-Buddies</h4>
 		<iframe
 			width="560"
@@ -245,7 +229,7 @@ observer.observe(items[items.length-1])*/
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
 		></iframe
-	></BasePopup>
+	></BasePopup> -->
 	<div class="flex flex-col gap-2">
 		<h1>Hjem</h1>
 		<SearchbarAndButton
