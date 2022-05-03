@@ -18,8 +18,9 @@ const { modelValue, error } = defineProps<Props>()
 
 <template>
 	<!--Text search input component-->
-	<div class="flex">
+	<div class="flex gap-2 w-full">
 		<BaseInput
+			class="grow"
 			@keyup.enter="search"
 			@input="updateValue"
 			v-model="modelValue"

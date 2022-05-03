@@ -11,13 +11,13 @@ const { color } = defineProps<Props>()
 const colorClass = computed(() => {
 	switch (color) {
 		case 'blue':
-			return 'bg-blue-500 text-white'
+			return 'bg-blue-600 text-white'
 		case 'red':
 			return 'bg-red-400 text-white'
 		case 'gray':
 			return 'bg-slate-300 text-slate-900'
 		default:
-			return 'bg-blue-500 text-white'
+			return 'bg-blue-600 text-white'
 	}
 })
 </script>
