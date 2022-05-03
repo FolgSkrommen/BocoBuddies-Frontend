@@ -12,6 +12,7 @@ import { userInfo } from 'os'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Alternative, Category, Item } from '../api/schema'
+import { GetItemSearchRequest } from '../api/item/search'
 
 //Enums
 enum State {
@@ -128,17 +129,18 @@ async function search() {
 	})
 
 	try {
+		const params: GetItemSearchRequest = {
+			categories: chosenCategoriesIds.slice(-1),
+			sort: sortChosenString,
+			amount: amountPerPage,
+			offset: currentPage.value,
+			userId: store.state.user.userId,
+			loan: false,
+			active: stateTag.value === State.ACTIVE,
+			useAuth: true,
+		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
-			params: {
-				categories: chosenCategoriesIds[chosenCategoriesIds.length - 1],
-				sort: sortChosenString,
-				amount: amountPerPage,
-				offset: currentPage.value,
-				userId: store.state.user.userId,
-				loan: false,
-				active: stateTag.value === State.ACTIVE,
-				useAuth: false,
-			},
+			params,
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
 			},
