@@ -5,13 +5,9 @@ import BasePopup from '../components/base/BasePopup.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { User } from '../api/schema'
-
+import { Review } from '../api/schema'
 interface Props {
 	user: User
-}
-
-interface Review {
-	//TODO
 }
 
 const { user } = defineProps<Props>()
@@ -24,7 +20,9 @@ const comment = ref('')
 function handleRate() {
 	if (rating.value === -1) return
 	//TODO: ADD Method
+	const review: Review = {}
 	//axios.post("/review", )
+	const res = axios.post('/review')
 	emit('exit')
 }
 </script>
