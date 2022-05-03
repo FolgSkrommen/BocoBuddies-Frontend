@@ -15,6 +15,7 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import { Item, Loan, User } from '../api/schema'
 import { GetLoanRequest, GetLoanResponse } from '../api/loan'
 import { GetItemRequest, GetItemResponse } from '../api/item'
+import { store } from '../store'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -22,7 +23,6 @@ const id = parseInt(params.id as string)
 type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
-const errorMessage = ref()
 
 const item = ref<Item>()
 const loaner = ref<User>()
@@ -50,9 +50,9 @@ async function getItem() {
 		item.value = data.item
 		loaner.value = data.lender
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -81,11 +81,6 @@ const showRateUserPopup = ref(false)
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<div v-if="status === 'loaded' && loaner && item">
 		<RateUserPopup
 			v-show="showRateUserPopup"

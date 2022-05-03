@@ -87,9 +87,9 @@ async function sendMessage(event: any) {
 		)
 
 		messages.value.push(chatMessage)
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 	currentMessage.value = ''
 
@@ -140,9 +140,9 @@ async function sendLoanRequestWS() {
 			price: price.value,
 		}
 		messages.value.push(loanRequestMessage)
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -182,9 +182,9 @@ async function sendLoanAccept() {
 		if (loanStatus.value !== 'RETURNED') loanStatus.value = 'ACCEPTED'
 
 		loanPending.value = true
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -215,9 +215,9 @@ async function sendLoanDecline() {
 			'/app/chat/acceptLoan',
 			JSON.stringify(loanAnswer)
 		)
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -348,9 +348,9 @@ onBeforeMount(async () => {
 	try {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data as GetChatResponse
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 
 	try {
@@ -364,9 +364,9 @@ onBeforeMount(async () => {
 			m.type = 'CHAT'
 		})
 		messages.value.reverse()
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 
 	try {
@@ -379,9 +379,9 @@ onBeforeMount(async () => {
 
 		item.value = res.data.item
 		lender.value = res.data.lender
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 
 	try {
@@ -449,9 +449,9 @@ function sendLoanRequest() {
 	try {
 		sendLoanRequestWS()
 		loanPending.value = true
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function handleLoanRequest() {
@@ -490,18 +490,12 @@ const range = ref<LoanRangePrice>()
 const render = ref<number>(0)
 const showRateUserPopup = ref<boolean>(false)
 const price = ref<number>(0)
-const errorMessage = ref()
+
 function reRenderChat() {
 	render.value++
 }
 </script>
 <template>
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-		data-testid="error"
-	/>
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>

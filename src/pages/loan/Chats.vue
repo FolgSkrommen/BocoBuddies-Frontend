@@ -6,13 +6,13 @@ import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import { Chat, User } from '../../api/schema'
 import { GetChatByUserMarketResponse } from '../../api/chat/getByUser/market'
+import { store } from '../../store'
 
 const chats = ref<Array<Chat>>([])
 
 type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
-const errorMessage = ref()
 async function getChats() {
 	status.value = 'loading'
 	try {
@@ -27,9 +27,9 @@ async function getChats() {
 				})
 		})
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -39,12 +39,6 @@ getChats()
 <template>
 	<div>
 		<LoadingIndicator v-if="status === 'loading'" data-testid="loader" />
-		<BaseBanner
-			v-if="status === 'error'"
-			type="error"
-			:message="errorMessage"
-			data-testid="error"
-		/>
 		<div v-if="status === 'loaded'">
 			<h1 data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">

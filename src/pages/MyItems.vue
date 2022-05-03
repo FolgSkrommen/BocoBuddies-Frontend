@@ -43,7 +43,6 @@ const stateTag = ref<State>(State.ACTIVE)
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 //const search = ref('')
 
 //Mounted
@@ -88,9 +87,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -165,9 +164,9 @@ async function search() {
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 		items.value = []
 	}
 }
@@ -185,9 +184,9 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -213,9 +212,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -228,11 +227,6 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<div v-if="!store.getters.loggedIn">
 		<p>Du må være logget inn for å se denne siden</p>
 	</div>
