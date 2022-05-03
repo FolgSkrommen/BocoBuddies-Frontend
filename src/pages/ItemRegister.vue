@@ -69,6 +69,7 @@ async function getCategories() {
 		getCategoriesStatus.value = 'error'
 		store.dispatch('error', error.message)
 	}
+	console.log(categoryChoices.value)
 }
 
 getCategories()
@@ -98,6 +99,7 @@ async function updateCategories(categoryId: number, index: number) {
 				console.log(object.filterTypes)
 				if (object.filterTypes) {
 					filterTypes.value = object.filterTypes
+					console.log(filterTypes.value)
 				}
 			}
 		})
@@ -110,9 +112,9 @@ async function updateCategories(categoryId: number, index: number) {
 
 /* Filter */
 
-let chosenFilters = ref<number[]>([])
-function updateFilters(typeId: number, index: number) {
-	chosenFilters.value[index] = typeId
+let chosenFilters = ref<String[]>([])
+function updateFilters(chosen: String, index: number) {
+	chosenFilters.value[index] = chosen
 	console.log(chosenFilters.value)
 }
 
@@ -188,8 +190,16 @@ async function registerItem() {
 	formData.append('postalCode', postalCode.value.toString())
 	formData.append('startDate', range.value.start.toISOString())
 	formData.append('endDate', range.value.end.toISOString())
-	chosenFilters.value.forEach(number => {
-		formData.append('filterIdList', number.toString())
+	chosenFilters.value.forEach(chosen => {
+		filterTypes.value.forEach(filterType => {
+			filterType.filterValues.forEach(filter => {
+				console.log(filter.value + filter)
+				if (chosen == filter.value) {
+					console.log(filter.id)
+					formData.append('filterIdList', filter.id.toString())
+				}
+			})
+		})
 	})
 	if (!imageFiles.value.length) {
 		//TODO: Filter funker ikke, fiks dette, muligens endre fra formdata til interface
@@ -294,7 +304,7 @@ async function registerItem() {
 				:key="index"
 				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
 				@input="
-						event => updateFilters(parseInt((event.target as HTMLInputElement).value), index)
+						event => updateFilters((event.target as HTMLInputElement).value, index)
 					"
 			>
 				>

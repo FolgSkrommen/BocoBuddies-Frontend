@@ -146,7 +146,7 @@ async function search() {
 			},
 		})
 		const data: Item[] = res.data
-		console.log(JSON.stringify(data))
+		console.log(data)
 		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
@@ -210,6 +210,20 @@ function loadMoreItems() {
 		currentPage.value++
 		search()
 	}
+}
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenMyItemsTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		"Dette er siden for dine egne gjenstander. Her kan du se alle gjenstandene du har opprettet. Klikk på 'Plus' ikonet for å opprette en ny gjenstand. Du kan også sortere på arkiverte og aktive gjenstander. Klikk X knappen for å lukke denne meldingen."
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenMyItemsTutorial=true; max-age=31536000')
 }
 </script>
 

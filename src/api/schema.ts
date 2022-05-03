@@ -23,7 +23,7 @@ export interface Review {
 }
 
 export interface Filter {
-	name: string
+	id: number
 	value: string
 }
 
@@ -48,6 +48,7 @@ export interface Item {
 	address: string
 	position: Position
 	images: string[]
+	active: boolean
 	availableFrom: string
 	availableTo: string
 	categories: string[]

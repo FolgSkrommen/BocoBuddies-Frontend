@@ -60,6 +60,20 @@ if (store.state.user && id && id !== store.state.user.userId) {
 	user.value = store.state.user
 	getUserStatus.value = 'loaded'
 }
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenUserTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		'Dette er profil siden din. her kan du åpne FAQen, åpne instillingsfanen din og se din egen rating. Klikk X knappen for å lukke denne meldingen.'
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenUserTutorial=true; max-age=31536000')
+}
 </script>
 
 <template>
