@@ -21,7 +21,7 @@ async function getChats() {
 		chats.value = data
 		chats.value.forEach(chat => {
 			axios
-				.get('/item', { params: { id: chat.itemId } })
+				.get('/item', { params: { id: chat.item?.itemId } })
 				.then(response => {
 					chat.item = response.data.item
 				})

@@ -96,12 +96,18 @@ async function sendMessage(event: any) {
  */
 async function sendLoanRequestWS() {
 	console.log(range.value)
-	if (!stompClient.value) return
-	if (!store.state.user || !chat.value?.chatId || !range.value) return
+	if (
+		!stompClient.value ||
+		!store.state.user ||
+		!chat.value?.chatId ||
+		!range.value ||
+		!chat.value.item
+	)
+		return
 
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
-		itemId: chat.value.itemId,
+		itemId: chat.value.item.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
 		end: range.value.end.toISOString(),
@@ -135,7 +141,13 @@ async function sendLoanRequestWS() {
 }
 
 async function sendLoanAccept() {
-	if (!stompClient.value || !chat.value || !loan.value || !store.state.user)
+	if (
+		!stompClient.value ||
+		!chat.value ||
+		!loan.value ||
+		!store.state.user ||
+		!chat.value.item
+	)
 		return
 
 	let loanRequest: PutLoanRequest = {
@@ -160,8 +172,7 @@ async function sendLoanAccept() {
 			'/app/chat/acceptLoan',
 			JSON.stringify(loanRequest)
 		)
-
-		console.log(chat.value?.itemId, loan.value?.loanId)
+		console.log(chat.value.item.itemId, loan.value?.loanId)
 		if (loanStatus.value !== 'RETURNED') loanStatus.value = 'ACCEPTED'
 
 		loanPending.value = true
@@ -171,13 +182,19 @@ async function sendLoanAccept() {
 }
 
 async function sendLoanDecline() {
-	if (!stompClient.value || !chat.value || !store.state.user) return
+	if (
+		!stompClient.value ||
+		!chat.value ||
+		!store.state.user ||
+		!chat.value.item
+	)
+		return
 	try {
 		const res = axios.delete('/loan?loanId=' + loan.value?.loanId)
 
 		let loanAnswer: Loan = {
 			chatId: chat.value.chatId,
-			itemId: chat.value.itemId,
+			itemId: chat.value.item.itemId,
 			active: false,
 			returned: false,
 			start: new Date().toISOString(),
@@ -244,7 +261,7 @@ async function onLoanAccept(payload: any) {
  */
 function onRequestReceived(payload: any) {
 	let request = JSON.parse(payload.body)
-	if (!store.state.user || !chat.value) return
+	if (!store.state.user || !chat.value || !chat.value.item) return
 
 	let msg: Message = {
 		senderId: request.loaner,
@@ -278,7 +295,7 @@ function onRequestReceived(payload: any) {
 				returned: request.returned,
 				price: request.price,
 				creationDate: request.creationDate,
-				itemId: chat.value.itemId,
+				itemId: chat.value.item.itemId,
 				loaner: request.loaner,
 			}
 		}
@@ -344,10 +361,10 @@ onBeforeMount(async () => {
 	}
 
 	try {
-		if (!chat.value?.itemId) return
+		if (!chat.value?.item) return
 		const res = await axios.get('/item', {
 			params: {
-				id: chat.value?.itemId,
+				id: chat.value.item.itemId,
 			},
 		})
 
@@ -359,6 +376,7 @@ onBeforeMount(async () => {
 		const res = await axios.get('/loan/chat?chatId=' + chat.value?.chatId)
 		user.value = res.data.user
 		console.log(res.data)
+		if (!chat.value || !chat.value.item) return
 
 		if (chat.value) {
 			loan.value = {
@@ -370,7 +388,7 @@ onBeforeMount(async () => {
 				returned: res.data.loan.returned,
 				creationDate: res.data.value?.creationDate,
 				price: res.data.loan.price,
-				itemId: chat.value.itemId,
+				itemId: chat.value.item.itemId,
 				loaner: res.data.loan.loaner,
 			}
 		}

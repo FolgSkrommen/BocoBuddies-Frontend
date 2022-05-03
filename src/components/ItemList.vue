@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Item } from '../api/schema'
 import BaseBtn from '../components/base/BaseBtn.vue'
+import Card from './Card.vue'
 
 const emit = defineEmits(['load-more-items'])
 const loadMoreItems = () => {
@@ -25,8 +26,7 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 				v-for="item in items"
 				:to="`/${redirect}/${item.itemId}`"
 			>
-				{{ item }}
-				<div class="flex gap-2">
+				<Card>
 					<img
 						v-if="item.images?.length > 0"
 						class="w-32 rounded-l-lg object-cover"
@@ -48,7 +48,7 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 							{{ item.postalCode }}, {{ item.address }}
 						</p>
 					</div>
-				</div>
+				</Card>
 			</router-link>
 		</div>
 		<div class="flex justify-center my-10">
