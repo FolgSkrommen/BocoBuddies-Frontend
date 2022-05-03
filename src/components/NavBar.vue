@@ -15,7 +15,7 @@ import {
 		<div class="flex justify-around px-4 py-2 container mx-auto">
 			<router-link class="grid place-items-center" to="/">
 				<SearchIcon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Items</p>
+				<p class="text-slate-300 text-sm">Gjenstander</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"
@@ -23,7 +23,7 @@ import {
 				to="/overview/items"
 			>
 				<CollectionIcon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Store</p>
+				<p class="text-slate-300 text-sm">Handel</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"
@@ -31,7 +31,7 @@ import {
 				to="/community"
 			>
 				<UserGroupIcon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Community</p>
+				<p class="text-slate-300 text-sm">Samfunn</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"
@@ -39,7 +39,7 @@ import {
 				to="/chats"
 			>
 				<ChatAlt2Icon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Chats</p>
+				<p class="text-slate-300 text-sm">Meldinger</p>
 			</router-link>
 			<router-link class="grid place-items-center" to="/user">
 				<img
@@ -49,7 +49,7 @@ import {
 					:alt="store.state.user.username"
 				/>
 				<UserIcon v-else class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Settings</p>
+				<p class="text-slate-300 text-sm">Profil</p>
 			</router-link>
 		</div>
 	</nav>
