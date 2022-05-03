@@ -36,7 +36,7 @@ async function getItem() {
 			params,
 		})
 		const data: GetItemResponse = res.data
-		console.log(data)
+		console.log(data.item)
 		item.value = data.item
 		lender.value = data.lender
 		status.value = 'loaded'

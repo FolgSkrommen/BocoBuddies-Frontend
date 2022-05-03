@@ -21,12 +21,8 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4 sm:grid-cols-2">
-			<router-link
-				class="bg-slate-100 rounded-lg shadow-lg"
-				v-for="item in items"
-				:to="`/${redirect}/${item.itemId}`"
-			>
-				<Card>
+			<Card v-for="item in items">
+				<router-link :to="`/${redirect}/${item.itemId}`">
 					<img
 						v-if="item.images?.length > 0"
 						class="w-32 rounded-l-lg object-cover"
@@ -48,8 +44,8 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 							{{ item.postalCode }}, {{ item.address }}
 						</p>
 					</div>
-				</Card>
-			</router-link>
+				</router-link>
+			</Card>
 		</div>
 		<div class="flex justify-center my-10">
 			<BaseBtn
