@@ -51,8 +51,8 @@ watch(sortChosen, () => {
 //Functions
 function isAnItem(obj: any): obj is Item {
 	return (
-		'id' in obj &&
-		'image' in obj &&
+		'itemId' in obj &&
+		'images' in obj &&
 		'name' in obj &&
 		'price' in obj &&
 		'availableFrom' in obj &&
@@ -142,6 +142,7 @@ async function search() {
 		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
 			items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
+		console.log(data)
 
 		status.value = 'loaded'
 	} catch (error: any) {
