@@ -26,7 +26,7 @@ const lender = ref<User>()
 async function getItem() {
 	status.value = 'loading'
 	const params: GetItemRequest = {
-		id: itemId,
+		itemId: itemId,
 	}
 	try {
 		const res = await axios.get('/item', {
