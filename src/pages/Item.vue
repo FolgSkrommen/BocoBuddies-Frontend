@@ -30,7 +30,9 @@ async function getItem() {
 	}
 	try {
 		const res = await axios.get('/item', {
-			params,
+			params: {
+				id: itemId,
+			},
 		})
 		const data: GetItemResponse = res.data
 		console.log(data.item)
