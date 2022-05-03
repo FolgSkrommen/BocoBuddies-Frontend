@@ -13,6 +13,7 @@ import AddFriendPopup from '../components/AddFriendPopup.vue'
 import BasePopup from '../components/base/BasePopup.vue'
 import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
+import { store } from '../store'
 
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
@@ -64,7 +65,6 @@ function isAnItem(obj: any): obj is Item {
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -72,9 +72,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 	}
 }
 getMainCategories()
@@ -143,9 +143,9 @@ async function search() {
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		status.value = 'error'
-		errorMessage.value = error
 		items.value = []
 	}
 }
@@ -165,9 +165,8 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
-		status.value = 'error'
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -193,9 +192,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -245,11 +244,6 @@ observer.observe(items[items.length-1])*/
 			allowfullscreen
 		></iframe
 	></BasePopup> -->
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 
 	<div class="flex flex-col gap-2">
 		<h1>Hjem</h1>

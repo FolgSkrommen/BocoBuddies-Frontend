@@ -12,7 +12,6 @@ import AddFriendPopup from '../components/community-popups/AddFriendPopup.vue'
 import NewMessagePopup from '../components/community-popups/NewMessagePopup.vue'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
-const errorMessage = ref()
 
 const users = ref<User[]>()
 
@@ -27,8 +26,8 @@ async function getFriends() {
 		users.value = res.data.friends
 		console.log(users.value)
 		getFriendsStatus.value = 'loaded'
-	} catch (error) {
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		getFriendsStatus.value = 'error'
 	}
 }
@@ -39,7 +38,7 @@ const getChatsStatus = ref<GetStatus>()
 async function getChats() {
 	getChatsStatus.value = 'loading'
 	if (!store.getters.loggedIn) {
-		errorMessage.value = 'Not logged in'
+		store.dispatch('error', 'Not logged in')
 		getChatsStatus.value = 'error'
 		return
 	}
@@ -61,8 +60,8 @@ async function getChats() {
 
 		friendChats.value = dataWithoutUser
 		getChatsStatus.value = 'loaded'
-	} catch (error) {
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		getChatsStatus.value = 'error'
 	}
 }
@@ -114,11 +113,6 @@ function add() {
 			</button>
 		</div>
 		<div v-if="view === 'Friends'">
-			<BaseBanner
-				v-if="getFriendsStatus === 'error'"
-				type="error"
-				:message="errorMessage"
-			/>
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<UserCard v-for="user in users" :user="user" />
@@ -130,11 +124,6 @@ function add() {
 			></AddFriendPopup>
 		</div>
 		<div v-if="view === 'Chats'">
-			<BaseBanner
-				v-if="getChatsStatus === 'error'"
-				type="error"
-				:message="errorMessage"
-			/>
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="{ chatId, chatName, members } in friendChats">
