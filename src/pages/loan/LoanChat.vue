@@ -585,7 +585,7 @@ function reRenderChat() {
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
 			<h1 v-if="item?.name">
 				{{ item.name }}
-				{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
+				({{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }})
 			</h1>
 			<h1 v-else>Chat</h1>
 		</div>
