@@ -115,7 +115,7 @@ async function sendLoanRequestWS() {
 
 	const body: PostLoanRequest = {
 		chatId: chat.value.chatId,
-		itemId: chat.value.item.itemId,
+		item: chat.value.item.itemId,
 		loaner: store.state.user.userId,
 		start: range.value.start.toISOString(),
 		end: range.value.end.toISOString(),
@@ -218,6 +218,7 @@ async function sendLoanDecline() {
 			'/app/chat/acceptLoan',
 			JSON.stringify(loanAnswer)
 		)
+		messages.value = messages.value.filter(({ type }) => type !== 'REQUEST')
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
@@ -484,8 +485,8 @@ function sendLoanRequest() {
 	}
 
 	if (
-		range.value?.start.toISOString() > item.value?.availableFrom ||
-		range.value?.start.toISOString() < item.value?.availableTo
+		range.value?.start.toISOString() < item.value?.availableFrom ||
+		range.value?.start.toISOString() > item.value?.availableTo
 	) {
 		status.value = 'error'
 		store.dispatch('error', 'Hold startdato innenfor oppgitt intervall')

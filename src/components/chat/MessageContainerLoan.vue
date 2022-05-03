@@ -52,6 +52,14 @@ function getProperDateTime(dateTime: string) {
 	return date + ' - ' + time
 }
 
+function getPriceUnit(unit: string) {
+	if (unit === 'DAY') return 'Dag'
+	if (unit === 'HOUR') return 'Time'
+	if (unit === 'MONTH') return 'Måned'
+	if (unit === 'WEEK') return 'Uke'
+	if (unit === 'YEAR') return 'År'
+}
+
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
@@ -107,7 +115,10 @@ function styleType(received: boolean) {
 
 					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
 					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
-					<h3>Price: {{ message.price }}kr / {{ item.priceUnit }}</h3>
+					<h3>
+						Pris: {{ message.price }}kr /
+						{{ getPriceUnit(item.priceUnit) }}
+					</h3>
 
 					<div
 						v-if="message.receive && modelValue === 'PENDING'"
