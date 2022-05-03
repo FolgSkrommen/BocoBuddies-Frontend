@@ -30,7 +30,7 @@ const loan = ref<Loan>()
 const range = computed(() => {
 	if (!loan.value) return
 	return {
-		start: new Date(loan.value.startTime),
+		start: new Date(loan.value.start),
 		end: new Date(loan.value.endTime),
 	}
 })

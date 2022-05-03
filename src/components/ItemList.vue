@@ -25,8 +25,10 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 				v-for="item in items"
 				:to="`/${redirect}/${item.itemId}`"
 			>
+				{{ item }}
 				<div class="flex gap-2">
 					<img
+						v-if="item.images?.length > 0"
 						class="w-32 rounded-l-lg object-cover"
 						:src="item.images[0]"
 						:alt="item.name"
