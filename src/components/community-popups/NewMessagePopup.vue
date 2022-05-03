@@ -8,7 +8,13 @@ import UserCard from '../UserCard.vue'
 import NewGCPopup from './NewGCPopup.vue'
 import axios from 'axios'
 import { store } from '../../store'
-import { FriendChat } from '../../api/schema'
+import { FriendChat, User } from '../../api/schema'
+import {
+	GetChatSearchRequest,
+	GetChatSearchResponse,
+} from '../../api/chat/search'
+import UserCardAndBtn from '../UserCardAndBtn.vue'
+import ChatCard from '../ChatCard.vue'
 
 const emit = defineEmits(['exit'])
 
@@ -19,26 +25,30 @@ const errorMessage = ref()
 const searchString = ref('')
 const currentPage = ref<number>(1)
 const amountPerPage: number = 20
+const loadMoreBool = ref<boolean>(false)
 
 const gcToggle = ref(false)
 
 const chatResults = ref<FriendChat[]>([])
 
 async function getFriends() {
-	console.log('Getting friends...')
 	if (!store.state.user)
 		throw Error('You must be logged in to search for friends')
 	status.value = 'loading'
 	try {
-		const res = await axios.get('/chat/search', {
-			params: {
-				searchString: searchString.value,
-				page: currentPage.value,
-				amount: amountPerPage,
-			},
-		})
-		const data: Response[] = res.data
-		console.log(data)
+		const params: GetChatSearchRequest = {
+			searchString: searchString.value,
+			page: currentPage.value,
+			amount: amountPerPage,
+		}
+		const res = await axios.get('/chat/search', { params })
+		const data: GetChatSearchResponse = res.data
+		data.length === 0 || data.length < amountPerPage
+			? (loadMoreBool.value = false)
+			: (loadMoreBool.value = true)
+
+		chatResults.value = data
+
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'
@@ -47,6 +57,7 @@ async function getFriends() {
 }
 getFriends()
 function searchForFriend() {
+	chatResults.value = []
 	console.log('Searching for friends...')
 	getFriends()
 }
@@ -72,8 +83,18 @@ function loadMoreFriends() {
 		<LoadingIndicator v-if="status === 'loading'" />
 
 		<div class="grid gap-4">
-			<!--<UserCard v-for="chat.members in chatResults" :user="chat.members" />-->
-			<BaseBtn @click="loadMoreFriends">Last inn flere</BaseBtn>
+			<div v-for="chatResult in chatResults" class="flex">
+				<ChatCard
+					:friendChat="chatResult"
+					:to="'/community/chat/' + chatResult.chatId"
+				></ChatCard>
+				<BaseBtn :to="'/community/chat/' + chatResult.chatId"
+					>Åpne samtale</BaseBtn
+				>
+			</div>
+			<BaseBtn @click="loadMoreFriends" v-if="loadMoreBool"
+				>Last inn flere</BaseBtn
+			>
 		</div>
 	</BasePopup>
 </template>
