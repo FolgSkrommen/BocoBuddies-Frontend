@@ -499,6 +499,13 @@ function reRenderChat() {
 </script>
 <template>
 	<div class="h-96 flex-col w-full">
+		<RateUserPopup
+			v-if="lender"
+			v-show="showRateUserPopup"
+			@exit="showRateUserPopup = false"
+			:user="lender"
+		></RateUserPopup>
+
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>
 			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
