@@ -1,7 +1,7 @@
 import { Item, User } from '../schema'
 
 export type GetItemRequest = {
-	id: number
+	itemId: number
 }
 
 export type GetItemResponse = {

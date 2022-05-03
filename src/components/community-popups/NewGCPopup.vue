@@ -110,10 +110,10 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 
 <template>
 	<BasePopup @exit="emit('exit')">
-		<h1 class="text-2xl font-bold">Ny gruppechat med</h1>
-
+		<h1>Ny gruppechat med</h1>
 		<BaseInput v-model="groupName" label="Gruppenavn"></BaseInput>
 
+		<!--GCPopup component here-->
 		<SearchbarAndButton
 			v-model="searchString"
 			@search="newSearch"

@@ -81,7 +81,7 @@ async function addUser(user: User) {
 <template>
 	<!--NB if popup getting too wide, max-w-full as class in BasePopup-->
 	<BasePopup @exit="emit('exit')">
-		<h1 class="text-2xl font-bold">Legg til BoCo-buddy</h1>
+		<h1>Legg til BoCo-buddy</h1>
 		<SearchbarAndButton
 			v-model="searchString"
 			@search="newSearch"

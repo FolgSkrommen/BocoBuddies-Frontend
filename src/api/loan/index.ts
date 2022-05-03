@@ -1,4 +1,5 @@
 import { Item, Loan, User } from '../schema'
+import { store } from '../../store'
 
 /**
  * TOKEN
@@ -17,7 +18,18 @@ export type DelLoanResponse = undefined
 /**
  * TOKEN
  */
-export type PostLoanRequest = Loan
+export type PostLoanRequest = {
+	loanId?: number
+	chatId: number
+	item: number
+	loaner: number
+	start: string
+	end: string
+	active: boolean
+	returned: boolean
+	creationDate: string
+	price: number
+}
 export type PostLoanResponse = Loan
 
 /**

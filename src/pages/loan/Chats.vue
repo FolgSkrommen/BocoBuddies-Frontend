@@ -6,30 +6,32 @@ import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import { Chat, User } from '../../api/schema'
 import { GetChatByUserMarketResponse } from '../../api/chat/getByUser/market'
+import { store } from '../../store'
 
 const chats = ref<Array<Chat>>([])
 
 type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
-const errorMessage = ref()
 async function getChats() {
 	status.value = 'loading'
 	try {
 		const res = await axios.get('/chat/getByUser/market')
 		const data = res.data as GetChatByUserMarketResponse
 		chats.value = data
+
 		chats.value.forEach(chat => {
 			axios
-				.get('/item', { params: { id: chat.itemId } })
+				.get('/item', { params: { itemId: chat.item?.itemId } })
 				.then(response => {
 					chat.item = response.data.item
 				})
 		})
+
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -39,14 +41,8 @@ getChats()
 <template>
 	<div>
 		<LoadingIndicator v-if="status === 'loading'" data-testid="loader" />
-		<BaseBanner
-			v-if="status === 'error'"
-			type="error"
-			:message="errorMessage"
-			data-testid="error"
-		/>
 		<div v-if="status === 'loaded'">
-			<h1 class="text-4xl my-4" data-testid="header">Samtaler</h1>
+			<h1 data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId">
@@ -59,10 +55,10 @@ getChats()
 							/>
 
 							<div class="flex-col">
-								<h1 class="text-4xl">
+								<h1>
 									{{ chat.item?.name }}
 								</h1>
-								<h2 class="text-xl">
+								<h2>
 									{{ chat.item?.description }}
 								</h2>
 							</div>

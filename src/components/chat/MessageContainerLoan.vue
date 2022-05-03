@@ -20,6 +20,7 @@ type loanStatus =
 	| 'NOT_SENT'
 	| 'UNDEFINED'
 	| 'RETURNED'
+	| 'REVIEWED'
 
 interface Props {
 	messages: MessageInterface[]
@@ -43,29 +44,31 @@ const decline = () => {
 	emit('update:modelValue', 'DECLINED')
 }
 
-const negotiate = () => {
-	emit('update:modelValue', 'RETURNED')
-}
-
 const { messages, modelValue, chat, item } = defineProps<Props>()
+
+function getProperDateTime(dateTime: string) {
+	let time = dateTime.substring(11, 16)
+	let date = dateTime.substring(0, 10)
+	return date + ' - ' + time
+}
 
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
-			return 'bg-gray-400 text-black '
+			return 'bg-slate-400 text-black '
 		case false:
-			return 'bg-blue text-white justify-self-end'
+			return 'bg-blue-500 text-white justify-self-end'
 		default:
-			return 'bg-blue text-white'
+			return 'bg-blue-500 text-white'
 	}
 }
 </script>
 <template>
 	<div
-		class="border bg-gray-200 px-2 my-2 py-3 w-full h-full overflow-auto"
+		class="border bg-slate-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
 	>
-		<div class="grid" v-for="(message, i) in messages">
+		<div class="grid" v-for="(message, i) in messages" :key="i">
 			<Message
 				v-if="message.type === 'CHAT'"
 				:id="i"
@@ -94,7 +97,6 @@ function styleType(received: boolean) {
 							modelValue === 'RETURNED' ||
 							message.type === 'RETURNED'
 						"
-						class="text-2xl"
 						data-testid="returned-h"
 					>
 						Lån tilbakelevert
@@ -103,8 +105,8 @@ function styleType(received: boolean) {
 						Forespørsel
 					</h1>
 
-					<h3>Fra: {{ message.start }}</h3>
-					<h3>Til: {{ message.stop }}</h3>
+					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
+					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
 					<h3>Price: {{ message.price }}kr / {{ item.priceUnit }}</h3>
 
 					<div

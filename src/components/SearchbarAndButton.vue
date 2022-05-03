@@ -19,16 +19,19 @@ const { modelValue, error } = defineProps<Props>()
 
 <template>
 	<!--Text search input component-->
-	<div class="flex">
+	<div class="flex w-full">
 		<BaseInput
+			class="grow"
 			@keyup.enter="search"
 			@input="updateValue"
 			v-model="modelValue"
 			:modelValue="modelValue"
 			data-testid="search-field"
+			type="search"
+			placeholder="Søk"
 			:error="error"
 			:label="label"
 		></BaseInput>
-		<BaseBtn @click="search" data-testid="search-button">Søk</BaseBtn>
+		<Button @click="search" data-testid="search-button">Søk</Button>
 	</div>
 </template>

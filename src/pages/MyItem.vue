@@ -11,10 +11,10 @@ import RateUserPopup from '../components/RateUserPopup.vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
 import { Item, Loan, User } from '../api/schema'
 import { GetLoanRequest, GetLoanResponse } from '../api/loan'
 import { GetItemRequest, GetItemResponse } from '../api/item'
+import { store } from '../store'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -22,7 +22,6 @@ const id = parseInt(params.id as string)
 type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
-const errorMessage = ref()
 
 const item = ref<Item>()
 const loaner = ref<User>()
@@ -31,8 +30,8 @@ const loan = ref<Loan>()
 const range = computed(() => {
 	if (!loan.value) return
 	return {
-		start: new Date(loan.value.startTime),
-		end: new Date(loan.value.endTime),
+		start: new Date(loan.value.start),
+		end: new Date(loan.value.end),
 	}
 })
 
@@ -40,7 +39,7 @@ async function getItem() {
 	status.value = 'loading'
 	try {
 		const params: GetItemRequest = {
-			id,
+			itemId: id,
 		}
 		const res = await axios.get('/item', {
 			params,
@@ -50,9 +49,9 @@ async function getItem() {
 		item.value = data.item
 		loaner.value = data.lender
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -81,11 +80,6 @@ const showRateUserPopup = ref(false)
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<div v-if="status === 'loaded' && loaner && item">
 		<RateUserPopup
 			v-show="showRateUserPopup"
@@ -93,7 +87,7 @@ const showRateUserPopup = ref(false)
 			:user="loaner"
 		/>
 		<div class="grid gap-4">
-			<h1 class="text-4xl font-bold">{{ item.name }}</h1>
+			<h1>{{ item.name }}</h1>
 
 			<div v-if="loan && loan.active" class="grid gap-4">
 				<div v-if="loan.returned" class="grid gap-4">

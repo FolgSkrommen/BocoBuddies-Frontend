@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { store } from '../store'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import BaseInput from '../components/base/BaseInput.vue'
@@ -12,7 +11,6 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { PostUserRegisterRequest } from '../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
-const errorMessage = ref()
 
 const newEmail = ref('')
 const newPassword = ref('')
@@ -56,14 +54,18 @@ async function uploadPicture() {
 		})
 		await store.dispatch('edit', res.data)
 		await router.push('/user')
-	} catch (error) {
+	} catch (error: any) {
 		uploadProfilePictureStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
-function sendVerificationEmail() {
-	//TODO: Implement
+async function sendVerificationEmail() {
+	try {
+		const res = await axios.post('/verify/sendVerificationEmail')
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 function deleteUser() {
@@ -73,12 +75,7 @@ function deleteUser() {
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<BaseBanner
-			v-if="uploadProfilePictureStatus === 'success'"
-			type="success"
-			message="Bildet er lastet opp"
-		/>
-		<h1 class="text-xl font-bold">Innstillinger</h1>
+		<h1>Innstillinger</h1>
 		<div class="grid gap-1">
 			<img
 				v-if="store.state.user.profilePicture"
@@ -95,15 +92,15 @@ function deleteUser() {
 		<form class="grid gap-4" @submit.prevent="updateUser">
 			<BaseInput label="Email" v-model="newEmail" />
 			<BaseInput label="Password" v-model="newPassword" />
-			<BaseBtn type="submit">Change user</BaseBtn>
+			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
 		</form>
-		<BaseBtn @click="logout" color="gray">Logout</BaseBtn>
-		<BaseBtn @click="deleteUser" color="red">Delete user</BaseBtn>
+		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
+		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
 		<BaseBtn
 			v-if="!store.state.user.verified"
 			@click="sendVerificationEmail"
 			color="blue"
-			>Send new verification email</BaseBtn
+			>Send ny verfikasjon på epost</BaseBtn
 		>
 		<input
 			type="file"
@@ -116,7 +113,7 @@ function deleteUser() {
 			class="h-52 place-self-center"
 		/>
 		<BaseBtn class="m-4 place-self-center" @click="uploadPicture"
-			>Upload</BaseBtn
+			>Last opp</BaseBtn
 		>
 	</div>
 	<div v-else>

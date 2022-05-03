@@ -14,7 +14,6 @@ import { Payload } from 'vuex'
 import ChatCard from '../components/ChatCard.vue'
 
 type GetStatus = 'loading' | 'loaded' | 'error'
-const errorMessage = ref()
 
 const users = ref<User[]>()
 
@@ -28,8 +27,8 @@ async function getFriends() {
 		})
 		users.value = res.data
 		getFriendsStatus.value = 'loaded'
-	} catch (error) {
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		getFriendsStatus.value = 'error'
 	}
 }
@@ -40,7 +39,7 @@ const getChatsStatus = ref<GetStatus>()
 async function getChats() {
 	getChatsStatus.value = 'loading'
 	if (!store.getters.loggedIn) {
-		errorMessage.value = 'Not logged in'
+		store.dispatch('error', 'Not logged in')
 		getChatsStatus.value = 'error'
 		return
 	}
@@ -62,8 +61,8 @@ async function getChats() {
 
 		friendChats.value = dataWithoutUser
 		getChatsStatus.value = 'loaded'
-	} catch (error) {
-		errorMessage.value = error
+	} catch (error: any) {
+		store.dispatch('error', error.message)
 		getChatsStatus.value = 'error'
 	}
 }
@@ -109,10 +108,9 @@ function add() {
 		<div class="flex gap-4">
 			<button
 				v-for="tag in View"
-				class="px-2 py-1 rounded-lg"
 				:class="
 					view === tag
-						? 'bg-blue text-white'
+						? 'bg-blue-500 text-white'
 						: 'bg-slate-300 text-slate-900'
 				"
 				@click="view = tag"
@@ -121,11 +119,6 @@ function add() {
 			</button>
 		</div>
 		<div v-if="view === 'Friends'">
-			<BaseBanner
-				v-if="getFriendsStatus === 'error'"
-				type="error"
-				:message="errorMessage"
-			/>
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<UserCard
@@ -142,11 +135,6 @@ function add() {
 			></AddFriendPopup>
 		</div>
 		<div v-if="view === 'Chats'">
-			<BaseBanner
-				v-if="getChatsStatus === 'error'"
-				type="error"
-				:message="errorMessage"
-			/>
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="friendChat in friendChats">

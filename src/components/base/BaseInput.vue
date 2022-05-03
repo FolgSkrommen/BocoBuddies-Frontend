@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { string } from 'yup'
 import BaseLabel from './BaseLabel.vue'
 const props = defineProps({
 	modelValue: [String, Number],
@@ -6,6 +7,7 @@ const props = defineProps({
 	disabled: Boolean,
 	type: String,
 	error: String,
+	placeholder: String,
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -17,18 +19,20 @@ const updateValue = (event: Event) => {
 
 <template>
 	<div class="grid">
-		<BaseLabel :model-value="label" />
+		<BaseLabel v-if="label" :model-value="label" />
 
 		<input
-			class="bg-gray-500 rounded-xl p-3 shadow-lg"
 			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
 			@input="updateValue"
 			:type="type ?? 'text'"
+			:placeholder="placeholder ?? ''"
 			data-testid="input"
 		/>
 
-		<p class="text-red-700 text-xs w-full text-center">{{ error }}</p>
+		<p v-show="error" class="text-red-700 text-xs w-full text-center">
+			{{ error }}
+		</p>
 	</div>
 </template>

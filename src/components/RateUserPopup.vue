@@ -4,28 +4,40 @@ import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
 import BasePopup from '../components/base/BasePopup.vue'
 import { ref } from 'vue'
 import axios from 'axios'
-import { User } from '../api/schema'
-
+import { User, Loan } from '../api/schema'
+import { PostReviewRequest } from '../api/review'
+import BaseLabel from './base/BaseLabel.vue'
+import { store } from '../store'
 interface Props {
 	user: User
+	loan: Loan
 }
 
-interface Review {
-	//TODO
-}
+const { user, loan } = defineProps<Props>()
 
-const { user } = defineProps<Props>()
-
-const emit = defineEmits(['exit'])
+const emit = defineEmits(['exit', 'confirm'])
 
 const rating = ref<number>(-1)
 const comment = ref('')
 
-function handleRate() {
+async function handleRate() {
 	if (rating.value === -1) return
 	//TODO: ADD Method
-	//axios.post("/review", )
-	emit('exit')
+	if (!loan.loanId) return
+	const review: PostReviewRequest = {
+		loanId: loan.loanId,
+		isOwner: user.userId === loan.loaner,
+		rating: rating.value,
+		description: comment.value,
+		date: new Date().toISOString(),
+	}
+	try {
+		const res = await axios.post('/review', review)
+	} catch (error: any) {
+		console.log(error)
+		store.dispatch('error', error.message)
+	}
+	emit('confirm')
 }
 </script>
 
@@ -47,6 +59,7 @@ function handleRate() {
 				:class="i < rating + 1 ? 'text-yellow-400' : ''"
 			/>
 		</div>
+		<BaseLabel modelValue="Kommentar"></BaseLabel>
 		<textarea class="p-2" v-model="comment" rows="4"></textarea>
 		<div class="flex justify-between">
 			<BaseBtn @click="emit('exit')" color="gray">Avbryt</BaseBtn>

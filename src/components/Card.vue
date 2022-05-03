@@ -12,7 +12,7 @@ const colorClass = computed(() => {
 		case 'green':
 			return 'bg-green-100'
 		default:
-			return 'bg-slate-100'
+			return 'bg-white'
 	}
 })
 </script>

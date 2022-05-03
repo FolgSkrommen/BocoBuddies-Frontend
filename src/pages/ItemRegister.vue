@@ -17,11 +17,13 @@ import * as yup from 'yup'
 import BaseLabel from '../components/base/BaseLabel.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Category, FilterType } from '../api/schema'
+import { store } from '../store'
+import { PostItemRegisterRequest } from '../api/item/register'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
-	description: yup.string().required('Fornavn er påkrevd'),
-	price: yup.string().required('Etternavn er påkrevd'),
+	description: yup.string().required('Beskrivelse er påkrevd'),
+	price: yup.string().required('Pris er påkrevd'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
 })
@@ -64,9 +66,9 @@ async function getCategories() {
 		const res = await axios.get('/category/main')
 		categoryChoices.value.push(res.data)
 		getCategoriesStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		getCategoriesStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -101,23 +103,23 @@ async function updateCategories(categoryId: number, index: number) {
 			}
 		})
 		updateCategoriesStatus.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		updateCategoriesStatus.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
 /* Filter */
 
-let chosenFilters: Ref<number[]> = ref([])
+let chosenFilters = ref<number[]>([])
 function updateFilters(typeId: number, index: number) {
 	chosenFilters.value[index] = typeId
 	console.log(chosenFilters.value)
 }
 
 /* Images*/
-let imagePreview: Ref<string[]> = ref([])
-let imageFiles: Ref<File[]> = ref([])
+const imagePreview = ref<string[]>([])
+const imageFiles = ref<File[]>([])
 function uploadImage(input: any) {
 	let count = input.files.length
 	let index = 0
@@ -161,19 +163,18 @@ let priceUnits: PriceUnit[] = [
 	},
 ]
 
-let currentPriceUnit: string
+let currentPriceUnit: string = 'HOUR'
 function setPriceUnit(priceUnit: string) {
 	currentPriceUnit = priceUnit
 }
 
 type PostStatus = 'sending' | 'success' | 'error'
 const status = ref<PostStatus>()
-const errorMessage = ref()
 async function registerItem() {
 	status.value = 'sending'
 	if (!range.value) {
 		status.value = 'error'
-		errorMessage.value = 'Range is not selected'
+		store.commit('error', 'Range is not selected')
 		return
 	}
 
@@ -191,41 +192,33 @@ async function registerItem() {
 	chosenFilters.value.forEach(number => {
 		formData.append('filterIdList', number.toString())
 	})
-	if (!imageFiles.value[0]) {
+	if (!imageFiles.value.length) {
+		//TODO: Filter funker ikke, fiks dette, muligens endre fra formdata til interface
 		formData.append('images', new Blob())
 		console.log('Bilde listen er tom')
 	} else {
-		formData.append('images', imageFiles.value[0])
+		for (let i = 0; i < imageFiles.value.length; i++) {
+			formData.append('images', imageFiles.value[i])
+		}
 	}
 	try {
+		console.log(formData.getAll('images'))
 		await axios.post('/item/register', formData)
 		await router.push('/')
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		console.log(error)
-		errorMessage.value = error.response.data
+		store.dispatch('error', error.message)
 	}
 }
 </script>
 
 <template>
-	<BaseBanner
-		v-if="
-			status === 'error' ||
-			getCategoriesStatus === 'error' ||
-			updateCategoriesStatus === 'error'
-		"
-		type="error"
-		:message="errorMessage"
-	/>
-	<h1 data-testid="header" class="font-bold text-4xl place-self-center">
-		Ny gjenstand
-	</h1>
 	<form
 		data-testid="form"
 		class="grid w-full gap-y-6"
 		@submit.prevent="registerItem"
 	>
+		<h1 data-testid="header">Ny gjenstand</h1>
 		<BaseInput
 			data-testid="title-input"
 			v-model.lazy="title"
@@ -253,7 +246,7 @@ async function registerItem() {
 
 				<select
 					data-testid="priceUnit-selector"
-					class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+					class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
@@ -277,7 +270,7 @@ async function registerItem() {
 				v-for="(categories, index) in categoryChoices"
 				v-if="categoryChoices"
 				:key="index"
-				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 				@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
@@ -300,7 +293,7 @@ async function registerItem() {
 			<select
 				v-if="filterTypes"
 				:key="index"
-				class="rounded-xl bg-gray-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
 				@input="
 						event => updateFilters(parseInt((event.target as HTMLInputElement).value), index)
 					"

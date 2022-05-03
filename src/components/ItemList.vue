@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Item } from '../api/schema'
 import BaseBtn from '../components/base/BaseBtn.vue'
+import Card from './Card.vue'
 
 const emit = defineEmits(['load-more-items'])
 const loadMoreItems = () => {
 	emit('load-more-items')
 }
+
 interface Props {
 	items: Array<Item>
 	searchHits: string
@@ -20,14 +22,11 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4 sm:grid-cols-2">
-			<router-link
-				class="bg-slate-100 rounded-lg shadow-lg"
-				v-for="item in items"
-				:to="`/${redirect}/${item.itemId}`"
-			>
-				<div class="flex gap-2">
+			<Card v-for="item in items">
+				<router-link :to="`/${redirect}/${item.itemId}`">
 					<img
-						class="w-32 rounded-l-lg object-cover"
+						v-if="item.images?.length > 0"
+						class="rounded object-contain"
 						:src="item.images[0]"
 						:alt="item.name"
 					/>
@@ -38,16 +37,9 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 						<div>
 							<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
 						</div>
-						<p class="text-slate-500">
-							{{ item.availableFrom }} -
-							{{ item.availableTo }}
-						</p>
-						<p class="text-slate-500">
-							{{ item.postalCode }}, {{ item.address }}
-						</p>
 					</div>
-				</div>
-			</router-link>
+				</router-link>
+			</Card>
 		</div>
 		<div class="flex justify-center my-10">
 			<BaseBtn

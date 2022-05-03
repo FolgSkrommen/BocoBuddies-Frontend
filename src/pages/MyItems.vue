@@ -12,6 +12,7 @@ import { userInfo } from 'os'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Alternative, Category, Item } from '../api/schema'
+import { GetItemSearchRequest } from '../api/item/search'
 
 //Enums
 enum State {
@@ -43,7 +44,6 @@ const stateTag = ref<State>(State.ACTIVE)
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 //const search = ref('')
 
 //Mounted
@@ -66,21 +66,6 @@ watch(stateTag, () => {
 	searchAndResetItems()
 })
 
-//Functions
-function isAnItem(obj: any): obj is Item {
-	return (
-		'id' in obj &&
-		'image' in obj &&
-		'name' in obj &&
-		'price' in obj &&
-		'availableFrom' in obj &&
-		'availableTo' in obj &&
-		'priceUnit' in obj &&
-		'address' in obj &&
-		'postalCode' in obj
-	)
-}
-
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -88,9 +73,9 @@ async function getMainCategories() {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -144,29 +129,31 @@ async function search() {
 	})
 
 	try {
+		const params: GetItemSearchRequest = {
+			categories: chosenCategoriesIds.slice(-1),
+			sort: sortChosenString,
+			amount: amountPerPage,
+			offset: currentPage.value,
+			userId: store.state.user.userId,
+			loan: false,
+			active: stateTag.value === State.ACTIVE,
+			useAuth: true,
+		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
-			params: {
-				categories: chosenCategoriesIds[chosenCategoriesIds.length - 1],
-				sort: sortChosenString,
-				amount: amountPerPage,
-				offset: currentPage.value,
-				userId: store.state.user.userId,
-				loan: false,
-				active: stateTag.value === State.ACTIVE,
-			},
+			params,
 			paramsSerializer: params => {
 				return qs.stringify(params, { arrayFormat: 'repeat' })
 			},
 		})
 		const data: Item[] = res.data
-		if (Array.isArray(data) && data.length > 0 && isAnItem(data[0]))
-			items.value = items.value.concat(data)
+		console.log(JSON.stringify(data))
+		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 		items.value = []
 	}
 }
@@ -184,9 +171,9 @@ async function categoryChosen(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 async function categoryRemoved(tag: Category) {
@@ -212,9 +199,9 @@ async function categoryRemoved(tag: Category) {
 		const data: Category[] = res.data
 		tagAlts.value = data
 		status.value = 'loaded'
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 function loadMoreItems() {
@@ -227,22 +214,19 @@ function loadMoreItems() {
 </script>
 
 <template>
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
-	<div v-if="!store.getters.loggedIn">
-		<p>Du må være logget inn for å se denne siden</p>
-	</div>
 	<div v-if="store.getters.loggedIn">
 		<div class="grid gap-4">
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search-and-reset="searchAndResetItems"
+			></SearchbarAndButton>
+
 			<div class="flex gap-4">
 				<button
-					class="px-2 py-1 rounded-lg"
+					class="flex-1"
 					:class="
 						stateTag === tag
-							? 'bg-blue text-white'
+							? 'bg-blue-500 text-white'
 							: 'bg-slate-300 text-slate-900'
 					"
 					@click="stateTag = tag"
@@ -251,23 +235,20 @@ function loadMoreItems() {
 					{{ tag }}
 				</button>
 			</div>
-			<SearchbarAndButton
-				v-model="searchWord"
-				@search-and-reset="searchAndResetItems"
-			></SearchbarAndButton>
 		</div>
 
-		<div class="py-10">
+		<div class="mt-3">
 			<!--Tag input component-->
-			<h2 class="text-2xl font-semibold">Kategorier</h2>
 			<CategoryList
+				v-if="chosenCategories.length > 0"
 				v-model="chosenCategories"
 				:removable="true"
 				@remove-category-event="categoryRemoved"
 				data-testid="categories-tag-chosen"
-				class="border-solid bg-gray-500 rounded"
+				class="border-solid bg-slate-300 rounded p-1"
 			></CategoryList>
 			<CategoryList
+				class="mt-1"
 				v-model="tagAlts"
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
@@ -275,16 +256,19 @@ function loadMoreItems() {
 		</div>
 		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
+			v-if="items.length > 0"
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
 			redirect="my-item"
 			@load-more-items="loadMoreItems"
-		>
-		</ItemList>
+		/>
 
-		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen">
-		</SortDropdown>
+		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
+			Du har ingen gjenstander
+		</h3>
+
+		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen" />
 
 		<FloatingBtn to="/item/register" />
 	</div>

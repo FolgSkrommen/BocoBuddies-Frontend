@@ -9,6 +9,7 @@ import BaseButton from '../components/base/BaseBtn.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { PostUserRegisterRequest } from '../api/user/register'
+import { store } from '../store'
 
 const schema = yup.object({
 	username: yup.string().required('Brukernavn er påkrevd'),
@@ -38,7 +39,6 @@ const passwordCheck = ref('')
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
-const errorMessage = ref()
 
 const router = useRouter()
 
@@ -58,9 +58,9 @@ async function submit() {
 		await axios.post('/user/register', data)
 		status.value = 'loaded'
 		await router.push('/login')
-	} catch (error) {
+	} catch (error: any) {
 		status.value = 'error'
-		errorMessage.value = error
+		store.dispatch('error', error.message)
 	}
 }
 
@@ -86,13 +86,8 @@ const notValid = computed(
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
-	<BaseBanner
-		v-if="status === 'error'"
-		type="error"
-		:message="errorMessage"
-	/>
 	<div class="text-center">
-		<h1 class="font-bold text-4xl my-8">Registrer deg</h1>
+		<h1>Registrer deg</h1>
 
 		<form
 			class="grid gap-y-8"
@@ -110,12 +105,14 @@ const notValid = computed(
 				label="Fornavn"
 				:error="errors.firstName"
 				data-testid="firstName-input"
+				type="firstName"
 			/>
 			<BaseInput
 				v-model.lazy="lastName"
 				label="Etternavn"
 				:error="errors.lastName"
 				data-testid="lastName-input"
+				type="lastName"
 			/>
 
 			<BaseInput

@@ -14,6 +14,7 @@ export interface User {
 }
 
 export interface Review {
+	reviewId: number
 	loanId: number
 	isOwner: boolean
 	rating: number
@@ -58,8 +59,8 @@ export interface Loan {
 	itemId: number
 	chatId: number
 	loaner: number
-	startTime: string
-	endTime: string
+	start: string
+	end: string
 	active: boolean
 	returned: boolean
 	creationDate: string
@@ -75,7 +76,6 @@ export interface Category {
 
 export interface Chat {
 	chatId: number
-	itemId: number
 	chatName: string
 	item?: Item
 }
