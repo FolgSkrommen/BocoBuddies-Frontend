@@ -65,7 +65,7 @@ function styleType(received: boolean) {
 		class="border bg-slate-200 px-2 my-2 py-3 w-full h-full overflow-auto"
 		id="box"
 	>
-		<div class="grid" v-for="(message, i) in messages">
+		<div class="grid" v-for="(message, i) in messages" :key="i">
 			<Message
 				v-if="message.type === 'CHAT'"
 				:id="i"

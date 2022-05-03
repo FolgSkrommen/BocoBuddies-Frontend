@@ -19,4 +19,9 @@ export type PostChatRequest = {
 	itemId: number
 	members: number[]
 }
-export type PostChatResponse = Chat
+export type PostChatResponse = {
+	chatName: string
+	itemId: number
+	members: number[]
+	chatId: number
+}
