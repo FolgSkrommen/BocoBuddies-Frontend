@@ -50,7 +50,10 @@ async function uploadPicture() {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
 		const res = await axios.get('/user', {
-			params: { user: store.state.user.userId },
+			params: {
+				user: store.state.user.userId,
+				useAuth: false,
+			},
 		})
 		await store.dispatch('edit', res.data)
 		await router.push('/user')
