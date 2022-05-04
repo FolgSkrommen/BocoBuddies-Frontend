@@ -255,6 +255,9 @@ async function onLoanAccept(payload: any) {
 		if (msg.active && msg.returned) {
 			await getLoan()
 			loanStatus.value = 'RETURNED'
+			messages.value = messages.value.filter(
+				({ type }) => type !== 'REQUEST'
+			)
 		}
 		//If loan is denied
 		console.log(msg.active, msg.returned)
@@ -678,6 +681,7 @@ function reRenderChat() {
 		v-show="showLoginModal"
 		@exit="showLoginModal = false"
 		data-testid="base-popup"
+		class="overscroll-auto"
 	>
 		<DatePicker
 			class="place-self-center"
@@ -687,7 +691,16 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 		/>
-		<BaseLabel modelValue="Pris"></BaseLabel>
+		<BaseLabel
+			v-if="item && item.price"
+			:modelValue="
+				'(Pris satt av utleier: ' +
+				item.price +
+				' / ' +
+				getPriceUnit(item.priceUnit) +
+				')'
+			"
+		></BaseLabel>
 		<BaseInput v-model="price"></BaseInput>
 		<div class="flex justify-between">
 			<BaseBtn @click="showLoginModal = false" color="gray"
