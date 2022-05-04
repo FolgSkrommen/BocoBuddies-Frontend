@@ -19,6 +19,7 @@ import ConfirmEmail from './pages/ConfirmEmail.vue'
 import User from './pages/User.vue'
 import VerifyUser from './pages/VerifyUser.vue'
 import Chat from './pages/community/Chat.vue'
+import EditItem from './pages/EditItem.vue'
 import FAQ from './pages/FAQ.vue'
 import { store } from './store'
 
@@ -89,6 +90,13 @@ const routes = [
 	{
 		path: '/my-item/:id',
 		component: MyItem,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		path: '/edit-item/:id',
+		component: EditItem,
 		meta: {
 			requiresAuth: true,
 		},
