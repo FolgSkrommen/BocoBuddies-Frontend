@@ -124,8 +124,8 @@ onBeforeMount(async () => {
 			m.type = 'CHAT'
 		})
 		messages.value.reverse()
-	} catch (error) {
-		store.dispatch('addError', error)
+	} catch (error: any) {
+		await store.dispatch('error', error.message)
 	}
 
 	//await connect()
@@ -146,13 +146,13 @@ function reRenderChat() {
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
-			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}}</h1>
+			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}</h1>
 			<h1 v-else>Chat</h1>
 		</div>
 
 		<MessageContainer
 			class="grow"
-			v-if="messages.length > 0"
+			v-if="messages.length >= 0"
 			:messages="messages"
 			:key="render"
 			data-testid="message-container"

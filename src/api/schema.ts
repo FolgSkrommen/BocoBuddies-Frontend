@@ -79,6 +79,7 @@ export interface Chat {
 	chatId: number
 	chatName: string
 	item?: Item
+	loan?: Loan
 }
 
 export interface FriendChat {
