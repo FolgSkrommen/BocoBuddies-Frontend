@@ -85,73 +85,72 @@ function styleType(received: boolean) {
 				<div data-testid="message">{{ message.message }}</div>
 			</Message>
 
-			<div class="grid" v-else>
+			<!--Kvittering-->
+			<div
+				v-else
+				class="w-2/3 rounded-lg border p-6 flex flex-col gap-3 text-center"
+				:class="styleType(message.receive)"
+			>
 				<div
-					class="w-2/3 rounded-lg border p-6 flex flex-col gap-3 text-center"
-					:class="styleType(message.receive)"
+					v-if="
+						modelValue === 'ACCEPTED' || message.type === 'ACCEPT'
+					"
 				>
-					<h1
-						v-if="
-							modelValue === 'ACCEPTED' ||
-							message.type === 'ACCEPT'
-						"
-						class="text-2xl"
-						data-testid="accept-h"
-					>
-						Avtalt lån
-					</h1>
-					<h1
-						v-if="
-							modelValue === 'ACCEPTED' ||
-							message.type === 'ACCEPT'
-						"
-						class="text-xl"
-						data-testid="accept-h"
-					>
-						Ikke Levert
-					</h1>
-					<h1
-						v-else-if="
-							modelValue === 'RETURNED' ||
-							message.type === 'RETURNED'
-						"
-						data-testid="returned-h"
-					>
-						Lån tilbakelevert
-					</h1>
-					<h1 v-else class="text-2xl" data-testid="request-h">
-						Forespørsel
-					</h1>
+					<h3 class="text-2xl" data-testid="accept-h">Avtalt lån</h3>
+					<h3 class="text-xl" data-testid="accept-h">Ikke Levert</h3>
+				</div>
 
-					<h3 v-if="message.start">
+				<h3
+					v-else-if="
+						modelValue === 'RETURNED' || message.type === 'RETURNED'
+					"
+					data-testid="returned-h"
+				>
+					Lån tilbakelevert
+				</h3>
+				<h3 v-else class="text-2xl" data-testid="request-h">
+					Forespørsel
+				</h3>
+
+				<!--Tidsintervall-->
+				<div>
+					<h4 v-if="message.start">
 						Fra: {{ getProperDateTime(message.start) }}
-					</h3>
-					<h3 v-if="message.stop">
+					</h4>
+					<h4 v-if="message.stop">
 						Til: {{ getProperDateTime(message.stop) }}
-					</h3>
-					<h3>{{ item.address }}</h3>
-					<h3>{{ item.postalCode }}</h3>
+					</h4>
+				</div>
+
+				<!--Adresse-->
+				<div>
+					<h3>{{ item.address }}, {{ item.postalCode }}</h3>
+				</div>
+
+				<!--Pris-->
+				<div>
 					<h3>
-						Pris: {{ message.price }}kr /
+						{{ message.price }} kr /
 						{{ getPriceUnit(item.priceUnit) }}
 					</h3>
-					<div
-						v-if="message.receive && modelValue === 'PENDING'"
-						class="flex gap-2"
+				</div>
+
+				<div
+					v-if="message.receive && modelValue === 'PENDING'"
+					class="flex gap-2"
+				>
+					<BaseBtn
+						class="grow"
+						@click="decline"
+						data-testid="decline-btn"
+						>Avslå</BaseBtn
 					>
-						<BaseBtn
-							class="grow"
-							@click="decline"
-							data-testid="decline-btn"
-							>Avslå</BaseBtn
-						>
-						<BaseBtn
-							class="grow"
-							@click="confirm"
-							data-testid="confirm-btn"
-							>Bekreft</BaseBtn
-						>
-					</div>
+					<BaseBtn
+						class="grow"
+						@click="confirm"
+						data-testid="confirm-btn"
+						>Bekreft</BaseBtn
+					>
 				</div>
 			</div>
 		</div>
