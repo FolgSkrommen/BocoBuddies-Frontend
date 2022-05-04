@@ -5,37 +5,23 @@ import { useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
+import { CogIcon } from '@heroicons/vue/outline'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import { User, Review } from '../../api/schema'
 import { GetUserRequest } from '../../api/user'
 import { PostUserFriendsRequest } from '../../api/user/friends'
+import Card from '../../components/Card.vue'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
+type GetStatus = 'loading' | 'loaded' | 'error'
+const getUserStatus = ref<GetStatus>()
+
 const user = ref<User>()
 
 const reviews = ref<Review[]>()
-
-async function getReviews() {
-	try {
-		const reviewsRes = await axios.get('/review/getByUser', {
-			params: {
-				userId: id,
-				isReceiver: false,
-			},
-		})
-		const data = reviewsRes.data as Review[]
-		console.log(data)
-		reviews.value = data
-	} catch (error: any) {
-		getUserStatus.value = 'error'
-		store.dispatch('error', error.message)
-	}
-}
-
-type GetStatus = 'loading' | 'loaded' | 'error'
-const getUserStatus = ref<GetStatus>()
+getReviews()
 
 async function getUser() {
 	getUserStatus.value = 'loading'
@@ -58,6 +44,24 @@ async function getUser() {
 		store.dispatch('error', error.message)
 	}
 }
+
+async function getReviews() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: id,
+				isReceiver: false,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		console.log(data)
+		reviews.value = data
+	} catch (error: any) {
+		getUserStatus.value = 'error'
+		store.dispatch('error', error.message)
+	}
+}
+
 if (store.state.user && id && id !== store.state.user.userId) {
 	getUser()
 } else {
@@ -142,8 +146,8 @@ async function addUser() {
 			v-if="store.state.user && user.userId === store.state.user.userId"
 			class="w-full"
 			to="/settings"
-			>Instillinger</BaseBtn
-		>
+			><CogIcon></CogIcon
+		></BaseBtn>
 		<button
 			v-else
 			@click="addUser()"
@@ -152,16 +156,32 @@ async function addUser() {
 			<UserAddIcon class="w-6" /> Legg til buddy
 		</button>
 
-		<!--Seeing another users profile page-->
 		<div class="flex gap-2 w-full">
-			<div class="flex gap-2">
-				<BaseBtn class="flex-1" @click="getReviews"
-					>Tilbakemeldinger</BaseBtn
-				>
-				<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
-			</div>
+			<BaseBtn class="flex-1" @click="getReviews"
+				>Tilbakemeldinger</BaseBtn
+			>
+			<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 		</div>
 
-		<div v-for="review in reviews">{{ review.description }}</div>
+		<div v-for="review in reviews" class="flex flex-col w-full">
+			<Card class="grow">
+				<div class="w-full flex">
+					<StarIcon
+						v-for="i in review.rating"
+						class="text-yellow-500 w-8"
+					/>
+					<StarIcon
+						v-for="i in 5 - review.rating"
+						class="text-slate-500 w-8"
+					/>
+				</div>
+				<p class="w-full text-left text-lg p-1">
+					<slot v-if="review.description">
+						{{ review.description }}
+					</slot>
+					<slot v-else class="text-slate-500"> No comment </slot>
+				</p>
+			</Card>
+		</div>
 	</div>
 </template>
