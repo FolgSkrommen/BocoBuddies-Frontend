@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
@@ -11,6 +11,7 @@ import { User, Review } from '../../api/schema'
 import { GetUserRequest } from '../../api/user'
 import { PostUserFriendsRequest } from '../../api/user/friends'
 import Card from '../../components/Card.vue'
+import UserCard from '../../components/UserCard.vue'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -27,7 +28,13 @@ enum State {
 }
 const stateTag = ref<State>(State.REVIEWS)
 
-watch(stateTag, () => {})
+watch(stateTag, () => {
+	if (stateTag.value == State.BUDDIES) {
+		getBuddies()
+	} else {
+		getReviews()
+	}
+})
 
 const reviews = ref<Review[]>()
 getReviews()
@@ -74,18 +81,13 @@ async function getReviews() {
 }
 
 async function getBuddies() {
+	if (!store.state.user) return
 	try {
-		const reviewsRes = await axios.get('/review/getByUser', {
-			params: {
-				userId: id,
-				isReceiver: true,
-			},
+		const res = await axios.get('/user/friends', {
+			params: { userId: user.value?.userId },
 		})
-		const data = reviewsRes.data as Review[]
-		console.log(data)
-		reviews.value = data
+		buddies.value = res.data as User[]
 	} catch (error: any) {
-		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
 	}
 }
@@ -118,6 +120,11 @@ async function addUser() {
 		const data = res.data as boolean
 	} catch (error) {}
 }
+
+const isOwnProfile = computed(() => {
+	console.log(user.value?.userId === store.state.user?.userId)
+	return user.value?.userId === store.state.user?.userId
+})
 </script>
 
 <template>
@@ -171,15 +178,13 @@ async function addUser() {
 		<!--Seeing your own profile page-->
 
 		<BaseBtn
-			v-if="store.state.user && user.userId === store.state.user.userId"
+			v-if="store.state.user && isOwnProfile"
 			class="w-full flex gap-1 justify-center items-center"
 			to="/settings"
 			>Instillinger</BaseBtn
 		>
 		<button
-			v-if="
-				user.friend == false && user.userId !== store.state.user.userId
-			"
+			v-if="user.friend == false && !isOwnProfile"
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 		>
@@ -187,10 +192,12 @@ async function addUser() {
 		</button>
 
 		<div class="flex gap-2 w-full">
-			<BaseBtn class="flex-1" @click="getReviews"
+			<BaseBtn class="flex-1" @click="stateTag = State.REVIEWS"
 				>Tilbakemeldinger</BaseBtn
 			>
-			<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
+			<BaseBtn class="flex-1" @click="stateTag = State.BUDDIES"
+				>Buddies</BaseBtn
+			>
 		</div>
 
 		<div class="flex flex-col w-full gap-2">
@@ -199,36 +206,52 @@ async function addUser() {
 				v-for="review in reviews"
 				class="grow"
 			>
-				<div class="w-full flex">
-					<StarIcon
-						v-for="i in review.rating"
-						class="text-yellow-500 w-8"
-					/>
-					<StarIcon
-						v-for="i in 5 - review.rating"
-						class="text-slate-500 w-8"
-					/>
+				<div class="flex justify-between">
+					<div>
+						<div class="w-full flex">
+							<StarIcon
+								v-for="i in review.rating"
+								class="text-yellow-500 w-8"
+							/>
+							<StarIcon
+								v-for="i in 5 - review.rating"
+								class="text-slate-500 w-8"
+							/>
+						</div>
+						<p class="w-full text-left text-lg p-1">
+							<slot v-if="review.description">
+								{{ review.description }}
+							</slot>
+							<slot v-else class="text-slate-500">
+								No comment
+							</slot>
+						</p>
+					</div>
+
+					<div class="flex">
+						<div class="flex flex-col">
+							<p>{{ review.user.firstName }}</p>
+							<p>{{ review.user.lastName }}</p>
+						</div>
+
+						<img
+							class="w-16 h-16 rounded-full object-cover"
+							:src="review.user.profilePicture"
+						/>
+					</div>
 				</div>
-				<p class="w-full text-left text-lg p-1">
-					<slot v-if="review.description">
-						{{ review.description }}
-					</slot>
-					<slot v-else class="text-slate-500"> No comment </slot>
-				</p>
 			</Card>
 
-			<Card
+			<UserCard
 				v-if="stateTag == State.BUDDIES"
 				v-for="buddy in buddies"
-				class="grow"
+				:user="buddy"
+				:to="'/user/' + buddy.userId"
 			>
-				<p class="w-full text-left text-lg p-1">
-					<slot v-if="review.description">
-						{{ review.description }}
-					</slot>
-					<slot v-else class="text-slate-500"> No comment </slot>
-				</p>
-			</Card>
+				<BaseBtn color="red" v-if="isOwnProfile" @click=""
+					>Fjern</BaseBtn
+				>
+			</UserCard>
 		</div>
 	</div>
 </template>
