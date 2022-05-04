@@ -1,12 +1,32 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { FriendChat } from '../api/schema'
 import Card from '../components/Card.vue'
+import { store } from '../store'
 
 interface Props {
 	friendChat: FriendChat
 	to?: string
 }
 const { friendChat } = defineProps<Props>()
+
+const chatName = computed(() => {
+	const nameArray = friendChat.chatName.split('|', 2)
+	let chatName = 'Default'
+	if (nameArray.length != 2 || !store.state.user)
+		return (chatName = friendChat.chatName)
+	if (
+		nameArray[0] === store.state.user.username &&
+		nameArray[1] !== store.state.user.username
+	)
+		chatName = nameArray[1]
+	if (
+		nameArray[1] === store.state.user.username &&
+		nameArray[0] !== store.state.user.username
+	)
+		chatName = nameArray[0]
+	return chatName
+})
 </script>
 
 <template>
@@ -23,7 +43,7 @@ const { friendChat } = defineProps<Props>()
 					</div>
 					<div class="grid gap-2">
 						<p class="font-bold text-lg">
-							{{ friendChat.chatName }}
+							{{ chatName }}
 						</p>
 						<div class="flex gap-2 flex-wrap">
 							<p

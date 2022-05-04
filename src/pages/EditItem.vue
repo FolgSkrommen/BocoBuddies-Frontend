@@ -193,6 +193,7 @@ async function updateItem() {
 		}
 		const formData = new FormData()
 		formData.append('name', body.name)
+		console.log(formData.get('name'))
 		formData.append('description', body.description)
 		formData.append('price', body.price.toString())
 		formData.append('priceUnit', body.priceUnit)
@@ -202,13 +203,17 @@ async function updateItem() {
 		formData.append('endDate', body.endDate)
 		formData.append('categoryId', body.categoryId.toString())
 		formData.append('filterIdList', body.filterIdList.toString())
-		formData.append('images', new Blob())
-		body.images.forEach(el => {
-			formData.append('images', el)
-		})
+		if (!body.images.length) {
+			formData.append('images', new Blob())
+			console.log('Bilde listen er tom')
+		} else {
+			for (let i = 0; i < body.images.length; i++) {
+				formData.append('images', body.images[i])
+			}
+		}
 		formData.append('itemId', body.itemId.toString())
 		formData.append('active', body.active.toString())
-
+		console.log(formData.getAll('images'))
 		await axios.put('/item/edit', formData)
 		await router.push('/')
 	} catch (error: any) {

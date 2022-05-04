@@ -13,6 +13,7 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { Alternative, Category, Item } from '../api/schema'
 import { GetItemSearchRequest } from '../api/item/search'
+import { AdjustmentsIcon } from '@heroicons/vue/solid'
 
 //Variables
 let sortChosen = ref(0)
@@ -221,19 +222,25 @@ if (!seenHomeCookie.includes('true')) {
 		'seenMyItemsTutorial=true; max-age=31536000')
 }
 
-const showCategoryPicker = ref(false)
+const showFiltersAndSort = ref(false)
 </script>
 
 <template>
-	<div v-if="store.getters.loggedIn">
-		<div class="grid gap-2">
+	<div v-if="store.getters.loggedIn" class="grid gap-4">
+		<div class="grid gap-4">
 			<!--Tag input component-->
-			<SearchbarAndButton
-				v-model="searchWord"
-				@search-and-reset="searchAndResetItems"
-			></SearchbarAndButton>
+			<div class="flex items-center gap-4">
+				<AdjustmentsIcon
+					class="w-8 h-8 text-slate-500 cursor-pointer"
+					@click="showFiltersAndSort = !showFiltersAndSort"
+				/>
+				<SearchbarAndButton
+					v-model="searchWord"
+					@search-and-reset="searchAndResetItems"
+				></SearchbarAndButton>
+			</div>
 
-			<div v-if="showCategoryPicker" class="grid gap-2">
+			<div class="grid gap-4" v-if="showFiltersAndSort">
 				<CategoryList
 					color="bg-slate-500"
 					v-if="chosenCategories.length > 0"
@@ -243,7 +250,6 @@ const showCategoryPicker = ref(false)
 					@remove-category-event="categoryRemoved"
 					data-testid="categories-tag-chosen"
 				></CategoryList>
-
 				<CategoryList
 					color="bg-blue-500"
 					class=""
@@ -251,21 +257,18 @@ const showCategoryPicker = ref(false)
 					@add-category-event="categoryChosen"
 					data-testid="categories-tag-alts"
 				></CategoryList>
-			</div>
-
-			<div class="flex">
-				<div class="flex">
-					<label>Aktive</label>
+				<div class="flex gap-4 items-center">
+					<SortDropdown
+						:sortAlts="sortAlts"
+						v-model.number="sortChosen"
+					/>
+					<h3>Aktiv</h3>
 					<input
 						class="h-8 w-8"
 						type="checkbox"
 						v-model="activeSelected"
 					/>
 				</div>
-
-				<button @click="showCategoryPicker = !showCategoryPicker">
-					Categories
-				</button>
 			</div>
 		</div>
 
@@ -283,8 +286,6 @@ const showCategoryPicker = ref(false)
 		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
 			Du har ingen gjenstander
 		</h3>
-
-		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen" />
 
 		<FloatingBtn to="/item/register" />
 	</div>

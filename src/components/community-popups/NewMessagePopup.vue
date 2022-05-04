@@ -16,7 +16,7 @@ import {
 import UserCardAndBtn from '../UserCardAndBtn.vue'
 import ChatCard from '../ChatCard.vue'
 
-const emit = defineEmits(['exit'])
+const emit = defineEmits(['exit', 'created-gc'])
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
@@ -66,13 +66,21 @@ function loadMoreFriends() {
 	currentPage.value++
 	getFriends()
 }
+function craetedGc() {
+	gcToggle.value = false
+	emit('created-gc')
+}
 </script>
 
 <template>
 	<BasePopup @exit="emit('exit')">
 		<h1>Ny melding til</h1>
 		<BaseBtn @click="gcToggle = true">Gruppechat</BaseBtn>
-		<NewGCPopup @exit="gcToggle = false" v-show="gcToggle"></NewGCPopup>
+		<NewGCPopup
+			@exit="gcToggle = false"
+			@created-gc="craetedGc"
+			v-show="gcToggle"
+		></NewGCPopup>
 		<!--GCPopup component here-->
 		<SearchbarAndButton
 			v-model="searchString"
