@@ -23,8 +23,8 @@ const user = ref<User>()
 
 //Enums
 enum State {
-	REVIEWS,
-	BUDDIES,
+	REVIEWS = 'Tilbakemeldinger',
+	BUDDIES = 'Buddies',
 }
 const stateTag = ref<State>(State.REVIEWS)
 
@@ -53,10 +53,8 @@ async function getUser() {
 			params,
 		})
 		const data = userRes.data as User
-		console.log(userRes.data)
 		user.value = data
 		getUserStatus.value = 'loaded'
-		console
 	} catch (error: any) {
 		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -72,7 +70,6 @@ async function getReviews() {
 			},
 		})
 		const data = reviewsRes.data as Review[]
-		console.log(data)
 		reviews.value = data
 	} catch (error: any) {
 		getUserStatus.value = 'error'
@@ -122,7 +119,6 @@ async function addUser() {
 }
 
 const isOwnProfile = computed(() => {
-	console.log(user.value?.userId === store.state.user?.userId)
 	return user.value?.userId === store.state.user?.userId
 })
 </script>
@@ -192,12 +188,18 @@ const isOwnProfile = computed(() => {
 		</button>
 
 		<div class="flex gap-2 w-full">
-			<BaseBtn class="flex-1" @click="stateTag = State.REVIEWS"
-				>Tilbakemeldinger</BaseBtn
+			<button
+				class="flex-1"
+				:class="
+					stateTag === tag
+						? 'bg-blue-600 text-white'
+						: 'bg-slate-300 text-slate-900'
+				"
+				@click="stateTag = tag"
+				v-for="tag in State"
 			>
-			<BaseBtn class="flex-1" @click="stateTag = State.BUDDIES"
-				>Buddies</BaseBtn
-			>
+				{{ tag }}
+			</button>
 		</div>
 
 		<div class="flex flex-col w-full gap-2">
