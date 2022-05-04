@@ -235,11 +235,12 @@ if (!seenHomeCookie.includes('true')) {
 		<div v-if="view === 'Friends'">
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
-				<div v-for="user in users" class="flex">
-					<UserCard :user="user" :to="'/user/' + user.userId" />
-					<BaseBtn color="red" @click="delUserReqOrFriend(user)"
-						>Fjern</BaseBtn
-					>
+				<div v-for="user in users">
+					<UserCard :user="user" :to="'/user/' + user.userId">
+						<BaseBtn color="red" @click="delUserReqOrFriend(user)"
+							>Fjern</BaseBtn
+						>
+					</UserCard>
 				</div>
 			</div>
 			<FloatingBtn @click="add" />
@@ -254,19 +255,20 @@ if (!seenHomeCookie.includes('true')) {
 			<div class="grid gap-4">
 				<div v-if="friendRequests.length > 0">
 					<h2>Forespørsler</h2>
-					<div v-for="request in friendRequests" class="flex">
+					<div v-for="request in friendRequests">
 						<UserCard
 							:user="request"
 							:to="'/user/' + request.userId"
-						></UserCard>
-						<BaseBtn color="blue" @click="acceptReq(request)"
-							>Godta</BaseBtn
 						>
-						<BaseBtn
-							color="red"
-							@click="delUserReqOrFriend(request)"
-							>Avslå</BaseBtn
-						>
+							<BaseBtn color="blue" @click="acceptReq(request)"
+								>Godta</BaseBtn
+							>
+							<BaseBtn
+								color="red"
+								@click="delUserReqOrFriend(request)"
+								>Avslå</BaseBtn
+							>
+						</UserCard>
 					</div>
 				</div>
 				<div v-if="sentFriendRequests.length > 0">
@@ -275,12 +277,13 @@ if (!seenHomeCookie.includes('true')) {
 						<UserCard
 							:user="request"
 							:to="'/user/' + request.userId"
-						></UserCard>
-						<BaseBtn
-							color="red"
-							@click="delUserReqOrFriend(request)"
-							>Angre</BaseBtn
 						>
+							<BaseBtn
+								color="red"
+								@click="delUserReqOrFriend(request)"
+								>Angre</BaseBtn
+							>
+						</UserCard>
 					</div>
 				</div>
 			</div>
