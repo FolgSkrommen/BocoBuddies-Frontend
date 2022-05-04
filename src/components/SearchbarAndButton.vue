@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
+import { SearchIcon } from '@heroicons/vue/outline'
 
 const emit = defineEmits(['update:modelValue', 'search'])
 const updateValue = (event: Event) => {
@@ -20,18 +21,19 @@ const { modelValue, error } = defineProps<Props>()
 <template>
 	<!--Text search input component-->
 	<div class="flex w-full">
-		<BaseInput
-			class="grow"
-			@keyup.enter="search"
-			@input="updateValue"
+		<input
 			v-model="modelValue"
-			:modelValue="modelValue"
-			data-testid="search-field"
-			type="search"
+			class="rounded-none grow rounded-l-xl"
 			placeholder="Søk"
-			:error="error"
-			:label="label"
-		></BaseInput>
-		<Button @click="search" data-testid="search-button">Søk</Button>
+			data-testid="search-field"
+			@input="updateValue"
+			@keyup.enter="search"
+		/>
+		<Button
+			@click="search"
+			class="rounded-l-none bg-green-600"
+			data-testid="search-button"
+			><SearchIcon class="w-6"
+		/></Button>
 	</div>
 </template>

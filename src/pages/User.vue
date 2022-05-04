@@ -4,10 +4,11 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
+import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import { User, Review } from '../api/schema'
 import { GetUserRequest } from '../api/user'
+import { PostUserFriendsRequest } from '../api/user/friends'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
@@ -46,8 +47,10 @@ async function getUser() {
 			params,
 		})
 		const data = userRes.data as User
+		console.log(userRes.data)
 		user.value = data
 		getUserStatus.value = 'loaded'
+		console
 	} catch (error: any) {
 		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -72,6 +75,14 @@ if (!seenHomeCookie.includes('true')) {
 	)
 	const seenHomeTutorial = (document.cookie =
 		'seenUserTutorial=true; max-age=31536000')
+}
+
+async function addUser() {
+	try {
+		const params: PostUserFriendsRequest = { userId: id }
+		const res = await axios.post('/user/friends', null, { params })
+		const data = res.data as boolean
+	} catch (error) {}
 }
 </script>
 
@@ -152,7 +163,14 @@ if (!seenHomeCookie.includes('true')) {
 		</div>
 
 		<!--Seeing another users profile page-->
-		<div v-else class="w-full">
+		<div v-else class="grid gap-2">
+			<button
+				v-if="!user.friend"
+				@click="addUser()"
+				class="w-full flex gap-2 items-center justify-center"
+			>
+				<UserAddIcon class="w-6" /> Legg til buddy
+			</button>
 			<div class="flex gap-2">
 				<BaseBtn to="/settings" class="flex-1">Gjenstander</BaseBtn>
 				<BaseBtn to="/faq" class="flex-1" @click="getReviews"

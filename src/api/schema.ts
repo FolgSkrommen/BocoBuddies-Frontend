@@ -8,7 +8,8 @@ export interface User {
 	postalCode?: string
 	phoneNumber?: string
 	profilePicture?: string
-	isFriend?: boolean
+	friend?: boolean
+	hasPendingInvite?: boolean
 	verified: boolean
 	trusted: boolean
 	rating: number
