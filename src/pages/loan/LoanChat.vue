@@ -259,6 +259,13 @@ async function onLoanAccept(payload: any) {
 			messages.value = messages.value.filter(
 				({ type }) => type !== 'REQUEST'
 			)
+			messages.value.sort(function (a, b) {
+				if (!a || !b) return -1
+				if (!a.date || !b.date) return -1
+				if (new Date(a.date) > new Date(b.date)) return -1
+				if (new Date(a.date) > new Date(b.date)) return 0
+				return 1
+			})
 		}
 		//If loan is denied
 		console.log(msg.active, msg.returned)
@@ -365,7 +372,7 @@ onBeforeMount(async () => {
 			user.value = chat.value?.members[1]
 	} catch (error: any) {
 		status.value = 'error'
-		store.dispatch('error', error.message)
+		await store.dispatch('error', error.message)
 	}
 
 	try {
@@ -382,9 +389,9 @@ onBeforeMount(async () => {
 		messages.value.reverse()
 	} catch (error: any) {
 		status.value = 'error'
-		store.dispatch('error', error.message)
+		await store.dispatch('error', error.message)
 	}
-
+	console.log(messages.value)
 	try {
 		if (!chat.value?.item) return
 		const res = await axios.get('/item', {
@@ -397,11 +404,11 @@ onBeforeMount(async () => {
 		lender.value = res.data.lender
 	} catch (error: any) {
 		status.value = 'error'
-		store.dispatch('error', error.message)
+		await store.dispatch('error', error.message)
 	}
-
+	console.log(messages.value)
 	await getLoan()
-
+	console.log(messages.value)
 	if (loan.value?.returned) {
 		try {
 			console.log('Here')
@@ -416,7 +423,9 @@ onBeforeMount(async () => {
 	}
 
 	await connect()
+	console.log(messages.value)
 	await reRenderChat()
+	console.log(messages.value)
 	status.value = 'loaded'
 })
 
@@ -458,7 +467,9 @@ async function getLoan() {
 
 			if (msg.active && !msg.returned) msg.type = 'ACCEPT'
 			if (msg.active && msg.returned) msg.type = 'RETURNED'
+			console.log(messages.value)
 			messages.value.push(msg)
+			console.log(messages.value)
 			loanPending.value = true
 			loanStatus.value = 'PENDING'
 			if (loan.value?.active) loanStatus.value = 'ACCEPTED'
@@ -466,8 +477,6 @@ async function getLoan() {
 				loanStatus.value = 'RETURNED'
 		}
 	} catch (error) {
-		try {
-		} catch (err: any) {}
 		loanPending.value = false
 		loanStatus.value = 'NOT_SENT'
 	}
@@ -493,24 +502,6 @@ function sendLoanRequest() {
 	}
 
 	if (!item.value) return
-
-	if (
-		range.value?.end.toISOString() > item.value?.availableTo ||
-		range.value?.end.toISOString() < item.value?.availableFrom
-	) {
-		status.value = 'error'
-		store.dispatch('error', 'Hold sluttdato innenfor oppgitt intervall')
-		return
-	}
-
-	if (
-		range.value?.start.toISOString() < item.value?.availableFrom ||
-		range.value?.start.toISOString() > item.value?.availableTo
-	) {
-		status.value = 'error'
-		store.dispatch('error', 'Hold startdato innenfor oppgitt intervall')
-		return
-	}
 
 	showLoginModal.value = !showLoginModal.value
 	//TODO: add checks if from date is later than to etc
@@ -689,6 +680,7 @@ function reRenderChat() {
 	<BasePopup
 		v-show="showLoginModal"
 		@exit="showLoginModal = false"
+		v-if="chat && chat.item.availableFrom && chat.item.availableTo"
 		data-testid="base-popup"
 		class="overflow-y-auto max-h-screen"
 	>
@@ -699,6 +691,12 @@ function reRenderChat() {
 			is-range
 			locale="no"
 			is24hr
+			:min-date="
+				new Date(chat.item.availableFrom) < new Date()
+					? new Date()
+					: new Date(chat.item.availableFrom)
+			"
+			:max-date="new Date(chat.item.availableTo)"
 		/>
 		<BaseLabel
 			v-if="item && item.price"
