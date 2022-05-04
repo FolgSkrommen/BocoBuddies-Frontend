@@ -155,8 +155,6 @@ function reRenderChat() {
 			<router-link class="place-sel" to="/community"> Back </router-link>
 			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}</h1>
 			<h1 v-else>Chat</h1>
-			<base-btn>Oppdater navn</base-btn>
-			<base-btn>Legg til i chat</base-btn>
 		</div>
 
 		<MessageContainer
