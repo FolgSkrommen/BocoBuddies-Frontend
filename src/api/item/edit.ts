@@ -1,8 +1,7 @@
-import { Item } from '../schema'
 /**
  * TOKEN
  */
-export type PutItemRegisterRequest = {
+export type PutItemEditRequest = {
 	name: string
 	description: string
 	price: number
@@ -14,9 +13,8 @@ export type PutItemRegisterRequest = {
 	categoryId: number
 	filterIdList: number[]
 	images: File[]
-
 	itemId: number
 	active: boolean
 }
 
-export type PutItemRegisterResponse = undefined
+export type PutItemEditResponse = undefined
