@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BaseBtn from '../components/base/BaseBtn.vue'
+</script>
 
 <template>
 	<div>
@@ -239,6 +241,7 @@
 
 				<br />
 				<br />
+
 				<p
 					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
 				>
@@ -246,7 +249,7 @@
 				</p>
 				<div class="border rounded shadow-sm">
 					<div
-						class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						class="focus:outline-none grid gap-4 w-full items-center pt-4 pr-4 pb-4 pl-4"
 					>
 						<p class="text-2xl text-slate-700">
 							Dersom du har spørsmål bare ta å sving oss en mail
@@ -256,6 +259,9 @@
 								>yourbocobuddy@gmail.com</a
 							>
 						</p>
+						<BaseBtn class="w-full" to="/contact"
+							>Kontaktskjema</BaseBtn
+						>
 					</div>
 				</div>
 			</div>
