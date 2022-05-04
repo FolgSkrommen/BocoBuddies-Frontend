@@ -44,15 +44,20 @@ function getProperDateTime(dateTime: string) {
 }
 
 function getUserName(id: number) {
-	console.log(users)
-	let name = 'Usikkert'
-	if (!users) return name
-	users.forEach(user => {
-		console.log(id)
-		console.log(user.userId)
-		if (user.userId === id) name = user.firstName
+	let user: User = {
+		userId: 0,
+		firstName: '',
+		lastName: '',
+		username: '',
+		verified: false,
+		trusted: false,
+		rating: 0,
+	}
+	if (!users) return undefined
+	users.forEach(u => {
+		if (u.userId === id) user = u
 	})
-	return name
+	return user
 }
 </script>
 <template>
@@ -74,16 +79,26 @@ function getUserName(id: number) {
 				data-testid="message-info"
 				v-if="!message.receive"
 			>
-				{{ getProperDateTime(message.date) }} -
-				{{ getUserName(message.senderId) }}
+				{{ getProperDateTime(message.date) }}
+				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
+					<img
+						class="rounded-full object-cover"
+						:src="getUserName(message.senderId).profilePicture"
+					/>
+				</div>
 			</div>
 			<div
 				class="text-black text-lg place-self-start"
 				data-testid="message-info"
 				v-else
 			>
-				{{ getUserName(message.senderId) }} -
 				{{ getProperDateTime(message.date) }}
+				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
+					<img
+						class="rounded-full object-cover"
+						:src="getUserName(message.senderId).profilePicture"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
