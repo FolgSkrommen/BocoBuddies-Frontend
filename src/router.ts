@@ -53,25 +53,6 @@ const routes = [
 		meta: {
 			requiresAuth: false,
 		},
-		children: [
-			{
-				path: 'feedback',
-				name: 'feedback',
-				component: UserFeedback,
-			},
-			{
-				path: 'loans',
-				name: 'myLoans',
-				component: MyLoans,
-			},
-		],
-	},
-	{
-		path: '/user/',
-		component: User,
-		meta: {
-			requiresAuth: true,
-		},
 	},
 	{
 		path: '/verify-user/',
