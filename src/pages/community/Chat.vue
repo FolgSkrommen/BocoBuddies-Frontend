@@ -14,6 +14,7 @@ import { useRoute } from 'vue-router'
 import axios from 'axios'
 import BasePopup from '../../components/base/BasePopup.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 const route = useRoute()
 
 const messages = ref<Message[]>([])
@@ -95,6 +96,7 @@ function onMessageReceived(payload: any) {
 		console.log(store.state.user.userId)
 	}
 	reRenderChat()
+	status.value = 'loaded'
 }
 
 async function updateChatName() {}
@@ -131,6 +133,7 @@ onBeforeMount(async () => {
 
 	connect()
 	reRenderChat()
+	status.value = 'loaded'
 })
 
 const user = ref<User>()
@@ -138,19 +141,20 @@ const currentMessage = ref<string>('')
 const chat = ref<FriendChat>()
 const showLoginModal = ref(false)
 const render = ref<number>(0)
+const status = ref<Status>('loading')
+type Status = 'loading' | 'loaded' | 'error'
 
 function reRenderChat() {
 	render.value++
 }
 </script>
 <template>
-	<div class="h-96 flex-col w-full">
+	<LoadingIndicator v-if="status === 'loading'" />
+	<div class="h-96 flex-col w-full" v-else>
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
 			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}</h1>
 			<h1 v-else>Chat</h1>
-			<base-btn>Oppdater navn</base-btn>
-			<base-btn>Legg til i chat</base-btn>
 		</div>
 
 		<MessageContainer

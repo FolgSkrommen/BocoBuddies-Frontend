@@ -189,10 +189,28 @@ async function updateItem() {
 			filterIdList: chosenFilters.value,
 			images: newImages.value,
 			itemId: itemId,
-			active: newItem.value.active,
+			active: newItem.value.active ?? true,
 		}
 		console.log(body)
-		await axios.put('/item/edit', body)
+		const formData = new FormData()
+		formData.append('name', body.name)
+		formData.append('description', body.description)
+		formData.append('price', body.price.toString())
+		formData.append('priceUnit', body.priceUnit)
+		formData.append('address', body.address)
+		formData.append('postalCode', body.postalCode.toString())
+		formData.append('startDate', body.startDate)
+		formData.append('endDate', body.endDate)
+		formData.append('categoryId', body.categoryId.toString())
+		formData.append('filterIdList', body.filterIdList.toString())
+		formData.append('images', new Blob())
+		body.images.forEach(el => {
+			formData.append('images', el)
+		})
+		formData.append('itemId', body.itemId.toString())
+		formData.append('active', body.active.toString())
+		console.log(formData)
+		await axios.put('/item/edit', formData)
 	} catch (error: any) {
 		putStatus.value = 'error'
 		store.dispatch('error', error.message)
