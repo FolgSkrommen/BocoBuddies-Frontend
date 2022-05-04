@@ -193,7 +193,7 @@ async function addUser() {
 			<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 		</div>
 
-		<div class="flex flex-col w-full">
+		<div class="flex flex-col w-full gap-2">
 			<Card
 				v-if="stateTag == State.REVIEWS"
 				v-for="review in reviews"
