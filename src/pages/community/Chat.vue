@@ -79,12 +79,12 @@ async function sendMessage(event: any) {
 function onMessageReceived(payload: any) {
 	if (!store.state.user || !chat.value) return
 	let message = JSON.parse(payload.body)
-
+	console.log(message.date)
 	let msg: Message = {
 		senderId: message.senderId,
 		message: message.message,
 		type: 'CHAT',
-		date: message.date,
+		date: new Date().toISOString(),
 		receive: true,
 		chatId: chat.value.chatId,
 	}
@@ -104,8 +104,12 @@ async function updateChatName() {}
  */
 onBeforeMount(async () => {
 	try {
-		//TODO nytt kall Even
-		const res = await axios.get('/chat?chatId=' + route.params.id)
+		const res = await axios.get('/chat/community', {
+			params: {
+				chatId: route.params.id,
+			},
+		})
+		console.log(res.data)
 		chat.value = res.data
 	} catch (error: any) {
 		await store.dispatch('error', error.message)
