@@ -45,7 +45,7 @@ async function handleSubmit() {
 			<input required v-model="data.email" type="email" />
 		</div>
 		<div class="grid">
-			<label>Etternavn</label>
+			<label>Melding</label>
 			<textarea required v-model="data.message" rows="6"></textarea>
 		</div>
 		<button type="submit" class="place-self-end">Send</button>
