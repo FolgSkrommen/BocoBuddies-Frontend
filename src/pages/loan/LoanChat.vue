@@ -359,6 +359,10 @@ onBeforeMount(async () => {
 	try {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data as GetChatResponse
+		if (!chat.value?.members || !store.state.user) return
+		user.value = chat.value?.members[0]
+		if (chat.value?.members[0].userId === store.state.user.userId)
+			user.value = chat.value?.members[1]
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
