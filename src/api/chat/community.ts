@@ -1,4 +1,4 @@
-import { Chat, FriendChat } from '../schema'
+import { FriendChat } from '../schema'
 
 /**
  * TOKEN
