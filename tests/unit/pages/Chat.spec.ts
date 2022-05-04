@@ -82,7 +82,7 @@ describe('when loaded', () => {
 
 	it('Axios get is called at start up', async () => {
 		const wrapper = mount(Chat)
-		expect(axios.get).toHaveBeenCalledTimes(3)
+		expect(axios.get).toHaveBeenCalledTimes(2)
 		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
 	})
 })

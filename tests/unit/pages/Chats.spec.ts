@@ -7,7 +7,6 @@ describe('when loaded', () => {
 	it('has the required elements and loader is loaded', async () => {
 		const wrapper = shallowMount(Chat)
 		expect(wrapper.exists()).toBe(true)
-		expect(wrapper.find('[data-testid="error"]').exists()).toBe(false)
 		expect(wrapper.find('[data-testid="loader"]').exists()).toBe(true)
 	})
 
@@ -26,14 +25,5 @@ describe('when loaded', () => {
 		await wrapper.vm.$forceUpdate()
 		expect(wrapper.find('[data-testid="header"]').exists()).toBe(true)
 		expect(wrapper.find('[data-testid="header"]').text()).toBe('Samtaler')
-	})
-
-	it('Check base banner error is loaded', async () => {
-		const wrapper = shallowMount(Chat)
-		expect(wrapper.exists()).toBe(true)
-		expect(wrapper.find('[data-testid="error"]').exists()).toBe(false)
-		wrapper.vm.status = 'error'
-		await wrapper.vm.$forceUpdate()
-		expect(wrapper.find('[data-testid="error"]').exists()).toBe(true)
 	})
 })
