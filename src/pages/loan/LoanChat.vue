@@ -462,6 +462,8 @@ async function getLoan() {
 				loanStatus.value = 'RETURNED'
 		}
 	} catch (error) {
+		try {
+		} catch (err: any) {}
 		loanPending.value = false
 		loanStatus.value = 'NOT_SENT'
 	}
