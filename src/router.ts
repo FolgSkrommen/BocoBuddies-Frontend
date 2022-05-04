@@ -180,7 +180,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const loggedIn = store.getters.loggedIn
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
+	store.dispatch('hideBanner', 'info')
+	store.dispatch('hideBanner', 'success')
+	store.dispatch('hideBanner', 'error')
 	if (requiresAuth && !loggedIn) {
 		return next('/login')
 	}
