@@ -9,7 +9,7 @@ const { images } = defineProps<Props>()
 <template>
 	<div class="flex overflow-x-scroll snap-x gap-4 p-4">
 		<img
-			class="rounded-xl snap-center max-h-96"
+			class="rounded-xl snap-center max-h-96 object-cover"
 			v-for="url in images"
 			:src="url"
 		/>

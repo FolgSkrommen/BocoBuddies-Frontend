@@ -9,12 +9,14 @@ const loadMoreItems = () => {
 }
 
 interface Props {
+	edit?: boolean
 	items: Array<Item>
 	searchHits: string
 	redirect: string
 	renderLoadButton?: boolean
 }
-const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
+const { edit, items, searchHits, redirect, renderLoadButton } =
+	defineProps<Props>()
 </script>
 
 <template>
@@ -23,7 +25,10 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4 sm:grid-cols-2">
 			<Card v-for="item in items">
-				<router-link :to="`/${redirect}/${item.itemId}`">
+				<router-link
+					:to="`/${redirect}/${item.itemId}`"
+					class="grid gap-4"
+				>
 					<img
 						v-if="item.images?.length > 0"
 						class="rounded object-contain"
@@ -39,6 +44,12 @@ const { items, searchHits, redirect, renderLoadButton } = defineProps<Props>()
 						</div>
 					</div>
 				</router-link>
+				<BaseBtn
+					class="h-fit w-fit"
+					:to="`/edit-item/${item.itemId}`"
+					v-if="edit"
+					>Rediger</BaseBtn
+				>
 			</Card>
 		</div>
 		<div class="flex justify-center my-10">
