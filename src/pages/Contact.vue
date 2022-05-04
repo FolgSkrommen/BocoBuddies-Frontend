@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import axios from 'axios'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { store } from '../store'
 
 const router = useRouter()
-const data: PostContactRequest = {
+const data = ref<PostContactRequest>({
 	email: '',
 	firstName: '',
 	lastName: '',
 	message: '',
+})
+
+if (store.state.user) {
+	data.value.email = store.state.user.email as string
+	data.value.firstName = store.state.user.firstName as string
+	data.value.lastName = store.state.user.lastName as string
 }
 
 async function handleSubmit() {
