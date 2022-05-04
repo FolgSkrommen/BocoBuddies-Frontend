@@ -15,7 +15,7 @@ import {
 		<div class="flex justify-around px-4 py-2 container mx-auto">
 			<router-link class="grid place-items-center" to="/">
 				<SearchIcon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Gjenstander</p>
+				<p class="text-slate-300 text-sm">Søk</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"
@@ -23,7 +23,7 @@ import {
 				to="/overview/items"
 			>
 				<CollectionIcon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Handel</p>
+				<p class="text-slate-300 text-sm">Ditt</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"
@@ -39,7 +39,7 @@ import {
 				to="/chats"
 			>
 				<ChatAlt2Icon class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Meldinger</p>
+				<p class="text-slate-300 text-sm">Lån</p>
 			</router-link>
 			<router-link
 				class="grid place-items-center"

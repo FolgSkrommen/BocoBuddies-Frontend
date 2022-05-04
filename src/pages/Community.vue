@@ -224,9 +224,10 @@ if (!seenHomeCookie.includes('true')) {
 
 <template>
 	<div class="grid gap-4">
-		<div class="flex gap-4">
+		<div class="flex gap-2">
 			<button
 				v-for="tag in View"
+				class="flex-1"
 				:class="
 					view === tag
 						? 'bg-blue-500 text-white'
