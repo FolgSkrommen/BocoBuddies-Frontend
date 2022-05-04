@@ -2,35 +2,18 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { store } from '../store'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import { CheckCircleIcon, StarIcon } from '@heroicons/vue/solid'
-import BaseBtn from '../components/base/BaseBtn.vue'
-import { User, Review } from '../api/schema'
-import { GetUserRequest } from '../api/user'
+import { store } from '../../store'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
+import BaseBtn from '../../components/base/BaseBtn.vue'
+import { User, Review } from '../../api/schema'
+import { GetUserRequest } from '../../api/user'
+import { PostUserFriendsRequest } from '../../api/user/friends'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
 const user = ref<User>()
-
-const reviews = ref<Review[]>()
-
-async function getReviews() {
-	try {
-		const reviewsRes = await axios.get('/review/getByUser', {
-			params: {
-				userId: user.value?.userId,
-				isReciever: true,
-			},
-		})
-		const data = reviewsRes.data as Review[]
-		reviews.value = data
-	} catch (error: any) {
-		getUserStatus.value = 'error'
-		store.dispatch('error', error.message)
-	}
-}
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
@@ -46,8 +29,10 @@ async function getUser() {
 			params,
 		})
 		const data = userRes.data as User
+		console.log(userRes.data)
 		user.value = data
 		getUserStatus.value = 'loaded'
+		console
 	} catch (error: any) {
 		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -73,13 +58,21 @@ if (!seenHomeCookie.includes('true')) {
 	const seenHomeTutorial = (document.cookie =
 		'seenUserTutorial=true; max-age=31536000')
 }
+
+async function addUser() {
+	try {
+		const params: PostUserFriendsRequest = { userId: id }
+		const res = await axios.post('/user/friends', null, { params })
+		const data = res.data as boolean
+	} catch (error) {}
+}
 </script>
 
 <template>
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
-		class="grid gap-2 place-items-center text-center"
+		class="grid gap-2 place-items-center text-center max-w-xl mx-auto"
 	>
 		<div class="flex gap-4 justify-start w-full">
 			<!-- Profile picture or initals-->
@@ -152,16 +145,27 @@ if (!seenHomeCookie.includes('true')) {
 		</div>
 
 		<!--Seeing another users profile page-->
-		<div v-else class="w-full">
-			<div class="flex gap-2 justify-items-stretch">
-				<BaseBtn to="/settings" class="">Gjenstander</BaseBtn>
-				<BaseBtn to="/faq" class="" @click="getReviews"
-					>Tilbakemeldinger</BaseBtn
+		<div v-else class="grid gap-2">
+			<button
+				v-if="!user.friend"
+				@click="addUser()"
+				class="w-full flex gap-2 items-center justify-center"
+			>
+				<UserAddIcon class="w-6" /> Legg til buddy
+			</button>
+			<div class="flex gap-2">
+				<router-link :to="{ name: 'feedback' }" class="flex-1"
+					>Tilbakemeldinger</router-link
 				>
-				<BaseBtn to="/faq" class="">Buddies</BaseBtn>
+				<router-link to="/faq" class="flex-1"
+					>Tilbakemeldinger</router-link
+				>
+				<router-link to="/faq" class="flex-1">Buddies</router-link>
 			</div>
 
 			<div v-for="review in reviews">{{ review.description }}</div>
+
+			<router-view :user="user" class="router-view" />
 		</div>
 	</div>
 </template>
