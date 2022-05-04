@@ -37,10 +37,10 @@ const getUserStatus = ref<GetStatus>()
 
 async function getUser() {
 	getUserStatus.value = 'loading'
-
 	try {
 		const params: GetUserRequest = {
 			user: id,
+			useAuth: true,
 		}
 		const userRes = await axios.get('/user', {
 			params,

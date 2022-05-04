@@ -2,6 +2,7 @@ import { User } from '../schema'
 
 export type GetUserRequest = {
 	user: number
+	useAuth: boolean
 }
 
 export type GetUserResponse = User
