@@ -79,7 +79,7 @@ if (!seenHomeCookie.includes('true')) {
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
-		class="grid gap-2 place-items-center text-center"
+		class="grid gap-2 place-items-center text-center max-w-xl mx-auto"
 	>
 		<div class="flex gap-4 justify-start w-full">
 			<!-- Profile picture or initals-->
@@ -153,12 +153,12 @@ if (!seenHomeCookie.includes('true')) {
 
 		<!--Seeing another users profile page-->
 		<div v-else class="w-full">
-			<div class="flex gap-2 justify-items-stretch">
-				<BaseBtn to="/settings" class="">Gjenstander</BaseBtn>
-				<BaseBtn to="/faq" class="" @click="getReviews"
+			<div class="flex gap-2">
+				<BaseBtn to="/settings" class="flex-1">Gjenstander</BaseBtn>
+				<BaseBtn to="/faq" class="flex-1" @click="getReviews"
 					>Tilbakemeldinger</BaseBtn
 				>
-				<BaseBtn to="/faq" class="">Buddies</BaseBtn>
+				<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 			</div>
 
 			<div v-for="review in reviews">{{ review.description }}</div>
