@@ -273,7 +273,7 @@ if (!seenHomeCookie.includes('true')) {
 				</div>
 				<div v-if="sentFriendRequests.length > 0">
 					<h2>Sendte forespørsler</h2>
-					<div v-for="request in sentFriendRequests" class="flex">
+					<div v-for="request in sentFriendRequests">
 						<UserCard
 							:user="request"
 							:to="'/user/' + request.userId"
