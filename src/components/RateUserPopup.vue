@@ -25,6 +25,7 @@ async function handleRate() {
 	//TODO: ADD Method
 	if (!loan.loanId) return
 	if (!user) return
+	rating.value++
 	const review: PostReviewRequest = {
 		loanId: loan.loanId,
 		isOwner: user.userId === loan.loaner,

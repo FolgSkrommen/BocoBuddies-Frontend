@@ -23,6 +23,7 @@ import BaseLabel from '../../components/base/BaseLabel.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
 import UserCard from '../../components/UserCard.vue'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
 const route = useRoute()
 
@@ -412,6 +413,7 @@ onBeforeMount(async () => {
 
 	await connect()
 	await reRenderChat()
+	status.value = 'loaded'
 })
 
 async function getLoan() {
@@ -460,6 +462,8 @@ async function getLoan() {
 				loanStatus.value = 'RETURNED'
 		}
 	} catch (error) {
+		try {
+		} catch (err: any) {}
 		loanPending.value = false
 		loanStatus.value = 'NOT_SENT'
 	}
@@ -560,7 +564,7 @@ const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
 const loan = ref<Loan>()
-const status = ref<Status>()
+const status = ref<Status>('loading')
 type Status = 'loading' | 'loaded' | 'error'
 const loanStatus = ref<loanStatusCode>('UNDEFINED')
 const currentMessage = ref<string>('')
@@ -584,7 +588,8 @@ function reRenderChat() {
 }
 </script>
 <template>
-	<div class="h-96 flex-col w-full">
+	<LoadingIndicator v-if="status === 'loading'" />
+	<div class="h-96 flex-col w-full" v-else>
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
