@@ -2,36 +2,18 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { store } from '../store'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import { store } from '../../store'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
-import BaseBtn from '../components/base/BaseBtn.vue'
-import { User, Review } from '../api/schema'
-import { GetUserRequest } from '../api/user'
-import { PostUserFriendsRequest } from '../api/user/friends'
+import BaseBtn from '../../components/base/BaseBtn.vue'
+import { User, Review } from '../../api/schema'
+import { GetUserRequest } from '../../api/user'
+import { PostUserFriendsRequest } from '../../api/user/friends'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
 const user = ref<User>()
-
-const reviews = ref<Review[]>()
-
-async function getReviews() {
-	try {
-		const reviewsRes = await axios.get('/review/getByUser', {
-			params: {
-				userId: user.value?.userId,
-				isReciever: true,
-			},
-		})
-		const data = reviewsRes.data as Review[]
-		reviews.value = data
-	} catch (error: any) {
-		getUserStatus.value = 'error'
-		store.dispatch('error', error.message)
-	}
-}
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
@@ -172,14 +154,18 @@ async function addUser() {
 				<UserAddIcon class="w-6" /> Legg til buddy
 			</button>
 			<div class="flex gap-2">
-				<BaseBtn to="/settings" class="flex-1">Gjenstander</BaseBtn>
-				<BaseBtn to="/faq" class="flex-1" @click="getReviews"
-					>Tilbakemeldinger</BaseBtn
+				<router-link :to="{ name: 'feedback' }" class="flex-1"
+					>Tilbakemeldinger</router-link
 				>
-				<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
+				<router-link to="/faq" class="flex-1"
+					>Tilbakemeldinger</router-link
+				>
+				<router-link to="/faq" class="flex-1">Buddies</router-link>
 			</div>
 
 			<div v-for="review in reviews">{{ review.description }}</div>
+
+			<router-view :user="user" class="router-view" />
 		</div>
 	</div>
 </template>
