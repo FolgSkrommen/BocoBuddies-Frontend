@@ -41,7 +41,10 @@ import {
 				<ChatAlt2Icon class="w-8 h-8" />
 				<p class="text-slate-300 text-sm">Meldinger</p>
 			</router-link>
-			<router-link class="grid place-items-center" to="/user">
+			<router-link
+				class="grid place-items-center"
+				:to="'/user/' + store.state.user?.userId"
+			>
 				<img
 					v-if="store.state.user"
 					class="rounded-full object-cover w-8 h-8"

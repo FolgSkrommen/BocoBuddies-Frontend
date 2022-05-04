@@ -101,6 +101,16 @@ function styleType(received: boolean) {
 						Avtalt lån
 					</h1>
 					<h1
+						v-if="
+							modelValue === 'ACCEPTED' ||
+							message.type === 'ACCEPT'
+						"
+						class="text-xl"
+						data-testid="accept-h"
+					>
+						Ikke Levert
+					</h1>
+					<h1
 						v-else-if="
 							modelValue === 'RETURNED' ||
 							message.type === 'RETURNED'
@@ -113,8 +123,12 @@ function styleType(received: boolean) {
 						Forespørsel
 					</h1>
 
-					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
-					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
+					<h3 v-if="message.start">
+						Fra: {{ getProperDateTime(message.start) }}
+					</h3>
+					<h3 v-if="message.stop">
+						Til: {{ getProperDateTime(message.stop) }}
+					</h3>
 					<h3>{{ item.address }}</h3>
 					<h3>{{ item.postalCode }}</h3>
 					<h3>

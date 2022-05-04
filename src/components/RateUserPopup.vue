@@ -9,7 +9,7 @@ import { PostReviewRequest } from '../api/review'
 import BaseLabel from './base/BaseLabel.vue'
 import { store } from '../store'
 interface Props {
-	user: User
+	user?: User
 	loan: Loan
 }
 
@@ -24,6 +24,7 @@ async function handleRate() {
 	if (rating.value === -1) return
 	//TODO: ADD Method
 	if (!loan.loanId) return
+	if (!user) return
 	const review: PostReviewRequest = {
 		loanId: loan.loanId,
 		isOwner: user.userId === loan.loaner,

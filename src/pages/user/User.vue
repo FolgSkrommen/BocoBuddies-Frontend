@@ -15,6 +15,25 @@ const id = parseInt(params.id as string)
 
 const user = ref<User>()
 
+const reviews = ref<Review[]>()
+
+async function getReviews() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: id,
+				isReceiver: false,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		console.log(data)
+		reviews.value = data
+	} catch (error: any) {
+		getUserStatus.value = 'error'
+		store.dispatch('error', error.message)
+	}
+}
+
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
 
@@ -24,6 +43,7 @@ async function getUser() {
 	try {
 		const params: GetUserRequest = {
 			user: id,
+			useAuth: false,
 		}
 		const userRes = await axios.get('/user', {
 			params,
@@ -117,55 +137,31 @@ async function addUser() {
 		</div>
 
 		<!--Seeing your own profile page-->
-		<div
-			v-if="store.state.user && user.userId === store.state.user.userId"
-			class="grid gap-4"
-		>
-			<div class="flex gap-2">
-				<BaseBtn class="flex-1" to="/settings">Instillinger</BaseBtn>
-				<BaseBtn class="flex-1" to="/faq">FAQ</BaseBtn>
-			</div>
 
-			<div>
-				<p class="font-bold">E-post</p>
-				<p>{{ user.email }}</p>
-				<div v-if="!user.verified" class="text-red-600">
-					E-post er ikke verifisert enda, sjekk e-post og trykk på
-					linken for å bruke appen
-				</div>
-			</div>
-			<div v-if="user.address">
-				<p class="font-bold">Adresse</p>
-				<p>{{ user.address }} {{ user.postalCode }}</p>
-			</div>
-			<div v-if="user.phoneNumber">
-				<p class="font-bold">Telefonnummer</p>
-				<p>{{ user.phoneNumber }}</p>
-			</div>
-		</div>
+		<BaseBtn
+			v-if="store.state.user && user.userId === store.state.user.userId"
+			class="w-full"
+			to="/settings"
+			>Instillinger</BaseBtn
+		>
+		<button
+			v-else
+			@click="addUser()"
+			class="w-full flex gap-2 items-center justify-center"
+		>
+			<UserAddIcon class="w-6" /> Legg til buddy
+		</button>
 
 		<!--Seeing another users profile page-->
-		<div v-else class="grid gap-2">
-			<button
-				v-if="!user.friend"
-				@click="addUser()"
-				class="w-full flex gap-2 items-center justify-center"
-			>
-				<UserAddIcon class="w-6" /> Legg til buddy
-			</button>
+		<div class="flex gap-2 w-full">
 			<div class="flex gap-2">
-				<router-link :to="{ name: 'feedback' }" class="flex-1"
-					>Tilbakemeldinger</router-link
+				<BaseBtn class="flex-1" @click="getReviews"
+					>Tilbakemeldinger</BaseBtn
 				>
-				<router-link to="/faq" class="flex-1"
-					>Tilbakemeldinger</router-link
-				>
-				<router-link to="/faq" class="flex-1">Buddies</router-link>
+				<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 			</div>
-
-			<div v-for="review in reviews">{{ review.description }}</div>
-
-			<router-view :user="user" class="router-view" />
 		</div>
+
+		<div v-for="review in reviews">{{ review.description }}</div>
 	</div>
 </template>

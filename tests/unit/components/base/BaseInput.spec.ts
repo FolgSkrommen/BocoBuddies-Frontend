@@ -45,17 +45,6 @@ describe('BaseInput', () => {
 			expect(input.element.value).toBe('Test text')
 			expect(input.element.value).not.toBe('Test text2')
 		})
-		it('label is not present', () => {
-			let inputText = 'Test text'
-			const wrapper = mount(BaseInput, {
-				props: {
-					modelValue: inputText,
-				},
-			})
-			const label = wrapper.find('[data-testid="label"]')
-
-			expect(label.text()).toBe('')
-		})
 	})
 	describe('When loaded with label', () => {
 		it('Label is loaded and correct', () => {

@@ -253,6 +253,7 @@ async function onLoanAccept(payload: any) {
 			loanStatus.value = 'ACCEPTED'
 		}
 		if (msg.active && msg.returned) {
+			await getLoan()
 			loanStatus.value = 'RETURNED'
 		}
 		//If loan is denied
@@ -363,6 +364,7 @@ onBeforeMount(async () => {
 		console.log('/message?chatId=' + chat.value?.chatId)
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
 		const data = res.data as GetMessageResponse
+		console.log(res.data)
 		messages.value = data.messages
 		messages.value.forEach(m => {
 			if (!store.state.user) return
@@ -390,6 +392,26 @@ onBeforeMount(async () => {
 		store.dispatch('error', error.message)
 	}
 
+	await getLoan()
+
+	if (loan.value?.returned) {
+		try {
+			console.log('Here')
+			const res = await axios.get('/review/hasReviewed', {
+				params: {
+					loanId: loan.value?.loanId,
+				},
+			})
+			console.log(res.data)
+			hasReviewed.value = res.data
+		} catch (error) {}
+	}
+
+	await connect()
+	await reRenderChat()
+})
+
+async function getLoan() {
 	try {
 		const res = await axios.get('/loan/chat?chatId=' + chat.value?.chatId)
 		user.value = res.data.user
@@ -438,23 +460,7 @@ onBeforeMount(async () => {
 		loanPending.value = false
 		loanStatus.value = 'NOT_SENT'
 	}
-
-	if (loan.value?.returned) {
-		try {
-			console.log('Here')
-			const res = await axios.get('/review/hasReviewed', {
-				params: {
-					loanId: loan.value?.loanId,
-				},
-			})
-			console.log(res.data)
-			hasReviewed.value = res.data
-		} catch (error) {}
-	}
-
-	await connect()
-	await reRenderChat()
-})
+}
 
 function sendLoanReturned() {
 	loanStatus.value = 'RETURNED'
@@ -522,7 +528,12 @@ function toggleShowRating() {
 
 function getUserToReview() {
 	if (!store.state.user) return
-	if (store.state.user.userId === user.value?.userId) {
+
+	if (!user.value && lender.value?.userId !== store.state.user.userId)
+		return lender.value
+	if (!user.value) return
+
+	if (store.state.user.userId === user.value.userId) {
 		return lender.value
 	} else {
 		return user.value
@@ -572,7 +583,7 @@ function reRenderChat() {
 <template>
 	<div class="h-96 flex-col w-full">
 		<RateUserPopup
-			v-if="lender && loan && getUserToReview()"
+			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
 			:user="getUserToReview()"
@@ -656,7 +667,7 @@ function reRenderChat() {
 		</form>
 
 		<UserCard
-			v-if="getUserToReview()"
+			v-if="getUserToReview() !== undefined"
 			:user="getUserToReview()"
 			color="green"
 			show-rating

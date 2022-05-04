@@ -123,6 +123,8 @@ if (!seenHomeCookie.includes('true')) {
 			<BaseInput label="Password" v-model="newPassword" />
 			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
 		</form>
+		<BaseBtn to="/faq">FAQ</BaseBtn>
+
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
 		<BaseBtn

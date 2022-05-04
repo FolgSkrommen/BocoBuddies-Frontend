@@ -7,7 +7,7 @@ import BaseInput from '../../components/base/BaseInput.vue'
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
-import { Chat, Message, User } from '../../api/schema'
+import { Chat, FriendChat, Message, User } from '../../api/schema'
 
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
@@ -17,15 +17,6 @@ import RateUserPopup from '../../components/RateUserPopup.vue'
 const route = useRoute()
 
 const messages = ref<Message[]>([])
-
-type loanStatusCode =
-	| 'PENDING'
-	| 'ACCEPTED'
-	| 'DECLINED'
-	| 'COUNTER'
-	| 'NOT_SENT'
-	| 'RETURNED'
-	| 'UNDEFINED'
 
 //WEBSOCKET
 const stompClient = ref<Client>()
@@ -54,6 +45,8 @@ function onError(err: any) {
 }
 
 async function sendMessage(event: any) {
+	console.log(!stompClient.value || !store.state.user || !chat.value)
+	console.log(!stompClient.value)
 	if (!stompClient.value || !store.state.user || !chat.value) return
 	let chatMessage: Message = {
 		senderId: store.state.user.userId,
@@ -65,7 +58,7 @@ async function sendMessage(event: any) {
 	}
 
 	try {
-		//const res = await axios.post("/message", chatMessage)
+		const res = await axios.post('/message', chatMessage)
 
 		stompClient.value.send(
 			'/app/chat/sendMessage',
@@ -104,37 +97,41 @@ function onMessageReceived(payload: any) {
 	reRenderChat()
 }
 
+async function updateChatName() {}
+
 /**
  * Fetches data before view is mounted
  */
 onBeforeMount(async () => {
 	try {
+		//TODO nytt kall Even
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data
-	} catch (error) {
-		store.dispatch('addError', error)
+	} catch (error: any) {
+		await store.dispatch('error', error.message)
 	}
 
 	try {
 		const res = await axios.get('/message?chatId=' + chat.value?.chatId)
-		messages.value = res.data
+		messages.value = res.data.messages
+		console.log(messages.value)
 		messages.value.forEach(m => {
 			if (!store.state.user) return
 			m.receive = m.senderId != store.state.user.userId
 			m.type = 'CHAT'
 		})
 		messages.value.reverse()
-	} catch (error) {
-		store.dispatch('addError', error)
+	} catch (error: any) {
+		await store.dispatch('error', error.message)
 	}
 
-	//await connect()
+	connect()
 	reRenderChat()
 })
 
 const user = ref<User>()
 const currentMessage = ref<string>('')
-const chat = ref<Chat>()
+const chat = ref<FriendChat>()
 const showLoginModal = ref(false)
 const render = ref<number>(0)
 
@@ -146,14 +143,17 @@ function reRenderChat() {
 	<div class="h-96 flex-col w-full">
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
-			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}}</h1>
+			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}</h1>
 			<h1 v-else>Chat</h1>
+			<base-btn>Oppdater navn</base-btn>
+			<base-btn>Legg til i chat</base-btn>
 		</div>
 
 		<MessageContainer
 			class="grow"
-			v-if="messages.length > 0"
+			v-if="messages.length >= 0 && chat"
 			:messages="messages"
+			:users="chat.members"
 			:key="render"
 			data-testid="message-container"
 		/>
@@ -170,7 +170,6 @@ function reRenderChat() {
 					type="submit"
 					:disabled="currentMessage.length < 1"
 					data-testid="submit-button"
-					@click="sendMessage"
 					>Send</base-btn
 				>
 			</div>
