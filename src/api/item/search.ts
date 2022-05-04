@@ -12,6 +12,8 @@ export type GetItemSearchRequest = {
 	active?: boolean
 	loan?: boolean
 	useAuth?: boolean
+	lat?: string
+	lng?: string
 }
 
 /**

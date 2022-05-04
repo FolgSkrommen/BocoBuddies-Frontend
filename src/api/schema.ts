@@ -82,6 +82,7 @@ export interface Chat {
 	chatId: number
 	chatName: string
 	item?: Item
+	members?: User[]
 	loan?: Loan
 }
 

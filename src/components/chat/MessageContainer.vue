@@ -75,7 +75,7 @@ function getUserName(id: number) {
 				<div data-testid="message">{{ message.message }}</div>
 			</Message>
 			<div
-				class="text-black text-lg place-self-end"
+				class="text-black text-m place-self-end"
 				data-testid="message-info"
 				v-if="!message.receive"
 			>

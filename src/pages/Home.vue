@@ -19,6 +19,7 @@ import AppVue from '../App.vue'
 import { Alternative, Category, Item } from '../api/schema'
 import { store } from '../store'
 import { GetItemSearchRequest } from '../api/item/search'
+import { AdjustmentsIcon } from '@heroicons/vue/solid'
 
 //Variables
 let sortChosen = ref(0)
@@ -26,7 +27,7 @@ let sortAlts: Alternative[] = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	//{ id: 3, alt: 'Nærmest' },
+	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
 ]
@@ -92,7 +93,7 @@ async function search() {
 			break
 		}
 		case 3: {
-			sortChosenString = 'closest'
+			sortChosenString = 'nearest'
 			break
 		}
 		case 4: {
@@ -114,13 +115,32 @@ async function search() {
 		chosenCategoriesIds.push(tag.categoryId)
 	})
 	try {
-		const params: GetItemSearchRequest = {
+		let params: GetItemSearchRequest = {
 			categories: chosenCategoriesIds.slice(-1),
 			sort: sortChosenString,
 			amount: amountPerPage,
 			offset: currentPage.value,
 			useAuth: false,
 		}
+		if (sortChosenString == 'nearest') {
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					params = {
+						categories: chosenCategoriesIds.slice(-1),
+						sort: sortChosenString,
+						amount: amountPerPage,
+						offset: currentPage.value,
+						useAuth: false,
+						lat: position.coords.latitude.toString(),
+						lng: position.coords.longitude.toString(),
+					}
+				},
+				error => {
+					console.log(error.message)
+				}
+			)
+		}
+
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params,
 			paramsSerializer: params => {
@@ -230,6 +250,8 @@ if (!seenHomeCookie.includes('true')) {
   observer.observe(items.value[items.value.length-1])
 }, {})
 observer.observe(items[items.length-1])*/
+
+const showFiltersAndSort = ref(false)
 </script>
 
 <template>
@@ -245,14 +267,19 @@ observer.observe(items[items.length-1])*/
 			allowfullscreen
 		></iframe
 	></BasePopup> -->
-	<div class="flex flex-col gap-2">
-		<SearchbarAndButton
-			v-model="searchWord"
-			@search="searchAndResetItems"
-			data-testid="searchbar-and-button"
-		></SearchbarAndButton>
-
-		<div class="flex flex-col gap-2 pb-3">
+	<div class="grid gap-4">
+		<div class="flex items-center gap-4">
+			<AdjustmentsIcon
+				class="w-8 h-8 text-slate-500 cursor-pointer"
+				@click="showFiltersAndSort = !showFiltersAndSort"
+			/>
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search="searchAndResetItems"
+				data-testid="searchbar-and-button"
+			></SearchbarAndButton>
+		</div>
+		<div class="grid gap-4" v-if="showFiltersAndSort">
 			<!--Tag input component-->
 			<CategoryList
 				color="bg-slate-500"
@@ -278,18 +305,19 @@ observer.observe(items[items.length-1])*/
 				data-testid="sort-dropdown"
 			/>
 		</div>
+		<LoadingIndicator v-if="status === 'loading'" />
+		<ItemList
+			v-if="items.length > 0"
+			:items="items"
+			:searchHits="searchHits"
+			:renderLoadButton="renderLoadButton"
+			redirect="item"
+			@load-more-items="loadMoreItems"
+			data-testid="item-list"
+		/>
+
+		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
+			Ingen resultater
+		</h2>
 	</div>
-
-	<LoadingIndicator v-if="status === 'loading'" />
-	<ItemList
-		v-if="items.length > 0"
-		:items="items"
-		:searchHits="searchHits"
-		:renderLoadButton="renderLoadButton"
-		redirect="item"
-		@load-more-items="loadMoreItems"
-		data-testid="item-list"
-	/>
-
-	<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">Ingen resultater</h2>
 </template>

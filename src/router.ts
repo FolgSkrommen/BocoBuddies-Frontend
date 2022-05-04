@@ -17,7 +17,7 @@ import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
 import ConfirmEmail from './pages/ConfirmEmail.vue'
 import User from './pages/user/User.vue'
-import UserFeedback from './pages/user/UserFeedback.vue'
+import Contact from './pages/Contact.vue'
 
 import VerifyUser from './pages/VerifyUser.vue'
 import Chat from './pages/community/Chat.vue'
@@ -140,6 +140,13 @@ const routes = [
 	{
 		path: '/login',
 		component: UserLogin,
+		meta: {
+			requiresAuth: false,
+		},
+	},
+	{
+		path: '/contact',
+		component: Contact,
 		meta: {
 			requiresAuth: false,
 		},

@@ -53,7 +53,7 @@ async function uploadPicture() {
 			params: { user: store.state.user.userId, useAuth: false },
 		})
 		await store.dispatch('edit', res.data)
-		await router.push('/user')
+		imagePreview = ref([])
 	} catch (error: any) {
 		uploadProfilePictureStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -69,12 +69,12 @@ async function sendVerificationEmail() {
 }
 
 function resetTips() {
-	var cookies = document.cookie.split(';')
+	let cookies = document.cookie.split(';')
 
-	for (var i = 0; i < cookies.length; i++) {
-		var cookie = cookies[i]
-		var eqPos = cookie.indexOf('=')
-		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+	for (let i = 0; i < cookies.length; i++) {
+		let cookie = cookies[i]
+		let eqPos = cookie.indexOf('=')
+		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
 		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
 	}
 	store.dispatch('info', 'Alle tips vil nå vises igjen')
@@ -97,18 +97,86 @@ if (!seenHomeCookie.includes('true')) {
 	const seenHomeTutorial = (document.cookie =
 		'seenSettingsTutorial=true; max-age=31536000')
 }
+
+let showUploadPicture = ref<boolean>(false)
 </script>
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
+		<BasePopup v-if="showUploadPicture" @exit="showUploadPicture = false">
+			<div class="flex justify-center">
+				<div class="rounded-lg shadow-xl bg-gray-50">
+					<div class="m-4">
+						<div
+							class="grid gap-4 place-items-center"
+							v-if="imagePreview.length > 0"
+						>
+							<h3 class="">
+								Forhåndsvisning av ditt nye profilbilde:
+							</h3>
+							<img
+								class="w-32 h-32 object-cover rounded-full"
+								:src="imagePreview[0]"
+								alt=""
+							/>
+						</div>
+						<label class="inline-block mb-2 text-gray-500"
+							>Last opp profilbilde(jpg, png, jpeg)</label
+						>
+						<div class="flex items-center justify-center w-full">
+							<label
+								class="flex flex-col w-full h-20 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300"
+							>
+								<div
+									class="flex flex-col items-center justify-center pt-6"
+								>
+									<p
+										class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600"
+									>
+										Velg et bilde
+									</p>
+								</div>
+								<input
+									type="file"
+									accept="image/*"
+									@input="event => uploadImage(event.target)"
+									class="opacity-0"
+								/>
+							</label>
+						</div>
+					</div>
+					<div class="flex p-2 space-x-4">
+						<BaseBtn
+							class="m-4 place-self-center w-full"
+							@click="uploadPicture"
+							>Last opp</BaseBtn
+						>
+					</div>
+				</div>
+			</div>
+		</BasePopup>
 		<h1>Innstillinger</h1>
 		<div class="grid gap-1">
-			<img
-				v-if="store.state.user.profilePicture"
-				:src="store.state.user.profilePicture"
-				alt=""
-				class="w-32 h-32 object-cover rounded-full"
-			/>
+			<div
+				class="group w-32 h-42 hover:cursor-pointer"
+				@click="showUploadPicture = true"
+			>
+				<img
+					v-if="store.state.user.profilePicture"
+					:src="store.state.user.profilePicture"
+					alt=""
+					class="w-32 h-32 object-cover rounded-full group-hover:hidden"
+				/>
+				<img
+					v-if="store.state.user.profilePicture"
+					src="https://media.istockphoto.com/vectors/black-plus-sign-positive-symbol-vector-id688550958?k=20&m=688550958&s=612x612&w=0&h=wvzUqT3u3feYygOXg3GB9pYBbqIsyu_xpvfTX-6HOd0="
+					alt=""
+					class="w-32 h-32 object-cover rounded-full hidden group-hover:block group-hover:cursor-pointer"
+				/>
+				<label class="text-xs hover:cursor-pointer"
+					>Oppdater profilebilde</label
+				>
+			</div>
 
 			<div class="flex gap-2 text-lg font-bold">
 				<p>{{ store.state.user.firstName }}</p>
@@ -120,7 +188,7 @@ if (!seenHomeCookie.includes('true')) {
 			<BaseInput label="Password" v-model="newPassword" />
 			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
 		</form>
-		<BaseBtn to="/faq">FAQ</BaseBtn>
+		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
@@ -131,20 +199,6 @@ if (!seenHomeCookie.includes('true')) {
 			>Send ny verfikasjon på epost</BaseBtn
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
-
-		<input
-			type="file"
-			@input="event => uploadImage(event.target)"
-			class="place-self-center"
-		/>
-		<ImageCarousel
-			v-if="imagePreview.length > 0"
-			:images="imagePreview"
-			class="h-52 place-self-center"
-		/>
-		<BaseBtn class="m-4 place-self-center" @click="uploadPicture"
-			>Last opp</BaseBtn
-		>
 	</div>
 	<div v-else>
 		<p>No user</p>
