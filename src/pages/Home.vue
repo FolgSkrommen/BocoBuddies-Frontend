@@ -193,22 +193,33 @@ function loadMoreItems() {
 		search()
 	}
 }
-/* const seenVideoCookie = ('; ' + document.cookie)
+/*const seenVideoCookie = ('; ' + document.cookie)
 	.split(`; seenVideo=`)
 	.pop()
 	.split(';')[0]
 
 if (seenVideoCookie.includes('true')) {
 	seenTutorial = ref(true)
-}
+}*/
 
 function setCookieSeen() {
 	document.cookie = 'seenVideo=true; max-age=31536000'
 	seenTutorial = ref(true)
 	location.reload()
 }
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenHomeTutorial=`)
+	.pop()
+	.split(';')[0]
 
-console.log(seenTutorial) */
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		'Hei! velkommen til Boco, dette er hjemsiden din. Her kan du søke etter gjenstander, sortere etter ulike kategorier og klikke deg inn på annonser. Sjekk ut FAQ under profil siden din dersom du har flere spørsmål. Klikk X knappen for å lukke denne meldingen.'
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenHomeTutorial=true; max-age=31536000')
+}
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {

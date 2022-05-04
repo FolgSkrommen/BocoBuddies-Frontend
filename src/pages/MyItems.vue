@@ -141,7 +141,7 @@ async function search() {
 			},
 		})
 		const data: Item[] = res.data
-		console.log(JSON.stringify(data))
+		console.log(data)
 		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
@@ -206,35 +206,67 @@ function loadMoreItems() {
 		search()
 	}
 }
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenMyItemsTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		"Dette er siden for dine egne gjenstander. Her kan du se alle gjenstandene du har opprettet. Klikk på 'Plus' ikonet for å opprette en ny gjenstand. Du kan også sortere på arkiverte og aktive gjenstander. Klikk X knappen for å lukke denne meldingen."
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenMyItemsTutorial=true; max-age=31536000')
+}
+
+const showCategoryPicker = ref(false)
 </script>
 
 <template>
 	<div v-if="store.getters.loggedIn">
-		<div class="grid gap-1">
+		<div class="grid gap-2">
 			<!--Tag input component-->
 			<SearchbarAndButton
 				v-model="searchWord"
 				@search-and-reset="searchAndResetItems"
 			></SearchbarAndButton>
-			<CategoryList
-				color="bg-slate-500"
-				v-if="chosenCategories.length > 0"
-				v-model="chosenCategories"
-				class="py-1"
-				:removable="true"
-				@remove-category-event="categoryRemoved"
-				data-testid="categories-tag-chosen"
-			></CategoryList>
 
-			<CategoryList
-				color="bg-blue-500"
-				class=""
-				v-model="tagAlts"
-				@add-category-event="categoryChosen"
-				data-testid="categories-tag-alts"
-			></CategoryList>
+			<div v-if="showCategoryPicker" class="grid gap-2">
+				<CategoryList
+					color="bg-slate-500"
+					v-if="chosenCategories.length > 0"
+					v-model="chosenCategories"
+					class="py-1"
+					:removable="true"
+					@remove-category-event="categoryRemoved"
+					data-testid="categories-tag-chosen"
+				></CategoryList>
 
-			<input class="h-8 w-8" type="checkbox" v-model="activeSelected" />
+				<CategoryList
+					color="bg-blue-500"
+					class=""
+					v-model="tagAlts"
+					@add-category-event="categoryChosen"
+					data-testid="categories-tag-alts"
+				></CategoryList>
+			</div>
+
+			<div class="flex">
+				<div class="flex">
+					<label>Aktive</label>
+					<input
+						class="h-8 w-8"
+						type="checkbox"
+						v-model="activeSelected"
+					/>
+				</div>
+
+				<button @click="showCategoryPicker = !showCategoryPicker">
+					Categories
+				</button>
+			</div>
 		</div>
 
 		<LoadingIndicator v-if="status === 'loading'" />

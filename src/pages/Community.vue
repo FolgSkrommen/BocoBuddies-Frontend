@@ -101,6 +101,20 @@ function add() {
 			break
 	}
 }
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenCommunityTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		'Dette er sammfunn siden. Her kan du legge til venner og chatte med de. Du kan til og med opprette gruppechatter. Klikk på pluss knappen under den riktige fanen for å enten opprette en ny chat eller å legge til nye venner Klikk X knappen for å lukke denne meldingen.'
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenCommunityTutorial=true; max-age=31536000')
+}
 </script>
 
 <template>

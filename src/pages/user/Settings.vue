@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { store } from '../store'
-import BaseBtn from '../components/base/BaseBtn.vue'
-import BaseInput from '../components/base/BaseInput.vue'
-import ImageCarousel from '../components/ImageCarousel.vue'
-import BasePopup from '../components/base/BasePopup.vue'
+import { store } from '../../store'
+import BaseBtn from '../../components/base/BaseBtn.vue'
+import BaseInput from '../../components/base/BaseInput.vue'
+import ImageCarousel from '../../components/ImageCarousel.vue'
+import BasePopup from '../../components/base/BasePopup.vue'
 import { Ref, ref } from 'vue'
-import router from '../router'
+import router from '../../router'
 import axios from 'axios'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
-import { PostUserRegisterRequest } from '../api/user/register'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import BaseBanner from '../../components/base/BaseBanner.vue'
+import { PostUserRegisterRequest } from '../../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
 
 const newEmail = ref('')
@@ -71,8 +71,34 @@ async function sendVerificationEmail() {
 	}
 }
 
+function resetTips() {
+	var cookies = document.cookie.split(';')
+
+	for (var i = 0; i < cookies.length; i++) {
+		var cookie = cookies[i]
+		var eqPos = cookie.indexOf('=')
+		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+	}
+	store.dispatch('info', 'Alle tips vil nå vises igjen')
+}
+
 function deleteUser() {
 	//TODO: Implement
+}
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenSettingsTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		"Dette er inntsillingssiden din. Her kan du oppdatere brukerdataen din, logge ut, slette brukeren din og laste opp profilbilde. Du kan også klikke knappen 'Vis alle tips igjen' for å få opp disse meldingen igjen Klikk X knappen for å lukke denne meldingen."
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenSettingsTutorial=true; max-age=31536000')
 }
 </script>
 
@@ -105,6 +131,8 @@ function deleteUser() {
 			color="blue"
 			>Send ny verfikasjon på epost</BaseBtn
 		>
+		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
+
 		<input
 			type="file"
 			@input="event => uploadImage(event.target)"

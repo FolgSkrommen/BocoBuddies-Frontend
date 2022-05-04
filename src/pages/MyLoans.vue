@@ -232,6 +232,20 @@ function loadMoreItems() {
 		search()
 	}
 }
+
+const seenHomeCookie = ('; ' + document.cookie)
+	.split(`; seenMyLoansTutorial=`)
+	.pop()
+	.split(';')[0]
+
+if (!seenHomeCookie.includes('true')) {
+	store.dispatch(
+		'info',
+		'Dette er siden for dine lån. Alle aktive og tidligere lån vil vises her. Klikk X knappen for å lukke denne meldingen.'
+	)
+	const seenHomeTutorial = (document.cookie =
+		'seenMyLoansTutorial=true; max-age=31536000')
+}
 </script>
 
 <template>

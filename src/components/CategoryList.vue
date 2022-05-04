@@ -16,7 +16,7 @@ const emit = defineEmits(['remove-category-event', 'add-category-event'])
 		<div
 			v-for="category in modelValue"
 			:key="category.categoryId"
-			class="bg-blue-500 text-white p-1 px-2 flex gap-1 rounded-full hover:cursor-pointer"
+			class="text-white p-1 px-2 flex gap-1 rounded-full hover:cursor-pointer"
 			:class="color"
 		>
 			<XCircleIcon

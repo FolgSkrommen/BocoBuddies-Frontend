@@ -8,7 +8,8 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import { Item, User } from '../api/schema'
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { Category, Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
 import { PostChatRequest, PostChatResponse } from '../api/chat'
 
@@ -22,6 +23,7 @@ const errorMessage = ref()
 
 const item = ref<Item>()
 const lender = ref<User>()
+const category = ref<Category>()
 
 async function getItem() {
 	status.value = 'loading'
@@ -35,6 +37,7 @@ async function getItem() {
 		const data: GetItemResponse = res.data
 		console.log(data.item)
 		item.value = data.item
+		console.log(item.value)
 		lender.value = data.lender
 		status.value = 'loaded'
 	} catch (error) {

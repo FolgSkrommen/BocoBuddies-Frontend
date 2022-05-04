@@ -101,7 +101,7 @@ function styleType(received: boolean) {
 						Avtalt lån
 					</h1>
 					<h1
-						v-if="
+						v-else-if="
 							modelValue === 'RETURNED' ||
 							message.type === 'RETURNED'
 						"
@@ -115,11 +115,12 @@ function styleType(received: boolean) {
 
 					<h3>Fra: {{ getProperDateTime(message.start) }}</h3>
 					<h3>Til: {{ getProperDateTime(message.stop) }}</h3>
+					<h3>{{ item.address }}</h3>
+					<h3>{{ item.postalCode }}</h3>
 					<h3>
 						Pris: {{ message.price }}kr /
 						{{ getPriceUnit(item.priceUnit) }}
 					</h3>
-
 					<div
 						v-if="message.receive && modelValue === 'PENDING'"
 						class="flex gap-2"

@@ -22,6 +22,7 @@ const updateValue = (event: Event) => {
 		<BaseLabel v-if="label" :model-value="label" />
 
 		<input
+			class="rounded-xl"
 			:class="disabled ? 'bg-slate-300 shadow-none' : ''"
 			:disabled="disabled"
 			:value="modelValue"
