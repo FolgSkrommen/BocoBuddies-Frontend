@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { store } from '../store'
-import BaseBtn from '../components/base/BaseBtn.vue'
-import BaseInput from '../components/base/BaseInput.vue'
-import ImageCarousel from '../components/ImageCarousel.vue'
-import BasePopup from '../components/base/BasePopup.vue'
+import { store } from '../../store'
+import BaseBtn from '../../components/base/BaseBtn.vue'
+import BaseInput from '../../components/base/BaseInput.vue'
+import ImageCarousel from '../../components/ImageCarousel.vue'
+import BasePopup from '../../components/base/BasePopup.vue'
 import { Ref, ref } from 'vue'
-import router from '../router'
+import router from '../../router'
 import axios from 'axios'
-import LoadingIndicator from '../components/base/LoadingIndicator.vue'
-import BaseBanner from '../components/base/BaseBanner.vue'
-import { PostUserRegisterRequest } from '../api/user/register'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import BaseBanner from '../../components/base/BaseBanner.vue'
+import { PostUserRegisterRequest } from '../../api/user/register'
 type Status = 'loading' | 'loaded' | 'error'
 
 const newEmail = ref('')
@@ -120,6 +120,8 @@ if (!seenHomeCookie.includes('true')) {
 			<BaseInput label="Password" v-model="newPassword" />
 			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
 		</form>
+		<BaseBtn to="/faq">FAQ</BaseBtn>
+
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
 		<BaseBtn

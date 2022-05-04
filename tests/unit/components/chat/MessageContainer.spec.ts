@@ -42,8 +42,8 @@ describe('MessageContainerLoan', () => {
 			const messageInfo = wrapper.find('[data-testid="message-info"]')
 			expect(wrapper.props().messages[0].senderId).toBe(1)
 			expect(messageInfo.exists()).toBe(true)
-			expect(messageInfo.element.textContent).toContain(' - 1')
-			expect(messageInfo.element.textContent).not.toContain(' - 2')
+			expect(messageInfo.element.textContent).toContain('Usikkert - ')
+			expect(messageInfo.element.textContent).not.toContain(' - Usikkert')
 		})
 		it('Chat box is rendered', () => {
 			const wrapper = mount(MessageContainer, {

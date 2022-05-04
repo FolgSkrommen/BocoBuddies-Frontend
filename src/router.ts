@@ -12,11 +12,13 @@ import MyLoan from './pages/MyLoan.vue'
 import ItemRegister from './pages/ItemRegister.vue'
 import MyItems from './pages/MyItems.vue'
 import MyLoans from './pages/MyLoans.vue'
-import Settings from './pages/Settings.vue'
+import Settings from './pages/user/Settings.vue'
 import UserLogin from './pages/UserLogin.vue'
 import UserRegister from './pages/UserRegister.vue'
 import ConfirmEmail from './pages/ConfirmEmail.vue'
-import User from './pages/User.vue'
+import User from './pages/user/User.vue'
+import UserFeedback from './pages/user/UserFeedback.vue'
+
 import VerifyUser from './pages/VerifyUser.vue'
 import Chat from './pages/community/Chat.vue'
 import EditItem from './pages/EditItem.vue'
@@ -47,13 +49,6 @@ const routes = [
 	},
 	{
 		path: '/user/:id',
-		component: User,
-		meta: {
-			requiresAuth: false,
-		},
-	},
-	{
-		path: '/user/',
 		component: User,
 		meta: {
 			requiresAuth: true,

@@ -85,6 +85,7 @@ const showRateUserPopup = ref(false)
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
 			:user="loaner"
+			:loan="undefined"
 		/>
 		<div class="grid gap-4">
 			<h1>{{ item.name }}</h1>

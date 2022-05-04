@@ -8,7 +8,8 @@ export interface User {
 	postalCode?: string
 	phoneNumber?: string
 	profilePicture?: string
-	isFriend?: boolean
+	friend?: boolean
+	hasPendingInvite?: boolean
 	verified: boolean
 	trusted: boolean
 	rating: number
@@ -80,6 +81,7 @@ export interface Chat {
 	chatId: number
 	chatName: string
 	item?: Item
+	loan?: Loan
 }
 
 export interface FriendChat {
