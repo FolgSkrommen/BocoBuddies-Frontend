@@ -26,7 +26,7 @@ let sortAlts: Alternative[] = [
 	{ id: 0, alt: 'Ingen sortering' },
 	{ id: 1, alt: 'Pris lav-høy' },
 	{ id: 2, alt: 'Pris høy-lav' },
-	//{ id: 3, alt: 'Nærmest' },
+	{ id: 3, alt: 'Nærmest' },
 	{ id: 4, alt: 'Nyeste først' },
 	{ id: 5, alt: 'Eldste først' },
 ]
@@ -92,7 +92,7 @@ async function search() {
 			break
 		}
 		case 3: {
-			sortChosenString = 'closest'
+			sortChosenString = 'nearest'
 			break
 		}
 		case 4: {
@@ -114,13 +114,32 @@ async function search() {
 		chosenCategoriesIds.push(tag.categoryId)
 	})
 	try {
-		const params: GetItemSearchRequest = {
+		let params: GetItemSearchRequest = {
 			categories: chosenCategoriesIds.slice(-1),
 			sort: sortChosenString,
 			amount: amountPerPage,
 			offset: currentPage.value,
 			useAuth: false,
 		}
+		if (sortChosenString == 'nearest') {
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					params = {
+						categories: chosenCategoriesIds.slice(-1),
+						sort: sortChosenString,
+						amount: amountPerPage,
+						offset: currentPage.value,
+						useAuth: false,
+						lat: position.coords.latitude.toString(),
+						lng: position.coords.longitude.toString(),
+					}
+				},
+				error => {
+					console.log(error.message)
+				}
+			)
+		}
+
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
 			params,
 			paramsSerializer: params => {
