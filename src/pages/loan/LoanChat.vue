@@ -596,7 +596,11 @@ function reRenderChat() {
 
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>
-			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
+			<img
+				class="w-16 h-16 fit rounded"
+				v-if="item"
+				:src="item.images[0]"
+			/>
 			<h1 v-if="item?.name">
 				{{ item.name }}
 				({{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }})

@@ -10,7 +10,7 @@ import UserCardAndBtn from '../UserCardAndBtn.vue'
 import BaseInput from '../base/BaseInput.vue'
 import { useRouter } from 'vue-router'
 
-const emit = defineEmits(['exit'])
+const emit = defineEmits(['exit', 'created-gc'])
 const router = useRouter()
 
 type Status = 'loading' | 'loaded' | 'error'
@@ -92,7 +92,7 @@ async function createGC() {
 		const data = res.data as boolean
 		if (data) {
 			status.value = 'loaded'
-			router.push('/community')
+			emit('created-gc')
 			return
 		}
 		status.value = 'error'
