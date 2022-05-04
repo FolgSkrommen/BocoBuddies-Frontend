@@ -76,6 +76,11 @@ async function getChats() {
 	}
 }
 
+function closeChatSearchAndGetChats() {
+	getChats()
+	createChat.value = false
+}
+
 const friendRequests = ref<User[]>([])
 const sentFriendRequests = ref<User[]>([])
 const friendRequestStatus = ref<GetStatus>()
@@ -308,6 +313,7 @@ if (!seenHomeCookie.includes('true')) {
 			<NewMessagePopup
 				v-show="createChat"
 				@exit="createChat = false"
+				@created-gc="closeChatSearchAndGetChats"
 			></NewMessagePopup>
 		</div>
 	</div>
