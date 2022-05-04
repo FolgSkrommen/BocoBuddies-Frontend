@@ -11,21 +11,21 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import { Category, Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
 import { PostChatRequest, PostChatResponse } from '../api/chat'
+import ImageCarousel from '../components/ImageCarousel.vue'
 
-const { params } = useRoute()
 const router = useRouter()
+const { params } = useRoute()
 const itemId = parseInt(params.id as string)
-type Status = 'loading' | 'loaded' | 'error'
-
-const status = ref<Status>()
-const errorMessage = ref()
 
 const item = ref<Item>()
-const lender = ref<User>()
-const category = ref<Category>()
+const newItem = ref<Item>()
 
+const lender = ref<User>()
+
+type GetStatus = 'loading' | 'loaded' | 'error'
+const getStatus = ref<GetStatus>()
 async function getItem() {
-	status.value = 'loading'
+	getStatus.value = 'loading'
 	const params: GetItemRequest = {
 		itemId: itemId,
 	}
@@ -34,51 +34,34 @@ async function getItem() {
 			params,
 		})
 		const data: GetItemResponse = res.data
-		console.log(data.item)
 		item.value = data.item
-		console.log(item.value)
+		newItem.value = data.item
 		lender.value = data.lender
-		status.value = 'loaded'
-	} catch (error) {
-		status.value = 'error'
-		errorMessage.value = error
-	}
-}
-
-async function createChat() {
-	if (!store.state.user) {
-		router.push('/login')
-		return
-	}
-	if (!item.value || !lender.value) return
-	try {
-		const body: PostChatRequest = {
-			chatName: `${item.value.name}: ${lender.value.firstName} ${lender.value.lastName}`,
-			itemId: itemId,
-			members: [store.state.user.userId, lender.value.userId],
-		}
-		const res = await axios.post('/chat', body)
-		const data = res.data as PostChatResponse
-		router.push(`/chat/${data.chatId}`)
-	} catch (error) {
-		console.log(error)
+		getStatus.value = 'loaded'
+	} catch (error: any) {
+		getStatus.value = 'error'
+		store.dispatch('error', error.message)
 	}
 }
 
 getItem()
+
+type PutStatus = 'sending' | 'success' | 'error'
+const putStatus = ref<PutStatus>()
+async function updateItem() {}
 </script>
 
 <template>
-	<LoadingIndicator v-if="status === 'loading'" />
-	<div v-if="status === 'loaded' && item && lender" class="grid gap-4">
-		<h1>{{ item.name }}</h1>
-		<ItemInfo :item="item" />
-		<UserCard :user="lender" show-rating />
-		<BaseBtn
-			@click="createChat"
-			v-if="lender.username !== store.state.user?.username"
-			>Send melding</BaseBtn
-		>
+	<LoadingIndicator v-if="getStatus === 'loading'" />
+	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
+		<div>
+			<h1>{{ newItem.name }}</h1>
+		</div>
+		<ImageCarousel :images="newItem.images" />
+		<textarea
+			class="w-full"
+			rows="4"
+			v-model="newItem.description"
+		></textarea>
 	</div>
-	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>
