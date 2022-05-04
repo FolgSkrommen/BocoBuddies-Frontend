@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
@@ -20,8 +20,19 @@ const getUserStatus = ref<GetStatus>()
 
 const user = ref<User>()
 
+//Enums
+enum State {
+	REVIEWS,
+	BUDDIES,
+}
+const stateTag = ref<State>(State.REVIEWS)
+
+watch(stateTag, () => {})
+
 const reviews = ref<Review[]>()
 getReviews()
+
+const buddies = ref<User[]>()
 
 async function getUser() {
 	getUserStatus.value = 'loading'
@@ -29,7 +40,7 @@ async function getUser() {
 	try {
 		const params: GetUserRequest = {
 			user: id,
-			useAuth: false,
+			useAuth: true,
 		}
 		const userRes = await axios.get('/user', {
 			params,
@@ -50,7 +61,24 @@ async function getReviews() {
 		const reviewsRes = await axios.get('/review/getByUser', {
 			params: {
 				userId: id,
-				isReceiver: false,
+				isReceiver: true,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		console.log(data)
+		reviews.value = data
+	} catch (error: any) {
+		getUserStatus.value = 'error'
+		store.dispatch('error', error.message)
+	}
+}
+
+async function getBuddies() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: id,
+				isReceiver: true,
 			},
 		})
 		const data = reviewsRes.data as Review[]
@@ -144,12 +172,12 @@ async function addUser() {
 
 		<BaseBtn
 			v-if="store.state.user && user.userId === store.state.user.userId"
-			class="w-full"
+			class="w-full flex gap-1 justify-center items-center"
 			to="/settings"
-			><CogIcon></CogIcon
-		></BaseBtn>
+			>Instillinger</BaseBtn
+		>
 		<button
-			v-else
+			v-if="user.friend"
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 		>
@@ -163,8 +191,12 @@ async function addUser() {
 			<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 		</div>
 
-		<div v-for="review in reviews" class="flex flex-col w-full">
-			<Card class="grow">
+		<div class="flex flex-col w-full">
+			<Card
+				v-if="stateTag == State.REVIEWS"
+				v-for="review in reviews"
+				class="grow"
+			>
 				<div class="w-full flex">
 					<StarIcon
 						v-for="i in review.rating"
@@ -175,6 +207,19 @@ async function addUser() {
 						class="text-slate-500 w-8"
 					/>
 				</div>
+				<p class="w-full text-left text-lg p-1">
+					<slot v-if="review.description">
+						{{ review.description }}
+					</slot>
+					<slot v-else class="text-slate-500"> No comment </slot>
+				</p>
+			</Card>
+
+			<Card
+				v-if="stateTag == State.BUDDIES"
+				v-for="buddy in buddies"
+				class="grow"
+			>
 				<p class="w-full text-left text-lg p-1">
 					<slot v-if="review.description">
 						{{ review.description }}
