@@ -23,6 +23,7 @@ import BaseLabel from '../../components/base/BaseLabel.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
 import UserCard from '../../components/UserCard.vue'
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
 const route = useRoute()
 
@@ -358,6 +359,10 @@ onBeforeMount(async () => {
 	try {
 		const res = await axios.get('/chat?chatId=' + route.params.id)
 		chat.value = res.data as GetChatResponse
+		if (!chat.value?.members || !store.state.user) return
+		user.value = chat.value?.members[0]
+		if (chat.value?.members[0].userId === store.state.user.userId)
+			user.value = chat.value?.members[1]
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
@@ -412,6 +417,7 @@ onBeforeMount(async () => {
 
 	await connect()
 	await reRenderChat()
+	status.value = 'loaded'
 })
 
 async function getLoan() {
@@ -460,6 +466,8 @@ async function getLoan() {
 				loanStatus.value = 'RETURNED'
 		}
 	} catch (error) {
+		try {
+		} catch (err: any) {}
 		loanPending.value = false
 		loanStatus.value = 'NOT_SENT'
 	}
@@ -560,7 +568,7 @@ const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
 const loan = ref<Loan>()
-const status = ref<Status>()
+const status = ref<Status>('loading')
 type Status = 'loading' | 'loaded' | 'error'
 const loanStatus = ref<loanStatusCode>('UNDEFINED')
 const currentMessage = ref<string>('')
@@ -584,7 +592,8 @@ function reRenderChat() {
 }
 </script>
 <template>
-	<div class="h-96 flex-col w-full">
+	<LoadingIndicator v-if="status === 'loading'" />
+	<div class="h-96 flex-col w-full" v-else>
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
@@ -596,7 +605,11 @@ function reRenderChat() {
 
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/chats"> Back </router-link>
-			<img class="w-12 rounded" v-if="item" :src="item.images[0]" />
+			<img
+				class="w-16 h-16 fit rounded"
+				v-if="item"
+				:src="item.images[0]"
+			/>
 			<h1 v-if="item?.name">
 				{{ item.name }}
 				({{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }})

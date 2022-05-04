@@ -22,6 +22,7 @@ export interface Review {
 	rating: number
 	description: string
 	date: string
+	user: User
 }
 
 export interface Filter {
@@ -81,6 +82,7 @@ export interface Chat {
 	chatId: number
 	chatName: string
 	item?: Item
+	members?: User[]
 	loan?: Loan
 }
 
