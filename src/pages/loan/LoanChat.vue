@@ -254,18 +254,22 @@ async function onLoanAccept(payload: any) {
 			loanStatus.value = 'ACCEPTED'
 		}
 		if (msg.active && msg.returned) {
-			await getLoan()
 			loanStatus.value = 'RETURNED'
+			console.log(messages.value)
+
+			/*
 			messages.value = messages.value.filter(
 				({ type }) => type !== 'REQUEST'
 			)
-			messages.value.sort(function (a, b) {
-				if (!a || !b) return -1
-				if (!a.date || !b.date) return -1
-				if (new Date(a.date) > new Date(b.date)) return -1
-				if (new Date(a.date) > new Date(b.date)) return 0
-				return 1
-			})
+
+       */
+
+			console.log()
+			await getLoan(false)
+
+			console.log(msg)
+
+			console.log(messages.value)
 		}
 		//If loan is denied
 		console.log(msg.active, msg.returned)
@@ -407,7 +411,7 @@ onBeforeMount(async () => {
 		await store.dispatch('error', error.message)
 	}
 	console.log(messages.value)
-	await getLoan()
+	await getLoan(true)
 	console.log(messages.value)
 	if (loan.value?.returned) {
 		try {
@@ -429,7 +433,7 @@ onBeforeMount(async () => {
 	status.value = 'loaded'
 })
 
-async function getLoan() {
+async function getLoan(doPush: boolean) {
 	try {
 		const res = await axios.get('/loan/chat?chatId=' + chat.value?.chatId)
 		user.value = res.data.user
@@ -468,7 +472,7 @@ async function getLoan() {
 			if (msg.active && !msg.returned) msg.type = 'ACCEPT'
 			if (msg.active && msg.returned) msg.type = 'RETURNED'
 			console.log(messages.value)
-			messages.value.push(msg)
+			if (doPush) messages.value.push(msg)
 			console.log(messages.value)
 			loanPending.value = true
 			loanStatus.value = 'PENDING'
