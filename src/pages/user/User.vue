@@ -255,5 +255,6 @@ const isOwnProfile = computed(() => {
 				>
 			</UserCard>
 		</div>
+		<BaseBtn class="w-full" to="/contact">Kontakt oss</BaseBtn>
 	</div>
 </template>
