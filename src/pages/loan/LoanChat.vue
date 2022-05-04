@@ -690,7 +690,7 @@ function reRenderChat() {
 		v-show="showLoginModal"
 		@exit="showLoginModal = false"
 		data-testid="base-popup"
-		class="overscroll-auto"
+		class="overflow-y-auto max-h-screen"
 	>
 		<DatePicker
 			class="place-self-center"
