@@ -47,7 +47,7 @@ async function searchForFriends() {
 		}
 	}
 }
-
+searchForFriends()
 function newSearch() {
 	friendResults.value = []
 	searchForFriends()
@@ -65,7 +65,7 @@ async function addUser(user: User) {
 		const res = await axios.post('/user/friends', null, { params })
 		const data = res.data as boolean
 		if (data) {
-			status.value = 'loaded'
+			newSearch()
 			return
 		}
 		status.value = 'error'

@@ -2,6 +2,6 @@ import { User } from '../../schema'
 /**
  * TOKEN
  */
-type GetUserFriendsPendingRequest = undefined
+export type GetUserFriendsPendingRequest = undefined
 
-type GetUserFriendsPendingResponse = User[]
+export type GetUserFriendsPendingResponse = User[]

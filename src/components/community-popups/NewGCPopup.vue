@@ -51,9 +51,13 @@ async function searchForFriends() {
 	}
 }
 searchForFriends()
-function newSearch() {
+async function newSearch() {
 	friendResults.value = []
-	searchForFriends()
+	await searchForFriends()
+	//Check if new results are in friendInGC, and remove them from friendResults if true
+	friendResults.value = friendResults.value.filter(el1 => {
+		return !friendInGC.value.find(rm => rm.userId === el1.userId)
+	})
 }
 
 function loadMoreResults() {
@@ -68,15 +72,11 @@ function addToGCList(user: User) {
 	}
 }
 function removeFromGCList(user: User) {
-	console.log('Removing user ' + user)
 	friendResults.value.push(user)
 	const index = friendInGC.value.indexOf(user, 0)
 	if (index > -1) {
 		friendInGC.value.splice(index, 1)
 	}
-}
-function test() {
-	console.log('TEST')
 }
 async function createGC() {
 	status.value = 'loading'
