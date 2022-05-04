@@ -338,6 +338,7 @@ async function registerItem() {
 
 			<input
 				type="file"
+				accept="image/*"
 				data-testid="image-input"
 				@input="event => uploadImage(event.target)"
 				multiple

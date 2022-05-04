@@ -11,12 +11,7 @@ import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import BaseBanner from '../components/base/BaseBanner.vue'
 import { GetItemSearchRequest } from '../api/item/search'
 import { Alternative, Category, Item } from '../api/schema'
-
-//Enums
-enum State {
-	ACTIVE = 'Active',
-	ARCHIVED = 'Archived',
-}
+import { AdjustmentsIcon } from '@heroicons/vue/solid'
 
 //Variables
 let sortChosen = ref(0)
@@ -42,7 +37,7 @@ let currentPage = ref<number>(0)
 const amountPerPage: number = 20
 let renderLoadButton = ref<boolean>(true)
 
-const stateTag = ref<State>(State.ACTIVE)
+const activeSelected = ref<boolean>(true)
 
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
@@ -65,7 +60,8 @@ const searchHits = computed<string>(() =>
 watch(sortChosen, () => {
 	searchAndResetItems()
 })
-watch(stateTag, () => {
+
+watch(activeSelected, () => {
 	searchAndResetItems()
 })
 
@@ -158,7 +154,7 @@ async function search() {
 			offset: currentPage.value,
 			userId: store.state.user.userId,
 			loan: true,
-			active: stateTag.value === State.ACTIVE,
+			active: activeSelected.value,
 			useAuth: true,
 		}
 		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
@@ -246,32 +242,24 @@ if (!seenHomeCookie.includes('true')) {
 	const seenHomeTutorial = (document.cookie =
 		'seenMyLoansTutorial=true; max-age=31536000')
 }
+
+const showFiltersAndSort = ref(false)
 </script>
 
 <template>
-	<div v-if="store.getters.loggedIn">
-		<div class="grid gap-4">
+	<div v-if="store.getters.loggedIn" class="grid gap-4">
+		<div class="flex items-center gap-4">
+			<AdjustmentsIcon
+				class="w-8 h-8 text-slate-500 cursor-pointer"
+				@click="showFiltersAndSort = !showFiltersAndSort"
+			/>
 			<SearchbarAndButton
 				v-model="searchWord"
 				@search-and-reset="searchAndResetItems"
 			></SearchbarAndButton>
-			<div class="flex gap-4">
-				<button
-					class="flex-1"
-					:class="
-						stateTag === tag
-							? 'bg-blue-500 text-white'
-							: 'bg-slate-300 text-slate-900'
-					"
-					@click="stateTag = tag"
-					v-for="tag in State"
-				>
-					{{ tag }}
-				</button>
-			</div>
 		</div>
 
-		<div class="mt-3">
+		<div class="grid gap-4" v-if="showFiltersAndSort">
 			<!--Tag input component-->
 			<CategoryList
 				color="bg-slate-500"
@@ -288,7 +276,21 @@ if (!seenHomeCookie.includes('true')) {
 				@add-category-event="categoryChosen"
 				data-testid="categories-tag-alts"
 			></CategoryList>
+			<div class="flex gap-4 items-center">
+				<SortDropdown
+					:sortAlts="sortAlts"
+					v-model.number="sortChosen"
+				/>
+
+				<h3>Aktiv</h3>
+				<input
+					class="h-8 w-8"
+					type="checkbox"
+					v-model="activeSelected"
+				/>
+			</div>
 		</div>
+
 		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
 			v-if="items.length > 0"
@@ -302,7 +304,5 @@ if (!seenHomeCookie.includes('true')) {
 		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
 			Du har aldri lånt noe
 		</h3>
-
-		<SortDropdown :sortAlts="sortAlts" v-model.number="sortChosen" />
 	</div>
 </template>

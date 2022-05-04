@@ -138,6 +138,7 @@ let showUploadPicture = ref<boolean>(false)
 								</div>
 								<input
 									type="file"
+									accept="image/*"
 									@input="event => uploadImage(event.target)"
 									class="opacity-0"
 								/>
