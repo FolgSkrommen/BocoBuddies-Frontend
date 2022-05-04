@@ -62,9 +62,7 @@ describe('Home', () => {
 			expect(
 				wrapper.find('[data-testid="categories-tag-alts"]').exists()
 			).toBe(true)
-			expect(wrapper.find('[data-testid="item-list"]').exists()).toBe(
-				true
-			)
+
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
 				true
 			)

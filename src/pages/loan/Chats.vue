@@ -20,19 +20,32 @@ async function getChats() {
 		const data = res.data as GetChatByUserMarketResponse
 		chats.value = data
 
-		chats.value.forEach(chat => {
-			axios
-				.get('/item', { params: { itemId: chat.item?.itemId } })
-				.then(response => {
-					chat.item = response.data.item
+		for (const chat of chats.value) {
+			try {
+				const res = await axios.get('/loan/chat?chatId=' + chat.chatId)
+				console.log(res.data)
+				chat.item = res.data.item
+				chat.loan = res.data.loan
+			} catch (err: any) {
+				const res = await axios.get('/item', {
+					params: { itemId: chat.item?.itemId },
 				})
-		})
-
+				chat.item = res.data.item
+			}
+		}
+		console.log(chats.value)
 		status.value = 'loaded'
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.message)
 	}
+}
+
+function getLoanStatus(chat: Chat) {
+	if (!chat.loan) return 'Ingen forespørsel'
+	if (chat.loan.active && !chat.loan.returned) return 'Utlånt / Avtalt lån'
+	if (chat.loan.active && chat.loan.returned) return 'Returnert'
+	if (!chat.loan.active && !chat.loan.returned) return 'Forespurt'
 }
 
 getChats()
@@ -60,6 +73,13 @@ getChats()
 								</h1>
 								<h2>
 									{{ chat.item?.description }}
+								</h2>
+							</div>
+
+							<div class="flex-col">
+								<h1>Lånestatus</h1>
+								<h2>
+									{{ getLoanStatus(chat) }}
 								</h2>
 							</div>
 						</div>
