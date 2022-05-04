@@ -44,11 +44,15 @@ function getProperDateTime(dateTime: string) {
 }
 
 function getUserName(id: number) {
-	if (!users) return 'Usikkert'
+	console.log(users)
+	let name = 'Usikkert'
+	if (!users) return name
 	users.forEach(user => {
-		if (user.userId === id) return user.firstName
+		console.log(id)
+		console.log(user.userId)
+		if (user.userId === id) name = user.firstName
 	})
-	return 'Usikkert'
+	return name
 }
 </script>
 <template>
