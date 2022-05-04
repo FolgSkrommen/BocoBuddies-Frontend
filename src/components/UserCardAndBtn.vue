@@ -21,17 +21,9 @@ const { user, btnTxt } = defineProps<Props>()
 </script>
 
 <template>
-	<div class="flex" v-if="to">
-		<UserCard :user="user" @click="userClicked(user)" :to="to" />
+	<UserCard :user="user" @click="userClicked(user)" :to="to">
 		<BaseBtn @click="buttonClicked(user)" :disabled="btnDsbld">{{
 			btnTxt
 		}}</BaseBtn>
-	</div>
-
-	<div class="flex" v-else>
-		<UserCard :user="user" @click="userClicked(user)" />
-		<BaseBtn @click="buttonClicked(user)" :disabled="btnDsbld">{{
-			btnTxt
-		}}</BaseBtn>
-	</div>
+	</UserCard>
 </template>

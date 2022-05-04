@@ -93,7 +93,7 @@ async function addUser(user: User) {
 			<UserCardAndBtn
 				v-for="user in friendResults"
 				:user="user"
-				btnTxt="Add user"
+				btnTxt="Legg til"
 				:btnDsbld="false"
 				@button-clicked="addUser"
 				:to="'/user/' + user.userId"

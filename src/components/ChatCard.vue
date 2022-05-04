@@ -34,6 +34,8 @@ const { friendChat } = defineProps<Props>()
 							</p>
 						</div>
 					</div>
+					<span class="flex-grow"></span>
+					<slot></slot>
 				</div>
 			</Card>
 		</router-link>
@@ -60,6 +62,8 @@ const { friendChat } = defineProps<Props>()
 							</p>
 						</div>
 					</div>
+					<span class="flex-grow"></span>
+					<slot></slot>
 				</div>
 			</Card>
 		</div>

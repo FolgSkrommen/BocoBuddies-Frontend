@@ -83,14 +83,15 @@ function loadMoreFriends() {
 		<LoadingIndicator v-if="status === 'loading'" />
 
 		<div class="grid gap-4">
-			<div v-for="chatResult in chatResults" class="flex">
+			<div v-for="chatResult in chatResults">
 				<ChatCard
 					:friendChat="chatResult"
 					:to="'/community/chat/' + chatResult.chatId"
-				></ChatCard>
-				<BaseBtn :to="'/community/chat/' + chatResult.chatId"
-					>Åpne samtale</BaseBtn
 				>
+					<BaseBtn :to="'/community/chat/' + chatResult.chatId"
+						>Naviger</BaseBtn
+					>
+				</ChatCard>
 			</div>
 			<BaseBtn @click="loadMoreFriends" v-if="loadMoreBool"
 				>Last inn flere</BaseBtn
