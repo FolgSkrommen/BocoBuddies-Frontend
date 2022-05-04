@@ -272,6 +272,7 @@ const showCategoryPicker = ref(false)
 		<LoadingIndicator v-if="status === 'loading'" />
 		<ItemList
 			v-if="items.length > 0"
+			:edit="true"
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"

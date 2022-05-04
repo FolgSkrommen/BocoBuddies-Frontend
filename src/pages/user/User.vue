@@ -1,41 +1,38 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
+import { CogIcon } from '@heroicons/vue/outline'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import { User, Review } from '../../api/schema'
 import { GetUserRequest } from '../../api/user'
 import { PostUserFriendsRequest } from '../../api/user/friends'
+import Card from '../../components/Card.vue'
 
 const { params } = useRoute()
 const id = parseInt(params.id as string)
 
-const user = ref<User>()
-
-const reviews = ref<Review[]>()
-
-async function getReviews() {
-	try {
-		const reviewsRes = await axios.get('/review/getByUser', {
-			params: {
-				userId: id,
-				isReceiver: false,
-			},
-		})
-		const data = reviewsRes.data as Review[]
-		console.log(data)
-		reviews.value = data
-	} catch (error: any) {
-		getUserStatus.value = 'error'
-		store.dispatch('error', error.message)
-	}
-}
-
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
+
+const user = ref<User>()
+
+//Enums
+enum State {
+	REVIEWS,
+	BUDDIES,
+}
+const stateTag = ref<State>(State.REVIEWS)
+
+watch(stateTag, () => {})
+
+const reviews = ref<Review[]>()
+getReviews()
+
+const buddies = ref<User[]>()
 
 async function getUser() {
 	getUserStatus.value = 'loading'
@@ -43,7 +40,7 @@ async function getUser() {
 	try {
 		const params: GetUserRequest = {
 			user: id,
-			useAuth: false,
+			useAuth: true,
 		}
 		const userRes = await axios.get('/user', {
 			params,
@@ -58,6 +55,41 @@ async function getUser() {
 		store.dispatch('error', error.message)
 	}
 }
+
+async function getReviews() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: id,
+				isReceiver: true,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		console.log(data)
+		reviews.value = data
+	} catch (error: any) {
+		getUserStatus.value = 'error'
+		store.dispatch('error', error.message)
+	}
+}
+
+async function getBuddies() {
+	try {
+		const reviewsRes = await axios.get('/review/getByUser', {
+			params: {
+				userId: id,
+				isReceiver: true,
+			},
+		})
+		const data = reviewsRes.data as Review[]
+		console.log(data)
+		reviews.value = data
+	} catch (error: any) {
+		getUserStatus.value = 'error'
+		store.dispatch('error', error.message)
+	}
+}
+
 if (store.state.user && id && id !== store.state.user.userId) {
 	getUser()
 } else {
@@ -140,28 +172,61 @@ async function addUser() {
 
 		<BaseBtn
 			v-if="store.state.user && user.userId === store.state.user.userId"
-			class="w-full"
+			class="w-full flex gap-1 justify-center items-center"
 			to="/settings"
 			>Instillinger</BaseBtn
 		>
 		<button
-			v-else
+			v-if="user.friend"
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 		>
 			<UserAddIcon class="w-6" /> Legg til buddy
 		</button>
 
-		<!--Seeing another users profile page-->
 		<div class="flex gap-2 w-full">
-			<div class="flex gap-2">
-				<BaseBtn class="flex-1" @click="getReviews"
-					>Tilbakemeldinger</BaseBtn
-				>
-				<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
-			</div>
+			<BaseBtn class="flex-1" @click="getReviews"
+				>Tilbakemeldinger</BaseBtn
+			>
+			<BaseBtn to="/faq" class="flex-1">Buddies</BaseBtn>
 		</div>
 
-		<div v-for="review in reviews">{{ review.description }}</div>
+		<div class="flex flex-col w-full">
+			<Card
+				v-if="stateTag == State.REVIEWS"
+				v-for="review in reviews"
+				class="grow"
+			>
+				<div class="w-full flex">
+					<StarIcon
+						v-for="i in review.rating"
+						class="text-yellow-500 w-8"
+					/>
+					<StarIcon
+						v-for="i in 5 - review.rating"
+						class="text-slate-500 w-8"
+					/>
+				</div>
+				<p class="w-full text-left text-lg p-1">
+					<slot v-if="review.description">
+						{{ review.description }}
+					</slot>
+					<slot v-else class="text-slate-500"> No comment </slot>
+				</p>
+			</Card>
+
+			<Card
+				v-if="stateTag == State.BUDDIES"
+				v-for="buddy in buddies"
+				class="grow"
+			>
+				<p class="w-full text-left text-lg p-1">
+					<slot v-if="review.description">
+						{{ review.description }}
+					</slot>
+					<slot v-else class="text-slate-500"> No comment </slot>
+				</p>
+			</Card>
+		</div>
 	</div>
 </template>
