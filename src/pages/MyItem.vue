@@ -119,6 +119,7 @@ const showRateUserPopup = ref(false)
 				<BaseBtn>Gå til chat</BaseBtn>
 			</div>
 			<BaseBtn v-else color="red">Slett</BaseBtn>
+			<BaseBtn :to="`/edit-item/${item.itemId}`">Rediger</BaseBtn>
 			<ItemInfo :item="item" />
 		</div>
 	</div>
