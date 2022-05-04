@@ -61,23 +61,19 @@ getChats()
 					<router-link :to="'/chat/' + chat.chatId">
 						<div class="grid grid-cols-3">
 							<img
-								class="w-32 rounded-l-lg"
+								class="h-20 rounded-lg"
 								v-if="chat.item"
 								:src="chat.item.images[0]"
 								:alt="chat.item.name"
 							/>
 
 							<div class="flex-col">
-								<h1>
+								<h3>
 									{{ chat.item?.name }}
-								</h1>
-								<h2>
-									{{ chat.item?.description }}
-								</h2>
+								</h3>
 							</div>
 
 							<div class="flex-col">
-								<h1>Lånestatus</h1>
 								<h2>
 									{{ getLoanStatus(chat) }}
 								</h2>
