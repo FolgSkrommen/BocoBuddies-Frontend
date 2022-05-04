@@ -177,7 +177,7 @@ async function addUser() {
 			>Instillinger</BaseBtn
 		>
 		<button
-			v-if="user.friend"
+			v-if="user.friend == false"
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 		>
