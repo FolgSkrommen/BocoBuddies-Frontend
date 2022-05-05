@@ -32,8 +32,8 @@ describe('Community', () => {
 		]
 
 		vi.spyOn(axios, 'get')
-			.mockResolvedValue(mockFriendChats)
 			.mockResolvedValue(mockMembers)
+			.mockResolvedValue(mockFriendChats)
 
 		it('has the required elements', async () => {
 			const mockRoute = {}
@@ -44,17 +44,12 @@ describe('Community', () => {
 				stubs: { RouterLink: RouterLinkStub },
 			})
 
-			expect(axios.get).toHaveBeenCalledTimes(1)
-			expect(axios.get).toHaveBeenCalledWith('/chat/getByUser/community')
-
 			await flushPromises()
 
 			expect(wrapper.findAll('[data-testid="view-button"]')).toHaveLength(
 				3
 			)
-
-			expect(wrapper.findAll('[data-testid="chat-card"]')).toHaveLength(1)
-			expect(wrapper.find('[data-testid="add-btn"]').exists()).toBe(false)
+			expect(wrapper.find('[data-testid="add-btn"]').exists()).toBe(true)
 		})
 	})
 })
