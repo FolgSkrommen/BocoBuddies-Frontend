@@ -106,11 +106,11 @@ const circleOptions = {
 			:contenteditable="false"
 			locale="no"
 		/>
-		<div>
+		<!--<div >
 			<p class="font-bold text-lg">Adresse</p>
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalCode }}</p>
-		</div>
+		</div>-->
 		<GMapMap :center="item.position" :zoom="13" class="h-96">
 			<GMapCircle
 				:center="randomCenter(item.position)"
