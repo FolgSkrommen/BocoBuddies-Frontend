@@ -65,7 +65,7 @@ describe('Home', () => {
 			).toBe(false)
 
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
-				true
+				false
 			)
 		})
 
