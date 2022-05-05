@@ -4,12 +4,10 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 
 <template>
 	<div>
-		<div
-			class="sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20 mr-auto ml-auto pr-4 pl-4"
-		>
-			<div class="max-w-xl sm:mx-auto lg:max-w-2xl mr-auto ml-auto">
-				<div class="sm:text-center flex flex-col mb-16">
-					<div class="sm:mx-auto mb-6">
+		<div>
+			<div class="max-w-xl mr-auto ml-auto">
+				<div class="flex flex-col mb-16">
+					<div class="mb-6">
 						<p
 							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
@@ -17,14 +15,14 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 						</p>
 					</div>
 					<div
-						class="max-w-lg font-sans sm:text-4xl md:mx-auto text-slate-900 mr-auto mb-6 ml-auto pb-0"
+						class="max-w-lg font-sans text-slate-900 mr-auto mb-6 ml-auto pb-0"
 					>
 						<div class="">
 							<p class="relative inline-block text-2xl ml-0">
 								<svg
 									viewbox="0 0 52 24"
 									fill="currentColor"
-									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-slate-300 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-slate-300"
 								>
 									<defs>
 										<pattern
@@ -45,16 +43,16 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 								</svg>
 							</p>
 							<p
-								class="relative font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
+								class="relative font-sans inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
 							>
 								FAQ
 							</p>
 						</div>
 						<p
-							class="font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mb-0 ml-0"
+							class="font-sans inline font-bold text-3xl tracking-tight mb-0 ml-0"
 						></p>
 					</div>
-					<p class="md:text-lg text-base text-slate-700">
+					<p class="text-base text-slate-700">
 						Her kan du finne svar på alle mulige spørsmål du kunne
 						finne på å stille
 					</p>

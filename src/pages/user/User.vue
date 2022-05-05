@@ -149,24 +149,18 @@ const isOwnProfile = computed(() => {
 
 			<!-- User name and lastname-->
 			<div class="flex flex-col gap-2">
-				<h2 class="font-bold">
-					{{ user.firstName }} {{ user.lastName }}
-				</h2>
+				<h2>{{ user.firstName }} {{ user.lastName }}</h2>
 				<div class="flex items-center text-xl">
-					@{{ user.username }}
+					<p class="text-slate-500">@{{ user.username }}</p>
 					<CheckCircleIcon
 						v-if="user.verified"
 						class="h-5 w-5 text-blue-500"
 					/>
 				</div>
 				<!-- User rating -->
-				<div
-					class="flex items-center border w-fit p-1 bg-white border-gray-500 rounded"
-				>
+				<div class="flex items-center gap-2">
 					<StarIcon class="w-5 h-5 text-yellow-500" />
-					<p
-						class="ml-2 text-sm font-bold text-slate-900 dark:text-white"
-					>
+					<p class="text-sm font-bold text-slate-900">
 						{{ user.rating }}
 					</p>
 				</div>
