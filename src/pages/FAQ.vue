@@ -141,6 +141,67 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
 							<p class="font-medium text-lg">
+								Hvordan låner jeg en gjenstand?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Gå til søk-siden, finn gjenstanden du vil låne,
+								trykk deg inn på den og klikk på 'Send melding'.
+							</p>
+							<br />
+							<p class="text-2xl text-slate-700">
+								Nå er du i en samtale med utleier, og du har
+								mulighet til å forespørre et lån. Trykk på
+								'Forespør', fyll ut perioden du ønsker å låne og
+								eventuelt foreslå en ny pris. Trykk på 'avtal
+								lån'.
+							</p>
+							<br />
+							<p class="text-2xl text-slate-700">
+								Da gjenstår det bare å vente på utleiers svar!
+							</p>
+						</div>
+					</div>
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
+								Hva skjer når utleier bekrefter et lån?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Da må dere avtale dere i mellom hva som skal
+								gjøres videre i chatten, enten det er relatert
+								til henting/sending av den lånte gjenstanden
+								eller noe helt annet.
+							</p>
+						</div>
+					</div>
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
+								Kan jeg avslyse et lån før det faktisk settes i
+								gang?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Det kan du, men det må senest skje 24t før
+								avtalt leiestart. Dette gjøres ved å si ifra til
+								utleier i den aktuelle chatten.
+							</p>
+						</div>
+					</div>
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
 								Hvordan lager jeg en gjenstand?
 							</p>
 						</div>

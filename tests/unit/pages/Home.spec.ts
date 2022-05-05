@@ -7,6 +7,7 @@ import {
 import Home from '../../../src/pages/Home.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
+import qs from 'qs'
 
 describe('Home', () => {
 	describe('when entered', () => {
@@ -33,24 +34,24 @@ describe('Home', () => {
 		]
 
 		vi.spyOn(axios, 'get')
-			.mockResolvedValue(mockCategoryList)
-			.mockResolvedValue(mockItemList)
+			.mockResolvedValueOnce(mockCategoryList)
+			.mockResolvedValueOnce(mockItemList)
 
 		it('has the required elements, including one tag alternative, initially', async () => {
-			const mockRoute = {
-				params: {
-					id: 1,
-				},
-			}
-			const mockRouter = {
-				push: vi.fn(),
-			}
-			const wrapper = shallowMount(Home, {
-				stubs: { RouterLink: RouterLinkStub },
-			})
+			const wrapper = shallowMount(Home)
 
 			expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
-			expect(axios.get).toHaveBeenCalledWith('/category/main')
+			expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
+			/*expect(axios.get).toHaveBeenNthCalledWith(2, '/item/search/'+'', {params: {categories: [],
+				sort: 'none',
+				amount: wrapper.vm.amountPerPage,
+				offset: 0,
+				useAuth: false}, 
+				paramsSerializer: params => {
+					return qs.stringify(params, {
+						arrayFormat: 'repeat',
+					})
+				},})*/
 
 			await flushPromises()
 
