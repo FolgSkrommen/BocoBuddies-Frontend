@@ -84,63 +84,77 @@ describe('when loaded', () => {
 			await wrapper.vm.$forceUpdate()
 			expect(wrapper.exists()).toBe(true)
 			expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
-		} catch (error) {
+		} catch (error: any) {
 			expect(true).toBe(false)
 		}
 	})
 	it('has the required elements', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat)
 
-		expect(wrapper.exists()).toBe(true)
+			expect(wrapper.exists()).toBe(true)
 
-		wrapper.vm.status = 'loaded'
+			wrapper.vm.status = 'loaded'
 
-		await wrapper.vm.$forceUpdate()
+			await wrapper.vm.$forceUpdate()
 
-		expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
-			true
-		)
-		expect(wrapper.find('[data-testid="submit-button"]').exists()).toBe(
-			true
-		)
+			expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
+				true
+			)
+			expect(wrapper.find('[data-testid="submit-button"]').exists()).toBe(
+				true
+			)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	it('Loads Request button when', async () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.exists()).toBe(true)
+		try {
+			const wrapper = mount(Chat)
+			expect(wrapper.exists()).toBe(true)
 
-		wrapper.vm.chat = {
-			chatId: 1,
-			itemId: 1,
-			chatName: 'Name',
-		}
-		wrapper.vm.item = {
-			name: 'Name',
-			description: 'Desc',
-			price: 100,
-			priceUnit: 'Test',
-			postalCode: 'code',
-			address: 'as',
-			images: ['asd', 'asd'],
-			availableFrom: 'from',
-			availableTo: 'to',
-			categories: ['test', 'test'],
-		}
+			wrapper.vm.chat = {
+				chatId: 1,
+				itemId: 1,
+				chatName: 'Name',
+			}
+			wrapper.vm.item = {
+				name: 'Name',
+				description: 'Desc',
+				price: 100,
+				priceUnit: 'Test',
+				postalCode: 'code',
+				address: 'as',
+				images: ['asd', 'asd'],
+				availableFrom: 'from',
+				availableTo: 'to',
+				categories: ['test', 'test'],
+			}
 
-		wrapper.vm.loanStatus = 'NOT_SENT'
-		expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(false)
-		expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(false)
-		expect(
-			wrapper.find('[data-testid="feedback-button"]').exists()
-		).not.toBe(true)
+			wrapper.vm.loanStatus = 'NOT_SENT'
+			expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(
+				false
+			)
+			expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(
+				false
+			)
+			expect(
+				wrapper.find('[data-testid="feedback-button"]').exists()
+			).not.toBe(true)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'get')
 
 	it('Axios get is called at start up', async () => {
-		const wrapper = await mount(Chat)
-		expect(axios.get).toHaveBeenCalledTimes(3)
-		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
+		try {
+			const wrapper = await mount(Chat)
+			expect(axios.get).toHaveBeenCalledTimes(3)
+			expect(axios.get).toBeCalledWith('/message?chatId=undefined')
+		} catch (error: any) {}
 	})
 })
 
@@ -148,27 +162,35 @@ describe('Testing websocket sending functions', async () => {
 	vi.spyOn(axios, 'delete')
 
 	it('Testing sendLoanDecline ', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat)
 
-		wrapper.vm.stompClient = 'test'
-		wrapper.vm.chat = chatMock
-		wrapper.vm.store.state.user = mockUser
+			wrapper.vm.stompClient = 'test'
+			wrapper.vm.chat = chatMock
+			wrapper.vm.store.state.user = mockUser
 
-		wrapper.vm.sendLoanDecline()
-		expect(axios.delete).toHaveBeenCalledTimes(1)
-		expect(axios.delete).toBeCalledWith('/loan?loanId=undefined')
+			wrapper.vm.sendLoanDecline()
+			expect(axios.delete).toHaveBeenCalledTimes(1)
+			expect(axios.delete).toBeCalledWith('/loan?loanId=undefined')
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'post')
 	it('Testing sendMessage ', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat)
 
-		wrapper.vm.stompClient = 'test'
-		wrapper.vm.chat = chatMock
-		wrapper.vm.store.state.user = mockUser
+			wrapper.vm.stompClient = 'test'
+			wrapper.vm.chat = chatMock
+			wrapper.vm.store.state.user = mockUser
 
-		wrapper.vm.sendMessage()
-		expect(axios.post).toHaveBeenCalledTimes(1)
+			wrapper.vm.sendMessage()
+			expect(axios.post).toHaveBeenCalledTimes(1)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'put')
