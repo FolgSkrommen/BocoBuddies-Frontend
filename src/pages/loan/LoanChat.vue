@@ -633,7 +633,7 @@ function reRenderChat() {
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
-	<div class="h-[60vh] flex-col w-full" v-else>
+	<div class="h-[70vh] flex-col w-full chatHeight" v-else>
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
@@ -796,3 +796,8 @@ function reRenderChat() {
 		</div>
 	</BasePopup>
 </template>
+<style scoped>
+.chatHeight {
+	height: calc(100vh - 250px);
+}
+</style>
