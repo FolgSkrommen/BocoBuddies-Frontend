@@ -178,7 +178,7 @@ const isOwnProfile = computed(() => {
 			class="w-full flex gap-1 justify-center items-center"
 			to="/settings"
 			data-testid="settings-btn"
-			>Instillinger</BaseBtn
+			>Innstillinger</BaseBtn
 		>
 		<button
 			v-if="user.friend == false && !isOwnProfile"
