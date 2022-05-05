@@ -43,7 +43,7 @@ function getProperDateTime(dateTime: string) {
 	return time
 }
 
-function getUserName(id: number) {
+function getProfilePicture(id: number) {
 	let user: User = {
 		userId: 0,
 		firstName: '',
@@ -53,11 +53,11 @@ function getUserName(id: number) {
 		trusted: false,
 		rating: 0,
 	}
-	if (!users) return undefined
+	if (!users) return ''
 	users.forEach(u => {
 		if (u.userId === id) user = u
 	})
-	return user
+	return user.profilePicture
 }
 </script>
 <template>
@@ -79,11 +79,14 @@ function getUserName(id: number) {
 				data-testid="message-info"
 				v-if="!message.receive"
 			>
-				{{ getProperDateTime(message.date) }}
+				<div v-if="message.date">
+					{{ getProperDateTime(message.date) }}
+				</div>
 				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
 					<img
+						v-if="message.senderId"
 						class="rounded-full object-cover"
-						:src="getUserName(message.senderId).profilePicture"
+						:src="getProfilePicture(message.senderId)"
 					/>
 				</div>
 			</div>
@@ -92,11 +95,14 @@ function getUserName(id: number) {
 				data-testid="message-info"
 				v-else
 			>
-				{{ getProperDateTime(message.date) }}
+				<div v-if="message.date">
+					{{ getProperDateTime(message.date) }}
+				</div>
 				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
 					<img
+						v-if="message.senderId"
 						class="rounded-full object-cover"
-						:src="getUserName(message.senderId).profilePicture"
+						:src="getProfilePicture(message.senderId)"
 					/>
 				</div>
 			</div>
