@@ -60,7 +60,7 @@ async function submit() {
 		await router.push('/login')
 	} catch (error: any) {
 		status.value = 'error'
-		store.dispatch('error', error.message)
+		store.dispatch('error', error.response.data)
 	}
 }
 

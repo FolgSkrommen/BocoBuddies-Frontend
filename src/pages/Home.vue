@@ -120,6 +120,7 @@ async function search() {
 			sort: sortChosenString,
 			amount: amountPerPage,
 			offset: currentPage.value,
+			active: true,
 			useAuth: false,
 		}
 		if (sortChosenString == 'nearest') {
@@ -130,6 +131,7 @@ async function search() {
 						sort: sortChosenString,
 						amount: amountPerPage,
 						offset: currentPage.value,
+						active: true,
 						useAuth: false,
 						lat: position.coords.latitude.toString(),
 						lng: position.coords.longitude.toString(),

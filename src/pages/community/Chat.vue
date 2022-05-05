@@ -147,13 +147,29 @@ type Status = 'loading' | 'loaded' | 'error'
 function reRenderChat() {
 	render.value++
 }
+const chatName = computed(() => {
+	const nameArray = chat.value?.chatName.split('|', 2)
+	let chatName = 'Default'
+	if (nameArray?.length != 2 || !store.state.user) return chat.value?.chatName
+	if (
+		nameArray[0] === store.state.user.username &&
+		nameArray[1] !== store.state.user.username
+	)
+		chatName = nameArray[1]
+	if (
+		nameArray[1] === store.state.user.username &&
+		nameArray[0] !== store.state.user.username
+	)
+		chatName = nameArray[0]
+	return chatName
+})
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
 	<div class="h-96 flex-col w-full" v-else>
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
-			<h1 v-if="chat && chat.chatName">{{ chat.chatName }}</h1>
+			<h1 v-if="chat && chat.chatName">{{ chatName }}</h1>
 			<h1 v-else>Chat</h1>
 		</div>
 
