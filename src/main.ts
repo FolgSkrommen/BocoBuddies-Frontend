@@ -4,6 +4,7 @@ import './index.css'
 import router from './router'
 import { store, key } from './store'
 import axios from 'axios'
+
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
 //axios.defaults.baseURL = import.meta.env.VITE_IP

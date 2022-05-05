@@ -607,10 +607,13 @@ console.log(lender)
 function reRenderChat() {
 	render.value++
 }
+
+console.log(messages.value)
+console.log(chat.value)
+console.log(item.value)
 </script>
 <template>
-	<LoadingIndicator v-if="status === 'loading'" />
-	<div class="h-[60vh] flex-col w-full" v-else>
+	<div class="h-[60vh] flex-col w-full">
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
