@@ -11,7 +11,7 @@ if (import.meta.env.VITE_USE_CUSTOM_IP == 'true') {
 	axios.defaults.baseURL = import.meta.env.VITE_IP
 	console.log(axios.defaults.baseURL)
 } else {
-	axios.defaults.baseURL = 'http://10.24.26.184:8001'
+	axios.defaults.baseURL = 'http://localhost:8001'
 }
 axios.defaults.headers.post = { 'Content-Type': 'application/json' }
 console.log(axios.defaults.baseURL)
