@@ -4,7 +4,9 @@ import { store } from '../store'
 
 <template>
 	<nav class="bg-slate-900 w-full fixed top-0 z-50">
-		<div class="container mx-auto p-2 flex justify-between items-center">
+		<div
+			class="container mx-auto px-4 py-2 flex justify-between items-center"
+		>
 			<router-link to="/">
 				<img
 					src="/logo.png"

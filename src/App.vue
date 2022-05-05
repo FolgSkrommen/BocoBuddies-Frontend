@@ -8,7 +8,7 @@ const { dispatch } = store
 
 <template>
 	<div>
-		<div class="left-0 top-0 fixed w-full p-4 grid gap-4">
+		<div class="left-0 top-0 fixed w-full p-4 grid gap-4 md:mt-14">
 			<BaseBanner
 				@exit="dispatch('hideBanner', 'error')"
 				v-show="store.state.banners.error.show"

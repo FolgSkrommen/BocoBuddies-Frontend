@@ -29,15 +29,15 @@ export const store = createStore<State>({
 		token: undefined,
 		banners: {
 			error: {
-				show: false,
+				show: true,
 				message: '',
 			},
 			info: {
-				show: false,
+				show: true,
 				message: '',
 			},
 			success: {
-				show: false,
+				show: true,
 				message: '',
 			},
 		},

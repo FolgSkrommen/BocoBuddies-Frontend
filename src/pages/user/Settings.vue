@@ -282,7 +282,16 @@ cookie()
 				:error="errors.newEmail"
 			/>
 
-			<BaseBtn type="submit" class="w-fit mx-auto">Oppdater</BaseBtn>
+			<BaseBtn
+				type="submit"
+				:disabled="
+					!!errors.newEmail ||
+					!!errors.newFirstName ||
+					!!errors.newLastName
+				"
+				class="w-fit mx-auto"
+				>Oppdater</BaseBtn
+			>
 		</form>
 
 		<BaseBtn @click="showChangePassword = !showChangePassword"
@@ -316,7 +325,14 @@ cookie()
 				:error="errors.newPasswordConfirm"
 			/>
 
-			<BaseBtn type="submit" class="w-fit mx-auto">Endre</BaseBtn>
+			<BaseBtn
+				type="submit"
+				:disabled="
+					!!errors.newPasswordConfirm || newPasswordConfirm != ''
+				"
+				class="w-fit mx-auto"
+				>Endre</BaseBtn
+			>
 		</form>
 
 		<span class="my-2"></span>
