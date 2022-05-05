@@ -60,6 +60,18 @@ function getPriceUnit(unit: string) {
 	if (unit === 'YEAR') return 'År'
 }
 
+function isValidHttpUrl(string: string) {
+	let url
+
+	try {
+		url = new URL(string)
+	} catch (_) {
+		return false
+	}
+
+	return url.protocol === 'http:' || url.protocol === 'https:'
+}
+
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
@@ -82,7 +94,13 @@ function styleType(received: boolean) {
 				:id="i"
 				:receive="!message.receive"
 			>
-				<div data-testid="message">{{ message.message }}</div>
+				<a
+					v-if="isValidHttpUrl(message.message)"
+					:href="message.message"
+				>
+					<div data-testid="message">{{ message.message }}</div>
+				</a>
+				<div data-testid="message" v-else>{{ message.message }}</div>
 			</Message>
 
 			<!--Kvittering-->
@@ -102,7 +120,9 @@ function styleType(received: boolean) {
 
 				<h3
 					v-else-if="
-						modelValue === 'RETURNED' || message.type === 'RETURNED'
+						modelValue === 'RETURNED' ||
+						modelValue === 'REVIEWED' ||
+						message.type === 'RETURNED'
 					"
 					data-testid="returned-h"
 				>
