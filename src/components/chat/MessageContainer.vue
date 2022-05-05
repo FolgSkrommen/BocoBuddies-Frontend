@@ -42,6 +42,18 @@ function getProperDateTime(dateTime: string) {
 	return time
 }
 
+function isValidHttpUrl(string: string) {
+	let url
+
+	try {
+		url = new URL(string)
+	} catch (_) {
+		return false
+	}
+
+	return url.protocol === 'http:' || url.protocol === 'https:'
+}
+
 function getProfilePicture(id: number) {
 	let user: User = {
 		userId: 0,
@@ -71,7 +83,13 @@ function getProfilePicture(id: number) {
 				:id="i"
 				:receive="!message.receive"
 			>
-				<div data-testid="message">{{ message.message }}</div>
+				<a
+					v-if="message.message && isValidHttpUrl(message.message)"
+					:href="message.message"
+				>
+					<div data-testid="message">{{ message.message }}</div>
+				</a>
+				<div data-testid="message" v-else>{{ message.message }}</div>
 			</Message>
 			<div
 				class="text-black text-m place-self-end"

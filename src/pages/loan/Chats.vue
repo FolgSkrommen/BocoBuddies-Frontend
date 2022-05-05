@@ -58,10 +58,10 @@ getChats()
 			<h1 hidden data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
-					<router-link :to="'/chat/' + chat.chatId">
+					<router-link :to="'/chat/' + chat.chatId" class="p-2">
 						<div class="grid grid-cols-3">
 							<img
-								class="h-20 w-20 object-cover rounded-lg"
+								class="h-20 w-20 object-cover rounded-xl"
 								v-if="chat.item"
 								:src="chat.item.images[0]"
 								:alt="chat.item.name"
