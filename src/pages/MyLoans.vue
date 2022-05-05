@@ -13,6 +13,7 @@ import { GetItemSearchRequest } from '../api/item/search'
 import { Alternative, Category, Item } from '../api/schema'
 import { AdjustmentsIcon } from '@heroicons/vue/solid'
 import { useRouter } from 'vue-router'
+import { GetLoanItemRequest, GetLoanItemResponse } from '../api/loan/item'
 
 //Variables
 let sortChosen = ref(0)
@@ -231,15 +232,11 @@ function loadMoreItems() {
 }
 const router = useRouter()
 async function properRedirect(item: Item, index: number) {
-	console.log('REDIRECTING PROPERLY')
-	console.log(index)
-	console.log(item)
 	let occurence = 0
 	for (let i = 0; i < items.value.length; i++) {
-		if (items.value[i].itemId === item.itemId) occurence++
 		if (i >= index) break
+		if (items.value[i].itemId === item.itemId) occurence++
 	}
-	console.log(occurence)
 
 	let sortChosenString: string
 	switch (sortChosen.value) {
@@ -291,6 +288,7 @@ async function properRedirect(item: Item, index: number) {
 
 	//get loan id
 	//push with router
+	status.value = 'loading'
 	try {
 		const params: GetLoanItemRequest = {
 			itemId: item.itemId,
@@ -299,10 +297,13 @@ async function properRedirect(item: Item, index: number) {
 			sort: sortChosenString,
 		}
 		const res = await axios.get('/loan/item/', { params })
-		console.log(res.data)
+		status.value = 'loaded'
 
-		//router.push('/my-loan/'+res.)
-	} catch (error) {}
+		router.push('/my-loan/' + (res.data as GetLoanItemResponse))
+	} catch (error: any) {
+		status.value = 'error'
+		store.dispatch('error', error.message)
+	}
 }
 function cookie() {
 	const seenMyLoansCookie = ('; ' + document.cookie)
