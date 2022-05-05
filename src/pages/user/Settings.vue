@@ -4,7 +4,13 @@ import BaseBtn from '../../components/base/BaseBtn.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import ImageCarousel from '../../components/ImageCarousel.vue'
 import BasePopup from '../../components/base/BasePopup.vue'
-import { CheckIcon, XIcon } from '@heroicons/vue/solid'
+
+import {
+	CheckCircleIcon,
+	CheckIcon,
+	XIcon,
+	StarIcon,
+} from '@heroicons/vue/solid'
 
 import { Ref, ref } from 'vue'
 import * as yup from 'yup'
@@ -149,8 +155,8 @@ cookie()
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<h1>Innstillinger</h1>
-		<div class="flex gap-1">
+		<h2>Innstillinger</h2>
+		<div class="flex gap-4">
 			<div class="h-40 grid">
 				<label class="grid w-fit">
 					<img
@@ -201,14 +207,26 @@ cookie()
 					/></BaseBtn>
 				</div>
 			</div>
-
 			<div class="flex flex-col gap-2">
-				<h2 class="font-bold">
+				<h2>
 					{{ store.state.user.firstName }}
 					{{ store.state.user.lastName }}
 				</h2>
 				<div class="flex items-center text-xl">
-					@{{ store.state.user.username }}
+					<p class="text-slate-500">
+						@{{ store.state.user.username }}
+					</p>
+					<CheckCircleIcon
+						v-if="store.state.user.verified"
+						class="h-5 w-5 text-blue-500"
+					/>
+				</div>
+				<!-- User rating -->
+				<div class="flex items-center gap-2">
+					<StarIcon class="w-5 h-5 text-yellow-500" />
+					<p class="text-sm font-bold text-slate-900">
+						{{ store.state.user.rating }}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -252,7 +270,7 @@ cookie()
 			<p v-else>Lukk redigering</p></BaseBtn
 		>
 
-		<hr class="border-slate-400" />
+		<span class="my-2"></span>
 
 		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
@@ -264,7 +282,8 @@ cookie()
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
 
-		<hr class="border-slate-400" />
+		<span class="my-2"></span>
+
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 
 		<!--<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>-->

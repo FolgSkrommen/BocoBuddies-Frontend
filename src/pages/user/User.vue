@@ -138,10 +138,12 @@ const isOwnProfile = computed(() => {
 				:src="user.profilePicture"
 				alt=""
 				class="w-32 h-32 object-cover rounded-full"
+				data-testid="profile-picture"
 			/>
 			<span
 				v-else
 				class="w-32 h-32 object-cover rounded-full bg-slate-900 text-white grid place-items-center text-4xl"
+				data-testid="username"
 			>
 				{{ user.username[0].toUpperCase() }}
 				{{ user.lastName[0].toUpperCase() }}
@@ -149,24 +151,20 @@ const isOwnProfile = computed(() => {
 
 			<!-- User name and lastname-->
 			<div class="flex flex-col gap-2">
-				<h2 class="font-bold">
+				<h2 class="font-bold" data-testid="name">
 					{{ user.firstName }} {{ user.lastName }}
 				</h2>
 				<div class="flex items-center text-xl">
-					@{{ user.username }}
+					<p class="text-slate-500">@{{ user.username }}</p>
 					<CheckCircleIcon
 						v-if="user.verified"
 						class="h-5 w-5 text-blue-500"
 					/>
 				</div>
 				<!-- User rating -->
-				<div
-					class="flex items-center border w-fit p-1 bg-white border-gray-500 rounded"
-				>
+				<div class="flex items-center gap-2">
 					<StarIcon class="w-5 h-5 text-yellow-500" />
-					<p
-						class="ml-2 text-sm font-bold text-slate-900 dark:text-white"
-					>
+					<p class="text-sm font-bold text-slate-900">
 						{{ user.rating }}
 					</p>
 				</div>
@@ -179,12 +177,14 @@ const isOwnProfile = computed(() => {
 			v-if="store.state.user && isOwnProfile"
 			class="w-full flex gap-1 justify-center items-center"
 			to="/settings"
+			data-testid="settings-btn"
 			>Instillinger</BaseBtn
 		>
 		<button
 			v-if="user.friend == false && !isOwnProfile"
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
+			data-testid="add-friend-btn"
 		>
 			<UserAddIcon class="w-6" /> Legg til buddy
 		</button>

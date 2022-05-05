@@ -44,7 +44,7 @@ async function logIn() {
 		await router.push('/')
 	} catch (error: any) {
 		loginStatus.value = 'error'
-		store.dispatch('error', error.message)
+		store.dispatch('error', error.response.data)
 	}
 }
 

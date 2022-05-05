@@ -34,13 +34,21 @@ const chatName = computed(() => {
 		<router-link v-if="to" :to="'/community/chat/' + friendChat.chatId">
 			<Card>
 				<div class="flex gap-4 w-full">
-					<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
+					<div
+						v-if="friendChat.members.length > 1"
+						class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
+					>
 						<img
 							v-for="user in friendChat.members.slice(0, 4)"
-							class="rounded-full object-cover"
+							class="rounded-full object-cover w-7 h-7"
 							:src="user.profilePicture"
 						/>
 					</div>
+					<img
+						class="w-16 h-16 rounded-full object-cover"
+						:src="friendChat.members[0].profilePicture"
+						v-else
+					/>
 					<div class="grid gap-2">
 						<p class="font-bold text-lg">
 							{{ chatName }}

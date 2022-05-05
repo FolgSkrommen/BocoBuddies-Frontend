@@ -84,7 +84,7 @@ function getProfilePicture(id: number) {
 				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
 					<img
 						v-if="message.senderId"
-						class="rounded-full object-cover"
+						class="rounded-full object-cover w-6 h-6"
 						:src="getProfilePicture(message.senderId)"
 					/>
 				</div>
@@ -100,7 +100,7 @@ function getProfilePicture(id: number) {
 				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
 					<img
 						v-if="message.senderId"
-						class="rounded-full object-cover"
+						class="rounded-full object-cover w-6 h-6"
 						:src="getProfilePicture(message.senderId)"
 					/>
 				</div>

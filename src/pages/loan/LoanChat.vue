@@ -73,7 +73,7 @@ function onError(err: any) {
 
 async function sendMessage(event: any) {
 	if (!stompClient.value || !store.state.user || !chat.value) return
-	console.log(!stompClient.value || !store.state.user || !chat.value)
+
 	let chatMessage: Message = {
 		senderId: store.state.user.userId,
 		message: currentMessage.value,
@@ -96,7 +96,7 @@ async function sendMessage(event: any) {
 		store.dispatch('error', error.message)
 	}
 	currentMessage.value = ''
-
+	if (!event) return
 	event.preventDefault()
 }
 
@@ -711,13 +711,13 @@ function reRenderChat() {
 	</div>
 
 	<BasePopup
-		v-show="showLoginModal"
 		@exit="showLoginModal = false"
 		v-if="
 			chat &&
 			chat.item &&
 			chat.item.availableFrom &&
-			chat.item.availableTo
+			chat.item.availableTo &&
+			showLoginModal
 		"
 		data-testid="base-popup"
 		class="overflow-y-auto max-h-screen"

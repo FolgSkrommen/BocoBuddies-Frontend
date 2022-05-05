@@ -4,12 +4,10 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 
 <template>
 	<div>
-		<div
-			class="sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20 mr-auto ml-auto pr-4 pl-4"
-		>
-			<div class="max-w-xl sm:mx-auto lg:max-w-2xl mr-auto ml-auto">
-				<div class="sm:text-center flex flex-col mb-16">
-					<div class="sm:mx-auto mb-6">
+		<div>
+			<div class="max-w-xl mr-auto ml-auto">
+				<div class="flex flex-col mb-16">
+					<div class="mb-6">
 						<p
 							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
@@ -17,14 +15,14 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 						</p>
 					</div>
 					<div
-						class="max-w-lg font-sans sm:text-4xl md:mx-auto text-slate-900 mr-auto mb-6 ml-auto pb-0"
+						class="max-w-lg font-sans text-slate-900 mr-auto mb-6 ml-auto pb-0"
 					>
 						<div class="">
 							<p class="relative inline-block text-2xl ml-0">
 								<svg
 									viewbox="0 0 52 24"
 									fill="currentColor"
-									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-slate-300 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+									class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-slate-300"
 								>
 									<defs>
 										<pattern
@@ -45,16 +43,16 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 								</svg>
 							</p>
 							<p
-								class="relative font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
+								class="relative font-sans inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
 							>
 								FAQ
 							</p>
 						</div>
 						<p
-							class="font-sans sm:text-4xl sm:leading-none inline font-bold text-3xl tracking-tight mb-0 ml-0"
+							class="font-sans inline font-bold text-3xl tracking-tight mb-0 ml-0"
 						></p>
 					</div>
-					<p class="md:text-lg text-base text-slate-700">
+					<p class="text-base text-slate-700">
 						Her kan du finne svar på alle mulige spørsmål du kunne
 						finne på å stille
 					</p>
@@ -136,6 +134,67 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 					Gjenstander:
 				</p>
 				<div class="space-y-4">
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
+								Hvordan låner jeg en gjenstand?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Gå til søk-siden, finn gjenstanden du vil låne,
+								trykk deg inn på den og klikk på 'Send melding'.
+							</p>
+							<br />
+							<p class="text-2xl text-slate-700">
+								Nå er du i en samtale med utleier, og du har
+								mulighet til å forespørre et lån. Trykk på
+								'Forespør', fyll ut perioden du ønsker å låne og
+								eventuelt foreslå en ny pris. Trykk på 'avtal
+								lån'.
+							</p>
+							<br />
+							<p class="text-2xl text-slate-700">
+								Da gjenstår det bare å vente på utleiers svar!
+							</p>
+						</div>
+					</div>
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
+								Hva skjer når utleier bekrefter et lån?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Da må dere avtale dere i mellom hva som skal
+								gjøres videre i chatten, enten det er relatert
+								til henting/sending av den lånte gjenstanden
+								eller noe helt annet.
+							</p>
+						</div>
+					</div>
+					<div class="border rounded shadow-sm">
+						<div
+							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
+						>
+							<p class="font-medium text-lg">
+								Kan jeg avslyse et lån før det faktisk settes i
+								gang?
+							</p>
+						</div>
+						<div class="pr-4 pb-4 pl-4">
+							<p class="text-2xl text-slate-700">
+								Det kan du, men det må senest skje 24t før
+								avtalt leiestart. Dette gjøres ved å si ifra til
+								utleier i den aktuelle chatten.
+							</p>
+						</div>
+					</div>
 					<div class="border rounded shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
