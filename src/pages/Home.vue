@@ -162,6 +162,7 @@ async function search() {
 			)
 		}
 		if (sortChosenString != 'nearest') {
+			status.value = 'loading'
 			const res = await axios.get(
 				'/item/search/' + searchWord.value.trim(),
 				{
