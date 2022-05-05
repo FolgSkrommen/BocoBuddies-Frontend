@@ -266,7 +266,7 @@ cookie()
 			<p v-else>Lukk redigering</p></BaseBtn
 		>
 
-		<hr class="border-slate-400" />
+		<span class="my-2"></span>
 
 		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
@@ -278,7 +278,8 @@ cookie()
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
 
-		<hr class="border-slate-400" />
+		<span class="my-2"></span>
+
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 
 		<!--<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>-->
