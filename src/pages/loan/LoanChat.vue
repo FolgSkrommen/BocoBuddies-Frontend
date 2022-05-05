@@ -651,23 +651,35 @@ function reRenderChat() {
 				<router-link
 					v-if="item"
 					:to="'/item/' + item.itemId"
-					class="flex gap-2 border"
+					class="flex gap-2"
 				>
 					<img
 						class="w-12 h-12 object-cover rounded"
 						v-if="item"
 						:src="item.images[0]"
 					/>
-					<p v-if="item">
-						{{ item.name }}<br />
+					<div v-if="item">
+						<p class="font-bold">{{ item.name }}</p>
 						{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
-					</p>
+					</div>
 				</router-link>
 			</div>
-			<h3 class="flex-1 truncate text-right">
-				{{ getUserToReview()?.firstName }}
-				{{ getUserToReview()?.lastName }}
-			</h3>
+
+			<router-link
+				class="flex gap-1 content-center"
+				:to="'/user/' + getUserToReview()?.userId"
+			>
+				<h4 class="flex-1 truncate text-right">
+					{{ getUserToReview()?.firstName }}<br />
+					{{ getUserToReview()?.lastName }}
+				</h4>
+
+				<img
+					class="w-12 h-12 object-cover rounded self-center"
+					v-if="item"
+					:src="getUserToReview()?.profilePicture"
+				/>
+			</router-link>
 		</div>
 
 		<MessageContainer

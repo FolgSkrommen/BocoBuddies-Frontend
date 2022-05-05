@@ -1,0 +1,30 @@
+stages: # List of stages for jobs, and their order of execution*
+    - format_test_build
+
+cache:
+    paths:
+        - /dist
+
+build-job:
+    stage: format_test_build
+    image: ubuntu:latest
+    only:
+        refs:
+            - main
+    script:
+        - apt update
+        - npm install
+        - npm run prettier
+        - npm run test
+        - apt install rsync -y
+        - apt install openssh-client -y
+        - mkdir ~/.ssh
+        - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        - touch ~/.ssh/id_rsa
+        - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        - echo $'' >> ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa # Required permission by ssh
+        - echo "$FRONTEND_ENV" > .env
+        - ssh eposkk@35.228.176.246 echo "Hi, this is a test"
+        - rsync --archive --delete --exclude='.git' --exclude='node_modules' . eposkk@35.228.176.246:frontend
+        - ssh eposkk@35.228.176.246 make -C frontend deploy

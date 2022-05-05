@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
+const counter = ref(0)
 </script>
 
 <template>
@@ -303,9 +305,11 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 
 				<p
 					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
+					@click="counter++"
 				>
 					Kontakt oss:
 				</p>
+				<img v-if="counter > 4" src="/random.png" alt="random" />
 				<div class="border rounded-xl shadow-sm">
 					<div
 						class="focus:outline-none grid gap-4 w-full items-center pt-4 pr-4 pb-4 pl-4"

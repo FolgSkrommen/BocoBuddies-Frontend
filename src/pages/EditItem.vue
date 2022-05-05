@@ -59,6 +59,7 @@ const newRange = ref<Range>({ start: new Date(), end: new Date() })
 
 function resetItem(oldItem: Item) {
 	newItem.value = { ...oldItem }
+	console.log(newItem.value.active)
 	newRange.value.start = new Date(oldItem.availableFrom)
 	newRange.value.end = new Date(oldItem.availableTo)
 
@@ -205,7 +206,7 @@ async function updateItem() {
 			filterIdList: chosenFilters.value,
 			images: newImages.value,
 			itemId: itemId,
-			active: newItem.value.active ?? true,
+			active: newItem.value.active,
 		}
 		console.log(body.images)
 		const formData = new FormData()
