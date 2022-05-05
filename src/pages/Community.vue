@@ -226,6 +226,7 @@ cookie()
 						: 'bg-slate-300 text-slate-900'
 				"
 				@click="view = tag"
+				data-testid="view-button"
 			>
 				{{ tag }}
 			</button>
@@ -299,10 +300,11 @@ cookie()
 					<ChatCard
 						:to="'/community/chat/' + friendChat.chatId"
 						:friendChat="friendChat"
+						data-testid="chat-card"
 					></ChatCard>
 				</div>
 			</div>
-			<FloatingBtn @click="add" />
+			<FloatingBtn @click="add" data-testid="add-btn" />
 			<NewMessagePopup
 				v-show="createChat"
 				@exit="createChat = false"

@@ -12,6 +12,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
+		"@fawmi/vue-google-maps": "^0.9.67",
 		"@headlessui/vue": "^1.5.0",
 		"@heroicons/vue": "^1.0.6",
 		"@types/google.maps": "^3.48.6",
@@ -23,7 +24,6 @@
 		"vue": "^3.2.25",
 		"vue-router": "^4.0.14",
 		"vue-stomp": "^0.0.5",
-		"vue3-google-map": "^0.10.0",
 		"vuex": "^4.0.2",
 		"webstomp-client": "^1.2.6",
 		"yup": "^0.32.11"

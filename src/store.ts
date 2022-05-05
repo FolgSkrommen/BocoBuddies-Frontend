@@ -105,8 +105,26 @@ export const store = createStore<State>({
 		info({ commit }, message: string) {
 			commit('SHOW_BANNER', { banner: 'info', message })
 		},
+		infoWithTimeout(
+			{ commit },
+			{ message, timeout }: { message: string; timeout: number }
+		) {
+			commit('SHOW_BANNER', { banner: 'info', message })
+			setTimeout(() => {
+				commit('HIDE_BANNER', 'info')
+			}, timeout)
+		},
 		success({ commit }, message: string) {
 			commit('SHOW_BANNER', { banner: 'success', message })
+		},
+		successWithTimeout(
+			{ commit },
+			{ message, timeout = 2000 }: { message: string; timeout?: number }
+		) {
+			commit('SHOW_BANNER', { banner: 'success', message })
+			setTimeout(() => {
+				commit('HIDE_BANNER', 'success')
+			}, timeout)
 		},
 		hideBanner({ commit }, banner: 'error' | 'info' | 'success') {
 			commit('HIDE_BANNER', banner)

@@ -58,13 +58,29 @@ interface Range {
 const newRange = ref<Range>({ start: new Date(), end: new Date() })
 
 function resetItem(oldItem: Item) {
-	if (!item.value) return
 	newItem.value = { ...oldItem }
 	newRange.value.start = new Date(oldItem.availableFrom)
 	newRange.value.end = new Date(oldItem.availableTo)
 
 	const convertedPriceUnit = priceUnits.find(
 		el => el.value === oldItem.priceUnit
+	)
+	if (convertedPriceUnit) newPriceUnit.value = convertedPriceUnit
+	filterTypes.value = []
+	categoryChoices.value = []
+	currentCategory = 0
+	chosenFilters.value = []
+	getCategories()
+}
+
+function resetItemFromOld() {
+	if (!item.value) return
+	newItem.value = { ...item.value }
+	newRange.value.start = new Date(item.value.availableFrom)
+	newRange.value.end = new Date(item.value.availableTo)
+
+	const convertedPriceUnit = priceUnits.find(
+		el => el.value === item.value?.priceUnit
 	)
 	if (convertedPriceUnit) newPriceUnit.value = convertedPriceUnit
 	filterTypes.value = []
@@ -191,6 +207,7 @@ async function updateItem() {
 			itemId: itemId,
 			active: newItem.value.active ?? true,
 		}
+		console.log(body.images)
 		const formData = new FormData()
 		formData.append('name', body.name)
 		console.log(formData.get('name'))
@@ -201,10 +218,11 @@ async function updateItem() {
 		formData.append('postalCode', body.postalCode.toString())
 		formData.append('startDate', body.startDate)
 		formData.append('endDate', body.endDate)
-		formData.append('categoryId', body.categoryId.toString())
-		formData.append('filterIdList', body.filterIdList.toString())
+		if (showEditCategory.value) {
+			formData.append('categoryId', body.categoryId.toString())
+			formData.append('filterIdList', body.filterIdList.toString())
+		}
 		if (!body.images.length) {
-			formData.append('images', new Blob())
 			console.log('Bilde listen er tom')
 		} else {
 			for (let i = 0; i < body.images.length; i++) {
@@ -215,18 +233,23 @@ async function updateItem() {
 		formData.append('active', body.active.toString())
 		console.log(formData.getAll('images'))
 		await axios.put('/item/edit', formData)
-		await router.push('/')
+		putStatus.value = 'success'
+		store.dispatch('successWithTimeout', {
+			message: 'Gjenstand er oppdatert',
+		})
 	} catch (error: any) {
 		putStatus.value = 'error'
 		store.dispatch('error', error.message)
 	}
 }
+
+const showEditCategory = ref(false)
 </script>
 
 <template>
 	<LoadingIndicator v-if="getStatus === 'loading'" />
 	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
-		<button v-if="item" @click="resetItem({ ...item })" class="bg-red-500">
+		<button v-if="item" @click="resetItemFromOld" class="bg-red-500">
 			Tilbakestill
 		</button>
 		<div class="flex gap-4 items-center">
@@ -300,7 +323,7 @@ async function updateItem() {
 		<div class="grid place-items-center">
 			<p class="font-bold text-lg">Tilgjengelig tid</p>
 			<DatePicker
-				:key="newRange.start + newRange.end"
+				:key="newRange"
 				data-testid="date-picker"
 				class="place-self-center"
 				v-model="newRange"
@@ -310,48 +333,54 @@ async function updateItem() {
 				is24hr
 			/>
 		</div>
-		<div class="grid gap-4">
-			<h3>Kategori</h3>
-			<select
-				class="w-full"
-				v-for="(categories, index) in categoryChoices"
-				v-if="categoryChoices"
-				:key="index"
-				@input="
+		<div class="flex gap-4 items-center">
+			<h3>Rediger kategori og filter</h3>
+			<input class="h-6 w-6" type="checkbox" v-model="showEditCategory" />
+		</div>
+		<div v-if="showEditCategory">
+			<div class="grid gap-4">
+				<h3>Kategori</h3>
+				<select
+					class="w-full"
+					v-for="(categories, index) in categoryChoices"
+					v-if="categoryChoices"
+					:key="index"
+					@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
-			>
 				>
-				<option></option>
-				<option
-					v-for="category in categories"
-					:key="category.categoryId"
-					:value="category.categoryId"
-				>
-					{{ category.categoryName }}
-				</option>
-			</select>
-		</div>
-		<div v-for="(filterType, index) in filterTypes">
-			<h3>{{ filterType.filterTypeName }}</h3>
-			<select
-				class="w-full"
-				v-if="filterTypes"
-				:key="index"
-				@input="
+					>
+					<option></option>
+					<option
+						v-for="category in categories"
+						:key="category.categoryId"
+						:value="category.categoryId"
+					>
+						{{ category.categoryName }}
+					</option>
+				</select>
+			</div>
+			<div v-for="(filterType, index) in filterTypes">
+				<h3>{{ filterType.filterTypeName }}</h3>
+				<select
+					class="w-full"
+					v-if="filterTypes"
+					:key="index"
+					@input="
 						event => updateFilters((event.target as HTMLInputElement).value, index)
 					"
-			>
 				>
-				<option></option>
-				<option
-					v-for="value in filterType.filterValues"
-					:key="value.id"
-					:value="value.id"
-				>
-					{{ value.value }}
-				</option>
-			</select>
+					>
+					<option></option>
+					<option
+						v-for="value in filterType.filterValues"
+						:key="value.id"
+						:value="value.id"
+					>
+						{{ value.value }}
+					</option>
+				</select>
+			</div>
 		</div>
 		<button @click="updateItem">Lagre</button>
 	</div>
