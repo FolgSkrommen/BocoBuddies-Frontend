@@ -7,9 +7,14 @@ import axios from 'axios'
 
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
-//axios.defaults.baseURL = import.meta.env.VITE_IP
-axios.defaults.baseURL = 'http://localhost:8001'
+if (import.meta.env.VITE_USE_CUSTOM_IP == 'true') {
+	axios.defaults.baseURL = import.meta.env.VITE_IP
+	console.log(axios.defaults.baseURL)
+} else {
+	axios.defaults.baseURL = 'http://localhost:8001'
+}
 axios.defaults.headers.post = { 'Content-Type': 'application/json' }
+console.log(axios.defaults.baseURL)
 
 const userString = localStorage.getItem('userData')
 if (userString) {
