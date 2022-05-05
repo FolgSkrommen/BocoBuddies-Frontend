@@ -142,7 +142,6 @@ async function search() {
 			},
 		})
 		const data: Item[] = res.data
-		console.log(data)
 		if (data.length > 0) items.value = items.value.concat(data)
 		if (data.length < amountPerPage) renderLoadButton.value = false
 
@@ -238,7 +237,7 @@ const showFiltersAndSort = ref(false)
 				/>
 				<SearchbarAndButton
 					v-model="searchWord"
-					@search-and-reset="searchAndResetItems"
+					@search="searchAndResetItems"
 				></SearchbarAndButton>
 			</div>
 
