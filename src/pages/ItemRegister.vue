@@ -295,7 +295,7 @@ async function registerItem() {
 					"
 			>
 				>
-				<option value="1">Velg</option>
+				<option value="0">Velg</option>
 
 				<option
 					v-for="category in categories"

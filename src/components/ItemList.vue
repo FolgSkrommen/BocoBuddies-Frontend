@@ -57,7 +57,7 @@ function getPriceUnit(unit: string) {
 						</div>
 					</router-link>
 					<BaseBtn
-						class="h-fit w-fit"
+						class="h-fit w-fit m-2 place-self-end"
 						:to="`/edit-item/${item.itemId}`"
 						v-if="edit"
 						>Rediger</BaseBtn

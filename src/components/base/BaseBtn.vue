@@ -14,9 +14,9 @@ const colorClass = computed(() => {
 		case 'blue':
 			return 'bg-blue-600 text-white'
 		case 'red':
-			return 'bg-red-400 text-white'
+			return 'bg-red-400 text-white hover:bg-red-700 hover:text-white'
 		case 'gray':
-			return 'bg-slate-300 text-slate-900'
+			return 'bg-slate-300 text-slate-900 hover:bg-slate-400 hover:text-black'
 		case 'green':
 			return 'bg-green-500 text-white'
 		default:
