@@ -226,7 +226,11 @@ async function updateItem() {
 <template>
 	<LoadingIndicator v-if="getStatus === 'loading'" />
 	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
-		<button v-if="item" @click="resetItem({ ...item })" class="bg-red-500">
+		<button
+			v-if="item"
+			@click="resetItem({ ...item } as Item)"
+			class="bg-red-500"
+		>
 			Tilbakestill
 		</button>
 		<div class="flex gap-4 items-center">
@@ -300,7 +304,7 @@ async function updateItem() {
 		<div class="grid place-items-center">
 			<p class="font-bold text-lg">Tilgjengelig tid</p>
 			<DatePicker
-				:key="newRange.start + newRange.end"
+				:key="newRange"
 				data-testid="date-picker"
 				class="place-self-center"
 				v-model="newRange"

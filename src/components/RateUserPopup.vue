@@ -9,7 +9,7 @@ import { PostReviewRequest } from '../api/review'
 import BaseLabel from './base/BaseLabel.vue'
 import { store } from '../store'
 interface Props {
-	user: User
+	user?: User
 	loan?: Loan
 }
 
@@ -48,11 +48,11 @@ async function handleRate() {
 	<BasePopup @exit="emit('exit')">
 		<img
 			class="w-16 h-16 rounded-full place-self-center"
-			:src="user.profilePicture"
-			:alt="user.username"
+			:src="user?.profilePicture"
+			:alt="user?.username"
 		/>
 		<p class="place-self-center font-bold text-lg">
-			{{ user.firstName }} {{ user.lastName }}
+			{{ user?.firstName }} {{ user?.lastName }}
 		</p>
 		<div class="flex gap-2 place-self-center">
 			<StarIcon

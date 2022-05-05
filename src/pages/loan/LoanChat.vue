@@ -24,7 +24,6 @@ import { GetMessageResponse } from '../../api/message'
 import BaseLabel from '../../components/base/BaseLabel.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
-import UserCard from '../../components/UserCard.vue'
 
 const route = useRoute()
 
@@ -42,7 +41,7 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://10.24.26.184:8001/ws')
+	socket = new WebSocket('ws://localhost:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -140,6 +139,7 @@ async function sendLoanRequestWS() {
 			type: 'REQUEST',
 			receive: false,
 			senderId: res.data.loaner.toString(),
+			date: res.data.date,
 			start: range.value.start.toISOString(),
 			stop: range.value.end.toISOString(),
 			price: price.value,
@@ -241,6 +241,7 @@ async function onLoanAccept(payload: any) {
 		senderId: accept.loaner,
 		type: 'ACCEPT',
 		receive: true,
+		date: accept.date,
 		start: accept.start,
 		stop: accept.end,
 		returned: accept.returned,
@@ -298,6 +299,7 @@ function onRequestReceived(payload: any) {
 		senderId: request.loaner,
 		type: 'REQUEST',
 		receive: true,
+		date: request.date,
 		start: request.start,
 		stop: request.end,
 		returned: request.returned,
@@ -533,6 +535,25 @@ function toggleShowRating() {
 	showRateUserPopup.value = true
 }
 
+function getUserToReviewCheck() {
+	if (!store.state.user) return false
+	if (!user.value) return false
+}
+/*function getUserToReview() {
+	if (store.state.user && store.state.user.userId && user.value) {
+
+		if (!user.value && lender.value?.userId !== store.state.user.userId)
+			return lender.value
+
+
+		if (store.state.user.userId === user.value.userId) {
+			return lender.value
+		} else {
+			return user.value
+		}
+	}
+
+}*/
 function getUserToReview() {
 	if (!store.state.user) return
 
@@ -692,11 +713,17 @@ function reRenderChat() {
 	<BasePopup
 		v-show="showLoginModal"
 		@exit="showLoginModal = false"
-		v-if="chat && chat.item.availableFrom && chat.item.availableTo"
+		v-if="
+			chat &&
+			chat.item &&
+			chat.item.availableFrom &&
+			chat.item.availableTo
+		"
 		data-testid="base-popup"
 		class="overflow-y-auto max-h-screen"
 	>
 		<DatePicker
+			v-if="chat.item"
 			class="place-self-center"
 			v-model="range"
 			mode="dateTime"

@@ -93,10 +93,10 @@ export interface FriendChat {
 }
 
 export interface Message {
-	senderId?: number
+	senderId: number
 	message?: string
 	type: string
-	date?: string
+	date: string
 	receive: boolean
 	chatId?: number
 	start?: string
