@@ -6,7 +6,8 @@ import axios from 'axios'
 describe('when loaded', () => {
 	it('has the required elements (loading)', async () => {
 		const wrapper = mount(Chat)
-
+		wrapper.vm.status = 'loading'
+		await wrapper.vm.$forceUpdate()
 		expect(wrapper.exists()).toBe(true)
 		expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
 	})
@@ -97,12 +98,5 @@ describe('when loaded', () => {
 		const wrapper = mount(Chat)
 		expect(axios.get).toHaveBeenCalledTimes(3)
 		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
-	})
-
-	it('Popup is shown when showLoginModal true', async () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.find('[data-testid="base-popup"]').isVisible()).toBe(
-			false
-		)
 	})
 })
