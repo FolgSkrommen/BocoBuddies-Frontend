@@ -17,6 +17,14 @@ interface Props {
 }
 const { edit, items, searchHits, redirect, renderLoadButton } =
 	defineProps<Props>()
+
+function getPriceUnit(unit: string) {
+	if (unit === 'DAY') return 'Dag'
+	if (unit === 'HOUR') return 'Time'
+	if (unit === 'MONTH') return 'Måned'
+	if (unit === 'WEEK') return 'Uke'
+	if (unit === 'YEAR') return 'År'
+}
 </script>
 
 <template>
@@ -41,12 +49,15 @@ const { edit, items, searchHits, redirect, renderLoadButton } =
 								{{ item.name }}
 							</p>
 							<div>
-								<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
+								<p>
+									{{ item.price }}kr /
+									{{ getPriceUnit(item.priceUnit) }}
+								</p>
 							</div>
 						</div>
 					</router-link>
 					<BaseBtn
-						class="h-fit w-fit"
+						class="h-fit w-fit m-2 place-self-end"
 						:to="`/edit-item/${item.itemId}`"
 						v-if="edit"
 						>Rediger</BaseBtn

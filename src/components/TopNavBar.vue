@@ -1,0 +1,46 @@
+<script setup lang="ts">
+import { store } from '../store'
+</script>
+
+<template>
+	<nav class="bg-slate-900 w-full fixed top-0 z-50">
+		<div
+			class="container mx-auto px-4 py-2 flex justify-between items-center"
+		>
+			<router-link to="/">
+				<img
+					src="/logo.png"
+					alt="boco logo"
+					class="h-10 w-10 rounded-full"
+				/>
+			</router-link>
+			<div class="flex gap-8 items-center">
+				<router-link to="/">Hjem</router-link>
+				<router-link to="/overview/items">Ditt</router-link>
+				<router-link to="/community">Samfunn</router-link>
+				<router-link to="/chats">Lån</router-link>
+				<router-link
+					class="grid place-items-center"
+					:to="'/user/' + store.state.user?.userId"
+				>
+					<img
+						v-if="store.state.user"
+						class="rounded-full object-cover w-8 h-8"
+						:src="store.state.user.profilePicture"
+						:alt="store.state.user.username"
+					/>
+					<UserIcon v-else class="w-8 h-8" />
+				</router-link>
+			</div>
+		</div>
+	</nav>
+</template>
+
+<style scoped>
+a {
+	@apply text-white;
+}
+.router-link-active {
+	@apply text-blue-400;
+}
+</style>
