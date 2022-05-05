@@ -123,7 +123,9 @@ async function uploadPicture() {
 		uploadProfilePictureStatus.value = 'success'
 		const picture = await axios.get('/user/getProfilePicture')
 
-		store.state.user.profilePicture = picture.data
+		let user = store.state.user
+		user.profilePicture = picture.data
+		await store.dispatch('edit', user)
 		imagePreview.value = []
 		imageFiles.value = []
 	} catch (error: any) {
@@ -326,7 +328,10 @@ cookie()
 			<BaseBtn
 				type="submit"
 				:disabled="
-					!!errors.newPasswordConfirm || newPasswordConfirm != ''
+					!!errors.newPasswordConfirm ||
+					newPasswordConfirm === '' ||
+					newPassword === '' ||
+					oldPassword === ''
 				"
 				class="w-fit mx-auto"
 				>Endre</BaseBtn

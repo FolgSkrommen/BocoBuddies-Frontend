@@ -52,7 +52,9 @@ async function getUser() {
 		const userRes = await axios.get('/user', {
 			params,
 		})
-		const data = userRes.data as User
+		let data = userRes.data as User
+
+		data.rating = data.rating
 		user.value = data
 		getUserStatus.value = 'loaded'
 	} catch (error: any) {
@@ -71,6 +73,15 @@ async function getReviews() {
 		})
 		const data = reviewsRes.data as Review[]
 		reviews.value = data
+
+		let avg = 0
+		for (let review of reviews.value) {
+			if (review) avg += review.rating
+		}
+		if (reviews.value?.length !== 0) avg = avg / reviews.value?.length
+
+		if (!store.state.user) return
+		store.state.user.rating = avg
 	} catch (error: any) {
 		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -93,6 +104,7 @@ if (store.state.user && id && id !== store.state.user.userId) {
 	getUser()
 } else {
 	user.value = store.state.user
+	console.log(user.value)
 	getUserStatus.value = 'loaded'
 }
 
@@ -165,7 +177,7 @@ const isOwnProfile = computed(() => {
 				<div class="flex items-center gap-2">
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p class="text-sm font-bold text-slate-900">
-						{{ user.rating }}
+						{{ Math.round(user.rating * 10) / 10 }}
 					</p>
 				</div>
 			</div>
