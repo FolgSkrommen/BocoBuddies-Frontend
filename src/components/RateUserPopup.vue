@@ -20,6 +20,11 @@ const emit = defineEmits(['exit', 'confirm'])
 const rating = ref<number>(-1)
 const comment = ref('')
 
+function getDateAndTime() {
+	let tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+	return new Date(Date.now() - tzoffset).toISOString().slice(0, -1)
+}
+
 async function handleRate() {
 	if (rating.value === -1) return
 	//TODO: ADD Method
@@ -32,7 +37,7 @@ async function handleRate() {
 		isOwner: user.userId === loan.loaner,
 		rating: rating.value,
 		description: comment.value,
-		date: new Date().toISOString(),
+		date: getDateAndTime(),
 	}
 	try {
 		const res = await axios.post('/review', review)
