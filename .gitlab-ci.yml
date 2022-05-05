@@ -18,6 +18,7 @@ build-job:
         - npm run test
         - apt install rsync -y
         - apt install openssh-client -y
+        - apt install nodejs
         - mkdir ~/.ssh
         - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         - touch ~/.ssh/id_rsa
