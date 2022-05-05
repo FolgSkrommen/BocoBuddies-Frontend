@@ -326,7 +326,10 @@ cookie()
 			<BaseBtn
 				type="submit"
 				:disabled="
-					!!errors.newPasswordConfirm || newPasswordConfirm != ''
+					!!errors.newPasswordConfirm ||
+					newPasswordConfirm === '' ||
+					newPassword === '' ||
+					oldPassword === ''
 				"
 				class="w-fit mx-auto"
 				>Endre</BaseBtn
