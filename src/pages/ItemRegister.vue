@@ -313,7 +313,7 @@ async function registerItem() {
 
 				<option
 					v-for="value in filterType.filterValues"
-					:key="value.name"
+					:key="value.id"
 					:value="value.value"
 				>
 					{{ value.value }}

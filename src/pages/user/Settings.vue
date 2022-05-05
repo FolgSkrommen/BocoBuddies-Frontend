@@ -84,19 +84,21 @@ function deleteUser() {
 	//TODO: Implement
 }
 
-const seenHomeCookie = ('; ' + document.cookie)
-	.split(`; seenSettingsTutorial=`)
-	.pop()
-	.split(';')[0]
+function cookie() {
+	const seenSettingsCookie = ('; ' + document.cookie)
+		.split(`; seenSettingsTutorial=`)
+		.pop()
+		?.split(';')[0]
 
-if (!seenHomeCookie.includes('true')) {
-	store.dispatch(
-		'info',
-		"Dette er inntsillingssiden din. Her kan du oppdatere brukerdataen din, logge ut, slette brukeren din og laste opp profilbilde. Du kan også klikke knappen 'Vis alle tips igjen' for å få opp disse meldingen igjen Klikk X knappen for å lukke denne meldingen."
-	)
-	const seenHomeTutorial = (document.cookie =
-		'seenSettingsTutorial=true; max-age=31536000')
+	if (!seenSettingsCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			"Dette er inntsillingssiden din. Her kan du oppdatere brukerdataen din, logge ut, slette brukeren din og laste opp profilbilde. Du kan også klikke knappen 'Vis alle tips igjen' for å få opp disse meldingen igjen Klikk X knappen for å lukke denne meldingen."
+		)
+		document.cookie = 'seenSettingsTutorial=true; max-age=31536000'
+	}
 }
+cookie()
 
 let showUploadPicture = ref<boolean>(false)
 </script>

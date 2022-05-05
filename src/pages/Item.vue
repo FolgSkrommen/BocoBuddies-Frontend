@@ -74,7 +74,7 @@ getItem()
 	<div v-if="status === 'loaded' && item && lender" class="grid gap-4">
 		<h1>{{ item.name }}</h1>
 		<ItemInfo :item="item" />
-		<UserCard :user="lender" :to="/user/ + lender.userId" show-rating />
+		<UserCard :user="lender" :to="'/user/' + lender.userId" show-rating />
 		<BaseBtn
 			@click="createChat"
 			v-if="lender.username !== store.state.user?.username"
