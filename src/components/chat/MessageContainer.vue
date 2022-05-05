@@ -84,7 +84,7 @@ function getProfilePicture(id: number) {
 				:receive="!message.receive"
 			>
 				<a
-					v-if="isValidHttpUrl(message.message)"
+					v-if="message.message && isValidHttpUrl(message.message)"
 					:href="message.message"
 					class="text-decoration-line: underline white"
 				>

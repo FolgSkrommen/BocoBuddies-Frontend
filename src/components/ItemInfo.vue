@@ -35,13 +35,13 @@ async function getFilterTypeName() {
 		})
 		const res = await axios.post('/category/getFilterName', sendObject)
 		filterTypes.value = res.data
-		filterTypes.value.forEach((nameOfFilter: any) => {
+		for (let i = 0; i < filterTypes.value.length; i++) {
 			let object = {
-				filter: item.filters[0].value,
-				name: nameOfFilter,
+				filter: item.filters[i].value,
+				name: filterTypes.value[i],
 			}
 			listOfFilterWithValue.value.push(object)
-		})
+		}
 	} catch (err) {
 		console.log(err)
 	}

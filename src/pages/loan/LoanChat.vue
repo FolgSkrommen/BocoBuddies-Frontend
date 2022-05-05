@@ -645,6 +645,7 @@ function reRenderChat() {
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link
+					v-if="item"
 					:to="'/item/' + item.itemId"
 					class="flex gap-2 border"
 				>
