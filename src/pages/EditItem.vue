@@ -58,13 +58,29 @@ interface Range {
 const newRange = ref<Range>({ start: new Date(), end: new Date() })
 
 function resetItem(oldItem: Item) {
-	if (!item.value) return
 	newItem.value = { ...oldItem }
 	newRange.value.start = new Date(oldItem.availableFrom)
 	newRange.value.end = new Date(oldItem.availableTo)
 
 	const convertedPriceUnit = priceUnits.find(
 		el => el.value === oldItem.priceUnit
+	)
+	if (convertedPriceUnit) newPriceUnit.value = convertedPriceUnit
+	filterTypes.value = []
+	categoryChoices.value = []
+	currentCategory = 0
+	chosenFilters.value = []
+	getCategories()
+}
+
+function resetItemFromOld() {
+	if (!item.value) return
+	newItem.value = { ...item.value }
+	newRange.value.start = new Date(item.value.availableFrom)
+	newRange.value.end = new Date(item.value.availableTo)
+
+	const convertedPriceUnit = priceUnits.find(
+		el => el.value === item.value?.priceUnit
 	)
 	if (convertedPriceUnit) newPriceUnit.value = convertedPriceUnit
 	filterTypes.value = []
@@ -191,6 +207,7 @@ async function updateItem() {
 			itemId: itemId,
 			active: newItem.value.active ?? true,
 		}
+		console.log(body.images)
 		const formData = new FormData()
 		formData.append('name', body.name)
 		console.log(formData.get('name'))
@@ -204,7 +221,6 @@ async function updateItem() {
 		formData.append('categoryId', body.categoryId.toString())
 		formData.append('filterIdList', body.filterIdList.toString())
 		if (!body.images.length) {
-			formData.append('images', new Blob())
 			console.log('Bilde listen er tom')
 		} else {
 			for (let i = 0; i < body.images.length; i++) {
@@ -226,11 +242,7 @@ async function updateItem() {
 <template>
 	<LoadingIndicator v-if="getStatus === 'loading'" />
 	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
-		<button
-			v-if="item"
-			@click="resetItem({ ...item } as Item)"
-			class="bg-red-500"
-		>
+		<button v-if="item" @click="resetItemFromOld" class="bg-red-500">
 			Tilbakestill
 		</button>
 		<div class="flex gap-4 items-center">
