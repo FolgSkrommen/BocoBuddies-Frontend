@@ -30,10 +30,14 @@ const schema = yup.object({
 	newFirstName: yup.string().min(2, 'Minimum 2 tegn'),
 	newLastName: yup.string().min(2, 'Minimum 2 tegn'),
 	newEmail: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
-	password: yup
+	oldPassword: yup.string().required('Passord er påkrevd'),
+	newPassword: yup
 		.string()
 		.required('Passord er påkrevd')
-		.min(8, 'Minimum 2 tegn'),
+		.min(8, 'Minimum 8 tegn'),
+	newPasswordConfirm: yup
+		.string()
+		.oneOf([yup.ref('newPassword'), null], 'Passorden er ulike'),
 })
 
 const { errors } = useForm({
@@ -43,9 +47,12 @@ const { errors } = useForm({
 const { value: newFirstName } = useField<string>('newFirstName')
 const { value: newLastName } = useField<string>('newLastName')
 const { value: newEmail } = useField<string>('newEmail')
-const { value: password } = useField<string>('password')
+const { value: oldPassword } = useField<string>('oldPassword')
+const { value: newPassword } = useField<string>('newPassword')
+const { value: newPasswordConfirm } = useField<string>('newPasswordConfirm')
 
 const editUser = ref(false)
+const showChangePassword = ref(false)
 
 if (store.state.user) {
 	newFirstName.value = store.state.user.firstName as string
@@ -69,6 +76,19 @@ async function updateUser() {
 		updatedUser.profilePicture = store.state.user.profilePicture
 		store.state.user = updatedUser
 		store.dispatch('edit', updatedUser)
+	} catch (error: any) {
+		store.dispatch('error', error.message)
+	}
+}
+
+async function changePassword() {
+	try {
+		await axios.put('/user/editPassword', {
+			oldPassword: oldPassword.value,
+			newPassword: newPassword.value,
+		})
+
+		showChangePassword.value = false
 	} catch (error: any) {
 		store.dispatch('error', error.message)
 	}
@@ -265,10 +285,39 @@ cookie()
 			<BaseBtn type="submit" class="w-fit mx-auto">Oppdater</BaseBtn>
 		</form>
 
-		<BaseBtn @click="editUser = !editUser"
-			><p v-if="!editUser">Endre passord</p>
+		<BaseBtn @click="showChangePassword = !showChangePassword"
+			><p v-if="!showChangePassword">Endre passord</p>
 			<p v-else>Lukk redigering</p></BaseBtn
 		>
+		<form
+			v-if="showChangePassword"
+			class="grid gap-4 border border-slate-400 p-2"
+			@submit.prevent="changePassword"
+		>
+			<BaseInput
+				data-testid="newFirstName-input"
+				v-model="oldPassword"
+				label="Gammelt passord"
+				type="password"
+				:error="errors.oldPassword"
+			/>
+			<BaseInput
+				data-testid="newLastName-input"
+				v-model="newPassword"
+				label="Nytt passord"
+				type="password"
+				:error="errors.newPassword"
+			/>
+			<BaseInput
+				data-testid="newEmail-input"
+				v-model="newPasswordConfirm"
+				label="Bekreft passord"
+				type="password"
+				:error="errors.newPasswordConfirm"
+			/>
+
+			<BaseBtn type="submit" class="w-fit mx-auto">Endre</BaseBtn>
+		</form>
 
 		<span class="my-2"></span>
 
