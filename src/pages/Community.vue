@@ -320,8 +320,7 @@ cookie()
 				v-if="friendChats?.length === 0"
 				class="text-slate-400 w-fit mx-auto mt-28"
 			>
-				Ingen Samtaler, trykk (+) for å starte en samtale, eller legg
-				til en venn
+				Trykk (+) for å starte en samtale, eller legg til en venn
 			</h2>
 			<FloatingBtn @click="add" data-testid="add-btn" />
 			<NewMessagePopup
