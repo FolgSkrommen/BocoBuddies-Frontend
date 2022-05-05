@@ -59,7 +59,7 @@ getChats()
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId" class="p-2">
-						<div class="grid grid-cols-3">
+						<div class="flex gap-2">
 							<img
 								class="h-20 w-20 object-cover rounded-xl"
 								v-if="chat.item"
@@ -71,12 +71,9 @@ getChats()
 								<h3>
 									{{ chat.item?.name }}
 								</h3>
-							</div>
-
-							<div class="flex-col">
-								<h2>
+								<h4>
 									{{ getLoanStatus(chat) }}
-								</h2>
+								</h4>
 							</div>
 						</div>
 					</router-link>

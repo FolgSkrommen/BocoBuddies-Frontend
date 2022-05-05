@@ -32,7 +32,7 @@ import { UserIcon } from '@heroicons/vue/solid'
 					:to="'/user/' + store.state.user?.userId"
 				>
 					<img
-						v-if="store.getters.loggedIn"
+						v-if="store.state.user"
 						class="rounded-full object-cover w-8 h-8"
 						:src="store.state.user.profilePicture"
 						:alt="store.state.user.username"
