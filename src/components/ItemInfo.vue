@@ -104,12 +104,7 @@ const circleOptions = {
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalCode }}</p>
 		</div>
-		<GMapMap
-			:center="item.position"
-			:zoom="13"
-			map-type-id="terrain"
-			class="h-96"
-		>
+		<GMapMap :center="item.position" :zoom="13" class="h-96">
 			<GMapCircle
 				:center="randomCenter(item.position)"
 				:radius="1000"
