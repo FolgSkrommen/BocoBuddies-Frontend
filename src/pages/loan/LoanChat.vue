@@ -41,7 +41,7 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://10.24.26.184:8001/ws')
+	socket = new WebSocket('ws://localhost:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
