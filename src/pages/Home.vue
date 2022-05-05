@@ -154,6 +154,7 @@ async function search() {
 				},
 				error => {
 					store.dispatch('error', error.message)
+					status.value = 'error'
 				}
 			)
 		}
