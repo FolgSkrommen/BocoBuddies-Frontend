@@ -257,7 +257,7 @@ const showFiltersAndSort = ref(false)
 			/>
 			<SearchbarAndButton
 				v-model="searchWord"
-				@search-and-reset="searchAndResetItems"
+				@search="searchAndResetItems"
 			></SearchbarAndButton>
 		</div>
 
