@@ -28,11 +28,11 @@ const { edit, items, searchHits, redirect, renderLoadButton } =
 				<Card class="h-min row-end-auto">
 					<router-link
 						:to="`/${redirect}/${item.itemId}`"
-						class="grid gap-2 p-2"
+						class="grid gap-2"
 					>
 						<img
 							v-if="item.images?.length > 0"
-							class="rounded-t-xl object-cover h-32 w-full"
+							class="rounded-t-xl object-cover h-44 w-full"
 							:src="item.images[0]"
 							:alt="item.name"
 						/>
