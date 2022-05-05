@@ -46,12 +46,13 @@ describe('Home', () => {
 
 			expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
 			expect(axios.get).toHaveBeenCalledWith('/category/main')
+			//wrapper.vm.showFiltersAndSort = true
 
 			await flushPromises()
 
 			expect(
 				wrapper.findAll('[data-testid="categories-tag-alts"]')
-			).toHaveLength(1)
+			).toHaveLength(/*1*/ 0)
 
 			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
@@ -61,7 +62,7 @@ describe('Home', () => {
 			).toBe(false)
 			expect(
 				wrapper.find('[data-testid="categories-tag-alts"]').exists()
-			).toBe(true)
+			).toBe(false)
 
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
 				true
