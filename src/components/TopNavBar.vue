@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { store } from '../store'
+
+import { UserIcon } from '@heroicons/vue/solid'
 </script>
 
 <template>
@@ -16,20 +18,26 @@ import { store } from '../store'
 			</router-link>
 			<div class="flex gap-8 items-center">
 				<router-link to="/">Hjem</router-link>
-				<router-link to="/overview/items">Ditt</router-link>
-				<router-link to="/community">Samfunn</router-link>
-				<router-link to="/chats">Lån</router-link>
+				<router-link v-if="store.getters.loggedIn" to="/overview/items">
+					Ditt
+				</router-link>
+				<router-link v-if="store.getters.loggedIn" to="/community">
+					Samfunn
+				</router-link>
+				<router-link v-if="store.getters.loggedIn" to="/chats">
+					Lån
+				</router-link>
 				<router-link
 					class="grid place-items-center"
 					:to="'/user/' + store.state.user?.userId"
 				>
 					<img
-						v-if="store.state.user"
+						v-if="store.getters.loggedIn"
 						class="rounded-full object-cover w-8 h-8"
 						:src="store.state.user.profilePicture"
 						:alt="store.state.user.username"
 					/>
-					<UserIcon v-else class="w-8 h-8" />
+					<p v-else>Logg inn</p>
 				</router-link>
 			</div>
 		</div>

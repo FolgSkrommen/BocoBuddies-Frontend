@@ -228,36 +228,31 @@ cookie()
 				</div>
 			</div>
 			<div class="flex flex-col gap-2">
-				<h2>
+				<h3>
 					{{ store.state.user.firstName }}
 					{{ store.state.user.lastName }}
-				</h2>
-				<div class="flex items-center text-xl">
-					<p class="text-slate-500">
+				</h3>
+				<div class="flex items-center">
+					<h4 class="text-slate-500">
 						@{{ store.state.user.username }}
-					</p>
+					</h4>
 					<CheckCircleIcon
 						v-if="store.state.user.verified"
 						class="h-5 w-5 text-blue-500"
 					/>
 				</div>
-				<!-- User rating -->
-				<div class="flex items-center gap-2">
-					<StarIcon class="w-5 h-5 text-yellow-500" />
-					<p class="text-sm font-bold text-slate-900">
-						{{ store.state.user.rating }}
-					</p>
-				</div>
+
+				<h4>{{ store.state.user.email }}</h4>
 			</div>
 		</div>
 
 		<BaseBtn @click="editUser = !editUser"
 			><p v-if="!editUser">Rediger brukerdata</p>
-			<p v-else>Lukk redigering</p></BaseBtn
+			<p v-else>Lukk</p></BaseBtn
 		>
 		<form
 			v-if="editUser"
-			class="grid gap-4 border border-slate-400 p-2"
+			class="grid gap-4 border rounded-xl border-slate-400 p-2"
 			@submit.prevent="updateUser"
 		>
 			<BaseInput
@@ -287,7 +282,10 @@ cookie()
 				:disabled="
 					!!errors.newEmail ||
 					!!errors.newFirstName ||
-					!!errors.newLastName
+					!!errors.newLastName ||
+					(newEmail == store.state.user.email &&
+						newFirstName == store.state.user.firstName &&
+						newLastName == store.state.user.lastName)
 				"
 				class="w-fit mx-auto"
 				>Oppdater</BaseBtn
@@ -296,7 +294,7 @@ cookie()
 
 		<BaseBtn @click="showChangePassword = !showChangePassword"
 			><p v-if="!showChangePassword">Endre passord</p>
-			<p v-else>Lukk redigering</p></BaseBtn
+			<p v-else>Lukk</p></BaseBtn
 		>
 		<form
 			v-if="showChangePassword"

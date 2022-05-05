@@ -151,11 +151,11 @@ const isOwnProfile = computed(() => {
 
 			<!-- User name and lastname-->
 			<div class="flex flex-col gap-2">
-				<h2 class="font-bold" data-testid="name">
+				<h3 class="font-bold" data-testid="name">
 					{{ user.firstName }} {{ user.lastName }}
-				</h2>
-				<div class="flex items-center text-xl">
-					<p class="text-slate-500">@{{ user.username }}</p>
+				</h3>
+				<div class="flex items-center">
+					<h4 class="text-slate-500">@{{ user.username }}</h4>
 					<CheckCircleIcon
 						v-if="user.verified"
 						class="h-5 w-5 text-blue-500"
