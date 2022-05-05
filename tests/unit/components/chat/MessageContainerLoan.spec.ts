@@ -178,7 +178,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe(' Avtalt lån ')
+			expect(request.element.textContent).toBe('Avtalt lån')
 		})
 
 		it('Accept header comes up when accepted send', () => {
@@ -195,7 +195,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe(' Avtalt lån ')
+			expect(request.element.textContent).toBe('Avtalt lån')
 		})
 
 		it('Returned header comes up when accepted receive', () => {

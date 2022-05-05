@@ -23,7 +23,7 @@ const messages = ref<Message[]>([])
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://localhost:8001/ws')
+	socket = new WebSocket('ws://10.24.26.184:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -149,7 +149,7 @@ function reRenderChat() {
 }
 </script>
 <template>
-	<LoadingIndicator v-if="status === 'loading'" />
+	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
 	<div class="h-96 flex-col w-full" v-else>
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community"> Back </router-link>
