@@ -15,4 +15,10 @@ if (userString) {
 	store.commit('SET_USER_DATA', userData)
 }
 
+const token = localStorage.getItem('token')
+if (token) {
+	const tokenData = JSON.parse(token)
+	store.commit('SET_TOKEN', tokenData)
+}
+
 createApp(App).use(router).use(store, key).mount('#app')

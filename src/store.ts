@@ -50,16 +50,22 @@ export const store = createStore<State>({
 	},
 
 	mutations: {
-		SET_USER_DATA(state, data) {
+		SET_USER_DATA(state, user) {
 			console.log('Setting user data...')
-			console.log(data)
-			state.user = data.user
-			localStorage.setItem('userData', JSON.stringify(data))
-			axios.defaults.headers.common['authorization'] =
-				'Bearer ' + data.token
+			state.user = user
+			localStorage.setItem('userData', JSON.stringify(user))
 		},
-		SET_NEW_USER_DATA(state, data) {
+
+		SET_TOKEN(state, token) {
+			localStorage.setItem('token', JSON.stringify(token))
+			state.token = token
+			axios.defaults.headers.common['authorization'] = 'Bearer ' + token
+		},
+
+		async SET_NEW_USER_DATA(state, data) {
 			state.user = data
+			await localStorage.removeItem('userData')
+			await localStorage.setItem('userData', JSON.stringify(data))
 		},
 		//TODO: Fjern asynkron kode i mutations
 		async CLEAR_USER_DATA(state) {
@@ -84,7 +90,8 @@ export const store = createStore<State>({
 	actions: {
 		async login({ commit }, data) {
 			const res = await axios.post('/user/login', data)
-			commit('SET_USER_DATA', res.data)
+			commit('SET_USER_DATA', res.data.user)
+			commit('SET_TOKEN', res.data.token)
 		},
 		logout({ commit }) {
 			commit('CLEAR_USER_DATA')

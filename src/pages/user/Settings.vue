@@ -4,23 +4,63 @@ import BaseBtn from '../../components/base/BaseBtn.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import ImageCarousel from '../../components/ImageCarousel.vue'
 import BasePopup from '../../components/base/BasePopup.vue'
+import { CheckIcon, XIcon } from '@heroicons/vue/solid'
+
 import { Ref, ref } from 'vue'
+import * as yup from 'yup'
+
 import router from '../../router'
 import axios from 'axios'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import BaseBanner from '../../components/base/BaseBanner.vue'
 import { PostUserRegisterRequest } from '../../api/user/register'
+import { useForm, useField } from 'vee-validate'
+import { SSL_OP_MICROSOFT_SESS_ID_BUG } from 'constants'
 type Status = 'loading' | 'loaded' | 'error'
 
-const newEmail = ref('')
-const newPassword = ref('')
+const schema = yup.object({
+	newFirstName: yup.string().min(2, 'Minimum 2 tegn'),
+	newLastName: yup.string().min(2, 'Minimum 2 tegn'),
+	newEmail: yup.string().required('Epost er påkrevd').email('Ikke gyldig'),
+	password: yup
+		.string()
+		.required('Passord er påkrevd')
+		.min(8, 'Minimum 2 tegn'),
+})
+
+const { errors } = useForm({
+	validationSchema: schema,
+})
+
+const { value: newFirstName } = useField<string>('newFirstName')
+const { value: newLastName } = useField<string>('newLastName')
+const { value: newEmail } = useField<string>('newEmail')
+const { value: password } = useField<string>('password')
+
+const editUser = ref(false)
 
 if (store.state.user) {
+	newFirstName.value = store.state.user.firstName as string
+	newLastName.value = store.state.user.lastName as string
 	newEmail.value = store.state.user.email as string
 }
 
-function updateUser() {
-	//TODO: Implement
+async function updateUser() {
+	if (!store.state.user) return
+	const updatedUser = store.state.user
+
+	updatedUser.profilePicture = undefined
+
+	updatedUser.firstName = newFirstName.value
+	updatedUser.lastName = newLastName.value
+	updatedUser.email = newEmail.value
+
+	try {
+		const res = await axios.put('/user', updatedUser)
+		await store.dispatch('edit', res.data)
+	} catch (error: any) {
+		store.dispatch('error', error.message)
+	}
 }
 
 async function logout() {
@@ -45,15 +85,17 @@ async function uploadPicture() {
 	uploadProfilePictureStatus.value = 'sending'
 	const formData = new FormData()
 	formData.append('image', imageFiles.value[0])
+
 	//TODO: Typescript for dette
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
 		const res = await axios.get('/user', {
-			params: { user: store.state.user.userId, useAuth: false },
+			params: { user: store.state.user.userId, useAuth: true },
 		})
 		await store.dispatch('edit', res.data)
-		imagePreview = ref([])
+		imagePreview.value = []
+		imageFiles.value = []
 	} catch (error: any) {
 		uploadProfilePictureStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -99,101 +141,117 @@ function cookie() {
 	}
 }
 cookie()
-
-let showUploadPicture = ref<boolean>(false)
 </script>
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<BasePopup v-if="showUploadPicture" @exit="showUploadPicture = false">
-			<div class="flex justify-center">
-				<div class="rounded-lg shadow-xl bg-gray-50">
-					<div class="m-4">
-						<div
-							class="grid gap-4 place-items-center"
-							v-if="imagePreview.length > 0"
-						>
-							<h3 class="">
-								Forhåndsvisning av ditt nye profilbilde:
-							</h3>
-							<img
-								class="w-32 h-32 object-cover rounded-full"
-								:src="imagePreview[0]"
-								alt=""
-							/>
-						</div>
-						<label class="inline-block mb-2 text-gray-500"
-							>Last opp profilbilde(jpg, png, jpeg)</label
-						>
-						<div class="flex items-center justify-center w-full">
-							<label
-								class="flex flex-col w-full h-20 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300"
-							>
-								<div
-									class="flex flex-col items-center justify-center pt-6"
-								>
-									<p
-										class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600"
-									>
-										Velg et bilde
-									</p>
-								</div>
-								<input
-									type="file"
-									accept="image/*"
-									@input="event => uploadImage(event.target)"
-									class="opacity-0"
-								/>
-							</label>
-						</div>
-					</div>
-					<div class="flex p-2 space-x-4">
-						<BaseBtn
-							class="m-4 place-self-center w-full"
-							@click="uploadPicture"
-							>Last opp</BaseBtn
-						>
-					</div>
+		<h1>Innstillinger</h1>
+		<div class="flex gap-1">
+			<div class="h-40 grid">
+				<label class="grid w-fit">
+					<img
+						v-if="imagePreview[0]"
+						class="w-32 h-32 object-cover rounded-full hover:cursor-pointer"
+						:src="imagePreview[0]"
+						alt=""
+					/>
+					<img
+						v-else-if="store.state.user.profilePicture"
+						:src="store.state.user.profilePicture"
+						alt=""
+						class="w-32 h-32 object-cover rounded-full hover:opacity-60 hover:cursor-pointer"
+					/>
+					<p
+						v-if="!imagePreview[0]"
+						class="text-xs hover:cursor-pointer text-center w-full"
+					>
+						Endre profilbilde
+					</p>
+					<input
+						v-show="false"
+						type="file"
+						accept="image/*"
+						@input="event => uploadImage(event.target)"
+					/>
+				</label>
+
+				<div class="grid grid-cols-2 w-full justify-items-center">
+					<BaseBtn
+						v-if="imagePreview[0]"
+						color="green"
+						class="w-fit"
+						@click="uploadPicture"
+						><CheckIcon class="w-6 h-6"
+					/></BaseBtn>
+					<BaseBtn
+						color="red"
+						class="w-fit"
+						v-if="imagePreview[0]"
+						@click="
+							() => {
+								imageFiles = []
+								imagePreview = []
+							}
+						"
+						><XIcon class="w-6 h-6"
+					/></BaseBtn>
 				</div>
 			</div>
-		</BasePopup>
-		<h1>Innstillinger</h1>
-		<div class="grid gap-1">
-			<div
-				class="group w-32 h-42 hover:cursor-pointer"
-				@click="showUploadPicture = true"
-			>
-				<img
-					v-if="store.state.user.profilePicture"
-					:src="store.state.user.profilePicture"
-					alt=""
-					class="w-32 h-32 object-cover rounded-full group-hover:hidden"
-				/>
-				<img
-					v-if="store.state.user.profilePicture"
-					src="https://media.istockphoto.com/vectors/black-plus-sign-positive-symbol-vector-id688550958?k=20&m=688550958&s=612x612&w=0&h=wvzUqT3u3feYygOXg3GB9pYBbqIsyu_xpvfTX-6HOd0="
-					alt=""
-					class="w-32 h-32 object-cover rounded-full hidden group-hover:block group-hover:cursor-pointer"
-				/>
-				<label class="text-xs hover:cursor-pointer"
-					>Oppdater profilebilde</label
-				>
-			</div>
 
-			<div class="flex gap-2 text-lg font-bold">
-				<p>{{ store.state.user.firstName }}</p>
-				<p>{{ store.state.user.lastName }}</p>
+			<div class="flex flex-col gap-2">
+				<h2 class="font-bold">
+					{{ store.state.user.firstName }}
+					{{ store.state.user.lastName }}
+				</h2>
+				<div class="flex items-center text-xl">
+					@{{ store.state.user.username }}
+				</div>
 			</div>
 		</div>
-		<form class="grid gap-4" @submit.prevent="updateUser">
-			<BaseInput label="Email" v-model="newEmail" />
-			<BaseInput label="Password" v-model="newPassword" />
-			<BaseBtn type="submit">Oppdater brukerdata</BaseBtn>
+
+		<BaseBtn @click="editUser = !editUser"
+			><p v-if="!editUser">Rediger brukerdata</p>
+			<p v-else>Lukk redigering</p></BaseBtn
+		>
+		<form
+			v-if="editUser"
+			class="grid gap-4 border border-slate-400 p-2"
+			@submit.prevent="updateUser"
+		>
+			<BaseInput
+				data-testid="newFirstName-input"
+				v-model="newFirstName"
+				label="Fornavn"
+				type="text"
+				:error="errors.newFirstName"
+			/>
+			<BaseInput
+				data-testid="newLastName-input"
+				v-model="newLastName"
+				label="Etternavn"
+				type="text"
+				:error="errors.newLastName"
+			/>
+			<BaseInput
+				data-testid="newEmail-input"
+				v-model="newEmail"
+				label="Epost"
+				type="text"
+				:error="errors.newEmail"
+			/>
+
+			<BaseBtn type="submit" class="w-fit mx-auto">Oppdater</BaseBtn>
 		</form>
+
+		<BaseBtn @click="editUser = !editUser"
+			><p v-if="!editUser">Endre passord</p>
+			<p v-else>Lukk redigering</p></BaseBtn
+		>
+
+		<hr class="border-slate-400" />
+
 		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
-		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
-		<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>
 		<BaseBtn
 			v-if="!store.state.user.verified"
 			@click="sendVerificationEmail"
@@ -201,6 +259,11 @@ let showUploadPicture = ref<boolean>(false)
 			>Send ny verfikasjon på epost</BaseBtn
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
+
+		<hr class="border-slate-400" />
+		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
+
+		<!--<BaseBtn @click="deleteUser" color="red">Slett bruker</BaseBtn>-->
 	</div>
 	<div v-else>
 		<p>No user</p>
