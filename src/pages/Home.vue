@@ -151,6 +151,7 @@ async function search() {
 						renderLoadButton.value = false
 
 					status.value = 'loaded'
+					store.dispatch('hideBanner', 'error')
 				},
 				error => {
 					store.dispatch('error', error.message)
@@ -173,6 +174,7 @@ async function search() {
 			if (data.length < amountPerPage) renderLoadButton.value = false
 
 			status.value = 'loaded'
+			store.dispatch('hideBanner', 'error')
 		}
 	} catch (error: any) {
 		store.dispatch('error', error.message)
