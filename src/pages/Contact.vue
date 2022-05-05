@@ -20,7 +20,7 @@ if (store.state.user) {
 
 async function handleSubmit() {
 	try {
-		await axios.post('/contact', data)
+		await axios.post('/contact', data.value)
 		router.push('/')
 	} catch (error: any) {
 		store.dispatch('error', error.message)

@@ -227,19 +227,21 @@ function setCookieSeen() {
 	seenTutorial = ref(true)
 	location.reload()
 }
-const seenHomeCookie = ('; ' + document.cookie)
-	.split(`; seenHomeTutorial=`)
-	.pop()
-	.split(';')[0]
+function cookie() {
+	const seenHomeCookie = ('; ' + document.cookie)
+		.split(`; seenHomeTutorial=`)
+		.pop()
+		?.split(';')[0]
 
-if (!seenHomeCookie.includes('true')) {
-	store.dispatch(
-		'info',
-		'Hei! velkommen til Boco, dette er hjemsiden din. Her kan du søke etter gjenstander, sortere etter ulike kategorier og klikke deg inn på annonser. Sjekk ut FAQ under profil siden din dersom du har flere spørsmål. Klikk X knappen for å lukke denne meldingen.'
-	)
-	const seenHomeTutorial = (document.cookie =
-		'seenHomeTutorial=true; max-age=31536000')
+	if (!seenHomeCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Hei! velkommen til Boco, dette er hjemsiden din. Her kan du søke etter gjenstander, sortere etter ulike kategorier og klikke deg inn på annonser. Sjekk ut FAQ under profil siden din dersom du har flere spørsmål. Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenHomeTutorial=true; max-age=31536000'
+	}
 }
+cookie()
 
 //Intersection observer for later if we have time to implement
 /*const observer:IntersectionObserver = new IntersectionObserver(entries => {

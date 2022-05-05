@@ -23,42 +23,44 @@ const { edit, items, searchHits, redirect, renderLoadButton } =
 	<div>
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
-		<div class="grid gap-4 sm:grid-cols-2">
-			<Card v-for="item in items">
-				<router-link
-					:to="`/${redirect}/${item.itemId}`"
-					class="grid gap-4"
-				>
-					<img
-						v-if="item.images?.length > 0"
-						class="rounded object-contain"
-						:src="item.images[0]"
-						:alt="item.name"
-					/>
-					<div class="p-2 grid">
-						<p class="font-bold text-lg">
-							{{ item.name }}
-						</p>
-						<div>
-							<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
+		<div class="grid gap-4 grid-cols-2 grid-flow-row">
+			<div v-for="item in items">
+				<Card class="h-min row-end-auto">
+					<router-link
+						:to="`/${redirect}/${item.itemId}`"
+						class="grid gap-4"
+					>
+						<img
+							v-if="item.images?.length > 0"
+							class="rounded object-contain"
+							:src="item.images[0]"
+							:alt="item.name"
+						/>
+						<div class="p-2 grid">
+							<p class="font-bold text-lg">
+								{{ item.name }}
+							</p>
+							<div>
+								<p>{{ item.price }}kr / {{ item.priceUnit }}</p>
+							</div>
 						</div>
-					</div>
-				</router-link>
+					</router-link>
+					<BaseBtn
+						class="h-fit w-fit"
+						:to="`/edit-item/${item.itemId}`"
+						v-if="edit"
+						>Rediger</BaseBtn
+					>
+				</Card>
+			</div>
+			<div class="flex justify-center my-10">
 				<BaseBtn
-					class="h-fit w-fit"
-					:to="`/edit-item/${item.itemId}`"
-					v-if="edit"
-					>Rediger</BaseBtn
+					@click="loadMoreItems"
+					v-if="renderLoadButton"
+					data-testid="load-more-items-button"
+					>Last inn flere</BaseBtn
 				>
-			</Card>
-		</div>
-		<div class="flex justify-center my-10">
-			<BaseBtn
-				@click="loadMoreItems"
-				v-if="renderLoadButton"
-				data-testid="load-more-items-button"
-				>Last inn flere</BaseBtn
-			>
+			</div>
 		</div>
 	</div>
 </template>

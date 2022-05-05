@@ -9,7 +9,7 @@ import { PostReviewRequest } from '../api/review'
 import BaseLabel from './base/BaseLabel.vue'
 import { store } from '../store'
 interface Props {
-	user?: User
+	user: User
 	loan: Loan
 }
 
