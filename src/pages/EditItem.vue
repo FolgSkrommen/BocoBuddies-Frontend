@@ -218,8 +218,10 @@ async function updateItem() {
 		formData.append('postalCode', body.postalCode.toString())
 		formData.append('startDate', body.startDate)
 		formData.append('endDate', body.endDate)
-		formData.append('categoryId', body.categoryId.toString())
-		formData.append('filterIdList', body.filterIdList.toString())
+		if (showEditCategory.value) {
+			formData.append('categoryId', body.categoryId.toString())
+			formData.append('filterIdList', body.filterIdList.toString())
+		}
 		if (!body.images.length) {
 			console.log('Bilde listen er tom')
 		} else {
@@ -231,12 +233,17 @@ async function updateItem() {
 		formData.append('active', body.active.toString())
 		console.log(formData.getAll('images'))
 		await axios.put('/item/edit', formData)
-		await router.push('/')
+		putStatus.value = 'success'
+		store.dispatch('successWithTimeout', {
+			message: 'Gjenstand er oppdatert',
+		})
 	} catch (error: any) {
 		putStatus.value = 'error'
 		store.dispatch('error', error.message)
 	}
 }
+
+const showEditCategory = ref(false)
 </script>
 
 <template>
@@ -326,48 +333,54 @@ async function updateItem() {
 				is24hr
 			/>
 		</div>
-		<div class="grid gap-4">
-			<h3>Kategori</h3>
-			<select
-				class="w-full"
-				v-for="(categories, index) in categoryChoices"
-				v-if="categoryChoices"
-				:key="index"
-				@input="
+		<div class="flex gap-4 items-center">
+			<h3>Rediger kategori og filter</h3>
+			<input class="h-6 w-6" type="checkbox" v-model="showEditCategory" />
+		</div>
+		<div v-if="showEditCategory">
+			<div class="grid gap-4">
+				<h3>Kategori</h3>
+				<select
+					class="w-full"
+					v-for="(categories, index) in categoryChoices"
+					v-if="categoryChoices"
+					:key="index"
+					@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
-			>
 				>
-				<option></option>
-				<option
-					v-for="category in categories"
-					:key="category.categoryId"
-					:value="category.categoryId"
-				>
-					{{ category.categoryName }}
-				</option>
-			</select>
-		</div>
-		<div v-for="(filterType, index) in filterTypes">
-			<h3>{{ filterType.filterTypeName }}</h3>
-			<select
-				class="w-full"
-				v-if="filterTypes"
-				:key="index"
-				@input="
+					>
+					<option></option>
+					<option
+						v-for="category in categories"
+						:key="category.categoryId"
+						:value="category.categoryId"
+					>
+						{{ category.categoryName }}
+					</option>
+				</select>
+			</div>
+			<div v-for="(filterType, index) in filterTypes">
+				<h3>{{ filterType.filterTypeName }}</h3>
+				<select
+					class="w-full"
+					v-if="filterTypes"
+					:key="index"
+					@input="
 						event => updateFilters((event.target as HTMLInputElement).value, index)
 					"
-			>
 				>
-				<option></option>
-				<option
-					v-for="value in filterType.filterValues"
-					:key="value.id"
-					:value="value.id"
-				>
-					{{ value.value }}
-				</option>
-			</select>
+					>
+					<option></option>
+					<option
+						v-for="value in filterType.filterValues"
+						:key="value.id"
+						:value="value.id"
+					>
+						{{ value.value }}
+					</option>
+				</select>
+			</div>
 		</div>
 		<button @click="updateItem">Lagre</button>
 	</div>
