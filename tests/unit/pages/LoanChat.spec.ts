@@ -182,6 +182,7 @@ describe('Testing websocket sending functions', async () => {
 })
 
 describe('Testing websocket receiving functions', async () => {
+	/*
 	const wrapper = mount(Chat)
 	wrapper.vm.price = 100
 	wrapper.vm.stompClient = 'test'
@@ -191,14 +192,14 @@ describe('Testing websocket receiving functions', async () => {
 	it('Testing onLoanAccept loan accepted', async () => {
 		mockPayload.body.active = true
 		mockPayload.body.returned = false
-		wrapper.vm.onLoanAccept(mockPayload)
+		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
 		expect(wrapper.vm.loanStatus === 'ACCEPTED')
 	})
 	vi.spyOn(axios, 'get')
 	it('Testing onLoanAccept loan accepted', async () => {
 		mockPayload.body.active = true
 		mockPayload.body.returned = true
-		wrapper.vm.onLoanAccept(mockPayload)
+		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
 		expect(wrapper.vm.loanStatus === 'RETURNED')
 		expect(axios.get).toHaveBeenCalledTimes(1)
 	})
@@ -206,7 +207,37 @@ describe('Testing websocket receiving functions', async () => {
 	it('Testing onLoanAccept loan denied', async () => {
 		mockPayload.body.active = false
 		mockPayload.body.returned = false
-		wrapper.vm.onLoanAccept(mockPayload)
+		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
 		expect(wrapper.vm.loanStatus === 'NOT_SENT')
+	})
+
+
+	 */
+})
+
+describe('Testing methods for updating views / popups etc', async () => {
+	it('Testing reRenderChat is working', async () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.render).toBe(0)
+		wrapper.vm.reRenderChat()
+		expect(wrapper.vm.render).toBe(1)
+		wrapper.vm.reRenderChat()
+		expect(wrapper.vm.render).toBe(2)
+	})
+
+	it('Get Price Unit for different units', async () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.getPriceUnit('DAY')).toBe('Dag')
+		expect(wrapper.vm.getPriceUnit('HOUR')).toBe('Time')
+		expect(wrapper.vm.getPriceUnit('WEEK')).toBe('Uke')
+		expect(wrapper.vm.getPriceUnit('MONTH')).toBe('Måned')
+		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
+	})
+
+	it('Testing userReviewved', async () => {
+		const wrapper = mount(Chat)
+		wrapper.vm.userReviewed()
+		expect(wrapper.vm.loanStatus).toBe('REVIEWED')
+		expect(wrapper.vm.showRateUserPopup).toBe(false)
 	})
 })
