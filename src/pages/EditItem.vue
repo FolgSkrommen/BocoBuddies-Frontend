@@ -191,7 +191,6 @@ async function updateItem() {
 			itemId: itemId,
 			active: newItem.value.active ?? true,
 		}
-		console.log(body)
 		const formData = new FormData()
 		formData.append('name', body.name)
 		console.log(formData.get('name'))
@@ -216,6 +215,7 @@ async function updateItem() {
 		formData.append('active', body.active.toString())
 		console.log(formData.getAll('images'))
 		await axios.put('/item/edit', formData)
+		await router.push('/')
 	} catch (error: any) {
 		putStatus.value = 'error'
 		store.dispatch('error', error.message)

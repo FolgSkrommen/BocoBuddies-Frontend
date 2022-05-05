@@ -7,6 +7,8 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
+
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
@@ -20,9 +22,7 @@ import {
 import { GetChatResponse } from '../../api/chat'
 import { GetMessageResponse } from '../../api/message'
 import BaseLabel from '../../components/base/BaseLabel.vue'
-import BaseBanner from '../../components/base/BaseBanner.vue'
 import RateUserPopup from '../../components/RateUserPopup.vue'
-import UserCard from '../../components/UserCard.vue'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
 const route = useRoute()
@@ -588,7 +588,7 @@ function reRenderChat() {
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
-	<div class="h-96 flex-col w-full" v-else>
+	<div class="h-[60vh] flex-col w-full" v-else>
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
@@ -598,18 +598,28 @@ function reRenderChat() {
 			@confirm="userReviewed()"
 		></RateUserPopup>
 
-		<div class="flex gap-2">
-			<router-link class="place-sel" to="/chats"> Back </router-link>
-			<img
-				class="w-16 h-16 fit rounded"
-				v-if="item"
-				:src="item.images[0]"
-			/>
-			<h1 v-if="item?.name">
-				{{ item.name }}
-				({{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }})
-			</h1>
-			<h1 v-else>Chat</h1>
+		<div class="flex justify-between items-center gap-5">
+			<div class="flex gap-2">
+				<router-link class="place-sel" to="/chats">
+					<ChevronLeftIcon class="h-12 w-12" />
+				</router-link>
+				<div class="flex gap-2">
+					<img
+						class="w-12 h-12 object-cover rounded"
+						v-if="item"
+						:src="item.images[0]"
+					/>
+					<p v-if="item">
+						{{ item.name }}<br />
+						{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
+					</p>
+				</div>
+			</div>
+
+			<h3 class="flex-1 truncate text-right">
+				{{ getUserToReview()?.firstName }}
+				{{ getUserToReview()?.lastName }}
+			</h3>
 		</div>
 
 		<MessageContainer
@@ -676,13 +686,6 @@ function reRenderChat() {
 				>
 			</div>
 		</form>
-
-		<UserCard
-			v-if="getUserToReview() !== undefined"
-			:user="getUserToReview()"
-			color="green"
-			show-rating
-		/>
 	</div>
 
 	<BasePopup
