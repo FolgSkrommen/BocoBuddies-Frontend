@@ -23,16 +23,16 @@ const { edit, items, searchHits, redirect, renderLoadButton } =
 	<div>
 		<!--List component-->
 		<p class="align-middle">{{ searchHits }}</p>
-		<div class="grid gap-4 grid-cols-2 grid-flow-row">
+		<div class="grid gap-4 grid-cols-2 md:grid-cols-3 grid-flow-row">
 			<div v-for="item in items">
 				<Card class="h-min row-end-auto">
 					<router-link
 						:to="`/${redirect}/${item.itemId}`"
-						class="grid gap-4"
+						class="grid gap-2 p-2"
 					>
 						<img
 							v-if="item.images?.length > 0"
-							class="rounded object-contain"
+							class="rounded-t-xl object-cover h-32 w-full"
 							:src="item.images[0]"
 							:alt="item.name"
 						/>

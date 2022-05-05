@@ -20,7 +20,7 @@ const updateValue = (event: Event) => {
 		<select
 			v-model="modelValue"
 			@input="updateValue"
-			class="border-2 border-slate-400 rounded w-full bg-slate-200 items-center animation-none p-1"
+			class="border-2 border-slate-400 rounded-xl w-full bg-slate-200 items-center animation-none p-1"
 			data-testid="dropdown-container"
 		>
 			<option

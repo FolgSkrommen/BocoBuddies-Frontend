@@ -27,7 +27,7 @@ const colorClass = computed(() => {
 
 <template>
 	<router-link
-		class="py-2 px-4 rounded-xl bg-blue-500 text-white text-center"
+		class="py-2 px-4 rounded-xl bg-blue-500 text-white hover:bg-blue-800 transition-colors text-center"
 		:class="colorClass"
 		v-if="to"
 		:to="to"

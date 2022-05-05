@@ -106,7 +106,7 @@ function styleType(received: boolean) {
 			<!--Kvittering-->
 			<div
 				v-else
-				class="w-2/3 rounded-lg border p-6 flex flex-col gap-3 text-center"
+				class="w-2/3 rounded-xl border p-6 flex flex-col gap-3 text-center"
 				:class="styleType(message.receive)"
 			>
 				<div
