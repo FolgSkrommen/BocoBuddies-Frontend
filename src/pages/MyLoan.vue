@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
-import { StarIcon, CheckCircleIcon } from '@heroicons/vue/solid'
 import BaseBtn from '../components/base/BaseBtn.vue'
 import ItemInfo from '../components/ItemInfo.vue'
-import { Calendar, DatePicker } from 'v-calendar'
+import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
 import { computed, ref } from 'vue'
@@ -11,7 +9,6 @@ import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import { array } from 'yup'
 import { Item, Loan, User } from '../api/schema'
 import { GetLoanRequest, GetLoanResponse } from '../api/loan'
 
@@ -66,7 +63,6 @@ const showRateUserPopup = ref(false)
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
 			:user="lender"
-			:loan="undefined"
 		/>
 		<div class="grid gap-4">
 			<h1>{{ item.name }}</h1>
