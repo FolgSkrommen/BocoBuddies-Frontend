@@ -19,13 +19,26 @@ async function getChats() {
 		const res = await axios.get('/chat/getByUser/market')
 		const data = res.data as GetChatByUserMarketResponse
 		chats.value = data
+		for (const chat of chats.value) {
+			let members: User[] = []
+			if (!chat.members) return
+			for (const member of chat.members) {
+				console.log('heisann')
+				if (member.userId !== store.state.user?.userId) {
+					console.log('Member: ' + member.username)
+					chat.user = member
+				}
+			}
+		}
 
 		for (const chat of chats.value) {
 			try {
+				console.log(chat)
 				const res = await axios.get('/loan/chat?chatId=' + chat.chatId)
 				console.log(res.data)
 				chat.item = res.data.item
 				chat.loan = res.data.loan
+				console.log(chat.user)
 			} catch (err: any) {
 				const res = await axios.get('/item', {
 					params: { itemId: chat.item?.itemId },
@@ -69,7 +82,11 @@ getChats()
 
 							<div class="flex-col">
 								<h3>
-									{{ chat.item?.name }}
+									{{
+										chat.user?.username +
+										' ' +
+										chat.item?.name
+									}}
 								</h3>
 								<h4>
 									{{ getLoanStatus(chat) }}
