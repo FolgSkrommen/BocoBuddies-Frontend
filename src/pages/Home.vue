@@ -123,8 +123,8 @@ async function search() {
 			useAuth: false,
 		}
 		if (sortChosenString == 'nearest') {
-			navigator.geolocation.getCurrentPosition(
-				position => {
+			const pos = navigator.geolocation.getCurrentPosition(
+				async position => {
 					params = {
 						categories: chosenCategoriesIds.slice(-1),
 						sort: sortChosenString,
@@ -134,24 +134,45 @@ async function search() {
 						lat: position.coords.latitude.toString(),
 						lng: position.coords.longitude.toString(),
 					}
+					const res = await axios.get(
+						'/item/search/' + searchWord.value.trim(),
+						{
+							params,
+							paramsSerializer: params => {
+								return qs.stringify(params, {
+									arrayFormat: 'repeat',
+								})
+							},
+						}
+					)
+					const data: Item[] = res.data
+					if (data.length > 0) items.value = items.value.concat(data)
+					if (data.length < amountPerPage)
+						renderLoadButton.value = false
+
+					status.value = 'loaded'
 				},
 				error => {
-					console.log(error.message)
+					store.dispatch('error', error.message)
 				}
 			)
 		}
+		if (sortChosenString != 'nearest') {
+			const res = await axios.get(
+				'/item/search/' + searchWord.value.trim(),
+				{
+					params,
+					paramsSerializer: params => {
+						return qs.stringify(params, { arrayFormat: 'repeat' })
+					},
+				}
+			)
+			const data: Item[] = res.data
+			if (data.length > 0) items.value = items.value.concat(data)
+			if (data.length < amountPerPage) renderLoadButton.value = false
 
-		const res = await axios.get('/item/search/' + searchWord.value.trim(), {
-			params,
-			paramsSerializer: params => {
-				return qs.stringify(params, { arrayFormat: 'repeat' })
-			},
-		})
-		const data: Item[] = res.data
-		if (data.length > 0) items.value = items.value.concat(data)
-		if (data.length < amountPerPage) renderLoadButton.value = false
-
-		status.value = 'loaded'
+			status.value = 'loaded'
+		}
 	} catch (error: any) {
 		store.dispatch('error', error.message)
 		status.value = 'error'
