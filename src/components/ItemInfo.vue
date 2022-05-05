@@ -4,21 +4,18 @@ import ImageCarousel from '../components/ImageCarousel.vue'
 import { DatePicker } from 'v-calendar'
 import { Item, Position } from '../api/schema'
 import axios from 'axios'
-import { GoogleMap, Circle } from 'vue3-google-map'
 
 interface Props {
 	item: Item
 }
 
 let listOfFilterWithValue = ref<any[]>([])
-
 const { item } = defineProps<Props>()
-const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 function randomCenter(position: Position) {
 	const newPosition: Position = {
-		lat: position.lat + Math.random() * 0.004 - 0.002,
-		lng: position.lng + Math.random() * 0.004 - 0.002,
+		lat: position.lat + Math.random() * 0.01 - 0.005,
+		lng: position.lng + Math.random() * 0.01 - 0.005,
 	}
 	return newPosition
 }
@@ -50,6 +47,13 @@ async function getFilterTypeName() {
 	}
 }
 getFilterTypeName()
+
+const circleOptions = {
+	strokeColor: '#004AAD',
+	strokeOpacity: 0.8,
+	strokeWeight: 2,
+	fillColor: '#004AAD',
+}
 </script>
 
 <template>
@@ -100,19 +104,12 @@ getFilterTypeName()
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalCode }}</p>
 		</div>
-		<GoogleMap
-			v-if="item.position && apiKey?.length > 0"
-			:api-key="apiKey"
-			style="width: 100%; height: 500px"
-			:center="item.position"
-			:zoom="14"
-		>
-			<Circle
-				:options="{
-					center: randomCenter(item.position),
-					radius: 400,
-				}"
+		<GMapMap :center="item.position" :zoom="13" class="h-96">
+			<GMapCircle
+				:center="randomCenter(item.position)"
+				:radius="1000"
+				:options="circleOptions"
 			/>
-		</GoogleMap>
+		</GMapMap>
 	</div>
 </template>
