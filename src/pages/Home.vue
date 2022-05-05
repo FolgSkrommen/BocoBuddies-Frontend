@@ -298,6 +298,7 @@ const showFiltersAndSort = ref(false)
 			<AdjustmentsIcon
 				class="w-8 h-8 text-slate-500 cursor-pointer"
 				@click="showFiltersAndSort = !showFiltersAndSort"
+				data-testid="filter-and-sort-toggle"
 			/>
 			<SearchbarAndButton
 				v-model="searchWord"
