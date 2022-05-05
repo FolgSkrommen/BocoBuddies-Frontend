@@ -172,7 +172,9 @@ const chatName = computed(() => {
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
-	<div class="h-96 flex-col w-full" v-else>
+
+	<!--TODO fix height-->
+	<div class="h-96 flex-col w-full chatHeight" v-else>
 		<div class="flex gap-2">
 			<router-link class="place-sel" to="/community">
 				<ChevronLeftIcon class="h-12 w-12" />
@@ -207,3 +209,8 @@ const chatName = computed(() => {
 		</form>
 	</div>
 </template>
+<style scoped>
+.chatHeight {
+	height: calc(100vh - 200px);
+}
+</style>
