@@ -4,10 +4,22 @@ import Chat from '../../../src/pages/loan/LoanChat.vue'
 import axios from 'axios'
 
 describe('when loaded', () => {
+	it('has the required elements (loading)', async () => {
+		const wrapper = mount(Chat)
+		wrapper.vm.status = 'loading'
+		await wrapper.vm.$forceUpdate()
+		expect(wrapper.exists()).toBe(true)
+		expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
+	})
 	it('has the required elements', async () => {
 		const wrapper = mount(Chat)
 
 		expect(wrapper.exists()).toBe(true)
+
+		wrapper.vm.status = 'loaded'
+
+		await wrapper.vm.$forceUpdate()
+
 		expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
 			true
 		)
@@ -18,9 +30,9 @@ describe('when loaded', () => {
 
 	it('Loads as expected with correct values', async () => {
 		const wrapper = mount(Chat)
-
-		/*
 		expect(wrapper.exists()).toBe(true)
+		/*
+
 		wrapper.vm.chat = {
 			chatId: 1,
 			itemId: 1,
@@ -61,13 +73,15 @@ describe('when loaded', () => {
 			}
 		})
 		*/
-
+		/*
 		expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
 			true
 		)
 		expect(wrapper.find('[data-testid="submit-button"]').exists()).toBe(
 			true
 		)
+
+		 */
 		/*
 		expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(true)
 		expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(true)
@@ -84,12 +98,5 @@ describe('when loaded', () => {
 		const wrapper = mount(Chat)
 		expect(axios.get).toHaveBeenCalledTimes(3)
 		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
-	})
-
-	it('Popup is shown when showLoginModal true', async () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.find('[data-testid="base-popup"]').isVisible()).toBe(
-			false
-		)
 	})
 })
