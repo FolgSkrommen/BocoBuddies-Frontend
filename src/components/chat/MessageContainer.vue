@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Card from '../components/Card.vue'
 import {
 	computed,
 	onMounted,

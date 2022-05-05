@@ -139,6 +139,7 @@ async function sendLoanRequestWS() {
 			type: 'REQUEST',
 			receive: false,
 			senderId: res.data.loaner.toString(),
+			date: res.data.date,
 			start: range.value.start.toISOString(),
 			stop: range.value.end.toISOString(),
 			price: price.value,
@@ -240,6 +241,7 @@ async function onLoanAccept(payload: any) {
 		senderId: accept.loaner,
 		type: 'ACCEPT',
 		receive: true,
+		date: accept.date,
 		start: accept.start,
 		stop: accept.end,
 		returned: accept.returned,
@@ -286,6 +288,7 @@ function onRequestReceived(payload: any) {
 		senderId: request.loaner,
 		type: 'REQUEST',
 		receive: true,
+		date: request.date,
 		start: request.start,
 		stop: request.end,
 		returned: request.returned,
@@ -537,6 +540,25 @@ function toggleShowRating() {
 	showRateUserPopup.value = true
 }
 
+function getUserToReviewCheck() {
+	if (!store.state.user) return false
+	if (!user.value) return false
+}
+/*function getUserToReview() {
+	if (store.state.user && store.state.user.userId && user.value) {
+
+		if (!user.value && lender.value?.userId !== store.state.user.userId)
+			return lender.value
+		
+	
+		if (store.state.user.userId === user.value.userId) {
+			return lender.value
+		} else {
+			return user.value
+		}
+	} 
+
+}*/
 function getUserToReview() {
 	if (!store.state.user) return
 
