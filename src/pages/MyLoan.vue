@@ -5,6 +5,7 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
 import { computed, ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
@@ -65,7 +66,12 @@ const showRateUserPopup = ref(false)
 			:user="lender"
 		/>
 		<div class="grid gap-4">
-			<h1>{{ item.name }}</h1>
+			<div class="flex gap-2">
+				<router-link class="place-sel" to="/overview/items">
+					<ChevronLeftIcon class="h-12 w-12" />
+				</router-link>
+				<h1>{{ item.name }}</h1>
+			</div>
 			<div v-if="!loan.returned" class="grid gap-4">
 				<div>
 					<p class="font-bold text-lg">Låneperiode</p>
