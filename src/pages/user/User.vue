@@ -204,6 +204,20 @@ const isOwnProfile = computed(() => {
 			</button>
 		</div>
 
+		<h2
+			v-if="stateTag == State.REVIEWS && reviews?.length == 0"
+			class="text-slate-400 w-fit mx-auto mt-28"
+		>
+			Brukeren har ingen tilbakemeldinger
+		</h2>
+
+		<h2
+			v-if="stateTag == State.BUDDIES && buddies?.length == 0"
+			class="text-slate-400 w-fit mx-auto mt-28"
+		>
+			Brukeren har ingen buddies
+		</h2>
+
 		<div class="flex flex-col w-full gap-2">
 			<Card
 				v-if="stateTag == State.REVIEWS"
