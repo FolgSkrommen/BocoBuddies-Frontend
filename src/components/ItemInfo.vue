@@ -24,6 +24,13 @@ const range = computed(() => ({
 	start: new Date(item.availableFrom),
 	end: new Date(item.availableTo),
 }))
+const getPriceUnit = computed(() => {
+	if (item.priceUnit === 'DAY') return 'Dag'
+	if (item.priceUnit === 'HOUR') return 'Time'
+	if (item.priceUnit === 'MONTH') return 'Måned'
+	if (item.priceUnit === 'WEEK') return 'Uke'
+	if (item.priceUnit === 'YEAR') return 'År'
+})
 let filterTypes = ref<string[]>([])
 async function getFilterTypeName() {
 	try {
@@ -62,7 +69,7 @@ const circleOptions = {
 		<p>{{ item.description }}</p>
 		<div>
 			<p class="font-bold text-lg">Pris</p>
-			<p>{{ item.price }} / {{ item.priceUnit }}</p>
+			<p>{{ item.price }} / {{ getPriceUnit }}</p>
 		</div>
 		<div v-if="item.categories.length > 0">
 			<p class="font-bold text-lg">Kategori</p>
