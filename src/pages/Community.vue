@@ -299,7 +299,10 @@ cookie()
 				</div>
 			</div>
 			<h2
-				v-if="friendRequests?.length === 0"
+				v-if="
+					friendRequests?.length === 0 &&
+					sentFriendRequests?.length === 0
+				"
 				class="text-slate-400 w-fit mx-auto mt-28"
 			>
 				Du har ingen forespørsler
