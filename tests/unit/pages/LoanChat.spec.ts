@@ -182,6 +182,8 @@ describe('Testing websocket sending functions', async () => {
 })
 
 describe('Testing websocket receiving functions', async () => {
+	const wrapper = mount(Chat)
+	expect(wrapper.exists())
 	/*
 	const wrapper = mount(Chat)
 	wrapper.vm.price = 100

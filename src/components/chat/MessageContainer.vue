@@ -86,6 +86,7 @@ function getProfilePicture(id: number) {
 				<a
 					v-if="message.message && isValidHttpUrl(message.message)"
 					:href="message.message"
+					class="text-decoration-line: underline white"
 				>
 					<div data-testid="message">{{ message.message }}</div>
 				</a>
