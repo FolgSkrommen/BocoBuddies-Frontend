@@ -163,20 +163,11 @@ async function delUserReqOrFriend(request: User) {
 }
 
 enum View {
-	FRIENDS = 'Friends',
-	FRIEND_REQ = 'Friend requests',
-	CHATS = 'Chats',
+	FRIENDS = 'Venner',
+	FRIEND_REQ = 'Forespørsler',
+	CHATS = 'Samtaler',
 }
-function display(view: View) {
-	switch (view) {
-		case View.CHATS:
-			return 'Samtaler'
-		case View.FRIENDS:
-			return 'Venner'
-		case View.FRIEND_REQ:
-			return 'Venneforespørsler'
-	}
-}
+
 const view = ref<View>(View.CHATS)
 getChats()
 
@@ -206,20 +197,21 @@ function add() {
 			break
 	}
 }
+function cookie() {
+	const seenCommunityCookie = ('; ' + document.cookie)
+		.split(`; seenCommunityTutorial=`)
+		.pop()
+		?.split(';')[0]
 
-const seenHomeCookie = ('; ' + document.cookie)
-	.split(`; seenCommunityTutorial=`)
-	.pop()
-	.split(';')[0]
-
-if (!seenHomeCookie.includes('true')) {
-	store.dispatch(
-		'info',
-		'Dette er sammfunn siden. Her kan du legge til venner og chatte med de. Du kan til og med opprette gruppechatter. Klikk på pluss knappen under den riktige fanen for å enten opprette en ny chat eller å legge til nye venner Klikk X knappen for å lukke denne meldingen.'
-	)
-	const seenHomeTutorial = (document.cookie =
-		'seenCommunityTutorial=true; max-age=31536000')
+	if (!seenCommunityCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Dette er sammfunn siden. Her kan du legge til venner og chatte med de. Du kan til og med opprette gruppechatter. Klikk på pluss knappen under den riktige fanen for å enten opprette en ny chat eller å legge til nye venner Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenCommunityTutorial=true; max-age=31536000'
+	}
 }
+cookie()
 </script>
 
 <template>
@@ -235,10 +227,10 @@ if (!seenHomeCookie.includes('true')) {
 				"
 				@click="view = tag"
 			>
-				{{ display(tag) }}
+				{{ tag }}
 			</button>
 		</div>
-		<div v-if="view === 'Friends'">
+		<div v-if="view === View.FRIENDS">
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="user in users">
@@ -255,7 +247,7 @@ if (!seenHomeCookie.includes('true')) {
 				@exit="addingUser = false"
 			></AddFriendPopup>
 		</div>
-		<div v-if="view === 'Friend requests'">
+		<div v-if="view === View.FRIEND_REQ">
 			<LoadingIndicator v-if="friendRequestStatus === 'loading'" />
 			<p v-if="!friendRequests">Ingen venneforespørsler</p>
 			<div class="grid gap-8">
@@ -300,7 +292,7 @@ if (!seenHomeCookie.includes('true')) {
 				</div>
 			</div>
 		</div>
-		<div v-if="view === 'Chats'">
+		<div v-if="view === View.CHATS">
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="friendChat in friendChats">

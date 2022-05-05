@@ -208,19 +208,21 @@ function loadMoreItems() {
 	}
 }
 
-const seenHomeCookie = ('; ' + document.cookie)
-	.split(`; seenMyItemsTutorial=`)
-	.pop()
-	.split(';')[0]
+function cookie() {
+	const seenMyItemsCookie = ('; ' + document.cookie)
+		.split(`; seenMyItemsTutorial=`)
+		.pop()
+		?.split(';')[0]
 
-if (!seenHomeCookie.includes('true')) {
-	store.dispatch(
-		'info',
-		"Dette er siden for dine egne gjenstander. Her kan du se alle gjenstandene du har opprettet. Klikk på 'Plus' ikonet for å opprette en ny gjenstand. Du kan også sortere på arkiverte og aktive gjenstander. Klikk X knappen for å lukke denne meldingen."
-	)
-	const seenHomeTutorial = (document.cookie =
-		'seenMyItemsTutorial=true; max-age=31536000')
+	if (!seenMyItemsCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			"Dette er siden for dine egne gjenstander. Her kan du se alle gjenstandene du har opprettet. Klikk på 'Plus' ikonet for å opprette en ny gjenstand. Du kan også sortere på arkiverte og aktive gjenstander. Klikk X knappen for å lukke denne meldingen."
+		)
+		document.cookie = 'seenMyItemsTutorial=true; max-age=31536000'
+	}
 }
+cookie()
 
 const showFiltersAndSort = ref(false)
 </script>
