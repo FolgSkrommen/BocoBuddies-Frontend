@@ -598,7 +598,7 @@ function cookie() {
 				' Eller brukes chatten for å bestemme pris og liknende, samt hvordan transport vil fungere. Etter lånet må den som låner ut bekrefte at ' +
 				'gjenstanden er levert tilbake. Etter dette kan begge legge igjen en tilbakemelding på hverandre. Hvis noe er uklart les FAQ'
 		)
-		document.cookie = 'seenHomeTutorial=true; max-age=31536000'
+		document.cookie = 'seenChatTutorial=true; max-age=31536000'
 	}
 }
 cookie()
@@ -769,8 +769,8 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 			:min-date="
-				new Date(chat.item.availableFrom) < getDateAndTime
-					? getDateAndTime
+				new Date(chat.item.availableFrom) < new Date(getDateAndTime())
+					? new Date(getDateAndTime())
 					: new Date(chat.item.availableFrom)
 			"
 			:max-date="new Date(chat.item.availableTo)"

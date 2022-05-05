@@ -24,7 +24,9 @@ const messages = ref<Message[]>([])
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://localhost:8001/ws')
+	const ip = axios.defaults.baseURL?.split('//')[1]
+	console.log(ip)
+	socket = new WebSocket('ws://' + ip + '/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
