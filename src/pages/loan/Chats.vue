@@ -55,8 +55,8 @@ getChats()
 	<div>
 		<LoadingIndicator v-if="status === 'loading'" data-testid="loader" />
 		<div v-if="status === 'loaded'">
-			<h1 hidden data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
+				<h1 data-testid="header">Lånesamtaler</h1>
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId" class="p-2">
 						<div class="flex gap-2">
