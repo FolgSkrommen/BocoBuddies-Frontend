@@ -74,7 +74,7 @@ getItem()
 	<LoadingIndicator v-if="status === 'loading'" />
 	<div v-if="status === 'loaded' && item && lender" class="grid gap-4">
 		<div class="flex gap-2">
-			<router-link class="place-sel" to="/chats">
+			<router-link class="place-sel" to="/">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1>{{ item.name }}</h1>
