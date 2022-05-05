@@ -163,20 +163,11 @@ async function delUserReqOrFriend(request: User) {
 }
 
 enum View {
-	FRIENDS = 'Friends',
-	FRIEND_REQ = 'Friend requests',
-	CHATS = 'Chats',
+	FRIENDS = 'Venner',
+	FRIEND_REQ = 'Forespørsler',
+	CHATS = 'Samtaler',
 }
-function display(view: View) {
-	switch (view) {
-		case View.CHATS:
-			return 'Samtaler'
-		case View.FRIENDS:
-			return 'Venner'
-		case View.FRIEND_REQ:
-			return 'Venneforespørsler'
-	}
-}
+
 const view = ref<View>(View.CHATS)
 getChats()
 
@@ -235,10 +226,10 @@ if (!seenHomeCookie.includes('true')) {
 				"
 				@click="view = tag"
 			>
-				{{ display(tag) }}
+				{{ tag }}
 			</button>
 		</div>
-		<div v-if="view === 'Friends'">
+		<div v-if="view === View.FRIENDS">
 			<LoadingIndicator v-if="getFriendsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="user in users">
@@ -255,7 +246,7 @@ if (!seenHomeCookie.includes('true')) {
 				@exit="addingUser = false"
 			></AddFriendPopup>
 		</div>
-		<div v-if="view === 'Friend requests'">
+		<div v-if="view === View.FRIEND_REQ">
 			<LoadingIndicator v-if="friendRequestStatus === 'loading'" />
 			<p v-if="!friendRequests">Ingen venneforespørsler</p>
 			<div class="grid gap-8">
@@ -300,7 +291,7 @@ if (!seenHomeCookie.includes('true')) {
 				</div>
 			</div>
 		</div>
-		<div v-if="view === 'Chats'">
+		<div v-if="view === View.CHATS">
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
 			<div class="grid gap-4">
 				<div v-for="friendChat in friendChats">
