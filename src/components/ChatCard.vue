@@ -33,7 +33,7 @@ const chatName = computed(() => {
 	<div class="grid gap-4">
 		<router-link v-if="to" :to="'/community/chat/' + friendChat.chatId">
 			<Card>
-				<div class="flex gap-4 w-full p-2">
+				<div class="flex gap-4 w-full p-2 h-fit place-items-end">
 					<div
 						v-if="friendChat.members.length > 1"
 						class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
