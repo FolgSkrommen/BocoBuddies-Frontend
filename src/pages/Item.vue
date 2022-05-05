@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { Category, Item, User } from '../api/schema'
 import { GetItemRequest, GetItemResponse } from '../api/item'
@@ -65,14 +66,19 @@ async function createChat() {
 		console.log(error)
 	}
 }
-
+async function back() {}
 getItem()
 </script>
 
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
 	<div v-if="status === 'loaded' && item && lender" class="grid gap-4">
-		<h1>{{ item.name }}</h1>
+		<div class="flex gap-2">
+			<router-link class="place-sel" to="/chats">
+				<ChevronLeftIcon class="h-12 w-12" />
+			</router-link>
+			<h1>{{ item.name }}</h1>
+		</div>
 		<ItemInfo :item="item" />
 		<UserCard :user="lender" :to="'/user/' + lender.userId" show-rating />
 		<BaseBtn
