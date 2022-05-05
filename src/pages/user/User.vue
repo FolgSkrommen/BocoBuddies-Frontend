@@ -204,7 +204,7 @@ const isOwnProfile = computed(() => {
 				v-for="review in reviews"
 				class="grow"
 			>
-				<div class="flex justify-between">
+				<div class="flex justify-between p-2">
 					<div>
 						<div class="w-full flex">
 							<StarIcon

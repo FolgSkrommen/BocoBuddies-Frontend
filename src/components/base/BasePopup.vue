@@ -11,7 +11,7 @@ const emit = defineEmits(['exit'])
 	>
 		<div class="min-w-[256px] mb-24 mt-8">
 			<Card>
-				<div class="grid gap-4 overflow-y-auto">
+				<div class="grid gap-4 overflow-y-auto p-2">
 					<XIcon
 						@click="emit('exit')"
 						class="place-self-end w-8 h-8"

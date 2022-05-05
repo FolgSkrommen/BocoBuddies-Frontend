@@ -63,7 +63,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 					Innlogging:
 				</p>
 				<div class="space-y-4">
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -78,7 +78,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -93,7 +93,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -109,7 +109,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -134,7 +134,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 					Gjenstander:
 				</p>
 				<div class="space-y-4">
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -161,7 +161,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -178,7 +178,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -195,7 +195,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -209,7 +209,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -223,7 +223,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -237,7 +237,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -262,7 +262,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 					Community:
 				</p>
 				<div class="space-y-4">
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -278,7 +278,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 							</p>
 						</div>
 					</div>
-					<div class="border rounded shadow-sm">
+					<div class="border rounded-xl shadow-sm">
 						<div
 							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
 						>
@@ -306,7 +306,7 @@ import BaseBtn from '../components/base/BaseBtn.vue'
 				>
 					Kontakt oss:
 				</p>
-				<div class="border rounded shadow-sm">
+				<div class="border rounded-xl shadow-sm">
 					<div
 						class="focus:outline-none grid gap-4 w-full items-center pt-4 pr-4 pb-4 pl-4"
 					>

@@ -264,7 +264,7 @@ async function registerItem() {
 				<BaseLabel model-value="Per" />
 
 				<select
-					class="rounded-lg"
+					class="rounded-xl"
 					data-testid="priceUnit-selector"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
@@ -286,7 +286,7 @@ async function registerItem() {
 			<BaseLabel model-value="Kategori" />
 
 			<select
-				class="rounded-lg"
+				class="rounded-xl"
 				v-for="(categories, index) in categoryChoices"
 				v-if="categoryChoices"
 				:key="index"

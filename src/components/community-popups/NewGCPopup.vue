@@ -129,7 +129,7 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 				:btnDsbld="false"
 				btnTxt="Fjern"
 				@button-clicked="removeFromGCList"
-				class="border-solid bg-gray-500 rounded p-3"
+				class="border-solid bg-gray-500 rounded-xl p-3"
 			></UserCardAndBtn>
 			<UserCardAndBtn
 				v-for="friend in friendResults"
