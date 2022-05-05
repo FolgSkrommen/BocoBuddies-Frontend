@@ -716,11 +716,17 @@ console.log(item.value)
 	<BasePopup
 		v-show="showLoginModal"
 		@exit="showLoginModal = false"
-		v-if="chat && chat.item.availableFrom && chat.item.availableTo"
+		v-if="
+			chat &&
+			chat.item &&
+			chat.item.availableFrom &&
+			chat.item.availableTo
+		"
 		data-testid="base-popup"
 		class="overflow-y-auto max-h-screen"
 	>
 		<DatePicker
+			v-if="chat.item"
 			class="place-self-center"
 			v-model="range"
 			mode="dateTime"
