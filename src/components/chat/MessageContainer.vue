@@ -70,6 +70,17 @@ function getProfilePicture(id: number) {
 	})
 	return user.profilePicture
 }
+
+function messagePlacement(receive: boolean) {
+	switch (receive) {
+		case true:
+			return 'place-self-start'
+		case false:
+			return 'place-self-end'
+		default:
+			return 'place-self-end'
+	}
+}
 </script>
 <template>
 	<div
@@ -78,50 +89,40 @@ function getProfilePicture(id: number) {
 		data-testid="chat"
 	>
 		<div class="grid" v-for="(message, i) in messages">
-			<Message
-				v-if="message.type === 'CHAT'"
-				:id="i"
-				:receive="!message.receive"
-			>
-				<a
-					v-if="message.message && isValidHttpUrl(message.message)"
-					:href="message.message"
-					class="text-decoration-line: underline white"
-				>
-					<div data-testid="message">{{ message.message }}</div>
-				</a>
-				<div data-testid="message" v-else>{{ message.message }}</div>
-			</Message>
 			<div
-				class="text-black text-m place-self-end"
-				data-testid="message-info"
-				v-if="!message.receive"
+				class="flex my-2 gap-1"
+				:class="messagePlacement(message.receive)"
 			>
-				<div v-if="message.date">
-					{{ getProperDateTime(message.date) }}
-				</div>
-				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
-					<img
-						v-if="message.senderId"
-						class="rounded-full object-cover w-6 h-6"
-						:src="getProfilePicture(message.senderId)"
-					/>
-				</div>
-			</div>
-			<div
-				class="text-black text-lg place-self-start"
-				data-testid="message-info"
-				v-else
-			>
-				<div v-if="message.date">
-					{{ getProperDateTime(message.date) }}
-				</div>
-				<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
-					<img
-						v-if="message.senderId"
-						class="rounded-full object-cover w-6 h-6"
-						:src="getProfilePicture(message.senderId)"
-					/>
+				<img
+					v-if="message.senderId && message.receive"
+					class="rounded-full object-cover w-6 h-6 self-end"
+					:src="getProfilePicture(message.senderId)"
+				/>
+				<div class="flex flex-col text-center">
+					<p v-if="message.date" class="text-xs">
+						{{ getProperDateTime(message.date) }}
+					</p>
+					<Message
+						v-if="message.type === 'CHAT'"
+						:id="i"
+						:receive="!message.receive"
+					>
+						<a
+							v-if="
+								message.message &&
+								isValidHttpUrl(message.message)
+							"
+							:href="message.message"
+							class="text-decoration-line: underline white"
+						>
+							<div data-testid="message">
+								{{ message.message }}
+							</div>
+						</a>
+						<div data-testid="message" v-else>
+							{{ message.message }}
+						</div>
+					</Message>
 				</div>
 			</div>
 		</div>

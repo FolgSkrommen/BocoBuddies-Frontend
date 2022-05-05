@@ -6,6 +6,7 @@ import ItemInfo from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import { computed, ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import UserCard from '../components/UserCard.vue'
 import RateUserPopup from '../components/RateUserPopup.vue'
 import { useRoute } from 'vue-router'
@@ -88,7 +89,12 @@ const showRateUserPopup = ref(false)
 			:loan="undefined"
 		/>
 		<div class="grid gap-4">
-			<h1>{{ item.name }}</h1>
+			<div class="flex gap-2">
+				<router-link class="place-sel" to="/overview/items">
+					<ChevronLeftIcon class="h-12 w-12" />
+				</router-link>
+				<h1>{{ item.name }}</h1>
+			</div>
 
 			<div v-if="loan && loan.active" class="grid gap-4">
 				<div v-if="loan.returned" class="grid gap-4">
