@@ -123,7 +123,9 @@ async function uploadPicture() {
 		uploadProfilePictureStatus.value = 'success'
 		const picture = await axios.get('/user/getProfilePicture')
 
-		store.state.user.profilePicture = picture.data
+		let user = store.state.user
+		user.profilePicture = picture.data
+		await store.dispatch('edit', user)
 		imagePreview.value = []
 		imageFiles.value = []
 	} catch (error: any) {
