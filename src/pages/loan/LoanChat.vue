@@ -41,7 +41,9 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://10.24.26.184:8001/ws')
+	const ip = axios.defaults.baseURL?.split('//')[1]
+	console.log(ip)
+	socket = new WebSocket('ws://' + ip + '/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -576,6 +578,28 @@ function getPriceUnit(unit: string) {
 	if (unit === 'YEAR') return 'År'
 }
 
+function setCookieSeen() {
+	document.cookie = 'seenVideo=true; max-age=31536000'
+	seenTutorial = ref(true)
+	location.reload()
+}
+function cookie() {
+	const seenHomeCookie = ('; ' + document.cookie)
+		.split(`; seenHomeTutorial=`)
+		.pop()
+		?.split(';')[0]
+
+	if (!seenHomeCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Hei! velkommen til Boco, dette er hjemsiden din. Her kan du søke etter gjenstander, sortere etter ulike kategorier og klikke deg inn på annonser. Sjekk ut FAQ under profil siden din dersom du har flere spørsmål. Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenHomeTutorial=true; max-age=31536000'
+	}
+}
+cookie()
+
+let seenTutorial = ref<boolean>(false)
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
