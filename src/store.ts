@@ -63,7 +63,7 @@ export const store = createStore<State>({
 		},
 
 		async SET_NEW_USER_DATA(state, data) {
-			state.user = data
+			if (data.profile) state.user = data
 			await localStorage.removeItem('userData')
 			await localStorage.setItem('userData', JSON.stringify(data))
 		},
