@@ -40,7 +40,7 @@ const chatName = computed(() => {
 					>
 						<img
 							v-for="user in friendChat.members.slice(0, 4)"
-							class="rounded-full object-cover"
+							class="rounded-full object-cover w-7 h-7"
 							:src="user.profilePicture"
 						/>
 					</div>

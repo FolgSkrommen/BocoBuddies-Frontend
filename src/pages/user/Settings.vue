@@ -22,6 +22,8 @@ import BaseBanner from '../../components/base/BaseBanner.vue'
 import { PostUserRegisterRequest } from '../../api/user/register'
 import { useForm, useField } from 'vee-validate'
 import { SSL_OP_MICROSOFT_SESS_ID_BUG } from 'constants'
+import { User } from '../../api/schema'
+import UserCardAndBtnVue from '../../components/UserCardAndBtn.vue'
 type Status = 'loading' | 'loaded' | 'error'
 
 const schema = yup.object({
@@ -53,7 +55,8 @@ if (store.state.user) {
 
 async function updateUser() {
 	if (!store.state.user) return
-	const updatedUser = store.state.user
+
+	let updatedUser = { ...store.state.user }
 
 	updatedUser.profilePicture = undefined
 
@@ -62,8 +65,10 @@ async function updateUser() {
 	updatedUser.email = newEmail.value
 
 	try {
-		const res = await axios.put('/user', updatedUser)
-		await store.dispatch('edit', res.data)
+		await axios.put('/user', updatedUser)
+		updatedUser.profilePicture = store.state.user.profilePicture
+		store.state.user = updatedUser
+		store.dispatch('edit', updatedUser)
 	} catch (error: any) {
 		store.dispatch('error', error.message)
 	}
@@ -96,10 +101,9 @@ async function uploadPicture() {
 	try {
 		await axios.post('/user/uploadProfilePicture', formData)
 		uploadProfilePictureStatus.value = 'success'
-		const res = await axios.get('/user', {
-			params: { user: store.state.user.userId, useAuth: true },
-		})
-		await store.dispatch('edit', res.data)
+		const picture = await axios.get('/user/getProfilePicture')
+
+		store.state.user.profilePicture = picture.data
 		imagePreview.value = []
 		imageFiles.value = []
 	} catch (error: any) {
