@@ -1,4 +1,4 @@
-export type GetLoanRequest = {
+export type GetLoanItemRequest = {
 	itemId: number
 	index: number
 	active: boolean
