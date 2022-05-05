@@ -1,4 +1,9 @@
-import { shallowMount, RouterLinkStub, flushPromises } from '@vue/test-utils'
+import {
+	shallowMount,
+	RouterLinkStub,
+	flushPromises,
+	VueWrapper,
+} from '@vue/test-utils'
 import Home from '../../../src/pages/Home.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
@@ -46,16 +51,14 @@ describe('Home', () => {
 
 			expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
 			expect(axios.get).toHaveBeenCalledWith('/category/main')
-			//wrapper.vm.showFiltersAndSort = true
 
 			await flushPromises()
 
 			expect(
-				wrapper.findAll('[data-testid="categories-tag-alts"]')
-			).toHaveLength(/*1*/ 0)
-
-			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
+			).toBe(true)
+			expect(
+				wrapper.find('[data-testid="filter-and-sort-toggle"]').exists()
 			).toBe(true)
 			expect(
 				wrapper.find('[data-testid="categories-tag-chosen"]').exists()
@@ -65,13 +68,33 @@ describe('Home', () => {
 			).toBe(false)
 
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
-				true
+				false
 			)
 		})
 
 		it('has initial sortChosen value equal to 0', async () => {
 			const wrapper = shallowMount(Home)
 			expect(wrapper.vm.sortChosen).toBe(0)
+		})
+
+		it('renders sort dropdown and category alternatives when toggle is clicked', async () => {
+			const wrapper = shallowMount(Home)
+			await wrapper
+				.find('[data-testid="filter-and-sort-toggle"]')
+				.trigger('click')
+
+			expect(
+				wrapper.find('[data-testid="categories-tag-alts"]').exists()
+			).toBe(true)
+			expect(
+				wrapper.findAll('[data-testid="categories-tag-alts"]')
+			).toHaveLength(1)
+			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
+				true
+			)
+			expect(
+				wrapper.find('[data-testid="categories-tag-chosen"]').exists()
+			).toBe(false)
 		})
 	})
 })
