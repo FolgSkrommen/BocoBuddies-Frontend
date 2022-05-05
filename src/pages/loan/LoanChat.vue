@@ -41,7 +41,7 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://localhost:8001/ws')
+	socket = new WebSocket('ws://10.24.26.184:8001/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -237,6 +237,7 @@ async function onLoanAccept(payload: any) {
 	console.log(payload)
 	let accept = JSON.parse(payload.body)
 
+	console.log(accept)
 	let msg: Message = {
 		senderId: accept.loaner,
 		type: 'ACCEPT',
@@ -256,19 +257,11 @@ async function onLoanAccept(payload: any) {
 			loanStatus.value = 'ACCEPTED'
 		}
 		if (msg.active && msg.returned) {
-			loanStatus.value = 'RETURNED'
 			console.log(messages.value)
 
-			/*
-			messages.value = messages.value.filter(
-				({ type }) => type !== 'REQUEST'
-			)
-
-       */
-
-			console.log()
+			loanStatus.value = 'RETURNED'
 			await getLoan(false)
-
+			loanStatus.value = 'RETURNED'
 			console.log(msg)
 
 			console.log(messages.value)
@@ -377,6 +370,8 @@ onBeforeMount(async () => {
 		user.value = chat.value?.members[0]
 		if (chat.value?.members[0].userId === store.state.user.userId)
 			user.value = chat.value?.members[1]
+
+		console.log(chat.value?.item)
 	} catch (error: any) {
 		status.value = 'error'
 		await store.dispatch('error', error.message)
@@ -406,7 +401,7 @@ onBeforeMount(async () => {
 				itemId: chat.value.item.itemId,
 			},
 		})
-
+		console.log(res.data)
 		item.value = res.data.item
 		lender.value = res.data.lender
 	} catch (error: any) {
@@ -625,7 +620,10 @@ function reRenderChat() {
 				<router-link class="place-sel" to="/chats">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
-				<div class="flex gap-2">
+				<router-link
+					:to="'/item/' + item.itemId"
+					class="flex gap-2 border"
+				>
 					<img
 						class="w-12 h-12 object-cover rounded"
 						v-if="item"
@@ -635,9 +633,8 @@ function reRenderChat() {
 						{{ item.name }}<br />
 						{{ item.price }}kr / {{ getPriceUnit(item.priceUnit) }}
 					</p>
-				</div>
+				</router-link>
 			</div>
-
 			<h3 class="flex-1 truncate text-right">
 				{{ getUserToReview()?.firstName }}
 				{{ getUserToReview()?.lastName }}
