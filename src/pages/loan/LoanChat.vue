@@ -405,6 +405,7 @@ onBeforeMount(async () => {
 		})
 		console.log(res.data)
 		item.value = res.data.item
+		if (item.value) price.value = item.value.price
 		lender.value = res.data.lender
 	} catch (error: any) {
 		status.value = 'error'
