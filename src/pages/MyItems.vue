@@ -285,9 +285,9 @@ const showFiltersAndSort = ref(false)
 			@load-more-items="loadMoreItems"
 		/>
 
-		<h3 v-else class="text-slate-400 w-fit mx-auto mt-28">
+		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
 			Du har ingen gjenstander
-		</h3>
+		</h2>
 
 		<FloatingBtn to="/item/register" />
 	</div>

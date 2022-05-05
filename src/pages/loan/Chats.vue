@@ -55,7 +55,7 @@ getChats()
 	<div>
 		<LoadingIndicator v-if="status === 'loading'" data-testid="loader" />
 		<div v-if="status === 'loaded'">
-			<h1 data-testid="header">Samtaler</h1>
+			<h1 hidden data-testid="header">Samtaler</h1>
 			<div class="grid gap-4">
 				<Card v-for="chat in chats" :key="chat.chatId">
 					<router-link :to="'/chat/' + chat.chatId">
@@ -82,6 +82,12 @@ getChats()
 					</router-link>
 				</Card>
 			</div>
+			<h2
+				v-if="chats.length === 0"
+				class="text-slate-400 w-fit mx-auto mt-28"
+			>
+				Du har ingen lånesamtaler
+			</h2>
 		</div>
 	</div>
 </template>

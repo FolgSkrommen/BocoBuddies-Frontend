@@ -226,6 +226,7 @@ cookie()
 						: 'bg-slate-300 text-slate-900'
 				"
 				@click="view = tag"
+				data-testid="view-button"
 			>
 				{{ tag }}
 			</button>
@@ -246,6 +247,12 @@ cookie()
 				v-show="addingUser"
 				@exit="addingUser = false"
 			></AddFriendPopup>
+			<h2
+				v-if="users?.length === 0"
+				class="text-slate-400 w-fit mx-auto mt-28"
+			>
+				Trykk (+) for å legge til venner
+			</h2>
 		</div>
 		<div v-if="view === View.FRIEND_REQ">
 			<LoadingIndicator v-if="friendRequestStatus === 'loading'" />
@@ -291,6 +298,12 @@ cookie()
 					</div>
 				</div>
 			</div>
+			<h2
+				v-if="friendRequests?.length === 0"
+				class="text-slate-400 w-fit mx-auto mt-28"
+			>
+				Du har ingen forespørsler
+			</h2>
 		</div>
 		<div v-if="view === View.CHATS">
 			<LoadingIndicator v-if="getChatsStatus === 'loading'" />
@@ -299,10 +312,17 @@ cookie()
 					<ChatCard
 						:to="'/community/chat/' + friendChat.chatId"
 						:friendChat="friendChat"
+						data-testid="chat-card"
 					></ChatCard>
 				</div>
 			</div>
-			<FloatingBtn @click="add" />
+			<h2
+				v-if="friendChats?.length === 0"
+				class="text-slate-400 w-fit mx-auto mt-28"
+			>
+				Trykk (+) for å starte en samtale, eller legg til en venn
+			</h2>
+			<FloatingBtn @click="add" data-testid="add-btn" />
 			<NewMessagePopup
 				v-show="createChat"
 				@exit="createChat = false"

@@ -16,6 +16,12 @@ if (userString) {
 	const userData = JSON.parse(userString)
 	store.commit('SET_USER_DATA', userData)
 }
+const token = localStorage.getItem('token')
+if (token) {
+	const tokenData = JSON.parse(token)
+	store.commit('SET_TOKEN', tokenData)
+}
+
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 createApp(App)
