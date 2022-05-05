@@ -54,7 +54,7 @@ async function getItem() {
 		store.dispatch('error', error.message)
 	}
 }
-
+getItem()
 async function getLoan() {
 	status.value = 'loading'
 	const params: GetLoanRequest = {
@@ -66,6 +66,8 @@ async function getLoan() {
 			params,
 		})
 		const data: GetLoanResponse = res.data
+		console.log('DATA' + data)
+
 		item.value = data.item
 		loaner.value = data.user
 		loan.value = data.loan
@@ -74,7 +76,7 @@ async function getLoan() {
 		getItem()
 	}
 }
-getLoan()
+//getLoan()
 const showRateUserPopup = ref(false)
 </script>
 

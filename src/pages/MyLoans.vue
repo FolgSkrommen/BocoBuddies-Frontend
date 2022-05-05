@@ -12,6 +12,7 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import { GetItemSearchRequest } from '../api/item/search'
 import { Alternative, Category, Item } from '../api/schema'
 import { AdjustmentsIcon } from '@heroicons/vue/solid'
+import { useRouter } from 'vue-router'
 
 //Variables
 let sortChosen = ref(0)
@@ -100,11 +101,11 @@ async function search() {
 			break
 		}
 		case 1: {
-			sortChosenString = 'price-ascending'
+			sortChosenString = 'loan-price-ascending'
 			break
 		}
 		case 2: {
-			sortChosenString = 'price-descending'
+			sortChosenString = 'loan-price-descending'
 			break
 		}
 		case 3: {
@@ -228,7 +229,81 @@ function loadMoreItems() {
 		search()
 	}
 }
+const router = useRouter()
+async function properRedirect(item: Item, index: number) {
+	console.log('REDIRECTING PROPERLY')
+	console.log(index)
+	console.log(item)
+	let occurence = 0
+	for (let i = 0; i < items.value.length; i++) {
+		if (items.value[i].itemId === item.itemId) occurence++
+		if (i >= index) break
+	}
+	console.log(occurence)
 
+	let sortChosenString: string
+	switch (sortChosen.value) {
+		case 0: {
+			sortChosenString = 'loan-none'
+			break
+		}
+		case 1: {
+			sortChosenString = 'loan-price-ascending'
+			break
+		}
+		case 2: {
+			sortChosenString = 'loan-price-descending'
+			break
+		}
+		case 3: {
+			sortChosenString = 'closest'
+			break
+		}
+		case 4: {
+			sortChosenString = 'loan-newest'
+			break
+		}
+		case 5: {
+			sortChosenString = 'loan-none'
+			break
+		}
+		case 6: {
+			sortChosenString = 'loan-start-ascending'
+			break
+		}
+		case 7: {
+			sortChosenString = 'loan-start-descending'
+			break
+		}
+		case 8: {
+			sortChosenString = 'loan-end-ascending'
+			break
+		}
+		case 9: {
+			sortChosenString = 'loan-end-descending'
+			break
+		}
+		default: {
+			sortChosenString = 'loan-none'
+			break
+		}
+	}
+
+	//get loan id
+	//push with router
+	try {
+		const params: GetLoanItemRequest = {
+			itemId: item.itemId,
+			index: occurence,
+			active: activeSelected.value,
+			sort: sortChosenString,
+		}
+		const res = await axios.get('/loan/item/', { params })
+		console.log(res.data)
+
+		//router.push('/my-loan/'+res.)
+	} catch (error) {}
+}
 function cookie() {
 	const seenMyLoansCookie = ('; ' + document.cookie)
 		.split(`; seenMyLoansTutorial=`)
@@ -299,7 +374,7 @@ const showFiltersAndSort = ref(false)
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
-			redirect="my-loan"
+			@item-clicked="properRedirect"
 			@load-more-items="loadMoreItems"
 		/>
 
