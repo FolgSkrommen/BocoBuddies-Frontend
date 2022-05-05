@@ -205,7 +205,7 @@ async function updateItem() {
 			filterIdList: chosenFilters.value,
 			images: newImages.value,
 			itemId: itemId,
-			active: newItem.value.active ?? true,
+			active: newItem.value.active,
 		}
 		console.log(body.images)
 		const formData = new FormData()
