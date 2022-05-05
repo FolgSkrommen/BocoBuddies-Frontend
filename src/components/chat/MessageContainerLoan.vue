@@ -103,7 +103,6 @@ function styleType(received: boolean) {
 				</a>
 				<div data-testid="message" v-else>{{ message.message }}</div>
 			</Message>
-
 			<!--Kvittering-->
 			<div
 				v-else
