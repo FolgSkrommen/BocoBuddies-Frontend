@@ -756,8 +756,8 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 			:min-date="
-				new Date(chat.item.availableFrom) < getDateAndTime
-					? getDateAndTime
+				new Date(chat.item.availableFrom) < new Date(getDateAndTime())
+					? new Date(getDateAndTime())
 					: new Date(chat.item.availableFrom)
 			"
 			:max-date="new Date(chat.item.availableTo)"
