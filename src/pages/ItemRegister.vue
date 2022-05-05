@@ -235,12 +235,21 @@ async function registerItem() {
 			label="Tittel *"
 			:error="errors.title"
 		/>
-		<BaseInput
-			data-testid="description-input"
-			v-model.lazy="description"
-			label="Beskrivelse *"
-			:error="errors.description"
-		/>
+
+		<div>
+			<p>Beskrivelse *</p>
+			<textarea
+				class="w-full"
+				data-testid="description-input"
+				v-model.lazy="description"
+				label="Beskrivelse *"
+				:error="errors.description"
+				rows="4"
+			></textarea>
+		</div>
+
+		<span class="my-4"></span>
+
 		<div class="flex gap-4">
 			<BaseInput
 				data-testid="price-input"
@@ -255,8 +264,8 @@ async function registerItem() {
 				<BaseLabel model-value="Per" />
 
 				<select
+					class="rounded-lg"
 					data-testid="priceUnit-selector"
-					class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 					@input="
 						event => setPriceUnit((event.target as HTMLInputElement).value)
 					"
@@ -277,10 +286,10 @@ async function registerItem() {
 			<BaseLabel model-value="Kategori" />
 
 			<select
+				class="rounded-lg"
 				v-for="(categories, index) in categoryChoices"
 				v-if="categoryChoices"
 				:key="index"
-				class="rounded-xl bg-white items-center text-xl my-3 shadow w-full p-3"
 				@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
@@ -350,6 +359,7 @@ async function registerItem() {
 				class="h-52"
 			/>
 		</div>
+		<span class="my-4"></span>
 
 		<BaseInput
 			data-testid="address-input"
