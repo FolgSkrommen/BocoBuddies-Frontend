@@ -40,6 +40,8 @@ const passwordCheck = ref('')
 type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
 
+let registerSuccess = ref(false)
+
 const router = useRouter()
 
 async function submit() {
@@ -57,7 +59,8 @@ async function submit() {
 	try {
 		await axios.post('/user/register', data)
 		status.value = 'loaded'
-		await router.push('/login')
+		//await router.push('/login')
+		registerSuccess.value = true
 	} catch (error: any) {
 		status.value = 'error'
 		store.dispatch('error', error.response.data)
@@ -87,13 +90,14 @@ const notValid = computed(
 <template>
 	<LoadingIndicator v-if="status === 'loading'" />
 	<div class="text-center">
-		<h1>Registrer deg</h1>
-
 		<form
+			v-if="!registerSuccess"
 			class="grid gap-y-8"
 			data-testid="register-form"
 			@submit.prevent="submit()"
 		>
+			<h1>Registrer deg</h1>
+
 			<BaseInput
 				v-model.lazy="username"
 				label="Brukernavn"
@@ -165,5 +169,15 @@ const notValid = computed(
 				>Registrer</BaseButton
 			>
 		</form>
+		<div class="text-center" v-if="registerSuccess">
+			<h2>Bruker registrert!</h2>
+			<router-link
+				data-testid="register-link"
+				class="text-blue-500 underline"
+				to="/login"
+			>
+				Gå til innlogging
+			</router-link>
+		</div>
 	</div>
 </template>
