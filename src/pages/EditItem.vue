@@ -59,6 +59,7 @@ const newRange = ref<Range>({ start: new Date(), end: new Date() })
 
 function resetItem(oldItem: Item) {
 	newItem.value = { ...oldItem }
+	console.log(newItem.value.active)
 	newRange.value.start = new Date(oldItem.availableFrom)
 	newRange.value.end = new Date(oldItem.availableTo)
 

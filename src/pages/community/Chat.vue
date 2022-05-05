@@ -46,14 +46,12 @@ function onError(err: any) {
 }
 
 async function sendMessage(event: any) {
-	console.log(!stompClient.value || !store.state.user || !chat.value)
-	console.log(!stompClient.value)
 	if (!stompClient.value || !store.state.user || !chat.value) return
 	let chatMessage: Message = {
 		senderId: store.state.user.userId,
 		message: currentMessage.value,
 		type: 'CHAT',
-		date: new Date().toISOString(),
+		date: getDateAndTime(),
 		receive: false,
 		chatId: chat.value.chatId,
 	}
@@ -85,7 +83,7 @@ function onMessageReceived(payload: any) {
 		senderId: message.senderId,
 		message: message.message,
 		type: 'CHAT',
-		date: new Date().toISOString(),
+		date: getDateAndTime(),
 		receive: true,
 		chatId: chat.value.chatId,
 	}
@@ -97,6 +95,11 @@ function onMessageReceived(payload: any) {
 	}
 	reRenderChat()
 	status.value = 'loaded'
+}
+
+function getDateAndTime() {
+	let tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+	return new Date(Date.now() - tzoffset).toISOString().slice(0, -1)
 }
 
 async function updateChatName() {}

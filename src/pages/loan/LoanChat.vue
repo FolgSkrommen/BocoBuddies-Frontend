@@ -41,7 +41,9 @@ type loanStatusCode =
 const stompClient = ref<Client>()
 let socket: any
 function connect() {
-	socket = new WebSocket('ws://localhost:8001/ws')
+	const ip = axios.defaults.baseURL?.split('//')[1]
+	console.log(ip)
+	socket = new WebSocket('ws://' + ip + '/ws')
 	stompClient.value = Stomp.over(socket)
 	stompClient.value.connect({}, onConnected, onError)
 }
@@ -78,7 +80,7 @@ async function sendMessage(event: any) {
 		senderId: store.state.user.userId,
 		message: currentMessage.value,
 		type: 'CHAT',
-		date: new Date().toISOString(),
+		date: getDateAndTime(),
 		receive: false,
 		chatId: chat.value.chatId,
 	}
@@ -123,7 +125,7 @@ async function sendLoanRequestWS() {
 		price: price.value,
 		active: false,
 		returned: false,
-		creationDate: new Date().toISOString(),
+		creationDate: getDateAndTime(),
 	}
 	try {
 		console.log(body)
@@ -164,9 +166,9 @@ async function sendLoanAccept() {
 	let loanRequest: PutLoanRequest = {
 		active: true,
 		chatId: loan.value?.chatId,
-		creationDate: new Date().toISOString(),
-		end: new Date().toISOString(),
-		start: new Date().toISOString(),
+		creationDate: getDateAndTime(),
+		end: getDateAndTime(),
+		start: getDateAndTime(),
 		loanId: loan.value.loanId,
 		returned: loanStatus.value === 'RETURNED',
 		price: price.value,
@@ -209,11 +211,11 @@ async function sendLoanDecline() {
 			itemId: chat.value.item.itemId,
 			active: false,
 			returned: false,
-			start: new Date().toISOString(),
-			end: new Date().toISOString(),
+			start: getDateAndTime(),
+			end: getDateAndTime(),
 			price: 0,
 			loaner: store.state.user.userId,
-			creationDate: new Date().toISOString(),
+			creationDate: getDateAndTime(),
 		}
 
 		stompClient.value.send(
@@ -576,6 +578,31 @@ function getPriceUnit(unit: string) {
 	if (unit === 'YEAR') return 'År'
 }
 
+function getDateAndTime() {
+	let tzoffset = new Date().getTimezoneOffset() * 60000 //offset in milliseconds
+	return new Date(Date.now() - tzoffset).toISOString().slice(0, -1)
+}
+
+function cookie() {
+	const seenChatCookie = ('; ' + document.cookie)
+		.split(`; seenChatTutorial=`)
+		.pop()
+		?.split(';')[0]
+
+	if (!seenChatCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Hei. Dette er plattformen for å låne en gjenstand. Den som vil låne må forespørre et lån. Her setter hen pris og tidsrom for lånet' +
+				'. Dette må bli godkjent av den som låner ut, før lånet er bindende. Man kan skriftlig via chat avlyse lånet 24 timer før den skal lånes.' +
+				' Eller brukes chatten for å bestemme pris og liknende, samt hvordan transport vil fungere. Etter lånet må den som låner ut bekrefte at ' +
+				'gjenstanden er levert tilbake. Etter dette kan begge legge igjen en tilbakemelding på hverandre. Hvis noe er uklart les FAQ'
+		)
+		document.cookie = 'seenHomeTutorial=true; max-age=31536000'
+	}
+}
+cookie()
+
+let seenTutorial = ref<boolean>(false)
 const item = ref<Item>()
 const user = ref<User>()
 const lender = ref<User>()
@@ -741,8 +768,8 @@ function reRenderChat() {
 			locale="no"
 			is24hr
 			:min-date="
-				new Date(chat.item.availableFrom) < new Date()
-					? new Date()
+				new Date(chat.item.availableFrom) < getDateAndTime
+					? getDateAndTime
 					: new Date(chat.item.availableFrom)
 			"
 			:max-date="new Date(chat.item.availableTo)"
