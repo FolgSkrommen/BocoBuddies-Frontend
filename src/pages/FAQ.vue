@@ -113,7 +113,11 @@ const questions: Section[] = [
 						<p
 							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
-							<img class="rounded-full" src="/logo.png" alt="" />
+							<img
+								class="rounded-full"
+								src="/logo.png"
+								alt="boco-logo"
+							/>
 						</p>
 					</div>
 					<div
@@ -144,7 +148,12 @@ const questions: Section[] = [
 									/>
 								</svg>
 							</p>
-							<h1>FAQ</h1>
+							<h1 @click="counter++">FAQ</h1>
+							<img
+								v-if="counter >= 10"
+								src="/random.png"
+								alt="random"
+							/>
 						</div>
 						<p
 							class="font-sans inline font-bold text-3xl tracking-tight mb-0 ml-0"

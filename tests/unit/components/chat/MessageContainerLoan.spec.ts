@@ -1,16 +1,17 @@
 import { mount, shallowMount } from '@vue/test-utils'
 import MessageContainerLoan from '../../../../src/components/chat/MessageContainerLoan.vue'
 import { describe, expect, it } from 'vitest'
+import { Chat, Item, Message, User } from '../../../../src/api/schema'
 
 describe('MessageContainerLoan', () => {
-	const chatDataMessage = [
+	const chatDataMessage: Message[] = [
 		{
 			senderId: 1,
 			message: 'Test message',
 			type: 'CHAT',
 			date: new Date().toString(),
 			receive: true,
-			chatId: '1',
+			chatId: 1,
 		},
 	]
 
@@ -42,13 +43,19 @@ describe('MessageContainerLoan', () => {
 		},
 	]
 
-	const chat = {
-		chatId: '1',
-		itemId: '2',
-		chatName: 'Test chatName',
-	}
-
-	const item = {
+	const mockItem: Item = {
+		itemId: 1,
+		position: {
+			lat: 1,
+			lng: 2,
+		},
+		active: true,
+		filters: [
+			{
+				id: 1,
+				value: '123',
+			},
+		],
 		name: 'Item name',
 		description: 'description',
 		price: 100,
@@ -61,6 +68,23 @@ describe('MessageContainerLoan', () => {
 		categories: ['cat1', 'cat2'],
 	}
 
+	let mockUser: User = {
+		firstName: '',
+		lastName: '',
+		rating: 0,
+		trusted: false,
+		userId: 0,
+		username: '',
+		verified: false,
+	}
+
+	const chat: Chat = {
+		chatId: 1,
+		item: mockItem,
+		chatName: 'Test chatName',
+		user: mockUser,
+	}
+
 	let loanStatus = 'UNDEFINED'
 
 	describe('when loaded', () => {
@@ -70,7 +94,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataMessage,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			expect(wrapper.exists()).toBe(true)
@@ -82,7 +106,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataMessage,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const message = wrapper.find('[data-testid="message"]')
@@ -97,7 +121,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const requestButtonDecline = wrapper.find(
@@ -118,7 +142,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const requestButtonDecline = wrapper.find(
@@ -139,7 +163,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="request-h"]')
@@ -155,7 +179,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataRequest,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="request-h"]')
@@ -172,13 +196,13 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toContain('Avtalt lån')
 		})
 
 		it('Accept header comes up when accepted send', () => {
@@ -189,13 +213,13 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toContain('Avtalt lån')
 		})
 
 		it('Returned header comes up when accepted receive', () => {
@@ -207,7 +231,7 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="returned-h"]')
@@ -225,13 +249,13 @@ describe('MessageContainerLoan', () => {
 					messages: chatDataAccept,
 					modelValue: loanStatus,
 					chat: chat,
-					item: item,
+					item: mockItem,
 				},
 			})
 			const request = wrapper.find('[data-testid="returned-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe(' Lån tilbakelevert ')
+			expect(request.element.textContent).toContain(' Lån tilbakelevert ')
 		})
 	})
 
@@ -312,26 +336,26 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(true)).toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(true)).not.toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(true)).not.toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 			it('text white self-end (false)', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(false)).not.toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(false)).toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(false)).not.toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 
@@ -339,13 +363,13 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(undefined)).not.toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(undefined)).not.toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(undefined)).toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 		})

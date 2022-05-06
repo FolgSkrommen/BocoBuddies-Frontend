@@ -89,7 +89,7 @@ const showRateUserPopup = ref(false)
 		/>
 		<div class="grid gap-4">
 			<div class="flex gap-2">
-				<router-link class="place-sel" to="/overview/items">
+				<router-link to="/overview">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<h1>{{ item.name }}</h1>
@@ -122,8 +122,12 @@ const showRateUserPopup = ref(false)
 				<p class="font-bold text-lg" v-else>Tilbakemelding levert</p>
 			</div>
 			<ItemInfo :item="item" />
+			<UserCard
+				:user="lender"
+				show-rating
+				:to="`/user/${lender.userId}`"
+			/>
 		</div>
-		<UserCard :user="lender" show-rating />
 	</div>
 	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>

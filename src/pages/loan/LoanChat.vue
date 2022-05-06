@@ -644,7 +644,7 @@ function reRenderChat() {
 
 		<div class="flex justify-between items-center gap-5">
 			<div class="flex gap-2">
-				<router-link class="place-sel" to="/chats">
+				<router-link to="/chats">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link
@@ -656,6 +656,7 @@ function reRenderChat() {
 						class="w-12 h-12 object-cover rounded"
 						v-if="item"
 						:src="item.images[0]"
+						:alt="item.name"
 					/>
 					<div v-if="item">
 						<p class="font-bold">{{ item.name }}</p>
@@ -677,6 +678,11 @@ function reRenderChat() {
 					class="w-12 h-12 object-cover rounded self-center"
 					v-if="item"
 					:src="getUserToReview()?.profilePicture"
+					:alt="
+						getUserToReview()?.firstName +
+						' ' +
+						getUserToReview()?.lastName
+					"
 				/>
 			</router-link>
 		</div>
@@ -730,7 +736,7 @@ function reRenderChat() {
 					v-if="loanStatus === 'RETURNED' && !hasReviewed"
 					@click="toggleShowRating"
 					data-testid="feedback-button"
-					class="grow bg-purple-500"
+					class="grow"
 					>Gi tilbakemelding</BaseBtn
 				>
 				<BaseBtn

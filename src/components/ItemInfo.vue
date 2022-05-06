@@ -65,7 +65,7 @@ const circleOptions = {
 
 <template>
 	<div class="grid gap-4">
-		<ImageCarousel :images="item.images" />
+		<ImageCarousel :images="item.images" :alt="item.name" />
 		<p>{{ item.description }}</p>
 		<div>
 			<p class="font-bold text-lg">Pris</p>
@@ -100,6 +100,7 @@ const circleOptions = {
 			</p>
 		</div>
 		<DatePicker
+			data-testid="calendar"
 			class="place-self-center pointer-events-none"
 			v-model="range"
 			is-range
@@ -111,7 +112,12 @@ const circleOptions = {
 			<p>{{ item.address }}</p>
 			<p>{{ item.postalCode }}</p>
 		</div>-->
-		<GMapMap :center="item.position" :zoom="13" class="h-96">
+		<GMapMap
+			:center="item.position"
+			:zoom="13"
+			class="h-96"
+			data-testid="map"
+		>
 			<GMapCircle
 				:center="randomCenter(item.position)"
 				:radius="1000"

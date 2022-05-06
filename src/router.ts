@@ -114,6 +114,7 @@ const routes = [
 	},
 	{
 		path: '/overview',
+		redirect: '/overview/items',
 		component: Overview,
 		meta: {
 			requiresAuth: true,
