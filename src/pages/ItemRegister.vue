@@ -224,6 +224,22 @@ async function registerItem() {
 		store.dispatch('error', error.message)
 	}
 }
+
+function cookie() {
+	const seenItemCookie = ('; ' + document.cookie)
+		.split(`; seenSettingsTutorial=`)
+		.pop()
+		?.split(';')[0]
+
+	if (!seenItemCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Her kan du opprette nye items, legg inn all nødvendig informasjon og klikk send. Bilder er ikke nødvenig, men anbefalt. Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenSettingsTutorial=true; max-age=31536000'
+	}
+}
+cookie()
 </script>
 
 <template>

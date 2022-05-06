@@ -30,7 +30,7 @@ const questions: Section[] = [
 			{
 				header: 'Hvorfor fungerer ingen av funskjonaliteten?',
 				paragraph:
-					'Sjekk at du er logget inn, dersom du er logget inn dobbelt sjekk at du har verfisert brukeren din via email lenken.&nbsp;',
+					'Sjekk at du er logget inn, dersom du er logget inn dobbelt sjekk at du har verfisert brukeren din via email lenken.',
 			},
 			{
 				header: 'Jeg har ikke fått verfiserings mail?',
