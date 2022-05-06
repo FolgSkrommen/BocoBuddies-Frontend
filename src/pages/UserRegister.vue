@@ -119,6 +119,8 @@ const notValid = computed(
 				type="lastName"
 			/>
 
+			<span class="my-4"></span>
+
 			<BaseInput
 				v-model.lazy="email"
 				label="E-post"
@@ -126,6 +128,7 @@ const notValid = computed(
 				:error="errors.email"
 				data-testid="email-input"
 			/>
+
 			<BaseInput
 				v-model="phoneNumber"
 				label="Telefon"
@@ -133,6 +136,8 @@ const notValid = computed(
 				type="number"
 				data-testid="phoneNumber-input"
 			/>
+
+			<span class="my-4"></span>
 
 			<BaseInput
 				v-model="address"
@@ -146,6 +151,7 @@ const notValid = computed(
 				:error="errors.postalCode"
 				data-testid="postalCode-input"
 			/>
+			<span class="my-4"></span>
 
 			<BaseInput
 				v-model="password"

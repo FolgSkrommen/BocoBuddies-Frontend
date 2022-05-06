@@ -25,6 +25,8 @@ import EditItem from './pages/EditItem.vue'
 import FAQ from './pages/FAQ.vue'
 import { store } from './store'
 
+import NotFound from './pages/NotFound.vue'
+
 const routes = [
 	{
 		path: '/',
@@ -171,6 +173,15 @@ const routes = [
 		meta: {
 			requiresAuth: false,
 		},
+	},
+	{
+		path: '/:catchAll(.*)',
+		redirect: '/404',
+	},
+	{
+		path: '/404',
+		name: 'Not Found',
+		component: NotFound,
 	},
 ]
 
