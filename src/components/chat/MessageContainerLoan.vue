@@ -81,11 +81,11 @@ function isValidHttpUrl(string: string) {
 function styleType(received: boolean) {
 	switch (received) {
 		case true:
-			return 'bg-slate-400 text-black '
+			return 'bg-slate-700 text-black '
 		case false:
-			return 'bg-blue-500 text-white justify-self-end'
+			return 'bg-blue-700 text-white justify-self-end'
 		default:
-			return 'bg-blue-500 text-white'
+			return 'bg-blue-700 text-white'
 	}
 }
 
@@ -136,13 +136,13 @@ function messagePlacement(receive: boolean) {
 				class="w-2/3 rounded-xl border p-6 flex flex-col gap-3 text-center"
 				:class="styleType(message.receive)"
 			>
-				<div
-					v-if="
-						modelValue === 'ACCEPTED' || message.type === 'ACCEPT'
-					"
-				>
-					<h3 class="text-2xl" data-testid="accept-h">Avtalt lån</h3>
-					<h3 class="text-xl" data-testid="accept-h">Ikke Levert</h3>
+				<div v-if="modelValue === 'ACCEPTED'">
+					<h3 class="text-2xl text-white" data-testid="accept-h">
+						Avtalt lån
+					</h3>
+					<h3 class="text-xl text-white" data-testid="accept-h">
+						Ikke Levert
+					</h3>
 				</div>
 
 				<h3
@@ -156,7 +156,7 @@ function messagePlacement(receive: boolean) {
 				>
 					Lån tilbakelevert
 				</h3>
-				<h3 v-else class="text-2xl" data-testid="request-h">
+				<h3 v-else class="text-2xl text-white" data-testid="request-h">
 					Forespørsel
 				</h3>
 

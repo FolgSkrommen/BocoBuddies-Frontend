@@ -10,6 +10,7 @@ import { GetItemRequest, GetItemResponse } from '../api/item'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { PutItemEditRequest } from '../api/item/edit'
 import { DatePicker } from 'v-calendar'
+import BaseBtn from '../components/base/BaseBtn.vue'
 
 const router = useRouter()
 const { params } = useRoute()
@@ -250,7 +251,11 @@ const showEditCategory = ref(false)
 <template>
 	<LoadingIndicator v-if="getStatus === 'loading'" />
 	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
-		<button v-if="item" @click="resetItemFromOld" class="bg-red-500">
+		<button
+			v-if="item"
+			@click="resetItemFromOld"
+			class="bg-red-500 hover:bg-red-700"
+		>
 			Tilbakestill
 		</button>
 		<div class="flex gap-4 items-center">
@@ -383,6 +388,6 @@ const showEditCategory = ref(false)
 				</select>
 			</div>
 		</div>
-		<button @click="updateItem">Lagre</button>
+		<BaseBtn @click="updateItem" :to="'/overview/items'">Lagre</BaseBtn>
 	</div>
 </template>

@@ -122,8 +122,12 @@ const showRateUserPopup = ref(false)
 				<p class="font-bold text-lg" v-else>Tilbakemelding levert</p>
 			</div>
 			<ItemInfo :item="item" />
+			<UserCard
+				:user="lender"
+				show-rating
+				:to="`/user/${lender.userId}`"
+			/>
 		</div>
-		<UserCard :user="lender" show-rating />
 	</div>
 	<p v-if="status === 'error'">{{ errorMessage }}</p>
 </template>

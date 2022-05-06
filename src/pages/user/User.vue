@@ -280,7 +280,10 @@ onBeforeRouteUpdate((to, from) => {
 						</p>
 					</div>
 
-					<div class="flex">
+					<router-link
+						:to="`/user/${review.user.userId}`"
+						class="flex"
+					>
 						<div class="flex flex-col">
 							<p>{{ review.user.firstName }}</p>
 							<p>{{ review.user.lastName }}</p>
@@ -291,7 +294,7 @@ onBeforeRouteUpdate((to, from) => {
 							:src="review.user.profilePicture"
 							:alt="review.user.username"
 						/>
-					</div>
+					</router-link>
 				</div>
 			</Card>
 

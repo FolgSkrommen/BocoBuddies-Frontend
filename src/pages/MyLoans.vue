@@ -375,7 +375,7 @@ const showFiltersAndSort = ref(false)
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
-			@item-clicked="properRedirect"
+			redirect="my-loan"
 			@load-more-items="loadMoreItems"
 		/>
 		<h2
