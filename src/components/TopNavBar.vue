@@ -10,7 +10,14 @@ import { UserIcon } from '@heroicons/vue/solid'
 			class="container mx-auto px-4 py-2 flex justify-between items-center"
 		>
 			<router-link to="/">
-				<img src="/BoCo_finished.png" alt="boco logo" class="w-16" />
+				<img
+					src="/BoCo_finished.png"
+					alt="boco logo"
+					class="w-16"
+					data-bs-toggle="tooltip"
+					data-bs-placement="bottom"
+					title="Hjem"
+				/>
 			</router-link>
 			<div class="flex gap-8 items-center">
 				<router-link to="/">Hjem</router-link>
