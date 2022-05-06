@@ -29,11 +29,12 @@ const { modelValue, error } = defineProps<Props>()
 			@input="updateValue"
 			@keyup.enter="search"
 		/>
-		<Button
+		<button
 			@click="search"
 			class="rounded-l-none bg-green-600"
 			data-testid="search-button"
-			><SearchIcon class="w-6"
-		/></Button>
+		>
+			<SearchIcon class="w-6" />
+		</button>
 	</div>
 </template>

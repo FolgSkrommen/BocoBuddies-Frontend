@@ -8,6 +8,7 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import { Chat, FriendChat, Message, User } from '../../api/schema'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 
 import Stomp, { Client } from 'webstomp-client'
 import { useRoute } from 'vue-router'
@@ -171,11 +172,14 @@ const chatName = computed(() => {
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
-	<div class="h-96 flex-col w-full" v-else>
+
+	<!--TODO fix height-->
+	<div class="h-96 flex-col w-full chatHeight" v-else>
 		<div class="flex gap-2">
-			<router-link class="place-sel" to="/community"> Back </router-link>
+			<router-link class="place-sel" to="/community">
+				<ChevronLeftIcon class="h-12 w-12" />
+			</router-link>
 			<h1 v-if="chat && chat.chatName">{{ chatName }}</h1>
-			<h1 v-else>Chat</h1>
 		</div>
 
 		<MessageContainer
@@ -205,3 +209,8 @@ const chatName = computed(() => {
 		</form>
 	</div>
 </template>
+<style scoped>
+.chatHeight {
+	height: calc(100vh - 200px);
+}
+</style>
