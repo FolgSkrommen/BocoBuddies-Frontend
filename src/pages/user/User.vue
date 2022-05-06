@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
-import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
+import {
+	CheckCircleIcon,
+	RefreshIcon,
+	StarIcon,
+	UserAddIcon,
+} from '@heroicons/vue/solid'
 import { CogIcon } from '@heroicons/vue/outline'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import { User, Review } from '../../api/schema'
@@ -12,9 +17,10 @@ import { GetUserRequest } from '../../api/user'
 import { PostUserFriendsRequest } from '../../api/user/friends'
 import Card from '../../components/Card.vue'
 import UserCard from '../../components/UserCard.vue'
+import router from '../../router'
 
 const { params } = useRoute()
-const id = parseInt(params.id as string)
+let id: number = parseInt(params.id as string)
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
@@ -41,6 +47,8 @@ getReviews()
 
 const buddies = ref<User[]>()
 
+const addUserToggle = ref<boolean>(false)
+
 async function getUser() {
 	getUserStatus.value = 'loading'
 
@@ -52,7 +60,9 @@ async function getUser() {
 		const userRes = await axios.get('/user', {
 			params,
 		})
-		const data = userRes.data as User
+		let data = userRes.data as User
+
+		data.rating = data.rating
 		user.value = data
 		getUserStatus.value = 'loaded'
 	} catch (error: any) {
@@ -71,6 +81,15 @@ async function getReviews() {
 		})
 		const data = reviewsRes.data as Review[]
 		reviews.value = data
+
+		let avg = 0
+		for (let review of reviews.value) {
+			if (review) avg += review.rating
+		}
+		if (reviews.value?.length !== 0) avg = avg / reviews.value?.length
+
+		if (!store.state.user) return
+		store.state.user.rating = avg
 	} catch (error: any) {
 		getUserStatus.value = 'error'
 		store.dispatch('error', error.message)
@@ -81,7 +100,7 @@ async function getBuddies() {
 	if (!store.state.user) return
 	try {
 		const res = await axios.get('/user/friends', {
-			params: { userId: user.value?.userId },
+			params: { userId: id },
 		})
 		buddies.value = res.data as User[]
 	} catch (error: any) {
@@ -117,11 +136,22 @@ async function addUser() {
 		const params: PostUserFriendsRequest = { userId: id }
 		const res = await axios.post('/user/friends', null, { params })
 		const data = res.data as boolean
+		addUserToggle.value = true
 	} catch (error) {}
 }
 
 const isOwnProfile = computed(() => {
 	return user.value?.userId === store.state.user?.userId
+})
+
+onBeforeRouteUpdate((to, from) => {
+	id = parseInt(to.params.id as string)
+
+	buddies.value = []
+	reviews.value = []
+	getUser()
+	getBuddies()
+	getReviews()
 })
 </script>
 
@@ -157,7 +187,7 @@ const isOwnProfile = computed(() => {
 				<div class="flex items-center">
 					<h4 class="text-slate-500">@{{ user.username }}</h4>
 					<CheckCircleIcon
-						v-if="user.verified"
+						v-if="user.trusted"
 						class="h-5 w-5 text-blue-500"
 					/>
 				</div>
@@ -165,7 +195,7 @@ const isOwnProfile = computed(() => {
 				<div class="flex items-center gap-2">
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p class="text-sm font-bold text-slate-900">
-						{{ user.rating }}
+						{{ Math.round(user.rating * 10) / 10 }}
 					</p>
 				</div>
 			</div>
@@ -185,8 +215,12 @@ const isOwnProfile = computed(() => {
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 			data-testid="add-friend-btn"
+			:disabled="addUserToggle == true"
 		>
-			<UserAddIcon class="w-6" /> Legg til buddy
+			<div v-if="addUserToggle">Forespørsel sendt!</div>
+			<div class="flex gap-2" v-else>
+				<UserAddIcon class="w-6" /> Legg til buddy
+			</div>
 		</button>
 
 		<div class="flex gap-2 w-full">

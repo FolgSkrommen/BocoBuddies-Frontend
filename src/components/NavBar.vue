@@ -52,7 +52,10 @@ import {
 					:alt="store.state.user.username"
 				/>
 				<UserIcon v-else class="w-8 h-8" />
-				<p class="text-slate-300 text-sm">Profil</p>
+				<p class="text-slate-300 text-sm">
+					<slot v-if="store.state.user"> Profil </slot>
+					<slot v-else> Profil </slot>
+				</p>
 			</router-link>
 		</div>
 	</nav>

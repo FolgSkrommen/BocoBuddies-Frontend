@@ -6,6 +6,7 @@ import ItemInfo from '../components/ItemInfo.vue'
 import { Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import { computed, ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import UserCard from '../components/UserCard.vue'
 import RateUserPopup from '../components/RateUserPopup.vue'
 import { useRoute } from 'vue-router'
@@ -54,7 +55,7 @@ async function getItem() {
 		store.dispatch('error', error.message)
 	}
 }
-
+getItem()
 async function getLoan() {
 	status.value = 'loading'
 	const params: GetLoanRequest = {
@@ -66,6 +67,8 @@ async function getLoan() {
 			params,
 		})
 		const data: GetLoanResponse = res.data
+		console.log('DATA' + data)
+
 		item.value = data.item
 		loaner.value = data.user
 		loan.value = data.loan
@@ -74,7 +77,7 @@ async function getLoan() {
 		getItem()
 	}
 }
-getLoan()
+//getLoan()
 const showRateUserPopup = ref(false)
 </script>
 
@@ -88,7 +91,12 @@ const showRateUserPopup = ref(false)
 			:loan="undefined"
 		/>
 		<div class="grid gap-4">
-			<h1>{{ item.name }}</h1>
+			<div class="flex gap-2">
+				<router-link class="place-sel" to="/overview/items">
+					<ChevronLeftIcon class="h-12 w-12" />
+				</router-link>
+				<h1>{{ item.name }}</h1>
+			</div>
 
 			<div v-if="loan && loan.active" class="grid gap-4">
 				<div v-if="loan.returned" class="grid gap-4">
@@ -118,7 +126,7 @@ const showRateUserPopup = ref(false)
 				<UserCard :user="loaner" color="green" show-rating />
 				<BaseBtn>Gå til chat</BaseBtn>
 			</div>
-			<BaseBtn v-else color="red">Slett</BaseBtn>
+			<!--<BaseBtn v-else color="red">Slett</BaseBtn>-->
 			<BaseBtn :to="`/edit-item/${item.itemId}`">Rediger</BaseBtn>
 			<ItemInfo :item="item" />
 		</div>

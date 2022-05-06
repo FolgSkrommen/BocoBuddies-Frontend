@@ -24,6 +24,8 @@ describe('when loaded', () => {
 		wrapper.vm.status = 'loaded'
 		await wrapper.vm.$forceUpdate()
 		expect(wrapper.find('[data-testid="header"]').exists()).toBe(true)
-		expect(wrapper.find('[data-testid="header"]').text()).toBe('Samtaler')
+		expect(wrapper.find('[data-testid="header"]').text()).toBe(
+			'Lånesamtaler'
+		)
 	})
 })

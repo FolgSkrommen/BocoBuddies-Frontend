@@ -27,7 +27,6 @@ function getDateAndTime() {
 
 async function handleRate() {
 	if (rating.value === -1) return
-	//TODO: ADD Method
 	if (!loan) return
 	if (!loan.loanId) return
 	if (!user) return
@@ -62,7 +61,7 @@ async function handleRate() {
 		<div class="flex gap-2 place-self-center">
 			<StarIcon
 				v-for="(icon, i) in 5"
-				@click="rating = i + 1"
+				@click="rating = i"
 				class="h-8 w-8 bg-black text-white rounded-full p-1"
 				:class="i < rating + 1 ? 'text-yellow-400' : ''"
 			/>

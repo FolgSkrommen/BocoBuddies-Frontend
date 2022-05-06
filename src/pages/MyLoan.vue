@@ -5,6 +5,7 @@ import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 import UserCard from '../components/UserCard.vue'
 import { computed, ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import RateUserPopup from '../components/RateUserPopup.vue'
 import LoadingIndicator from '../components/base/LoadingIndicator.vue'
 import axios from 'axios'
@@ -19,7 +20,7 @@ type Status = 'loading' | 'loaded' | 'error'
 
 const status = ref<Status>()
 const errorMessage = ref()
-
+const hasReviewed = ref<boolean>(false)
 const item = ref<Item>()
 const lender = ref<User>()
 const loan = ref<Loan>()
@@ -32,6 +33,16 @@ const range = computed(() => {
 	}
 })
 
+async function hasReviewedCheck() {
+	const res = await axios.get('/review/hasReviewed', {
+		params: {
+			loanId: id,
+		},
+	})
+	console.log(res.data)
+	hasReviewed.value = res.data
+}
+
 async function getLoan() {
 	status.value = 'loading'
 	try {
@@ -43,16 +54,26 @@ async function getLoan() {
 			params,
 		})
 		const data: GetLoanResponse = res.data
+		console.log(data)
+
 		item.value = data.item
 		lender.value = data.user
 		loan.value = data.loan
+		console.log(loan.value)
+
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'
 		errorMessage.value = error
 	}
 }
+
+function confirmReview() {
+	hasReviewed.value = true
+	showRateUserPopup.value = false
+}
 getLoan()
+hasReviewedCheck()
 const showRateUserPopup = ref(false)
 </script>
 
@@ -62,16 +83,23 @@ const showRateUserPopup = ref(false)
 		<RateUserPopup
 			v-show="showRateUserPopup"
 			@exit="showRateUserPopup = false"
+			@confirm="confirmReview()"
 			:user="lender"
+			:loan="loan"
 		/>
 		<div class="grid gap-4">
-			<h1>{{ item.name }}</h1>
+			<div class="flex gap-2">
+				<router-link class="place-sel" to="/overview/items">
+					<ChevronLeftIcon class="h-12 w-12" />
+				</router-link>
+				<h1>{{ item.name }}</h1>
+			</div>
 			<div v-if="!loan.returned" class="grid gap-4">
 				<div>
 					<p class="font-bold text-lg">Låneperiode</p>
 					<p>
-						{{ new Date(item.availableFrom).toLocaleString() }} -
-						{{ new Date(item.availableTo).toLocaleString() }}
+						{{ new Date(loan.start).toLocaleString() }} -
+						{{ new Date(loan.end).toLocaleString() }}
 					</p>
 				</div>
 				<DatePicker
@@ -83,13 +111,15 @@ const showRateUserPopup = ref(false)
 					locale="no"
 				/>
 			</div>
-			<BaseBtn v-if="!loan.returned">Gå til chat</BaseBtn>
-			<BaseBtn v-if="!loan.returned" color="red">Avlys</BaseBtn>
+			<BaseBtn :to="'/chat/' + loan.chatId">Gå til chat</BaseBtn>
 			<div v-if="loan.returned" class="grid gap-4">
 				<p class="font-bold text-lg">Objektet er returnert</p>
-				<BaseBtn @click="showRateUserPopup = true" v-if="loan.returned"
+				<BaseBtn
+					@click="showRateUserPopup = true"
+					v-if="loan.returned && !hasReviewed"
 					>Gi tilbakemelding</BaseBtn
 				>
+				<p class="font-bold text-lg" v-else>Tilbakemelding levert</p>
 			</div>
 			<ItemInfo :item="item" />
 		</div>

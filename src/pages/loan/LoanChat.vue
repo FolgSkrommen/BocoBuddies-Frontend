@@ -128,7 +128,6 @@ async function sendLoanRequestWS() {
 		creationDate: getDateAndTime(),
 	}
 	try {
-		console.log(body)
 		const res = await axios.post('/loan', body)
 		loan.value = res.data as PostLoanResponse
 		body.loanId = loan.value.loanId
@@ -167,14 +166,16 @@ async function sendLoanAccept() {
 		active: true,
 		chatId: loan.value?.chatId,
 		creationDate: getDateAndTime(),
-		end: getDateAndTime(),
-		start: getDateAndTime(),
+		end: loan.value.end,
+		start: loan.value.start,
 		loanId: loan.value.loanId,
 		returned: loanStatus.value === 'RETURNED',
 		price: price.value,
 		loaner: store.state.user.userId,
 		itemId: loan.value.itemId,
 	}
+	console.log('HERE!!!')
+
 	console.log(loanRequest)
 	try {
 		const res = await axios.put('/loan', loanRequest)
@@ -211,8 +212,8 @@ async function sendLoanDecline() {
 			itemId: chat.value.item.itemId,
 			active: false,
 			returned: false,
-			start: getDateAndTime(),
-			end: getDateAndTime(),
+			start: loan.value ? loan.value.start : '',
+			end: loan.value ? loan.value.end : '',
 			price: 0,
 			loaner: store.state.user.userId,
 			creationDate: getDateAndTime(),
@@ -594,11 +595,9 @@ function cookie() {
 		store.dispatch(
 			'info',
 			'Hei. Dette er plattformen for å låne en gjenstand. Den som vil låne må forespørre et lån. Her setter hen pris og tidsrom for lånet' +
-				'. Dette må bli godkjent av den som låner ut, før lånet er bindende. Man kan skriftlig via chat avlyse lånet 24 timer før den skal lånes.' +
-				' Eller brukes chatten for å bestemme pris og liknende, samt hvordan transport vil fungere. Etter lånet må den som låner ut bekrefte at ' +
-				'gjenstanden er levert tilbake. Etter dette kan begge legge igjen en tilbakemelding på hverandre. Hvis noe er uklart les FAQ'
+				'. Dette må bli godkjent av den som låner ut, før lånet er bindende. Hvis noe er uklart les FAQ'
 		)
-		document.cookie = 'seenHomeTutorial=true; max-age=31536000'
+		document.cookie = 'seenChatTutorial=true; max-age=31536000'
 	}
 }
 cookie()
@@ -633,7 +632,7 @@ function reRenderChat() {
 </script>
 <template>
 	<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
-	<div class="h-[60vh] flex-col w-full" v-else>
+	<div class="h-[70vh] flex-col w-full chatHeight" v-else>
 		<RateUserPopup
 			v-if="lender && loan && getUserToReview() !== undefined"
 			v-show="showRateUserPopup"
@@ -796,3 +795,8 @@ function reRenderChat() {
 		</div>
 	</BasePopup>
 </template>
+<style scoped>
+.chatHeight {
+	height: calc(100vh - 280px);
+}
+</style>

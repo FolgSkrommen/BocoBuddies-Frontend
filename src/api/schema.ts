@@ -84,6 +84,7 @@ export interface Chat {
 	item?: Item
 	members?: User[]
 	loan?: Loan
+	user: User
 }
 
 export interface FriendChat {

@@ -10,7 +10,7 @@ import {
 } from 'vue'
 import Message from './Message.vue'
 import BaseBtn from '../base/BaseBtn.vue'
-import { Chat, Item, Message as MessageInterface } from '../../api/schema'
+import { Chat, Item, Message as MessageInterface, User } from '../../api/schema'
 
 type loanStatus =
 	| 'PENDING'
@@ -49,7 +49,13 @@ const { messages, modelValue, chat, item } = defineProps<Props>()
 function getProperDateTime(dateTime: string) {
 	let time = dateTime.substring(11, 16)
 	let date = dateTime.substring(0, 10)
-	return date + ' - ' + time
+	if (new Date().toISOString().substring(0, 10) === date) return time
+	return date
+}
+
+function getProperDateHour(dateTime: string) {
+	let date = dateTime.substring(0, 16)
+	return date.replace('T', ' ')
 }
 
 function getPriceUnit(unit: string) {
@@ -82,6 +88,17 @@ function styleType(received: boolean) {
 			return 'bg-blue-500 text-white'
 	}
 }
+
+function messagePlacement(receive: boolean) {
+	switch (receive) {
+		case true:
+			return 'place-self-start'
+		case false:
+			return 'place-self-end'
+		default:
+			return 'place-self-end'
+	}
+}
 </script>
 <template>
 	<div
@@ -89,20 +106,29 @@ function styleType(received: boolean) {
 		id="box"
 	>
 		<div class="grid" v-for="(message, i) in messages" :key="i">
-			<Message
+			<div
 				v-if="message.type === 'CHAT'"
-				:id="i"
-				:receive="!message.receive"
+				class="text-center w-fit my-2"
+				:class="messagePlacement(message.receive)"
 			>
-				<a
-					v-if="message.message && isValidHttpUrl(message.message)"
-					:href="message.message"
-					class="text-decoration-line: underline white"
-				>
-					<div data-testid="message">{{ message.message }}</div>
-				</a>
-				<div data-testid="message" v-else>{{ message.message }}</div>
-			</Message>
+				<p v-if="message.date" class="text-xs">
+					{{ getProperDateTime(message.date) }}
+				</p>
+				<Message :id="i" :receive="!message.receive" class="w-fit">
+					<a
+						v-if="
+							message.message && isValidHttpUrl(message.message)
+						"
+						:href="message.message"
+						class="text-decoration-line: underline white"
+					>
+						<div data-testid="message">{{ message.message }}</div>
+					</a>
+					<div data-testid="message" v-else>
+						{{ message.message }}
+					</div>
+				</Message>
+			</div>
 
 			<!--Kvittering-->
 			<div
@@ -136,10 +162,10 @@ function styleType(received: boolean) {
 				<!--Tidsintervall-->
 				<div>
 					<h4 v-if="message.start">
-						Fra: {{ getProperDateTime(message.start) }}
+						Fra: {{ getProperDateHour(message.start) }}
 					</h4>
 					<h4 v-if="message.stop">
-						Til: {{ getProperDateTime(message.stop) }}
+						Til: {{ getProperDateHour(message.stop) }}
 					</h4>
 				</div>
 

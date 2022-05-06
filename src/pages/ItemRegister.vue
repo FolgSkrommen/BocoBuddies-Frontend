@@ -5,6 +5,7 @@ import BaseButton from '../components/base/BaseBtn.vue'
 import BaseDropdown from '../components/base/BaseDropdown.vue'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { DatePicker } from 'v-calendar'
+import { ChevronLeftIcon } from '@heroicons/vue/outline'
 
 import axios from 'axios'
 
@@ -22,7 +23,10 @@ import { PostItemRegisterRequest } from '../api/item/register'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
-	description: yup.string().required('Beskrivelse er påkrevd'),
+	description: yup
+		.string()
+		.required('Beskrivelse er påkrevd')
+		.max(254, 'Maks 255 tegn'),
 	price: yup.string().required('Pris er påkrevd'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
@@ -228,7 +232,12 @@ async function registerItem() {
 		class="grid w-full gap-y-6"
 		@submit.prevent="registerItem"
 	>
-		<h1 data-testid="header">Ny gjenstand</h1>
+		<div class="flex gap-2">
+			<router-link class="place-sel" to="/overview/items">
+				<ChevronLeftIcon class="h-12 w-12" />
+			</router-link>
+			<h1 data-testid="header">Ny gjenstand</h1>
+		</div>
 		<BaseInput
 			data-testid="title-input"
 			v-model.lazy="title"
@@ -347,7 +356,7 @@ async function registerItem() {
 
 			<input
 				type="file"
-				accept="image/*"
+				accept="image/jpeg"
 				data-testid="image-input"
 				@input="event => uploadImage(event.target)"
 				multiple

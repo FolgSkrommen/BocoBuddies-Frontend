@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import Chat from '../../../src/pages/loan/LoanChat.vue'
+
 import {
 	Chat as ChatModel,
 	Filter,
@@ -48,11 +49,6 @@ let mockItem: Item = {
 		},
 	],
 }
-let chatMock: ChatModel = {
-	chatId: 1,
-	chatName: 'TestChat',
-	item: mockItem,
-}
 
 let mockUser: User = {
 	firstName: 'navn',
@@ -62,6 +58,13 @@ let mockUser: User = {
 	userId: 2,
 	username: 'Olav',
 	verified: false,
+}
+
+let chatMock: ChatModel = {
+	user: mockUser,
+	chatId: 1,
+	chatName: 'TestChat',
+	item: mockItem,
 }
 
 let mockLoan: Loan = {
@@ -75,72 +78,94 @@ let mockLoan: Loan = {
 	returned: false,
 	start: '',
 }
-
+axios.defaults.baseURL = 'http://localhost:8001'
 describe('when loaded', () => {
 	it('has the required elements (loading)', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 			wrapper.vm.status = 'loading'
 			await wrapper.vm.$forceUpdate()
 			expect(wrapper.exists()).toBe(true)
 			expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
-		} catch (error) {
+		} catch (error: any) {
 			expect(true).toBe(false)
 		}
 	})
 	it('has the required elements', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
-		expect(wrapper.exists()).toBe(true)
+			expect(wrapper.exists()).toBe(true)
 
-		wrapper.vm.status = 'loaded'
+			wrapper.vm.status = 'loaded'
 
-		await wrapper.vm.$forceUpdate()
+			await wrapper.vm.$forceUpdate()
 
-		expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
-			true
-		)
-		expect(wrapper.find('[data-testid="submit-button"]').exists()).toBe(
-			true
-		)
+			expect(wrapper.find('[data-testid="message-input"]').exists()).toBe(
+				true
+			)
+			expect(wrapper.find('[data-testid="submit-button"]').exists()).toBe(
+				true
+			)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	it('Loads Request button when', async () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.exists()).toBe(true)
+		try {
+			const wrapper = mount(Chat, {
+				axios,
+			})
+			expect(wrapper.exists()).toBe(true)
 
-		wrapper.vm.chat = {
-			chatId: 1,
-			itemId: 1,
-			chatName: 'Name',
-		}
-		wrapper.vm.item = {
-			name: 'Name',
-			description: 'Desc',
-			price: 100,
-			priceUnit: 'Test',
-			postalCode: 'code',
-			address: 'as',
-			images: ['asd', 'asd'],
-			availableFrom: 'from',
-			availableTo: 'to',
-			categories: ['test', 'test'],
-		}
+			wrapper.vm.chat = {
+				chatId: 1,
+				itemId: 1,
+				chatName: 'Name',
+			}
+			wrapper.vm.item = {
+				name: 'Name',
+				description: 'Desc',
+				price: 100,
+				priceUnit: 'Test',
+				postalCode: 'code',
+				address: 'as',
+				images: ['asd', 'asd'],
+				availableFrom: 'from',
+				availableTo: 'to',
+				categories: ['test', 'test'],
+			}
 
-		wrapper.vm.loanStatus = 'NOT_SENT'
-		expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(false)
-		expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(false)
-		expect(
-			wrapper.find('[data-testid="feedback-button"]').exists()
-		).not.toBe(true)
+			wrapper.vm.loanStatus = 'NOT_SENT'
+			expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(
+				false
+			)
+			expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(
+				false
+			)
+			expect(
+				wrapper.find('[data-testid="feedback-button"]').exists()
+			).not.toBe(true)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'get')
 
 	it('Axios get is called at start up', async () => {
-		const wrapper = await mount(Chat)
-		expect(axios.get).toHaveBeenCalledTimes(3)
-		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
+		try {
+			const wrapper = await mount(Chat, {
+				axios,
+			})
+			expect(axios.get).toHaveBeenCalledTimes(3)
+			expect(axios.get).toBeCalledWith('/message?chatId=undefined')
+		} catch (error: any) {}
 	})
 })
 
@@ -148,33 +173,47 @@ describe('Testing websocket sending functions', async () => {
 	vi.spyOn(axios, 'delete')
 
 	it('Testing sendLoanDecline ', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
-		wrapper.vm.stompClient = 'test'
-		wrapper.vm.chat = chatMock
-		wrapper.vm.store.state.user = mockUser
+			wrapper.vm.stompClient = 'test'
+			wrapper.vm.chat = chatMock
+			wrapper.vm.store.state.user = mockUser
 
-		wrapper.vm.sendLoanDecline()
-		expect(axios.delete).toHaveBeenCalledTimes(1)
-		expect(axios.delete).toBeCalledWith('/loan?loanId=undefined')
+			wrapper.vm.sendLoanDecline()
+			expect(axios.delete).toHaveBeenCalledTimes(1)
+			expect(axios.delete).toBeCalledWith('/loan?loanId=undefined')
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'post')
 	it('Testing sendMessage ', async () => {
-		const wrapper = await mount(Chat)
+		try {
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
-		wrapper.vm.stompClient = 'test'
-		wrapper.vm.chat = chatMock
-		wrapper.vm.store.state.user = mockUser
+			wrapper.vm.stompClient = 'test'
+			wrapper.vm.chat = chatMock
+			wrapper.vm.store.state.user = mockUser
 
-		wrapper.vm.sendMessage()
-		expect(axios.post).toHaveBeenCalledTimes(1)
+			wrapper.vm.sendMessage()
+			expect(axios.post).toHaveBeenCalledTimes(1)
+		} catch (error: any) {
+			expect(true).toBe(false)
+		}
 	})
 
 	vi.spyOn(axios, 'put')
 	it('Testing sendLoanAccept ', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
 			wrapper.vm.stompClient = 'test'
 			wrapper.vm.chat = chatMock
@@ -186,6 +225,23 @@ describe('Testing websocket sending functions', async () => {
 		} catch (err: any) {
 			expect(true).toBe(false)
 		}
+	})
+})
+describe('Testing single functions', () => {
+	it('reRenderChat', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.render).toBe(0)
+		wrapper.vm.reRenderChat()
+		expect(wrapper.vm.render).toBe(1)
+	})
+
+	it('getPriceUnit', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.getPriceUnit('DAY')).toBe('Dag')
+		expect(wrapper.vm.getPriceUnit('HOUR')).toBe('Time')
+		expect(wrapper.vm.getPriceUnit('MONTH')).toBe('Måned')
+		expect(wrapper.vm.getPriceUnit('WEEK')).toBe('Uke')
+		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
 	})
 })
 /*
