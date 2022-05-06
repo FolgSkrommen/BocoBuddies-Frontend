@@ -322,7 +322,7 @@ cookie()
 		>
 		<form
 			v-if="showChangePassword"
-			class="grid gap-4 border border-slate-400 p-2"
+			class="grid gap-4 border border-slate-400 rounded-xl p-2"
 			@submit.prevent="changePassword"
 		>
 			<BaseInput
