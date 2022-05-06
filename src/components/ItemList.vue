@@ -63,7 +63,7 @@ function getPriceUnit(unit: string) {
 
 					<div
 						v-else
-						class="grid gap-4"
+						class="grid gap-4 cursor-pointer"
 						@click="itemClicked(item, index)"
 					>
 						<img
