@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import Chat from '../../../src/pages/loan/LoanChat.vue'
 
@@ -244,41 +244,76 @@ describe('Testing single functions', () => {
 		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
 	})
 })
-/*
+
 describe('Testing websocket receiving functions', async () => {
-	const wrapper = mount(Chat)
-	expect(wrapper.exists()).toBe(true)
-
-	const wrapper = mount(Chat)
-	wrapper.vm.price = 100
-	wrapper.vm.stompClient = 'test'
-	wrapper.vm.chat = chatMock
-	wrapper.vm.store.state.user = mockUser
-
-	it('Testing onLoanAccept loan accepted', async () => {
-		mockPayload.body.active = true
-		mockPayload.body.returned = false
-		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
-		expect(wrapper.vm.loanStatus === 'ACCEPTED')
+	let wrapper: any
+	beforeEach(() => {
+		wrapper = mount(Chat)
+		wrapper.vm.price = 100
+		wrapper.vm.stompClient = 'test'
+		wrapper.vm.chat = chatMock
+		wrapper.vm.store.state.user = mockUser
 	})
+
+	it('onMessageReceived', () => {
+		let mockPayload2 = {
+			body: '{"id":0, "chatId":20, "senderId":1, "recipientId":null, "type":"CHAT", "message":"test", "date":"2022-05-06T14:13:18.066+00:00", "status":null}',
+		}
+
+		expect(wrapper.vm.messages.length).toBe(0)
+		wrapper.vm.onMessageReceived(mockPayload2)
+		expect(wrapper.vm.messages.length).toBe(1)
+	})
+
+	it('onRequestReceived', () => {
+		let mockPayload2 = {
+			body: '{"loanId":17, "item":2, "loaner":10, "chatId":25, "start":"2022-05-10T12:40:34.014", "end":"2022-05-19T12:40:34.014", "active":false, "returned":false, "creationDate":"2022-05-06T14:40:36.251808", "price":1000}',
+		}
+		wrapper.vm.loan = mockLoan
+		wrapper.vm.$forceUpdate()
+		expect(wrapper.vm.messages.length).toBe(0)
+		wrapper.vm.onRequestReceived(mockPayload2)
+		expect(wrapper.vm.messages.length).toBe(1)
+		expect(wrapper.vm.loanPending).toBe(true)
+		expect(wrapper.vm.loanStatus).toBe('PENDING')
+	})
+
+	it('Test onLoanAccept loan denied', () => {
+		let mockPayload2 = {
+			body: '{"loanId":0,"item":0,"loaner":5,"chatId":26,"start":"2022-05-10T12:50:56.496","end":"2022-05-19T12:50:56.496","active":false,"returned":false,"creationDate":"2022-05-06T14:51:03.883","price":0}',
+		}
+		wrapper.vm.onLoanAccept(mockPayload2)
+		expect(wrapper.vm.loanStatus).toBe('NOT_SENT')
+	})
+
+	it('Test onLoanAccept loan is accepted', () => {
+		let axiosSpy = vi.spyOn(axios, 'get')
+		let mockPayload2 = {
+			body: '{"loanId":19,"item":0,"loaner":5,"chatId":26,"start":"2022-05-10T12:50:56.496","end":"2022-05-19T12:50:56.496","active":true,"returned":false,"creationDate":"2022-05-06T14:53:56.475","price":4545}',
+		}
+
+		wrapper.vm.onLoanAccept(mockPayload2)
+		expect(wrapper.vm.loanStatus).toBe('ACCEPTED')
+	})
+
+	it('Test onLoanChat loan is returned', async () => {
+		const mockCall = vi.spyOn(axios, 'get')
+		let mockPayload2 = {
+			body: '{"loanId":19,"item":0,"loaner":5,"chatId":26,"start":"2022-05-10T12:50:56.496","end":"2022-05-19T12:50:56.496","active":true,"returned":true,"creationDate":"2022-05-06T14:58:37.83","price":4545}',
+		}
+	})
+	/*
 	vi.spyOn(axios, 'get')
 	it('Testing onLoanAccept loan accepted', async () => {
 		mockPayload.body.active = true
 		mockPayload.body.returned = true
-		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
+		let mockPayload2 ={
+			body: '{"id":0, "chatId":20, "senderId":1, "recipientId":null, "type":"CHAT", "message":"test", "date":"2022-05-06T14:13:18.066+00:00", "status":null}'
+		}
+		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload2))
 		expect(wrapper.vm.loanStatus === 'RETURNED')
 		expect(axios.get).toHaveBeenCalledTimes(1)
 	})
 
-	it('Testing onLoanAccept loan denied', async () => {
-		mockPayload.body.active = false
-		mockPayload.body.returned = false
-		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload))
-		expect(wrapper.vm.loanStatus === 'NOT_SENT')
-	})
-
-
-
+	 */
 })
-
-*/

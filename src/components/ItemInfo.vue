@@ -66,10 +66,12 @@ const circleOptions = {
 <template>
 	<div class="grid gap-4">
 		<ImageCarousel :images="item.images" :alt="item.name" />
-		<p>{{ item.description }}</p>
+		<p data-testid="description">{{ item.description }}</p>
 		<div>
 			<p class="font-bold text-lg">Pris</p>
-			<p>{{ item.price }} / {{ getPriceUnit }}</p>
+			<p data-testid="price-with-unit">
+				{{ item.price }} / {{ getPriceUnit }}
+			</p>
 		</div>
 		<div v-if="item.categories.length > 0">
 			<p class="font-bold text-lg">Kategori</p>
