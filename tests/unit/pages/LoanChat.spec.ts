@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import Chat from '../../../src/pages/loan/LoanChat.vue'
+
 import {
 	Chat as ChatModel,
 	Filter,
@@ -48,11 +49,6 @@ let mockItem: Item = {
 		},
 	],
 }
-let chatMock: ChatModel = {
-	chatId: 1,
-	chatName: 'TestChat',
-	item: mockItem,
-}
 
 let mockUser: User = {
 	firstName: 'navn',
@@ -62,6 +58,13 @@ let mockUser: User = {
 	userId: 2,
 	username: 'Olav',
 	verified: false,
+}
+
+let chatMock: ChatModel = {
+	user: mockUser,
+	chatId: 1,
+	chatName: 'TestChat',
+	item: mockItem,
 }
 
 let mockLoan: Loan = {
@@ -75,11 +78,13 @@ let mockLoan: Loan = {
 	returned: false,
 	start: '',
 }
-
+axios.defaults.baseURL = 'http://localhost:8001'
 describe('when loaded', () => {
 	it('has the required elements (loading)', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 			wrapper.vm.status = 'loading'
 			await wrapper.vm.$forceUpdate()
 			expect(wrapper.exists()).toBe(true)
@@ -90,7 +95,9 @@ describe('when loaded', () => {
 	})
 	it('has the required elements', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
 			expect(wrapper.exists()).toBe(true)
 
@@ -111,7 +118,9 @@ describe('when loaded', () => {
 
 	it('Loads Request button when', async () => {
 		try {
-			const wrapper = mount(Chat)
+			const wrapper = mount(Chat, {
+				axios,
+			})
 			expect(wrapper.exists()).toBe(true)
 
 			wrapper.vm.chat = {
@@ -151,7 +160,9 @@ describe('when loaded', () => {
 
 	it('Axios get is called at start up', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 			expect(axios.get).toHaveBeenCalledTimes(3)
 			expect(axios.get).toBeCalledWith('/message?chatId=undefined')
 		} catch (error: any) {}
@@ -163,7 +174,9 @@ describe('Testing websocket sending functions', async () => {
 
 	it('Testing sendLoanDecline ', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
 			wrapper.vm.stompClient = 'test'
 			wrapper.vm.chat = chatMock
@@ -180,7 +193,9 @@ describe('Testing websocket sending functions', async () => {
 	vi.spyOn(axios, 'post')
 	it('Testing sendMessage ', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
 			wrapper.vm.stompClient = 'test'
 			wrapper.vm.chat = chatMock
@@ -196,7 +211,9 @@ describe('Testing websocket sending functions', async () => {
 	vi.spyOn(axios, 'put')
 	it('Testing sendLoanAccept ', async () => {
 		try {
-			const wrapper = await mount(Chat)
+			const wrapper = await mount(Chat, {
+				axios,
+			})
 
 			wrapper.vm.stompClient = 'test'
 			wrapper.vm.chat = chatMock
@@ -208,6 +225,23 @@ describe('Testing websocket sending functions', async () => {
 		} catch (err: any) {
 			expect(true).toBe(false)
 		}
+	})
+})
+describe('Testing single functions', () => {
+	it('reRenderChat', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.render).toBe(0)
+		wrapper.vm.reRenderChat()
+		expect(wrapper.vm.render).toBe(1)
+	})
+
+	it('getPriceUnit', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.getPriceUnit('DAY')).toBe('Dag')
+		expect(wrapper.vm.getPriceUnit('HOUR')).toBe('Time')
+		expect(wrapper.vm.getPriceUnit('MONTH')).toBe('Måned')
+		expect(wrapper.vm.getPriceUnit('WEEK')).toBe('Uke')
+		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
 	})
 })
 /*
