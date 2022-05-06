@@ -10,7 +10,7 @@ import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import axios from 'axios'
 
 import { computed, Ref, ref } from 'vue'
-import router from '../router'
+import { useRouter } from 'vue-router'
 
 //Form validation
 import { useForm, useField } from 'vee-validate'
@@ -20,6 +20,8 @@ import BaseBanner from '../components/base/BaseBanner.vue'
 import { Category, FilterType } from '../api/schema'
 import { store } from '../store'
 import { PostItemRegisterRequest } from '../api/item/register'
+
+const router = useRouter()
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
@@ -218,7 +220,6 @@ async function registerItem() {
 		}
 	}
 	try {
-		console.log(formData.getAll('images'))
 		await axios.post('/item/register', formData)
 		router.push('/overview/items')
 	} catch (error: any) {
