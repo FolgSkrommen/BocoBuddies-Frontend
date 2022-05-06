@@ -159,7 +159,7 @@ onBeforeRouteUpdate((to, from) => {
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
-		class="grid gap-2 place-items-center text-center max-w-xl mx-auto"
+		class="grid gap-2 place-content-center text-center max-w-xl mx-auto"
 	>
 		<div class="flex gap-4 justify-start w-full">
 			<!-- Profile picture or initals-->

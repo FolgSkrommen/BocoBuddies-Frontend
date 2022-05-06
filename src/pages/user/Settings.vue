@@ -187,7 +187,7 @@ cookie()
 </script>
 
 <template>
-	<div v-if="store.state.user" class="grid gap-4">
+	<div v-if="store.state.user" class="grid gap-4 place-content-center">
 		<div class="flex gap-2">
 			<router-link :to="`/user/${store.state.user.userId}`">
 				<ChevronLeftIcon class="h-12 w-12" />
