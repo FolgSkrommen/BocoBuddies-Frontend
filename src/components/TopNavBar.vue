@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { store } from '../store'
-
-import { UserIcon } from '@heroicons/vue/solid'
 </script>
 
 <template>

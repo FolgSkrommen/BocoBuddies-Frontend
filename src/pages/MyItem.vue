@@ -92,7 +92,12 @@ const showRateUserPopup = ref(false)
 		/>
 		<div class="grid gap-4">
 			<div class="flex gap-4">
-				<router-link to="/overview">
+				<router-link
+					to="/overview"
+					data-bs-toggle="tooltip"
+					data-bs-placement="bottom"
+					title="Tilbake til mine gjendstander"
+				>
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<h1>{{ item.name }}</h1>
