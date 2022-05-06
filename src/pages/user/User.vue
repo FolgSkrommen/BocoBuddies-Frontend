@@ -47,6 +47,8 @@ getReviews()
 
 const buddies = ref<User[]>()
 
+const addUserToggle = ref<boolean>(false)
+
 async function getUser() {
 	getUserStatus.value = 'loading'
 
@@ -134,6 +136,7 @@ async function addUser() {
 		const params: PostUserFriendsRequest = { userId: id }
 		const res = await axios.post('/user/friends', null, { params })
 		const data = res.data as boolean
+		addUserToggle.value = true
 	} catch (error) {}
 }
 
@@ -212,8 +215,12 @@ onBeforeRouteUpdate((to, from) => {
 			@click="addUser()"
 			class="w-full flex gap-2 items-center justify-center"
 			data-testid="add-friend-btn"
+			:disabled="addUserToggle == true"
 		>
-			<UserAddIcon class="w-6" /> Legg til buddy
+			<div v-if="addUserToggle">Forespørsel sendt!</div>
+			<div class="flex gap-2" v-else>
+				<UserAddIcon class="w-6" /> Legg til buddy
+			</div>
 		</button>
 
 		<div class="flex gap-2 w-full">

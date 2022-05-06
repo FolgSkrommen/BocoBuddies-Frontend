@@ -216,12 +216,14 @@ cookie()
 						color="green"
 						class="w-fit"
 						@click="uploadPicture"
+						alt="Approve new profile picture"
 						><CheckIcon class="w-6 h-6"
 					/></BaseBtn>
 					<BaseBtn
 						color="red"
 						class="w-fit"
 						v-if="imagePreview[0]"
+						alt="Reject new profile picture"
 						@click="
 							() => {
 								imageFiles = []
