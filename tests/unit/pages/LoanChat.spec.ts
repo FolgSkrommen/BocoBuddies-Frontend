@@ -310,4 +310,11 @@ describe('Testing single functions', () => {
 		const wrapper = mount(Chat)
 		expect(wrapper.vm.getUserToReviewCheck()).toBe(false)
 	})
+
+	it('toggleShowRating', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.showRateUserPopup).toBe(false)
+		wrapper.vm.toggleShowRating()
+		expect(wrapper.vm.showRateUserPopup).toBe(true)
+	})
 })

@@ -15,6 +15,7 @@ const emit = defineEmits(['exit'])
 					<XIcon
 						@click="emit('exit')"
 						class="place-self-end w-8 h-8 cursor-pointer"
+						data-testid="xicon"
 					/>
 					<slot></slot>
 				</div>
