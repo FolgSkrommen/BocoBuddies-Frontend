@@ -20,7 +20,7 @@ import {
 			<router-link
 				class="grid place-items-center"
 				v-if="store.getters.loggedIn"
-				to="/overview/items"
+				to="/overview"
 			>
 				<CollectionIcon class="w-8 h-8" data-testid="yours-icon" />
 				<p class="text-slate-300 text-sm" data-testid="yours">Ditt</p>

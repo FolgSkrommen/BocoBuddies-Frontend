@@ -18,7 +18,7 @@ import { UserIcon } from '@heroicons/vue/solid'
 			</router-link>
 			<div class="flex gap-8 items-center">
 				<router-link to="/">Hjem</router-link>
-				<router-link v-if="store.getters.loggedIn" to="/overview/items">
+				<router-link v-if="store.getters.loggedIn" to="/overview">
 					Ditt
 				</router-link>
 				<router-link v-if="store.getters.loggedIn" to="/community">
