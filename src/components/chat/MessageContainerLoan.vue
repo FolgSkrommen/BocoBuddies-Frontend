@@ -137,8 +137,12 @@ function messagePlacement(receive: boolean) {
 				:class="styleType(message.receive)"
 			>
 				<div v-if="modelValue === 'ACCEPTED'">
-					<h3 class="text-2xl" data-testid="accept-h">Avtalt lån</h3>
-					<h3 class="text-xl" data-testid="accept-h">Ikke Levert</h3>
+					<h3 class="text-2xl text-white" data-testid="accept-h">
+						Avtalt lån
+					</h3>
+					<h3 class="text-xl text-white" data-testid="accept-h">
+						Ikke Levert
+					</h3>
 				</div>
 
 				<h3
