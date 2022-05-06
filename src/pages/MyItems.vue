@@ -234,10 +234,12 @@ const showFiltersAndSort = ref(false)
 				<AdjustmentsIcon
 					class="w-8 h-8 text-slate-500 cursor-pointer"
 					@click="showFiltersAndSort = !showFiltersAndSort"
+					data-testid="filter-and-sort-toggle"
 				/>
 				<SearchbarAndButton
 					v-model="searchWord"
 					@search="searchAndResetItems"
+					data-testid="searchbar-and-button"
 				></SearchbarAndButton>
 			</div>
 
@@ -249,7 +251,7 @@ const showFiltersAndSort = ref(false)
 					class="py-1"
 					:removable="true"
 					@remove-category-event="categoryRemoved"
-					data-testid="categories-tag-chosen"
+					data-testid="categories-category-chosen"
 				></CategoryList>
 				<CategoryList
 					color="bg-blue-500"
@@ -282,6 +284,7 @@ const showFiltersAndSort = ref(false)
 			:renderLoadButton="renderLoadButton"
 			redirect="my-item"
 			@load-more-items="loadMoreItems"
+			data-testid="item-list"
 		/>
 
 		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
