@@ -21,9 +21,17 @@ const { user, btnTxt } = defineProps<Props>()
 </script>
 
 <template>
-	<UserCard :user="user" @click="userClicked(user)" :to="to">
-		<BaseBtn @click="buttonClicked(user)" :disabled="btnDsbld">{{
-			btnTxt
-		}}</BaseBtn>
+	<UserCard
+		:user="user"
+		@click="userClicked(user)"
+		:to="to"
+		data-testid="user-card"
+	>
+		<BaseBtn
+			@click="buttonClicked(user)"
+			:disabled="btnDsbld"
+			data-testid="button"
+			>{{ btnTxt }}</BaseBtn
+		>
 	</UserCard>
 </template>
