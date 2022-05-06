@@ -62,7 +62,7 @@ async function handleRate() {
 		>
 			{{ user?.firstName }} {{ user?.lastName }}
 		</p>
-		<div class="flex gap-2 place-self-center">
+		<div class="flex gap-4 place-self-center">
 			<StarIcon
 				v-for="(icon, i) in 5"
 				@click="rating = i"

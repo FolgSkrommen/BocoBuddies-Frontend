@@ -38,7 +38,7 @@ const colorClass = computed(() => {
 	<button
 		v-else
 		data-testid="button"
-		class="disabled:bg-slate-300"
+		class="disabled:bg-slate-300 disabled:hover:bg-slate-300"
 		:class="colorClass"
 		:disabled="disabled"
 		:type="type ?? 'button'"

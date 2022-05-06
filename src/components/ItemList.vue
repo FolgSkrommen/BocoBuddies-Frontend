@@ -40,7 +40,7 @@ function getPriceUnit(unit: string) {
 					<router-link
 						v-if="redirect"
 						:to="`/${redirect}/${item.itemId}`"
-						class="grid gap-2"
+						class="grid gap-4"
 					>
 						<img
 							v-if="item.images?.length > 0"
@@ -63,7 +63,7 @@ function getPriceUnit(unit: string) {
 
 					<div
 						v-else
-						class="grid gap-2"
+						class="grid gap-4"
 						@click="itemClicked(item, index)"
 					>
 						<img

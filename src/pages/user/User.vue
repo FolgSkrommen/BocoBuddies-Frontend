@@ -159,7 +159,7 @@ onBeforeRouteUpdate((to, from) => {
 	<LoadingIndicator v-if="getUserStatus === 'loading'" />
 	<div
 		v-if="getUserStatus === 'loaded' && user"
-		class="grid gap-2 place-items-center text-center max-w-xl mx-auto"
+		class="grid gap-4 text-center sm:w-96 mx-auto"
 	>
 		<div class="flex gap-4 justify-start w-full">
 			<!-- Profile picture or initals-->
@@ -180,7 +180,7 @@ onBeforeRouteUpdate((to, from) => {
 			</span>
 
 			<!-- User name and lastname-->
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-4">
 				<h3 class="font-bold" data-testid="name">
 					{{ user.firstName }} {{ user.lastName }}
 				</h3>
@@ -192,7 +192,7 @@ onBeforeRouteUpdate((to, from) => {
 					/>
 				</div>
 				<!-- User rating -->
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-4">
 					<StarIcon class="w-5 h-5 text-yellow-500" />
 					<p class="text-sm font-bold text-slate-900">
 						{{ Math.round(user.rating * 10) / 10 }}
@@ -213,17 +213,17 @@ onBeforeRouteUpdate((to, from) => {
 		<button
 			v-if="user.friend == false && !isOwnProfile"
 			@click="addUser()"
-			class="w-full flex gap-2 items-center justify-center"
+			class="w-full flex gap-4 items-center justify-center"
 			data-testid="add-friend-btn"
 			:disabled="addUserToggle == true"
 		>
 			<div v-if="addUserToggle">Forespørsel sendt!</div>
-			<div class="flex gap-2" v-else>
+			<div class="flex gap-4" v-else>
 				<UserAddIcon class="w-6" /> Legg til buddy
 			</div>
 		</button>
 
-		<div class="flex gap-2 w-full">
+		<div class="flex gap-4 w-full">
 			<button
 				class="flex-1"
 				:class="
@@ -252,7 +252,7 @@ onBeforeRouteUpdate((to, from) => {
 			Brukeren har ingen buddies
 		</h2>
 
-		<div class="flex flex-col w-full gap-2">
+		<div class="flex flex-col w-full gap-4">
 			<Card
 				v-if="stateTag == State.REVIEWS"
 				v-for="review in reviews"
