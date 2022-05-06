@@ -27,7 +27,6 @@ function getDateAndTime() {
 
 async function handleRate() {
 	if (rating.value === -1) return
-	//TODO: ADD Method
 	if (!loan) return
 	if (!loan.loanId) return
 	if (!user) return
@@ -35,7 +34,7 @@ async function handleRate() {
 	const review: PostReviewRequest = {
 		loanId: loan.loanId,
 		isOwner: user.userId === loan.loaner,
-		rating: rating.value + 1,
+		rating: rating.value,
 		description: comment.value,
 		date: getDateAndTime(),
 	}

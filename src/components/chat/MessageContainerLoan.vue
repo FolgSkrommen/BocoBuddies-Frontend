@@ -50,7 +50,12 @@ function getProperDateTime(dateTime: string) {
 	let time = dateTime.substring(11, 16)
 	let date = dateTime.substring(0, 10)
 	if (new Date().toISOString().substring(0, 10) === date) return time
-	return time
+	return date
+}
+
+function getProperDateHour(dateTime: string) {
+	let date = dateTime.substring(0, 16)
+	return date.replace('T', ' ')
 }
 
 function getPriceUnit(unit: string) {
@@ -157,10 +162,10 @@ function messagePlacement(receive: boolean) {
 				<!--Tidsintervall-->
 				<div>
 					<h4 v-if="message.start">
-						Fra: {{ getProperDateTime(message.start) }}
+						Fra: {{ getProperDateHour(message.start) }}
 					</h4>
 					<h4 v-if="message.stop">
-						Til: {{ getProperDateTime(message.stop) }}
+						Til: {{ getProperDateHour(message.stop) }}
 					</h4>
 				</div>
 

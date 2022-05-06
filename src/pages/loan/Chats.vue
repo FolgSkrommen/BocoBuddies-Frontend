@@ -22,11 +22,8 @@ async function getChats() {
 
 		for (const chat of chats.value) {
 			if (chat.members) {
-				console.log(status.value)
 				for (const member of chat.members) {
-					console.log('heisann')
 					if (member.userId !== store.state.user?.userId) {
-						console.log('Member: ' + member.username)
 						chat.user = member
 					}
 				}
@@ -35,20 +32,20 @@ async function getChats() {
 
 		for (const chat of chats.value) {
 			try {
-				console.log(chat)
 				const res = await axios.get('/loan/chat?chatId=' + chat.chatId)
-				console.log(res.data)
 				chat.item = res.data.item
 				chat.loan = res.data.loan
-				console.log(chat.user)
 			} catch (err: any) {
-				const res = await axios.get('/item', {
-					params: { itemId: chat.item?.itemId },
-				})
-				chat.item = res.data.item
+				try {
+					const res = await axios.get('/item', {
+						params: { itemId: chat.item?.itemId },
+					})
+					chat.item = res.data.item
+				} catch (error: any) {
+					store.dispatch('error', error.message)
+				}
 			}
 		}
-		console.log(chats.value)
 		status.value = 'loaded'
 	} catch (error: any) {
 		status.value = 'error'
@@ -73,29 +70,33 @@ getChats()
 			<div class="grid gap-4">
 				<h1 data-testid="header">Lånesamtaler</h1>
 				<Card v-for="chat in chats" :key="chat.chatId">
-					<router-link :to="'/chat/' + chat.chatId" class="p-2">
-						<div class="flex gap-2">
-							<img
-								class="h-20 w-20 object-cover rounded-xl"
-								v-if="chat.item"
-								:src="chat.item.images[0]"
-								:alt="chat.item.name"
-							/>
+					<div class="flex justify-between p-2 w-full">
+						<router-link :to="'/chat/' + chat.chatId" class="">
+							<div class="flex gap-2">
+								<img
+									class="h-20 w-20 object-cover rounded-xl"
+									v-if="chat.item"
+									:src="chat.item.images[0]"
+									:alt="chat.item.name"
+								/>
 
-							<div class="flex-col">
-								<h3>
-									{{
-										chat.user?.username +
-										' ' +
-										chat.item?.name
-									}}
-								</h3>
-								<h4>
-									{{ getLoanStatus(chat) }}
-								</h4>
+								<div class="flex-col">
+									<h3>
+										{{ chat.item?.name }}
+									</h3>
+									<h4>
+										{{ getLoanStatus(chat) }}
+									</h4>
+								</div>
 							</div>
-						</div>
-					</router-link>
+						</router-link>
+
+						<h4 class="text-right text-xs">
+							{{
+								chat.user?.firstName + ' ' + chat.user.lastName
+							}}
+						</h4>
+					</div>
 				</Card>
 			</div>
 			<h2
