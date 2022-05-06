@@ -38,7 +38,7 @@ function styleType(received: boolean) {
 function getProperDateTime(dateTime: string) {
 	let time = dateTime.substring(11, 16)
 	let date = dateTime.substring(0, 10)
-	if (new Date().toISOString().substring(0, 10) === date) return time
+	if (new Date().toISOString().substring(0, 10) === date) return date
 	return time
 }
 
@@ -92,6 +92,7 @@ function messagePlacement(receive: boolean) {
 			<div
 				class="flex my-2 gap-1"
 				:class="messagePlacement(message.receive)"
+				data-testid="message-info"
 			>
 				<img
 					v-if="message.senderId && message.receive"

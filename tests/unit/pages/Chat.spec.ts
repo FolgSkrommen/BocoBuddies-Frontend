@@ -27,66 +27,22 @@ describe('when loaded', () => {
 		)
 	})
 
-	it('Loads as expected with correct values', async () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.exists()).toBe(true)
-		/*
-
-		wrapper.vm.chat = {
-			chatId: 1,
-			itemId: 1,
-			chatName: "Name"
+	it('has the required elements (loading)', async () => {
+		try {
+			const wrapper = await mount(Chat)
+			wrapper.vm.status = 'loading'
+			await wrapper.vm.$forceUpdate()
+			expect(wrapper.exists()).toBe(true)
+			expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
+		} catch (error) {
+			expect(true).toBe(false)
 		}
-		wrapper.vm.item = {
-			name: "Name",
-			description: "Desc",
-			price: 100,
-			priceUnit: "Test",
-			postalCode: "code",
-			address: "as",
-			images: ["asd", "asd"],
-			availableFrom: "from",
-			availableTo: "to",
-			categories: ["test", "test"]
-		}
-
-		wrapper.vm.chatData = {
-			userId: "1",
-			messages: [
-				{
-					type: 'CHAT',
-					receive: true,
-				}
-			]
-		}
-
-		await wrapper.setData({
-			chatData:{
-				userId: "1",
-				messages: [
-					{
-						type: 'CHAT',
-						receive: true,
-					}
-				]
-			}
-		})
-		*/
-
-		/*
-		expect(wrapper.find('[data-testid="rent-button"]').exists()).toBe(true)
-		expect(wrapper.find('[data-testid="loan-modal"]').exists()).toBe(true)
-		expect(
-			wrapper.find('[data-testid="feedback-button"]').exists()
-		).not.toBe(true)
-
-		 */
 	})
 
 	vi.spyOn(axios, 'get')
 
 	it('Axios get is called at start up', async () => {
-		const wrapper = mount(Chat)
+		const wrapper = await mount(Chat)
 		expect(axios.get).toHaveBeenCalledTimes(3)
 		expect(axios.get).toBeCalledWith('/message?chatId=undefined')
 	})

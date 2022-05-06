@@ -54,5 +54,23 @@ describe('MessageContainerLoan', () => {
 			const messageInfo = wrapper.find('[data-testid="chat"]')
 			expect(messageInfo.exists()).toBe(true)
 		})
+
+		describe('Function testing', async () => {
+			it('getProperDateTime', () => {
+				const wrapper = mount(MessageContainer, {
+					props: {
+						messages,
+					},
+				})
+				expect(
+					wrapper.vm.getProperDateTime(new Date().toISOString())
+				).toHaveLength(5)
+				expect(
+					wrapper.vm.getProperDateTime(
+						new Date('05 October 2000 14:48 UTC').toISOString()
+					)
+				).toHaveLength(10)
+			})
+		})
 	})
 })
