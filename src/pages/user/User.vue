@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
@@ -14,7 +14,7 @@ import Card from '../../components/Card.vue'
 import UserCard from '../../components/UserCard.vue'
 
 const { params } = useRoute()
-const id = parseInt(params.id as string)
+let id: number = parseInt(params.id as string)
 
 type GetStatus = 'loading' | 'loaded' | 'error'
 const getUserStatus = ref<GetStatus>()
@@ -92,7 +92,7 @@ async function getBuddies() {
 	if (!store.state.user) return
 	try {
 		const res = await axios.get('/user/friends', {
-			params: { userId: user.value?.userId },
+			params: { userId: id },
 		})
 		buddies.value = res.data as User[]
 	} catch (error: any) {
@@ -134,6 +134,18 @@ async function addUser() {
 
 const isOwnProfile = computed(() => {
 	return user.value?.userId === store.state.user?.userId
+})
+
+onBeforeRouteUpdate((to, from) => {
+	console.log(to)
+	console.log(from)
+	id = parseInt(to.params.id as string)
+
+	buddies.value = []
+	reviews.value = []
+	getUser()
+	getBuddies()
+	getReviews()
 })
 </script>
 
