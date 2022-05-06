@@ -69,9 +69,11 @@ const circleOptions = {
 			<ImageCarousel :images="item.images" :alt="item.name" />
 			<div>
 				<p class="font-bold text-lg">Pris</p>
-				<h1>{{ item.price }}kr / {{ getPriceUnit }}</h1>
+				<h1 data-testid="price-with-unit">
+					{{ item.price }}kr / {{ getPriceUnit }}
+				</h1>
 			</div>
-			<p>{{ item.description }}</p>
+			<p data-testid="description">{{ item.description }}</p>
 			<div v-if="item.categories.length > 0">
 				<p class="font-bold text-lg">Kategori</p>
 				<div class="flex gap-4">

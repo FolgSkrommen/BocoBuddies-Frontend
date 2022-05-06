@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import CategoryList from '../components/CategoryList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -375,7 +375,7 @@ const showFiltersAndSort = ref(false)
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
-			redirect="my-loan"
+			@item-clicked="properRedirect"
 			@load-more-items="loadMoreItems"
 		/>
 		<h2

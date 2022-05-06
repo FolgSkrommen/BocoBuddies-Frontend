@@ -61,6 +61,22 @@ function getLoanStatus(chat: Chat) {
 }
 
 getChats()
+
+function cookie() {
+	const seenChatsCookie = ('; ' + document.cookie)
+		.split(`; seenSettingsTutorial=`)
+		.pop()
+		?.split(';')[0]
+
+	if (!seenChatsCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Dette er siden for dine lånesamtaler. Her vil du få opp alle pågående samtaler med utlånere. Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenSettingsTutorial=true; max-age=31536000'
+	}
+}
+cookie()
 </script>
 
 <template>
