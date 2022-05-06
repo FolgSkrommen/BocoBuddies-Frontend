@@ -187,7 +187,7 @@ function messagePlacement(receive: boolean) {
 
 				<div
 					v-if="message.receive && modelValue === 'PENDING'"
-					class="flex gap-2"
+					class="flex gap-4"
 				>
 					<BaseBtn
 						class="grow"

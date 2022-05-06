@@ -1,9 +1,5 @@
-/*import {
-	shallowMount,
-	RouterLinkStub,
-	flushPromises,
-	VueWrapper,
-} from '@vue/test-utils'
+import { mount, shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
+import { createStore } from 'vuex'
 import MyItems from '../../../src/pages/MyItems.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
@@ -40,21 +36,6 @@ describe('MyItems', () => {
 		it('has the required elements, including one tag alternative, initially', async () => {
 			const wrapper = shallowMount(MyItems)
 
-			//expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
-			//expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
-			expect(axios.get).toHaveBeenNthCalledWith(2, '/item/search/'+'', {params: {categories: [],
-				sort: 'none',
-				amount: wrapper.vm.amountPerPage,
-				offset: 0,
-				useAuth: false}, 
-				paramsSerializer: params => {
-					return qs.stringify(params, {
-						arrayFormat: 'repeat',
-					})
-				},})
-
-			await flushPromises()
-
 			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
 			).toBe(true)
@@ -80,8 +61,8 @@ describe('MyItems', () => {
 
 		it('renders sort dropdown and category alternatives when toggle is clicked', async () => {
 			const wrapper = shallowMount(MyItems)
-			console.log(wrapper);
-			
+			console.log(wrapper)
+
 			await wrapper
 				.find('[data-testid="filter-and-sort-toggle"]')
 				.trigger('click')
@@ -100,4 +81,4 @@ describe('MyItems', () => {
 			).toBe(false)
 		})
 	})
-})*/
+})

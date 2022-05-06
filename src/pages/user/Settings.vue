@@ -187,8 +187,8 @@ cookie()
 </script>
 
 <template>
-	<div v-if="store.state.user" class="grid gap-4 place-content-center">
-		<div class="flex gap-2">
+	<div v-if="store.state.user" class="grid gap-4 sm:w-96 mx-auto">
+		<div class="flex gap-4">
 			<router-link :to="`/user/${store.state.user.userId}`">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
@@ -251,7 +251,7 @@ cookie()
 					/></BaseBtn>
 				</div>
 			</div>
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-4">
 				<h3>
 					{{ store.state.user.firstName }}
 					{{ store.state.user.lastName }}
@@ -322,7 +322,7 @@ cookie()
 		>
 		<form
 			v-if="showChangePassword"
-			class="grid gap-4 border border-slate-400 p-2"
+			class="grid gap-4 border border-slate-400 rounded-xl p-2"
 			@submit.prevent="changePassword"
 		>
 			<BaseInput
@@ -365,7 +365,7 @@ cookie()
 			>
 		</form>
 
-		<span class="my-2"></span>
+		<hr class="border-slate-400" />
 
 		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
@@ -377,7 +377,7 @@ cookie()
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
 
-		<span class="my-2"></span>
+		<hr class="border-slate-400" />
 
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 

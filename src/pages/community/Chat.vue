@@ -105,8 +105,6 @@ function getDateAndTime() {
 	return new Date(Date.now() - tzoffset).toISOString().slice(0, -1)
 }
 
-async function updateChatName() {}
-
 /**
  * Fetches data before view is mounted
  */
@@ -175,7 +173,7 @@ const chatName = computed(() => {
 
 	<!--TODO fix height-->
 	<div class="h-96 flex-col w-full chatHeight" v-else>
-		<div class="flex gap-2">
+		<div class="flex gap-4">
 			<router-link to="/community">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
@@ -192,7 +190,7 @@ const chatName = computed(() => {
 		/>
 
 		<form class="my-2" v-on:submit.prevent="sendMessage">
-			<div class="flex gap-2 content-center min-h-fit">
+			<div class="flex gap-4 content-center min-h-fit">
 				<base-input
 					class="grow"
 					v-model="currentMessage"

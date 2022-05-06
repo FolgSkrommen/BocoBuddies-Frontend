@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import CategoryList from '../components/CategoryList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -223,70 +223,69 @@ const showFiltersAndSort = ref(false)
 </script>
 
 <template>
-	<div v-if="store.getters.loggedIn" class="grid gap-4">
-		<div class="grid gap-4">
-			<!--Tag input component-->
-			<div class="flex items-center gap-4">
-				<AdjustmentsIcon
-					class="w-8 h-8 text-slate-600 cursor-pointer"
-					@click="showFiltersAndSort = !showFiltersAndSort"
-					data-testid="filter-and-sort-toggle"
-				/>
-				<SearchbarAndButton
-					v-model="searchWord"
-					@search="searchAndResetItems"
-					data-testid="searchbar-and-button"
-				></SearchbarAndButton>
-			</div>
-
-			<div class="grid gap-4" v-if="showFiltersAndSort">
-				<CategoryList
-					color="bg-slate-500"
-					v-if="chosenCategories.length > 0"
-					v-model="chosenCategories"
-					class="py-1"
-					:removable="true"
-					@remove-category-event="categoryRemoved"
-					data-testid="categories-category-chosen"
-				></CategoryList>
-				<CategoryList
-					color="bg-blue-500"
-					class=""
-					v-model="tagAlts"
-					@add-category-event="categoryChosen"
-					data-testid="categories-tag-alts"
-				></CategoryList>
-				<div class="flex gap-4 items-center">
-					<SortDropdown
-						:sortAlts="sortAlts"
-						v-model.number="sortChosen"
-					/>
-					<h3>Aktiv</h3>
-					<input
-						class="h-8 w-8"
-						type="checkbox"
-						v-model="activeSelected"
-					/>
-				</div>
-			</div>
+	<div class="grid gap-4">
+		<!--Tag input component-->
+		<div class="flex items-center gap-4">
+			<AdjustmentsIcon
+				class="w-8 h-8 text-slate-600 cursor-pointer"
+				@click="showFiltersAndSort = !showFiltersAndSort"
+				data-testid="filter-and-sort-toggle"
+			/>
+			<SearchbarAndButton
+				v-model="searchWord"
+				@search="searchAndResetItems"
+				data-testid="searchbar-and-button"
+			></SearchbarAndButton>
 		</div>
 
-		<LoadingIndicator v-if="status === 'loading'" />
-		<ItemList
-			v-if="items.length > 0"
-			:edit="true"
-			:items="items"
-			:searchHits="searchHits"
-			:renderLoadButton="renderLoadButton"
-			redirect="my-item"
-			@load-more-items="loadMoreItems"
-			data-testid="item-list"
-		/>
-
-		<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
-			Du har ingen gjenstander
-		</h2>
-
-		<FloatingBtn to="/item/register" />
+		<div class="grid gap-4" v-if="showFiltersAndSort">
+			<CategoryList
+				color="bg-slate-500"
+				v-if="chosenCategories.length > 0"
+				v-model="chosenCategories"
+				class="py-1"
+				:removable="true"
+				@remove-category-event="categoryRemoved"
+				data-testid="categories-category-chosen"
+			></CategoryList>
+			<CategoryList
+				color="bg-blue-500"
+				class=""
+				v-model="tagAlts"
+				@add-category-event="categoryChosen"
+				data-testid="categories-tag-alts"
+			></CategoryList>
+			<div class="flex gap-4 items-center">
+				<SortDropdown
+					:sortAlts="sortAlts"
+					v-model.number="sortChosen"
+					data-testid="sort-dropdown"
+				/>
+				<h3>Aktiv</h3>
+				<input
+					class="h-8 w-8"
+					type="checkbox"
+					v-model="activeSelected"
+				/>
+			</div>
+		</div>
 	</div>
+
+	<LoadingIndicator v-if="status === 'loading'" />
+	<ItemList
+		v-if="items.length > 0"
+		:edit="true"
+		:items="items"
+		:searchHits="searchHits"
+		:renderLoadButton="renderLoadButton"
+		redirect="my-item"
+		@load-more-items="loadMoreItems"
+		data-testid="item-list"
+	/>
+
+	<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
+		Du har ingen gjenstander
+	</h2>
+
+	<FloatingBtn to="/item/register" />
 </template>

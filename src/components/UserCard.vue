@@ -22,14 +22,14 @@ const { user, color, showRating } = defineProps<Props>()
 						:src="user.profilePicture"
 						:alt="user.username"
 					/>
-					<div class="grid gap-2">
+					<div class="grid gap-4">
 						<p class="font-bold text-lg">
 							{{ user.firstName }} {{ user.lastName }}
 						</p>
 						<p class="text-slate-600 place-self-start">
 							@{{ user.username }}
 						</p>
-						<div v-if="showRating" class="flex gap-2">
+						<div v-if="showRating" class="flex gap-4">
 							<StarIcon
 								v-for="icon in Math.floor(user.rating)"
 								class="h-6 w-6 text-yellow-400"
@@ -57,12 +57,12 @@ const { user, color, showRating } = defineProps<Props>()
 				:src="user.profilePicture"
 				:alt="user.username"
 			/>
-			<div class="grid gap-2">
+			<div class="grid gap-4">
 				<p class="font-bold text-lg">
 					{{ user.firstName }} {{ user.lastName }}
 				</p>
 				<p class="text-slate-600">@{{ user.username }}</p>
-				<div v-if="showRating" class="flex gap-2">
+				<div v-if="showRating" class="flex gap-4">
 					<StarIcon
 						v-for="icon in Math.floor(user.rating)"
 						class="h-6 w-6 text-yellow-400"

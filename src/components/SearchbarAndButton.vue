@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import BaseInput from '../components/base/BaseInput.vue'
-import BaseBtn from '../components/base/BaseBtn.vue'
 import { SearchIcon } from '@heroicons/vue/outline'
 
 const emit = defineEmits(['update:modelValue', 'search'])

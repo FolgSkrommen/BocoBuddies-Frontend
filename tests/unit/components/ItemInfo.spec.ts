@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ItemInfo from '../../../src/components/ItemInfo.vue'
 import { flushPromises, mount, shallowMount } from '@vue/test-utils'
 import axios from 'axios'
@@ -30,17 +30,40 @@ describe('Tests for ItemInfo', () => {
 		availableTo: 'to',
 		categories: ['cat1', 'cat2'],
 	}
-
+	let wrapper: any
+	beforeEach(() => {
+		wrapper = mount(ItemInfo, {
+			props: {
+				item: mockItem,
+			},
+		})
+	})
 	describe('Tests to make sure it renders properly when', () => {
 		it('Standard render', async () => {
-			const wrapper = mount(ItemInfo, {
-				props: {
-					item: mockItem,
-				},
-			})
 			expect(wrapper.exists())
 		})
 
-		it('All information is properly rendered', () => {})
+		it('All information is properly rendered', () => {
+			expect(
+				wrapper.find('[data-testid="description"]').element.textContent
+			).toContain('description')
+			expect(
+				wrapper.find('[data-testid="price-with-unit"]').element
+					.textContent
+			).toContain('100kr /')
+			expect(wrapper.find('[data-testid="calendar"]').exists())
+			expect(wrapper.find('[data-testid="maps"]').exists())
+		})
+	})
+
+	describe('Test functions', () => {
+		it('getFilterTypeName()', async () => {
+			const mockPost = vi.spyOn(axios, 'post')
+			await wrapper.vm.getFilterTypeName()
+			expect(mockPost).toHaveBeenCalledTimes(1)
+			expect(mockPost).toBeCalledWith('/category/getFilterName', {
+				list: [1],
+			})
+		})
 	})
 })

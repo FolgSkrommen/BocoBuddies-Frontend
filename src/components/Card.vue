@@ -19,7 +19,7 @@ const colorClass = computed(() => {
 
 <template>
 	<div
-		class="shadow-lg rounded-xl grid gap-2 transition-all"
+		class="shadow-lg rounded-xl grid gap-4 transition-all"
 		:class="colorClass"
 	>
 		<slot></slot>
