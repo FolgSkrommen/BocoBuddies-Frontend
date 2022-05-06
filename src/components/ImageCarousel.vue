@@ -14,6 +14,7 @@ const { images, alt } = defineProps<Props>()
 			v-for="src in images"
 			:src="src"
 			:alt="alt ? alt : ''"
+			data-testid="carousel"
 		/>
 	</div>
 </template>

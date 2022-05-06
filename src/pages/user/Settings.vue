@@ -242,6 +242,9 @@ cookie()
 						class="w-fit"
 						@click="uploadPicture"
 						alt="Approve new profile picture"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Bekreft"
 						><CheckIcon class="w-6 h-6"
 					/></BaseBtn>
 					<BaseBtn
@@ -258,6 +261,9 @@ cookie()
 								imagePreview = []
 							}
 						"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Avbryt"
 						><XIcon class="w-6 h-6"
 					/></BaseBtn>
 				</div>
