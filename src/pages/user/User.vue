@@ -169,7 +169,7 @@ const isOwnProfile = computed(() => {
 				<div class="flex items-center">
 					<h4 class="text-slate-500">@{{ user.username }}</h4>
 					<CheckCircleIcon
-						v-if="user.verified"
+						v-if="user.trusted"
 						class="h-5 w-5 text-blue-500"
 					/>
 				</div>
