@@ -385,7 +385,7 @@ const showFiltersAndSort = ref(false)
 			Du har ingen aktive lån
 		</h2>
 		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
-			Du har aldri lånt noe
+			Du har ingen tidligere lån
 		</h2>
 	</div>
 </template>
