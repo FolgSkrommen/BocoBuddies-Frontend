@@ -378,7 +378,12 @@ const showFiltersAndSort = ref(false)
 			@item-clicked="properRedirect"
 			@load-more-items="loadMoreItems"
 		/>
-
+		<h2
+			v-else-if="activeSelected"
+			class="text-slate-400 w-fit mx-auto mt-28"
+		>
+			Du har ingen aktive lån
+		</h2>
 		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
 			Du har aldri lånt noe
 		</h2>
