@@ -105,8 +105,6 @@ function getDateAndTime() {
 	return new Date(Date.now() - tzoffset).toISOString().slice(0, -1)
 }
 
-async function updateChatName() {}
-
 /**
  * Fetches data before view is mounted
  */
