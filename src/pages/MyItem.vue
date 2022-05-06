@@ -126,7 +126,7 @@ const showRateUserPopup = ref(false)
 				<UserCard :user="loaner" color="green" show-rating />
 				<BaseBtn>Gå til chat</BaseBtn>
 			</div>
-			<BaseBtn v-else color="red">Slett</BaseBtn>
+			<!--<BaseBtn v-else color="red">Slett</BaseBtn>-->
 			<BaseBtn :to="`/edit-item/${item.itemId}`">Rediger</BaseBtn>
 			<ItemInfo :item="item" />
 		</div>

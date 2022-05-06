@@ -258,11 +258,11 @@ onBeforeRouteUpdate((to, from) => {
 					<div>
 						<div class="w-full flex">
 							<StarIcon
-								v-for="i in review.rating - 1"
+								v-for="i in review.rating"
 								class="text-yellow-500 w-8"
 							/>
 							<StarIcon
-								v-for="i in 5 - review.rating + 1"
+								v-for="i in 5 - review.rating"
 								class="text-slate-500 w-8"
 							/>
 						</div>
