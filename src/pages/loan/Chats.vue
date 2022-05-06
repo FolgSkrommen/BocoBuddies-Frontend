@@ -19,14 +19,16 @@ async function getChats() {
 		const res = await axios.get('/chat/getByUser/market')
 		const data = res.data as GetChatByUserMarketResponse
 		chats.value = data
+
 		for (const chat of chats.value) {
-			let members: User[] = []
-			if (!chat.members) return
-			for (const member of chat.members) {
-				console.log('heisann')
-				if (member.userId !== store.state.user?.userId) {
-					console.log('Member: ' + member.username)
-					chat.user = member
+			if (chat.members) {
+				console.log(status.value)
+				for (const member of chat.members) {
+					console.log('heisann')
+					if (member.userId !== store.state.user?.userId) {
+						console.log('Member: ' + member.username)
+						chat.user = member
+					}
 				}
 			}
 		}
