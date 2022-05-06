@@ -234,6 +234,9 @@ cookie()
 
 				<div class="grid grid-cols-2 w-full justify-items-center">
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Bekreft"
 						v-if="imagePreview[0]"
 						color="green"
 						class="w-fit"
@@ -242,6 +245,9 @@ cookie()
 						><CheckIcon class="w-6 h-6"
 					/></BaseBtn>
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Avbryt"
 						color="red"
 						class="w-fit"
 						v-if="imagePreview[0]"

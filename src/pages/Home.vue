@@ -345,6 +345,9 @@ const showFiltersAndSort = ref(false)
 			redirect="item"
 			@load-more-items="loadMoreItems"
 			data-testid="item-list"
+			data-bs-toggle="tooltip"
+			data-bs-placement="bottom"
+			title="Til annonse"
 		/>
 
 		<h2
