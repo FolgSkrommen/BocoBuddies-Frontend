@@ -31,7 +31,13 @@ const chatName = computed(() => {
 
 <template>
 	<div class="grid gap-4">
-		<router-link v-if="to" :to="'/community/chat/' + friendChat.chatId">
+		<router-link
+			v-if="to"
+			:to="'/community/chat/' + friendChat.chatId"
+			data-bs-toggle="tooltip"
+			data-bs-placement="bottom"
+			title="Til chat"
+		>
 			<Card>
 				<div class="flex gap-4 w-full p-2 h-fit place-items-end">
 					<div

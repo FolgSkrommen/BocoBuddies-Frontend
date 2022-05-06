@@ -47,11 +47,10 @@ const status = ref<Status>()
 //const search = ref('')
 
 //Mounted
-if (store.getters.loggedIn) {
-	//Only needs to call these if user is logged in
-	getMainCategories()
-	search()
-}
+
+//Only needs to call these if user is logged in
+getMainCategories()
+search()
 
 //Computed
 const searchHits = computed<string>(() =>
@@ -325,67 +324,61 @@ const showFiltersAndSort = ref(false)
 </script>
 
 <template>
-	<div v-if="store.getters.loggedIn" class="grid gap-4">
-		<div class="flex items-center gap-4">
-			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-600 cursor-pointer"
-				@click="showFiltersAndSort = !showFiltersAndSort"
-			/>
-			<SearchbarAndButton
-				v-model="searchWord"
-				@search="searchAndResetItems"
-			></SearchbarAndButton>
-		</div>
-
-		<div class="grid gap-4" v-if="showFiltersAndSort">
-			<!--Tag input component-->
-			<CategoryList
-				color="bg-slate-500"
-				v-if="chosenCategories.length > 0"
-				v-model="chosenCategories"
-				:removable="true"
-				@remove-category-event="categoryRemoved"
-				data-testid="categories-tag-chosen"
-			></CategoryList>
-			<CategoryList
-				color="bg-blue-500"
-				class="mt-1"
-				v-model="tagAlts"
-				@add-category-event="categoryChosen"
-				data-testid="categories-tag-alts"
-			></CategoryList>
-			<div class="flex gap-4 items-center">
-				<SortDropdown
-					:sortAlts="sortAlts"
-					v-model.number="sortChosen"
-				/>
-
-				<h3>Aktiv</h3>
-				<input
-					class="h-8 w-8"
-					type="checkbox"
-					v-model="activeSelected"
-				/>
-			</div>
-		</div>
-
-		<LoadingIndicator v-if="status === 'loading'" />
-		<ItemList
-			v-if="items.length > 0"
-			:items="items"
-			:searchHits="searchHits"
-			:renderLoadButton="renderLoadButton"
-			@item-clicked="properRedirect"
-			@load-more-items="loadMoreItems"
+	<div class="flex items-center gap-4">
+		<AdjustmentsIcon
+			data-testid="filter-and-sort-toggle"
+			class="w-8 h-8 text-slate-600 cursor-pointer"
+			@click="showFiltersAndSort = !showFiltersAndSort"
 		/>
-		<h2
-			v-else-if="activeSelected"
-			class="text-slate-600 w-fit mx-auto mt-28"
-		>
-			Du har ingen aktive lån
-		</h2>
-		<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
-			Du har ingen tidligere lån
-		</h2>
+		<SearchbarAndButton
+			data-testid="searchbar-and-button"
+			v-model="searchWord"
+			@search="searchAndResetItems"
+		></SearchbarAndButton>
 	</div>
+
+	<div class="grid gap-4" v-if="showFiltersAndSort">
+		<!--Tag input component-->
+		<CategoryList
+			color="bg-slate-500"
+			v-if="chosenCategories.length > 0"
+			v-model="chosenCategories"
+			:removable="true"
+			@remove-category-event="categoryRemoved"
+			data-testid="categories-tag-chosen"
+		></CategoryList>
+		<CategoryList
+			color="bg-blue-500"
+			class="mt-1"
+			v-model="tagAlts"
+			@add-category-event="categoryChosen"
+			data-testid="categories-tag-alts"
+		></CategoryList>
+		<div class="flex gap-4 items-center">
+			<SortDropdown
+				data-testid="sort-dropdown"
+				:sortAlts="sortAlts"
+				v-model.number="sortChosen"
+			/>
+
+			<h3>Aktiv</h3>
+			<input class="h-8 w-8" type="checkbox" v-model="activeSelected" />
+		</div>
+	</div>
+
+	<LoadingIndicator v-if="status === 'loading'" />
+	<ItemList
+		v-if="items.length > 0"
+		:items="items"
+		:searchHits="searchHits"
+		:renderLoadButton="renderLoadButton"
+		@item-clicked="properRedirect"
+		@load-more-items="loadMoreItems"
+	/>
+	<h2 v-else-if="activeSelected" class="text-slate-600 w-fit mx-auto mt-28">
+		Du har ingen aktive lån
+	</h2>
+	<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
+		Du har ingen tidligere lån
+	</h2>
 </template>

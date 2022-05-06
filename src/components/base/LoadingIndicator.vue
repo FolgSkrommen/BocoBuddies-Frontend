@@ -2,6 +2,7 @@
 	<div class="grid place-items-center fixed w-full h-full">
 		<div>
 			<svg
+				data-testid="svg"
 				role="status"
 				class="w-16 h-16 mr-2 text-slate-200 animate-spin fill-blue-500"
 				viewBox="0 0 100 101"
