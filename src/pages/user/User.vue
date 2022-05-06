@@ -163,7 +163,7 @@ onBeforeRouteUpdate((to, from) => {
 			<img
 				v-if="user.profilePicture"
 				:src="user.profilePicture"
-				alt=""
+				:alt="user.username"
 				class="w-32 h-32 object-cover rounded-full"
 				data-testid="profile-picture"
 			/>
@@ -282,6 +282,7 @@ onBeforeRouteUpdate((to, from) => {
 						<img
 							class="w-16 h-16 rounded-full object-cover"
 							:src="review.user.profilePicture"
+							:alt="review.user.username"
 						/>
 					</div>
 				</div>

@@ -20,6 +20,7 @@ const { user, color, showRating } = defineProps<Props>()
 					<img
 						class="w-16 h-16 rounded-full object-cover"
 						:src="user.profilePicture"
+						:alt="user.username"
 					/>
 					<div class="grid gap-2">
 						<p class="font-bold text-lg">
@@ -52,6 +53,7 @@ const { user, color, showRating } = defineProps<Props>()
 			<img
 				class="w-16 h-16 rounded-full object-cover"
 				:src="user.profilePicture"
+				:alt="user.username"
 			/>
 			<div class="grid gap-2">
 				<p class="font-bold text-lg">

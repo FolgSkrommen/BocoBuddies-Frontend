@@ -71,6 +71,10 @@ function getProfilePicture(id: number) {
 	return user.profilePicture
 }
 
+function getUserName(id: number) {
+	return users.find(u => u.userId === id)?.username ?? ''
+}
+
 function messagePlacement(receive: boolean) {
 	switch (receive) {
 		case true:
@@ -98,6 +102,7 @@ function messagePlacement(receive: boolean) {
 					v-if="message.senderId && message.receive"
 					class="rounded-full object-cover w-6 h-6 self-end"
 					:src="getProfilePicture(message.senderId)"
+					:alt="getUserName(message.senderId)"
 				/>
 				<div class="flex flex-col text-center">
 					<p v-if="message.date" class="text-xs">

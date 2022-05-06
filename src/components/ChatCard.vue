@@ -42,11 +42,13 @@ const chatName = computed(() => {
 							v-for="user in friendChat.members.slice(0, 4)"
 							class="rounded-full object-cover w-7 h-7"
 							:src="user.profilePicture"
+							:alt="user.username"
 						/>
 					</div>
 					<img
 						class="w-16 h-16 rounded-full object-cover"
 						:src="friendChat.members[0].profilePicture"
+						:alt="friendChat.members[0].username"
 						v-else
 					/>
 					<div class="grid gap-2">
@@ -75,6 +77,7 @@ const chatName = computed(() => {
 							v-for="user in friendChat.members.slice(0, 4)"
 							class="rounded-full object-cover"
 							:src="user.profilePicture"
+							:alt="user.username"
 						/>
 					</div>
 					<div class="grid gap-2">
