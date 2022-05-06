@@ -78,9 +78,12 @@ async function updateUser() {
 		await axios.put('/user', updatedUser)
 		updatedUser.profilePicture = store.state.user.profilePicture
 		store.state.user = updatedUser
+		store.dispatch('successWithTimeout', {
+			message: 'Brukerinformasjon er endret',
+		})
 		store.dispatch('edit', updatedUser)
 	} catch (error: any) {
-		store.dispatch('error', error.message)
+		store.dispatch('error', 'Noe gikk galt')
 	}
 }
 
@@ -91,9 +94,12 @@ async function changePassword() {
 			newPassword: newPassword.value,
 		})
 
+		store.dispatch('successWithTimeout', {
+			message: 'Passord har blitt endret',
+		})
 		showChangePassword.value = false
 	} catch (error: any) {
-		store.dispatch('error', error.message)
+		store.dispatch('error', 'Passordet du skrev inn er ikke korrekt')
 	}
 }
 
@@ -129,6 +135,7 @@ async function uploadPicture() {
 		let user = store.state.user
 		user.profilePicture = picture.data
 		await store.dispatch('edit', user)
+		store.dispatch('successWithTimeout', { message: 'Nytt bilde lagret' })
 		imagePreview.value = []
 		imageFiles.value = []
 	} catch (error: any) {
@@ -139,7 +146,8 @@ async function uploadPicture() {
 
 async function sendVerificationEmail() {
 	try {
-		const res = await axios.post('/verify/sendVerificationEmail')
+		await axios.post('/verify/sendAgain')
+		store.dispatch('successWithTimeout', { message: 'Ny e-post er sendt' })
 	} catch (error) {
 		console.log(error)
 	}
@@ -154,7 +162,7 @@ function resetTips() {
 		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
 		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
 	}
-	store.dispatch('info', 'Alle tips vil nå vises igjen')
+	store.dispatch('successWithTimeout', { message: 'Tips vises igjen' })
 }
 
 function deleteUser() {
