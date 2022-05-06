@@ -1,12 +1,26 @@
 stages: # List of stages for jobs, and their order of execution*
-    - format_test_build
+    - test
+    - build
 
 cache:
     paths:
         - /dist
 
+
+test-job:
+    stage: test
+    image: ubuntu:latest
+    only:
+        refs:
+            - main
+    script:
+        - apt update
+        - apt install nodejs -y
+        - npm install
+        - npm run test
+
 build-job:
-    stage: format_test_build
+    stage: build
     image: ubuntu:latest
     only:
         refs:
