@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'v-calendar/dist/style.css'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { store } from '../store'
@@ -263,7 +263,7 @@ const showEditCategory = ref(false)
 		</div>
 		<div>
 			<h3>Bilder</h3>
-			<ImageCarousel :images="newItem.images" />
+			<ImageCarousel :images="newItem.images" :alt="newItem.name" />
 			<input
 				multiple
 				type="file"

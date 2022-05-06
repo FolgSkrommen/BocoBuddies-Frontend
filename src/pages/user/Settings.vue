@@ -188,12 +188,12 @@ cookie()
 						v-if="imagePreview[0]"
 						class="w-32 h-32 object-cover rounded-full hover:cursor-pointer"
 						:src="imagePreview[0]"
-						alt=""
+						:alt="'Profilbilde'"
 					/>
 					<img
 						v-else-if="store.state.user.profilePicture"
 						:src="store.state.user.profilePicture"
-						alt=""
+						:alt="'Profilbilde'"
 						class="w-32 h-32 object-cover rounded-full hover:opacity-60 hover:cursor-pointer"
 					/>
 					<p
