@@ -13,6 +13,7 @@ test-job:
     only:
         refs:
             - main
+            - merge_requests
     script:
         - apt update
         - apt install nodejs -y
