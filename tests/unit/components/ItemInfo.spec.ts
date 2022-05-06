@@ -40,5 +40,7 @@ describe('Tests for ItemInfo', () => {
 			})
 			expect(wrapper.exists())
 		})
+
+		it('All information is properly rendered', () => {})
 	})
 })

@@ -202,7 +202,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toContain('Avtalt lån')
 		})
 
 		it('Accept header comes up when accepted send', () => {
@@ -219,7 +219,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="accept-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe('Avtalt lån')
+			expect(request.element.textContent).toContain('Avtalt lån')
 		})
 
 		it('Returned header comes up when accepted receive', () => {
@@ -255,7 +255,7 @@ describe('MessageContainerLoan', () => {
 			const request = wrapper.find('[data-testid="returned-h"]')
 
 			expect(request.exists()).toBe(true)
-			expect(request.element.textContent).toBe(' Lån tilbakelevert ')
+			expect(request.element.textContent).toContain(' Lån tilbakelevert ')
 		})
 	})
 
@@ -336,26 +336,26 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(true)).toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(true)).not.toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(true)).not.toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 			it('text white self-end (false)', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(false)).not.toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(false)).toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(false)).not.toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 
@@ -363,13 +363,13 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainerLoan)
 
 				expect(wrapper.vm.styleType(undefined)).not.toBe(
-					'bg-slate-400 text-black '
+					'bg-slate-700 text-black '
 				)
 				expect(wrapper.vm.styleType(undefined)).not.toBe(
-					'bg-blue-500 text-white justify-self-end'
+					'bg-blue-700 text-white justify-self-end'
 				)
 				expect(wrapper.vm.styleType(undefined)).toBe(
-					'bg-blue-500 text-white'
+					'bg-blue-700 text-white'
 				)
 			})
 		})

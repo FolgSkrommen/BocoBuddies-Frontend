@@ -41,12 +41,8 @@ type Status = 'loading' | 'loaded' | 'error'
 const status = ref<Status>()
 //const search = ref('')
 
-//Mounted
-if (store.getters.loggedIn) {
-	//Only needs to call these if user is logged in
-	getMainCategories()
-	search()
-}
+getMainCategories()
+search()
 
 //Computed
 const searchHits = computed<string>(() =>
