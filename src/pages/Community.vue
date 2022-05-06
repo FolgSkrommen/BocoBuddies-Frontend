@@ -216,7 +216,7 @@ cookie()
 
 <template>
 	<div class="grid gap-4">
-		<div class="flex gap-2">
+		<div class="flex gap-4">
 			<button
 				v-for="tag in View"
 				class="flex-1"

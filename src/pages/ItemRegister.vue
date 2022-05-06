@@ -232,7 +232,7 @@ async function registerItem() {
 		class="grid w-full gap-y-6"
 		@submit.prevent="registerItem"
 	>
-		<div class="flex gap-2">
+		<div class="flex gap-4">
 			<router-link to="/overview">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
@@ -248,7 +248,7 @@ async function registerItem() {
 		<div>
 			<p>Beskrivelse *</p>
 			<textarea
-				class="w-full"
+				class="w-full rounded-xl border p-4"
 				data-testid="description-input"
 				v-model.lazy="description"
 				label="Beskrivelse *"
@@ -293,27 +293,28 @@ async function registerItem() {
 
 		<div>
 			<BaseLabel model-value="Kategori" />
-
-			<select
-				class="rounded-xl"
-				v-for="(categories, index) in categoryChoices"
-				v-if="categoryChoices"
-				:key="index"
-				@input="
+			<div class="flex gap-4">
+				<select
+					class="rounded-xl"
+					v-for="(categories, index) in categoryChoices"
+					v-if="categoryChoices"
+					:key="index"
+					@input="
 						event => updateCategories(parseInt((event.target as HTMLInputElement).value), index)
 					"
-			>
 				>
-				<option value="0">Velg</option>
+					>
+					<option value="0">Velg</option>
 
-				<option
-					v-for="category in categories"
-					:key="category.categoryId"
-					:value="category.categoryId"
-				>
-					{{ category.categoryName }}
-				</option>
-			</select>
+					<option
+						v-for="category in categories"
+						:key="category.categoryId"
+						:value="category.categoryId"
+					>
+						{{ category.categoryName }}
+					</option>
+				</select>
+			</div>
 		</div>
 
 		<div v-for="(filterType, index) in filterTypes">
@@ -321,7 +322,7 @@ async function registerItem() {
 			<select
 				v-if="filterTypes"
 				:key="index"
-				class="rounded-xl bg-slate-500 items-center text-xl my-3 shadow-lg w-full p-3"
+				class="rounded-xl"
 				@input="
 						event => updateFilters((event.target as HTMLInputElement).value, index)
 					"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import CategoryList from '../components/CategoryList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -322,13 +322,33 @@ function cookie() {
 cookie()
 
 const showFiltersAndSort = ref(false)
+
+function setFiltersAndSort() {
+	if (window.innerWidth < 768) {
+		showFiltersAndSort.value = false
+	} else {
+		showFiltersAndSort.value = true
+	}
+}
+
+setFiltersAndSort()
+
+window.addEventListener('resize', () => {
+	setFiltersAndSort()
+})
+
+onUnmounted(() => {
+	window.removeEventListener('resize', () => {
+		setFiltersAndSort()
+	})
+})
 </script>
 
 <template>
 	<div v-if="store.getters.loggedIn" class="grid gap-4">
 		<div class="flex items-center gap-4">
 			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-600 cursor-pointer"
+				class="w-8 h-8 text-slate-600 cursor-pointer md:hidden"
 				@click="showFiltersAndSort = !showFiltersAndSort"
 			/>
 			<SearchbarAndButton
@@ -375,7 +395,7 @@ const showFiltersAndSort = ref(false)
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
-			redirect="my-loan"
+			@item-clicked="properRedirect"
 			@load-more-items="loadMoreItems"
 		/>
 		<h2

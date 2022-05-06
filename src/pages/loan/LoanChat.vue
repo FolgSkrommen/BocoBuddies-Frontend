@@ -630,14 +630,14 @@ function reRenderChat() {
 		></RateUserPopup>
 
 		<div class="flex justify-between items-center gap-5">
-			<div class="flex gap-2">
+			<div class="flex gap-4">
 				<router-link to="/chats">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link
 					v-if="item"
 					:to="'/item/' + item.itemId"
-					class="flex gap-2"
+					class="flex gap-4"
 				>
 					<img
 						class="w-12 h-12 object-cover rounded"
@@ -691,7 +691,7 @@ function reRenderChat() {
 			v-on:submit.prevent="sendMessage"
 			data-testid="message-form"
 		>
-			<div class="flex gap-2 content-center min-h-fit">
+			<div class="flex gap-4 content-center min-h-fit">
 				<base-input
 					class="grow"
 					v-model="currentMessage"

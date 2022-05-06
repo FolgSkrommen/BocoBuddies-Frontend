@@ -1,24 +1,39 @@
 stages: # List of stages for jobs, and their order of execution*
-    - format_test_build
+    - test
+    - build
 
 cache:
     paths:
         - /dist
 
+
+test-job:
+    stage: test
+    image: ubuntu:latest
+    only:
+        refs:
+            - main
+            - merge_requests
+    script:
+        - apt update
+        - apt install -y curl
+        - curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+        - apt update
+        - apt install -y nodejs
+        - apt install npm -y
+        - npm install
+        - npm run test
+
 build-job:
-    stage: format_test_build
+    stage: build
     image: ubuntu:latest
     only:
         refs:
             - main
     script:
         - apt update
-        - npm install
-        - npm run prettier
-        - npm run test
         - apt install rsync -y
         - apt install openssh-client -y
-        - apt install nodejs
         - mkdir ~/.ssh
         - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         - touch ~/.ssh/id_rsa

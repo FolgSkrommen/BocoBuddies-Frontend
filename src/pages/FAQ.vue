@@ -165,11 +165,11 @@ const questions: Section[] = [
 					</p>
 				</div>
 
-				<div v-for="section in questions" class="grid gap-2 my-5">
+				<div v-for="section in questions" class="grid gap-4 my-5">
 					<h1>{{ section.name }}</h1>
 					<div
 						v-for="question in section.questions"
-						class="border rounded-xl shadow-sm p-4 grid gap-2"
+						class="border rounded-xl shadow-sm p-4 grid gap-4"
 					>
 						<h3>{{ question.header }}</h3>
 						<p>{{ question.paragraph }}</p>

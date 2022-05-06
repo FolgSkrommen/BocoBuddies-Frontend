@@ -65,42 +65,48 @@ const circleOptions = {
 
 <template>
 	<div class="grid gap-4">
-		<ImageCarousel :images="item.images" :alt="item.name" />
-		<p data-testid="description">{{ item.description }}</p>
-		<div>
-			<p class="font-bold text-lg">Pris</p>
-			<p data-testid="price-with-unit">
-				{{ item.price }} / {{ getPriceUnit }}
-			</p>
-		</div>
-		<div v-if="item.categories.length > 0">
-			<p class="font-bold text-lg">Kategori</p>
-			<div class="flex gap-4">
-				<div
-					class="flex gap-4"
-					v-for="(category, i) in item.categories"
-				>
-					<p v-if="i">></p>
-					<p>{{ category }}</p>
+		<div class="grid gap-4">
+			<ImageCarousel :images="item.images" :alt="item.name" />
+			<div>
+				<p class="font-bold text-lg">Pris</p>
+				<h1 data-testid="price-with-unit">
+					{{ item.price }}kr / {{ getPriceUnit }}
+				</h1>
+			</div>
+			<p data-testid="description">{{ item.description }}</p>
+			<div v-if="item.categories.length > 0">
+				<p class="font-bold text-lg">Kategori</p>
+				<div class="flex gap-4">
+					<div
+						class="flex gap-4"
+						v-for="(category, i) in item.categories"
+					>
+						<p v-if="i">></p>
+						<p>{{ category }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div v-if="listOfFilterWithValue.length > 0">
-			<p class="font-bold text-lg">Filtere</p>
-			<div class="grid gap-2">
-				<div v-for="filter in listOfFilterWithValue" class="flex gap-2">
-					<p class="">{{ filter.name }}:</p>
-					<p>{{ filter.filter }}</p>
+			<div v-if="listOfFilterWithValue.length > 0">
+				<p class="font-bold text-lg">Filtere</p>
+				<div class="grid gap-4">
+					<div
+						v-for="filter in listOfFilterWithValue"
+						class="flex gap-4"
+					>
+						<p class="">{{ filter.name }}:</p>
+						<p>{{ filter.filter }}</p>
+					</div>
 				</div>
 			</div>
+			<div>
+				<p class="font-bold text-lg">Tilgjengelig fra</p>
+				<p>
+					{{ new Date(item.availableFrom).toLocaleString() }} -
+					{{ new Date(item.availableTo).toLocaleString() }}
+				</p>
+			</div>
 		</div>
-		<div>
-			<p class="font-bold text-lg">Tilgjengelig fra</p>
-			<p>
-				{{ new Date(item.availableFrom).toLocaleString() }} -
-				{{ new Date(item.availableTo).toLocaleString() }}
-			</p>
-		</div>
+
 		<DatePicker
 			data-testid="calendar"
 			class="place-self-center pointer-events-none"
