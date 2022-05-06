@@ -66,7 +66,7 @@ async function handleRate() {
 			<StarIcon
 				v-for="(icon, i) in 5"
 				@click="rating = i"
-				class="h-8 w-8 bg-black text-white rounded-full p-1"
+				class="h-8 w-8 bg-black text-white rounded-full p-1 cursor-pointer"
 				:class="i < rating + 1 ? 'text-yellow-400' : ''"
 			/>
 		</div>
@@ -75,7 +75,7 @@ async function handleRate() {
 			data-testid="comment-label"
 		></BaseLabel>
 		<textarea
-			class="p-2"
+			class="p-2 bg-slate-100 rounded-xl border"
 			v-model="comment"
 			rows="4"
 			data-testid="comment"

@@ -251,7 +251,11 @@ const showEditCategory = ref(false)
 <template>
 	<LoadingIndicator v-if="getStatus === 'loading'" />
 	<div class="grid gap-4" v-if="newItem && getStatus === 'loaded'">
-		<button v-if="item" @click="resetItemFromOld" class="bg-red-500">
+		<button
+			v-if="item"
+			@click="resetItemFromOld"
+			class="bg-red-500 hover:bg-red-700"
+		>
 			Tilbakestill
 		</button>
 		<div class="flex gap-4 items-center">
