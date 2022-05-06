@@ -1,10 +1,10 @@
 import { expect, it, vi } from 'vitest'
 import UserLogin from '../../../src/pages/UserLogin.vue'
-import { mount, shallowMount } from '@vue/test-utils'
+import { flushPromises, mount, shallowMount } from '@vue/test-utils'
 import axios from 'axios'
 
 it('Loads components', async () => {
-	const wrapper = mount(UserLogin)
+	const wrapper = await mount(UserLogin)
 
 	expect(wrapper.find('[data-testid="email-input"]').exists()).toBe(true)
 
@@ -15,11 +15,9 @@ it('Loads components', async () => {
 	expect(wrapper.find('[data-testid="register-link"]').exists()).toBe(true)
 })
 
-vi.spyOn(axios, 'post')
-
 it('login api is called when all fields are valid and submit is clicked', async () => {
-	const wrapper = shallowMount(UserLogin)
-
+	const wrapper = await shallowMount(UserLogin)
+	const getSpy = vi.spyOn(axios, 'post')
 	wrapper.vm.username = 'user@mail.com'
 	expect(wrapper.vm.username).toBe('user@mail.com')
 
@@ -33,7 +31,8 @@ it('login api is called when all fields are valid and submit is clicked', async 
 
 	await wrapper.find('[data-testid="login-form"]').trigger('submit.prevent')
 
-	expect(axios.post).toHaveBeenCalledTimes(1)
+	await flushPromises()
+	expect(getSpy).toHaveBeenCalledTimes(1)
 })
 
 it('Form is invalid if password under 8 char', async () => {

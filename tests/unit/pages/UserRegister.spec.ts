@@ -1,9 +1,11 @@
 import UserRegister from '../../../src/pages/UserRegister.vue'
-import { shallowMount } from '@vue/test-utils'
+import { flushPromises, shallowMount } from '@vue/test-utils'
 import { expect, it, describe, vi } from 'vitest'
 
 import axios from 'axios'
-
+export default {
+	get: vi.fn(() => Promise.resolve({ data: {} })),
+}
 describe('UserRegister', () => {
 	it('when loaded has the required elements', () => {
 		const wrapper = shallowMount(UserRegister)
@@ -72,10 +74,11 @@ describe('UserRegister', () => {
 	// Following lines tell Jest to mock any call to `axios.get`
 	// and to return `mockPostList` instead
 
-	vi.spyOn(axios, 'post')
-
-	it('register api is called when all fields are valid and submit is clicked', () => {
-		const wrapper = shallowMount(UserRegister)
+	it('register api is called when all fields are valid and submit is clicked', async () => {
+		const wrapper = shallowMount(UserRegister, {
+			axios: axios,
+		})
+		const mockedAxios = vi.spyOn(axios, 'post')
 
 		wrapper.vm.username = 'username'
 		expect(wrapper.vm.username).toBe('username')
@@ -113,10 +116,12 @@ describe('UserRegister', () => {
 		expect(wrapper.vm.passwordCheck).toBe('12345678')
 		expect(wrapper.vm.passwordCheck).not.toBe('Wrong value')
 
-		wrapper.find('[data-testid="register-form"]').trigger('submit.prevent')
+		await wrapper
+			.find('[data-testid="register-form"]')
+			.trigger('submit.prevent')
 
-		expect(axios.post).toHaveBeenCalledTimes(1)
-		expect(axios.post).toHaveBeenCalledWith('/user/register', {
+		expect(mockedAxios).toHaveBeenCalledTimes(1)
+		expect(mockedAxios).toHaveBeenCalledWith('/user/register', {
 			address: 'Address',
 			email: 'email@gmail.com',
 			firstName: 'First',

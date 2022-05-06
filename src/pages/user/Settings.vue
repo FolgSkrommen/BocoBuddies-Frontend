@@ -188,17 +188,20 @@ cookie()
 						v-if="imagePreview[0]"
 						class="w-32 h-32 object-cover rounded-full hover:cursor-pointer"
 						:src="imagePreview[0]"
+						data-testid="new-profile-picture"
 						:alt="'Profilbilde'"
 					/>
 					<img
 						v-else-if="store.state.user.profilePicture"
 						:src="store.state.user.profilePicture"
+						data-testid="profile-picture"
 						:alt="'Profilbilde'"
 						class="w-32 h-32 object-cover rounded-full hover:opacity-60 hover:cursor-pointer"
 					/>
 					<p
 						v-if="!imagePreview[0]"
 						class="text-xs hover:cursor-pointer text-center w-full"
+						data-testid="change-picture-text"
 					>
 						Endre profilbilde
 					</p>
@@ -207,6 +210,7 @@ cookie()
 						type="file"
 						accept="image/jpeg"
 						@input="event => uploadImage(event.target)"
+						data-testid="change-picture-input"
 					/>
 				</label>
 
@@ -240,7 +244,7 @@ cookie()
 					{{ store.state.user.lastName }}
 				</h3>
 				<div class="flex items-center">
-					<h4 class="text-slate-500">
+					<h4 class="text-slate-600">
 						@{{ store.state.user.username }}
 					</h4>
 					<CheckCircleIcon

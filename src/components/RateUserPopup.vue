@@ -54,23 +54,40 @@ async function handleRate() {
 			class="w-16 h-16 rounded-full place-self-center"
 			:src="user?.profilePicture"
 			:alt="user?.username"
+			data-testid="profile-img"
 		/>
-		<p class="place-self-center font-bold text-lg">
+		<p
+			class="place-self-center font-bold text-lg"
+			data-testid="last-first-name"
+		>
 			{{ user?.firstName }} {{ user?.lastName }}
 		</p>
 		<div class="flex gap-2 place-self-center">
 			<StarIcon
 				v-for="(icon, i) in 5"
 				@click="rating = i"
-				class="h-8 w-8 bg-black text-white rounded-full p-1"
+				class="h-8 w-8 bg-black text-white rounded-full p-1 cursor-pointer"
 				:class="i < rating + 1 ? 'text-yellow-400' : ''"
 			/>
 		</div>
-		<BaseLabel modelValue="Kommentar"></BaseLabel>
-		<textarea class="p-2" v-model="comment" rows="4"></textarea>
+		<BaseLabel
+			modelValue="Kommentar"
+			data-testid="comment-label"
+		></BaseLabel>
+		<textarea
+			class="p-2 bg-slate-100 rounded-xl border"
+			v-model="comment"
+			rows="4"
+			data-testid="comment"
+		></textarea>
 		<div class="flex justify-between">
-			<BaseBtn @click="emit('exit')" color="gray">Avbryt</BaseBtn>
-			<BaseBtn @click="handleRate" :disabled="rating === -1"
+			<BaseBtn @click="emit('exit')" color="gray" data-testid="cancel-btn"
+				>Avbryt</BaseBtn
+			>
+			<BaseBtn
+				@click="handleRate"
+				:disabled="rating === -1"
+				data-testid="rating-btn"
 				>Ranger</BaseBtn
 			>
 		</div>

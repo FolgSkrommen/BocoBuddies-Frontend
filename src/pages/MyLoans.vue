@@ -328,7 +328,7 @@ const showFiltersAndSort = ref(false)
 	<div v-if="store.getters.loggedIn" class="grid gap-4">
 		<div class="flex items-center gap-4">
 			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-500 cursor-pointer"
+				class="w-8 h-8 text-slate-600 cursor-pointer"
 				@click="showFiltersAndSort = !showFiltersAndSort"
 			/>
 			<SearchbarAndButton
@@ -375,16 +375,16 @@ const showFiltersAndSort = ref(false)
 			:items="items"
 			:searchHits="searchHits"
 			:renderLoadButton="renderLoadButton"
-			@item-clicked="properRedirect"
+			redirect="my-loan"
 			@load-more-items="loadMoreItems"
 		/>
 		<h2
 			v-else-if="activeSelected"
-			class="text-slate-400 w-fit mx-auto mt-28"
+			class="text-slate-600 w-fit mx-auto mt-28"
 		>
 			Du har ingen aktive lån
 		</h2>
-		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
+		<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
 			Du har ingen tidligere lån
 		</h2>
 	</div>

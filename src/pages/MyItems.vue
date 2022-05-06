@@ -228,7 +228,7 @@ const showFiltersAndSort = ref(false)
 			<!--Tag input component-->
 			<div class="flex items-center gap-4">
 				<AdjustmentsIcon
-					class="w-8 h-8 text-slate-500 cursor-pointer"
+					class="w-8 h-8 text-slate-600 cursor-pointer"
 					@click="showFiltersAndSort = !showFiltersAndSort"
 					data-testid="filter-and-sort-toggle"
 				/>
@@ -283,7 +283,7 @@ const showFiltersAndSort = ref(false)
 			data-testid="item-list"
 		/>
 
-		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
+		<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">
 			Du har ingen gjenstander
 		</h2>
 

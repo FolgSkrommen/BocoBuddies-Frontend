@@ -223,7 +223,7 @@ cookie()
 				:class="
 					view === tag
 						? 'bg-blue-500 text-white'
-						: 'bg-slate-300 text-slate-900'
+						: 'bg-slate-600 text-white'
 				"
 				@click="view = tag"
 				data-testid="view-button"
@@ -249,7 +249,7 @@ cookie()
 			></AddFriendPopup>
 			<h2
 				v-if="users?.length === 0"
-				class="text-slate-400 w-fit mx-auto mt-28"
+				class="text-slate-600 w-fit mx-auto mt-28"
 			>
 				Trykk (+) for å legge til venner
 			</h2>
@@ -303,7 +303,7 @@ cookie()
 					friendRequests?.length === 0 &&
 					sentFriendRequests?.length === 0
 				"
-				class="text-slate-400 w-fit mx-auto mt-28"
+				class="text-slate-600 w-fit mx-auto mt-28"
 			>
 				Du har ingen forespørsler
 			</h2>
@@ -321,7 +321,7 @@ cookie()
 			</div>
 			<h2
 				v-if="friendChats?.length === 0"
-				class="text-slate-400 w-fit mx-auto mt-28"
+				class="text-slate-600 w-fit mx-auto mt-28"
 			>
 				Trykk (+) for å starte en samtale, eller legg til en venn
 			</h2>

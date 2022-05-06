@@ -185,7 +185,7 @@ onBeforeRouteUpdate((to, from) => {
 					{{ user.firstName }} {{ user.lastName }}
 				</h3>
 				<div class="flex items-center">
-					<h4 class="text-slate-500">@{{ user.username }}</h4>
+					<h4 class="text-slate-600">@{{ user.username }}</h4>
 					<CheckCircleIcon
 						v-if="user.trusted"
 						class="h-5 w-5 text-blue-500"
@@ -229,7 +229,7 @@ onBeforeRouteUpdate((to, from) => {
 				:class="
 					stateTag === tag
 						? 'bg-blue-600 text-white'
-						: 'bg-slate-300 text-slate-900'
+						: 'bg-slate-600 text-white'
 				"
 				@click="stateTag = tag"
 				v-for="tag in State"
@@ -240,14 +240,14 @@ onBeforeRouteUpdate((to, from) => {
 
 		<h2
 			v-if="stateTag == State.REVIEWS && reviews?.length == 0"
-			class="text-slate-400 w-fit mx-auto mt-28"
+			class="text-slate-600 w-fit mx-auto mt-28"
 		>
 			Brukeren har ingen tilbakemeldinger
 		</h2>
 
 		<h2
 			v-if="stateTag == State.BUDDIES && buddies?.length == 0"
-			class="text-slate-400 w-fit mx-auto mt-28"
+			class="text-slate-600 w-fit mx-auto mt-28"
 		>
 			Brukeren har ingen buddies
 		</h2>
@@ -267,20 +267,23 @@ onBeforeRouteUpdate((to, from) => {
 							/>
 							<StarIcon
 								v-for="i in 5 - review.rating"
-								class="text-slate-500 w-8"
+								class="text-slate-600 w-8"
 							/>
 						</div>
 						<p class="w-full text-left text-lg p-1">
 							<slot v-if="review.description">
 								{{ review.description }}
 							</slot>
-							<slot v-else class="text-slate-500">
+							<slot v-else class="text-slate-600">
 								No comment
 							</slot>
 						</p>
 					</div>
 
-					<div class="flex">
+					<router-link
+						:to="`/user/${review.user.userId}`"
+						class="flex"
+					>
 						<div class="flex flex-col">
 							<p>{{ review.user.firstName }}</p>
 							<p>{{ review.user.lastName }}</p>
@@ -291,7 +294,7 @@ onBeforeRouteUpdate((to, from) => {
 							:src="review.user.profilePicture"
 							:alt="review.user.username"
 						/>
-					</div>
+					</router-link>
 				</div>
 			</Card>
 
