@@ -148,7 +148,12 @@ const questions: Section[] = [
 									/>
 								</svg>
 							</p>
-							<h1>FAQ</h1>
+							<h1 @click="counter++">FAQ</h1>
+							<img
+								v-if="counter >= 10"
+								src="/random.png"
+								alt="random"
+							/>
 						</div>
 						<p
 							class="font-sans inline font-bold text-3xl tracking-tight mb-0 ml-0"
