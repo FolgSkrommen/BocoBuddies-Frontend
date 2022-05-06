@@ -10,6 +10,7 @@ import { GetItemRequest, GetItemResponse } from '../api/item'
 import ImageCarousel from '../components/ImageCarousel.vue'
 import { PutItemEditRequest } from '../api/item/edit'
 import { DatePicker } from 'v-calendar'
+import BaseBtn from '../components/base/BaseBtn.vue'
 
 const router = useRouter()
 const { params } = useRoute()
@@ -383,6 +384,6 @@ const showEditCategory = ref(false)
 				</select>
 			</div>
 		</div>
-		<button @click="updateItem">Lagre</button>
+		<BaseBtn @click="updateItem" :to="'/overview/items'">Lagre</BaseBtn>
 	</div>
 </template>
