@@ -23,7 +23,10 @@ import { PostItemRegisterRequest } from '../api/item/register'
 
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
-	description: yup.string().required('Beskrivelse er påkrevd'),
+	description: yup
+		.string()
+		.required('Beskrivelse er påkrevd')
+		.max(254, 'Maks 255 tegn'),
 	price: yup.string().required('Pris er påkrevd'),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
