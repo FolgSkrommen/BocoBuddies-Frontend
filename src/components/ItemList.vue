@@ -36,24 +36,29 @@ function getPriceUnit(unit: string) {
 		<p class="align-middle">{{ searchHits }}</p>
 		<div class="grid gap-4 grid-cols-2 md:grid-cols-3 grid-flow-row">
 			<div v-for="(item, index) in items">
-				<Card class="h-min row-end-auto">
+				<Card class="h-min row-end-auto" data-testid="item-card">
 					<router-link
 						v-if="redirect"
 						:to="`/${redirect}/${item.itemId}`"
 						class="grid gap-4"
+						data-testid="redirect"
 					>
 						<img
 							v-if="item.images?.length > 0"
 							class="rounded-t-xl object-cover h-44 w-full"
 							:src="item.images[0]"
 							:alt="item.name"
+							data-testid="item-image"
 						/>
 						<div class="p-2 grid">
-							<p class="font-bold text-lg">
+							<p
+								class="font-bold text-lg"
+								data-testid="item-name"
+							>
 								{{ item.name }}
 							</p>
 							<div>
-								<p>
+								<p data-testid="item-price">
 									{{ item.price }}kr /
 									{{ getPriceUnit(item.priceUnit) }}
 								</p>
@@ -65,19 +70,24 @@ function getPriceUnit(unit: string) {
 						v-else
 						class="grid gap-4 cursor-pointer"
 						@click="itemClicked(item, index)"
+						data-testid="not-redirect"
 					>
 						<img
 							v-if="item.images?.length > 0"
 							class="rounded-t-xl object-cover h-44 w-full"
 							:src="item.images[0]"
 							:alt="item.name"
+							data-testid="item-image"
 						/>
 						<div class="p-2 grid">
-							<p class="font-bold text-lg">
+							<p
+								class="font-bold text-lg"
+								data-testid="item-name"
+							>
 								{{ item.name }}
 							</p>
 							<div>
-								<p>
+								<p data-testid="item-price">
 									{{ item.price }}kr /
 									{{ getPriceUnit(item.priceUnit) }}
 								</p>
@@ -88,6 +98,7 @@ function getPriceUnit(unit: string) {
 						class="h-fit w-fit m-2 place-self-end"
 						:to="`/edit-item/${item.itemId}`"
 						v-if="edit"
+						data-testid="edit-button"
 						>Rediger</BaseBtn
 					>
 				</Card>
