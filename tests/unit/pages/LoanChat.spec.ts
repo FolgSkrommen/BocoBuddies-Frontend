@@ -78,7 +78,7 @@ let mockLoan: Loan = {
 	returned: false,
 	start: '',
 }
-axios.defaults.baseURL = 'http://localhost:8001'
+
 describe('when loaded', () => {
 	it('has the required elements (loading)', async () => {
 		try {
@@ -227,23 +227,6 @@ describe('Testing websocket sending functions', async () => {
 		}
 	})
 })
-describe('Testing single functions', () => {
-	it('reRenderChat', () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.vm.render).toBe(0)
-		wrapper.vm.reRenderChat()
-		expect(wrapper.vm.render).toBe(1)
-	})
-
-	it('getPriceUnit', () => {
-		const wrapper = mount(Chat)
-		expect(wrapper.vm.getPriceUnit('DAY')).toBe('Dag')
-		expect(wrapper.vm.getPriceUnit('HOUR')).toBe('Time')
-		expect(wrapper.vm.getPriceUnit('MONTH')).toBe('Måned')
-		expect(wrapper.vm.getPriceUnit('WEEK')).toBe('Uke')
-		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
-	})
-})
 
 describe('Testing websocket receiving functions', async () => {
 	let wrapper: any
@@ -295,25 +278,43 @@ describe('Testing websocket receiving functions', async () => {
 		wrapper.vm.onLoanAccept(mockPayload2)
 		expect(wrapper.vm.loanStatus).toBe('ACCEPTED')
 	})
+})
 
-	it('Test onLoanChat loan is returned', async () => {
-		const mockCall = vi.spyOn(axios, 'get')
-		let mockPayload2 = {
-			body: '{"loanId":19,"item":0,"loaner":5,"chatId":26,"start":"2022-05-10T12:50:56.496","end":"2022-05-19T12:50:56.496","active":true,"returned":true,"creationDate":"2022-05-06T14:58:37.83","price":4545}',
-		}
-	})
-	/*
-	vi.spyOn(axios, 'get')
-	it('Testing onLoanAccept loan accepted', async () => {
-		mockPayload.body.active = true
-		mockPayload.body.returned = true
-		let mockPayload2 ={
-			body: '{"id":0, "chatId":20, "senderId":1, "recipientId":null, "type":"CHAT", "message":"test", "date":"2022-05-06T14:13:18.066+00:00", "status":null}'
-		}
-		wrapper.vm.onLoanAccept(JSON.stringify(mockPayload2))
-		expect(wrapper.vm.loanStatus === 'RETURNED')
-		expect(axios.get).toHaveBeenCalledTimes(1)
+describe('Testing single functions', () => {
+	it('reRenderChat', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.render).toBe(0)
+		wrapper.vm.reRenderChat()
+		expect(wrapper.vm.render).toBe(1)
 	})
 
-	 */
+	it('getPriceUnit', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.getPriceUnit('DAY')).toBe('Dag')
+		expect(wrapper.vm.getPriceUnit('HOUR')).toBe('Time')
+		expect(wrapper.vm.getPriceUnit('MONTH')).toBe('Måned')
+		expect(wrapper.vm.getPriceUnit('WEEK')).toBe('Uke')
+		expect(wrapper.vm.getPriceUnit('YEAR')).toBe('År')
+	})
+
+	it('userReviewed', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.loanStatus).toBe('UNDEFINED')
+		wrapper.vm.showRateUserPopup = true
+		wrapper.vm.userReviewed()
+		expect(wrapper.vm.loanStatus).toBe('REVIEWED')
+		expect(wrapper.vm.showRateUserPopup).toBe(false)
+	})
+
+	it('getUserToReviewCheck', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.getUserToReviewCheck()).toBe(false)
+	})
+
+	it('toggleShowRating', () => {
+		const wrapper = mount(Chat)
+		expect(wrapper.vm.showRateUserPopup).toBe(false)
+		wrapper.vm.toggleShowRating()
+		expect(wrapper.vm.showRateUserPopup).toBe(true)
+	})
 })

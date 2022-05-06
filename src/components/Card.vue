@@ -21,6 +21,7 @@ const colorClass = computed(() => {
 	<div
 		class="shadow-lg rounded-xl grid gap-4 transition-all"
 		:class="colorClass"
+		data-testid="slot"
 	>
 		<slot></slot>
 	</div>

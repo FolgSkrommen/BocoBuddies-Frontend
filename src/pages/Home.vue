@@ -299,11 +299,17 @@ const showFiltersAndSort = ref(false)
 	></BasePopup> -->
 	<div class="grid gap-4">
 		<div class="flex items-center gap-4">
-			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-600 cursor-pointer"
-				@click="showFiltersAndSort = !showFiltersAndSort"
-				data-testid="filter-and-sort-toggle"
-			/>
+			<span
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Vis filtre"
+			>
+				<AdjustmentsIcon
+					class="w-8 h-8 text-slate-600 cursor-pointer"
+					@click="showFiltersAndSort = !showFiltersAndSort"
+					data-testid="filter-and-sort-toggle"
+				/>
+			</span>
 			<SearchbarAndButton
 				v-model="searchWord"
 				@search="searchAndResetItems"
@@ -345,6 +351,9 @@ const showFiltersAndSort = ref(false)
 			redirect="item"
 			@load-more-items="loadMoreItems"
 			data-testid="item-list"
+			data-bs-toggle="tooltip"
+			data-bs-placement="bottom"
+			title="Til annonse"
 		/>
 
 		<h2

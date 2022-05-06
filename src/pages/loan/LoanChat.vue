@@ -631,7 +631,12 @@ function reRenderChat() {
 
 		<div class="flex justify-between items-center gap-5">
 			<div class="flex gap-4">
-				<router-link to="/chats">
+				<router-link
+					to="/chats"
+					data-bs-toggle="tooltip"
+					data-bs-placement="bottom"
+					title="Tilbake til lånesamtaler"
+				>
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link
@@ -696,6 +701,7 @@ function reRenderChat() {
 					class="grow"
 					v-model="currentMessage"
 					data-testid="message-input"
+					placeholder="Aa"
 				/>
 				<base-btn
 					class="h-full"
