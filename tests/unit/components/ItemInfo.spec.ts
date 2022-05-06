@@ -50,7 +50,7 @@ describe('Tests for ItemInfo', () => {
 			expect(
 				wrapper.find('[data-testid="price-with-unit"]').element
 					.textContent
-			).toContain('100 /')
+			).toContain('100kr /')
 			expect(wrapper.find('[data-testid="calendar"]').exists())
 			expect(wrapper.find('[data-testid="maps"]').exists())
 		})
