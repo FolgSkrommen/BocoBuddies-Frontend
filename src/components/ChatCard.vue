@@ -48,7 +48,7 @@ const chatName = computed(() => {
 					<img
 						class="w-16 h-16 rounded-full object-cover"
 						:src="friendChat.members[0].profilePicture"
-						:alt="friendChat.members[0].username"
+						:alt="friendChat.chatName"
 						v-else
 					/>
 					<div class="grid gap-2">
