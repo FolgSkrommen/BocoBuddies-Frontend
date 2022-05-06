@@ -26,6 +26,9 @@ const { modelValue, error } = defineProps<Props>()
 			data-testid="search-field"
 			@input="updateValue"
 			@keyup.enter="search"
+			data-bs-toggle="tooltip"
+			data-bs-placement="bottom"
+			title="Søk"
 		/>
 		<button
 			@click="search"

@@ -234,17 +234,20 @@ cookie()
 
 				<div class="grid grid-cols-2 w-full justify-items-center">
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Bekreft"
 						v-if="imagePreview[0]"
 						color="green"
 						class="w-fit"
 						@click="uploadPicture"
 						alt="Approve new profile picture"
-						data-bs-toggle="tooltip"
-						data-bs-placement="bottom"
-						title="Bekreft"
 						><CheckIcon class="w-6 h-6"
 					/></BaseBtn>
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Avbryt"
 						color="red"
 						class="w-fit"
 						v-if="imagePreview[0]"
@@ -255,9 +258,6 @@ cookie()
 								imagePreview = []
 							}
 						"
-						data-bs-toggle="tooltip"
-						data-bs-placement="bottom"
-						title="Avbryt"
 						><XIcon class="w-6 h-6"
 					/></BaseBtn>
 				</div>

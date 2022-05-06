@@ -701,6 +701,7 @@ function reRenderChat() {
 					class="grow"
 					v-model="currentMessage"
 					data-testid="message-input"
+					placeholder="Aa"
 				/>
 				<base-btn
 					class="h-full"
