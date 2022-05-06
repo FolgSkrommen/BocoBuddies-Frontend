@@ -66,7 +66,6 @@ async function createChat() {
 		console.log(error)
 	}
 }
-async function back() {}
 getItem()
 </script>
 
@@ -74,7 +73,12 @@ getItem()
 	<LoadingIndicator v-if="status === 'loading'" />
 	<div v-if="status === 'loaded' && item && lender" class="grid gap-4">
 		<div class="flex gap-4">
-			<router-link to="/">
+			<router-link
+				to="/"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Tilbake til hjemsiden"
+			>
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1>{{ item.name }}</h1>
