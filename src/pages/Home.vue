@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import CategoryList from '../components/CategoryList.vue'
 import SearchbarAndButton from '../components/SearchbarAndButton.vue'
 import qs from 'qs'
@@ -282,6 +282,26 @@ cookie()
 observer.observe(items[items.length-1])*/
 
 const showFiltersAndSort = ref(false)
+
+function setFiltersAndSort() {
+	if (window.innerWidth < 768) {
+		showFiltersAndSort.value = false
+	} else {
+		showFiltersAndSort.value = true
+	}
+}
+
+setFiltersAndSort()
+
+window.addEventListener('resize', () => {
+	setFiltersAndSort()
+})
+
+onUnmounted(() => {
+	window.removeEventListener('resize', () => {
+		setFiltersAndSort()
+	})
+})
 </script>
 
 <template>
@@ -300,7 +320,7 @@ const showFiltersAndSort = ref(false)
 	<div class="grid gap-4">
 		<div class="flex items-center gap-4">
 			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-600 cursor-pointer"
+				class="w-8 h-8 text-slate-600 cursor-pointer md:hidden"
 				@click="showFiltersAndSort = !showFiltersAndSort"
 				data-testid="filter-and-sort-toggle"
 			/>
