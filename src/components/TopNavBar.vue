@@ -14,6 +14,9 @@ import { UserIcon } from '@heroicons/vue/solid'
 					src="/logo.png"
 					alt="boco logo"
 					class="h-10 w-10 rounded-full"
+					data-bs-toggle="tooltip"
+					data-bs-placement="bottom"
+					title="Hjem"
 				/>
 			</router-link>
 			<div class="flex gap-8 items-center">
@@ -36,6 +39,9 @@ import { UserIcon } from '@heroicons/vue/solid'
 						class="rounded-full object-cover w-8 h-8"
 						:src="store.state.user.profilePicture"
 						:alt="store.state.user.username"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Til profil"
 					/>
 					<p v-else>Logg inn</p>
 				</router-link>
