@@ -53,7 +53,7 @@ watch(sortChosen, () => {
 })
 
 type Status = 'loading' | 'loaded' | 'error'
-const status = ref<Status>()
+const status = ref<Status>('loading')
 async function getMainCategories() {
 	status.value = 'loading'
 	try {
@@ -188,6 +188,7 @@ async function search() {
 search()
 
 function searchAndResetItems() {
+	status.value = 'loading'
 	currentPage.value = 0
 	items.value = []
 	search()
@@ -346,7 +347,10 @@ const showFiltersAndSort = ref(false)
 			data-testid="item-list"
 		/>
 
-		<h2 v-else class="text-slate-400 w-fit mx-auto mt-28">
+		<h2
+			v-if="status !== 'loading' && items.length == 0"
+			class="text-slate-400 w-fit mx-auto mt-28"
+		>
 			Ingen resultater
 		</h2>
 	</div>
