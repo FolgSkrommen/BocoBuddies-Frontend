@@ -6,6 +6,7 @@ cache:
     paths:
         - /dist
 
+
 test-cypress:
   image: cypress/browsers:node16.14.0-chrome99-ff97
   stage: test
