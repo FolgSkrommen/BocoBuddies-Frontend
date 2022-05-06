@@ -223,7 +223,7 @@ cookie()
 				:class="
 					view === tag
 						? 'bg-blue-500 text-white'
-						: 'bg-slate-300 text-slate-900'
+						: 'bg-slate-600 text-white'
 				"
 				@click="view = tag"
 				data-testid="view-button"
