@@ -240,7 +240,7 @@ cookie()
 					{{ store.state.user.lastName }}
 				</h3>
 				<div class="flex items-center">
-					<h4 class="text-slate-500">
+					<h4 class="text-slate-600">
 						@{{ store.state.user.username }}
 					</h4>
 					<CheckCircleIcon

@@ -101,7 +101,7 @@ getChats()
 			</div>
 			<h2
 				v-if="chats.length === 0"
-				class="text-slate-400 w-fit mx-auto mt-28"
+				class="text-slate-600 w-fit mx-auto mt-28"
 			>
 				Du har ingen lånesamtaler
 			</h2>

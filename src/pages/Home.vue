@@ -300,7 +300,7 @@ const showFiltersAndSort = ref(false)
 	<div class="grid gap-4">
 		<div class="flex items-center gap-4">
 			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-500 cursor-pointer"
+				class="w-8 h-8 text-slate-600 cursor-pointer"
 				@click="showFiltersAndSort = !showFiltersAndSort"
 				data-testid="filter-and-sort-toggle"
 			/>
@@ -349,7 +349,7 @@ const showFiltersAndSort = ref(false)
 
 		<h2
 			v-if="status !== 'loading' && items.length == 0"
-			class="text-slate-400 w-fit mx-auto mt-28"
+			class="text-slate-600 w-fit mx-auto mt-28"
 		>
 			Ingen resultater
 		</h2>

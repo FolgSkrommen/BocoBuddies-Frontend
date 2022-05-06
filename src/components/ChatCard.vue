@@ -56,7 +56,7 @@ const chatName = computed(() => {
 						<div class="flex gap-2 flex-wrap">
 							<p
 								v-for="member in friendChat.members"
-								class="text-slate-500"
+								class="text-slate-600"
 							>
 								{{ member.firstName }}
 							</p>
@@ -84,7 +84,7 @@ const chatName = computed(() => {
 						<div class="flex gap-2 flex-wrap">
 							<p
 								v-for="member in friendChat.members"
-								class="text-slate-500"
+								class="text-slate-600"
 							>
 								{{ member.firstName }}
 							</p>
