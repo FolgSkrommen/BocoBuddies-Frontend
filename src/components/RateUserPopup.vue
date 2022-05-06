@@ -34,7 +34,7 @@ async function handleRate() {
 	const review: PostReviewRequest = {
 		loanId: loan.loanId,
 		isOwner: user.userId === loan.loaner,
-		rating: rating.value + 1,
+		rating: rating.value,
 		description: comment.value,
 		date: getDateAndTime(),
 	}

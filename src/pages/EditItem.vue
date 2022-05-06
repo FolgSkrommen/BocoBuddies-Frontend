@@ -268,7 +268,7 @@ const showEditCategory = ref(false)
 			<input
 				multiple
 				type="file"
-				accept="image/*"
+				accept="image/jpeg"
 				@change="handleImageChange($event)"
 			/>
 		</div>
