@@ -341,7 +341,8 @@ function onRequestReceived(payload: any) {
  */
 function onMessageReceived(payload: any) {
 	if (!store.state.user) return
-
+	console.log(payload)
+	console.log(payload.body)
 	let message = JSON.parse(payload.body)
 
 	let msg: Message = {
@@ -538,21 +539,7 @@ function getUserToReviewCheck() {
 	if (!store.state.user) return false
 	if (!user.value) return false
 }
-/*function getUserToReview() {
-	if (store.state.user && store.state.user.userId && user.value) {
 
-		if (!user.value && lender.value?.userId !== store.state.user.userId)
-			return lender.value
-
-
-		if (store.state.user.userId === user.value.userId) {
-			return lender.value
-		} else {
-			return user.value
-		}
-	}
-
-}*/
 function getUserToReview() {
 	if (!store.state.user) return
 
@@ -644,7 +631,12 @@ function reRenderChat() {
 
 		<div class="flex justify-between items-center gap-5">
 			<div class="flex gap-4">
-				<router-link to="/chats">
+				<router-link
+					to="/chats"
+					data-bs-toggle="tooltip"
+					data-bs-placement="bottom"
+					title="Tilbake til lånesamtaler"
+				>
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link

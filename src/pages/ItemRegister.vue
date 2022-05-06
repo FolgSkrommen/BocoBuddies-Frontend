@@ -224,6 +224,22 @@ async function registerItem() {
 		store.dispatch('error', error.message)
 	}
 }
+
+function cookie() {
+	const seenItemCookie = ('; ' + document.cookie)
+		.split(`; seenSettingsTutorial=`)
+		.pop()
+		?.split(';')[0]
+
+	if (!seenItemCookie?.includes('true')) {
+		store.dispatch(
+			'info',
+			'Her kan du opprette nye items, legg inn all nødvendig informasjon og klikk send. Bilder er ikke nødvenig, men anbefalt. Klikk X knappen for å lukke denne meldingen.'
+		)
+		document.cookie = 'seenSettingsTutorial=true; max-age=31536000'
+	}
+}
+cookie()
 </script>
 
 <template>
@@ -233,7 +249,12 @@ async function registerItem() {
 		@submit.prevent="registerItem"
 	>
 		<div class="flex gap-4">
-			<router-link to="/overview">
+			<router-link
+				to="/overview"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Tilbake til mine gjenstander"
+			>
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1 data-testid="header">Ny gjenstand</h1>

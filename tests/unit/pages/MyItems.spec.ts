@@ -1,35 +1,23 @@
-import { shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
+import { mount, shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import MyItems from '../../../src/pages/MyItems.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
 import qs from 'qs'
-
-const store = createStore({
-	state() {
-		return {
-			user: {
-				userId: 'number',
-				firstName: 'string',
-				lastName: 'string',
-				username: 'string',
-				email: 'string',
-				address: 'string',
-				postalCode: 'string',
-				phoneNumber: 'string',
-				profilePicture: 'string',
-				friend: 'boolean',
-				hasPendingInvite: 'boolean',
-				verified: 'boolean',
-				trusted: 'boolean',
-				rating: 'number',
-			},
-		}
-	},
-})
+import { User } from '../../../src/api/schema'
 
 describe('MyItems', () => {
 	describe('when entered', () => {
+		let mockUser: User = {
+			firstName: 'navn',
+			lastName: 'forett',
+			rating: 1,
+			trusted: false,
+			userId: 2,
+			username: 'Olav',
+			verified: false,
+		}
+
 		let mockCategoryList = [
 			{
 				categoryId: 1,
@@ -57,19 +45,7 @@ describe('MyItems', () => {
 			.mockResolvedValueOnce(mockItemList)
 
 		it('has the required elements, including one tag alternative, initially', async () => {
-			const wrapper = shallowMount(MyItems, {
-				global: {
-					provide: {
-						store: store,
-					},
-				},
-			})
-
-			//Both categories and items are gotten with separate calls
-			expect(axios.get).toHaveBeenCalledTimes(2) //Both categories and items are gotten with separate calls
-			expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
-
-			await flushPromises()
+			const wrapper = shallowMount(MyItems)
 
 			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
@@ -87,6 +63,11 @@ describe('MyItems', () => {
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
 				false
 			)
+		})
+
+		it('fetches categories', async () => {
+			mount(MyItems)
+			expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
 		})
 
 		it('has initial sortChosen value equal to 0', async () => {
