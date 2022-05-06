@@ -14,7 +14,7 @@ const emit = defineEmits(['exit'])
 				<div class="grid gap-4 overflow-y-auto p-2">
 					<XIcon
 						@click="emit('exit')"
-						class="place-self-end w-8 h-8"
+						class="place-self-end w-8 h-8 cursor-pointer"
 					/>
 					<slot></slot>
 				</div>

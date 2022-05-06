@@ -736,7 +736,7 @@ function reRenderChat() {
 					v-if="loanStatus === 'RETURNED' && !hasReviewed"
 					@click="toggleShowRating"
 					data-testid="feedback-button"
-					class="grow bg-purple-500"
+					class="grow"
 					>Gi tilbakemelding</BaseBtn
 				>
 				<BaseBtn
