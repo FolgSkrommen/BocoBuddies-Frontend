@@ -2,12 +2,112 @@
 import { ref } from 'vue'
 import BaseBtn from '../components/base/BaseBtn.vue'
 const counter = ref(0)
+
+interface Section {
+	name: string
+	questions: Question[]
+}
+
+interface Question {
+	header: string
+	paragraph: string
+}
+
+const questions: Section[] = [
+	{
+		name: 'Innlogging',
+		questions: [
+			{
+				header: 'Hvorfor kan jeg ikke logge inn?',
+				paragraph:
+					'Dobbeltsjekk at du bruker riktig brukernavn og passord kombinasjon',
+			},
+			{
+				header: 'Hvordan registrer jeg meg selv?',
+				paragraph:
+					'	Trykk på “Har du ikke bruker? Klikk her!” under påloggingsknappen på innloggingsiden',
+			},
+			{
+				header: 'Hvorfor fungerer ingen av funskjonaliteten?',
+				paragraph:
+					'Sjekk at du er logget inn, dersom du er logget inn dobbelt sjekk at du har verfisert brukeren din via email lenken.&nbsp;',
+			},
+			{
+				header: 'Jeg har ikke fått verfiserings mail?',
+				paragraph:
+					'Klikk på send ny verifiserings mail på profilsiden din',
+			},
+		],
+	},
+	{
+		name: 'Gjenstander',
+		questions: [
+			{
+				header: 'Hvordan låner jeg en gjenstand?',
+				paragraph:
+					'	Gå til søk-siden, finn gjenstanden du vil låne, trykk deg inn på den og klikk på "Send melding". <br>' +
+					'Nå er du i en samtale med utleier, og du har mulighet til å forespørre et lån. Trykk på "Forespør", fyll ut perioden du ønsker å låne og	eventuelt foreslå en ny pris. Trykk på avtal lån <br>' +
+					'	Da gjenstår det bare å vente på utleiers svar!',
+			},
+			{
+				header: 'Hva skjer når utleier bekrefter et lån?',
+				paragraph:
+					'Da må dere avtale dere i mellom hva som skal gjøres videre i chatten, enten det er relatert til henting/sending av den lånte gjenstanden eller noe helt annet.',
+			},
+			{
+				header: 'Kan jeg avslyse et lån før det faktisk settes i gang?',
+				paragraph:
+					'Det kan du, men det må senest skje 24t før avtalt leiestart. Dette gjøres ved å si ifra til utleier i den aktuelle chatten.',
+			},
+			{
+				header: 'Hvordan lager jeg en gjenstand?',
+				paragraph: 'Klikk på pluss ikonet under dine gjenstander',
+			},
+			{
+				header: 'Hva koster det å annonsere?',
+				paragraph: 'Det er helt gratis!!! For nå 😊',
+			},
+			{
+				header: 'Hvordan kan jeg endre på en annonse?',
+				paragraph: 'Klikk på “endre” under annonsen det gjelder',
+			},
+			{
+				header: 'Hvordan sletter jeg en annonse/gjenstand?',
+				paragraph: 'Klikk på annonsen din og bla ned til slett knappen',
+			},
+		],
+	},
+	{
+		name: 'Community',
+		questions: [
+			{
+				header: 'Hvordan legger jeg til venner?',
+				paragraph:
+					'Klikk på pluss knappen under vennefanen. Søk deretter på brukernavnet til den du vil legge til',
+			},
+			{
+				header: 'Hvordan kan jeg sende chatter?',
+				paragraph:
+					'Du kan enten opprette chatter med venner. Da er	det bare å klikke pluss ikonet under chatter og velge hvem du vil chatte med. Du kan også opprette samtaler med utleiere. Da er det bare å klikke på send melding under en annonse',
+			},
+		],
+	},
+	{
+		name: 'Kontakt oss',
+		questions: [
+			{
+				header: 'Dersom du har spørsmål bare ta å sving oss en mail på:',
+				paragraph: 'yourbocobuddy@gmail.com',
+			},
+		],
+	},
+]
 </script>
 
 <template>
 	<div>
 		<div>
-			<div class="max-w-xl mr-auto ml-auto">
+			<div class="max-w-xl mr-auto ml-auto text-slate-700">
 				<div class="flex flex-col mb-16">
 					<div class="mb-6">
 						<p
@@ -44,289 +144,29 @@ const counter = ref(0)
 									/>
 								</svg>
 							</p>
-							<p
-								class="relative font-sans inline font-bold text-3xl tracking-tight mr-0 text-slate-900"
-							>
-								FAQ
-							</p>
+							<h1>FAQ</h1>
 						</div>
 						<p
 							class="font-sans inline font-bold text-3xl tracking-tight mb-0 ml-0"
 						></p>
 					</div>
-					<p class="text-base text-slate-700">
+					<p>
 						Her kan du finne svar på alle mulige spørsmål du kunne
 						finne på å stille
 					</p>
 				</div>
-				<p
-					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
-				>
-					Innlogging:
-				</p>
-				<div class="space-y-4">
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvorfor kan jeg ikke logge inn?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Dobbeltsjekk at du bruker tiktig brukernavn og
-								passord kombinasjon
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan registrer jeg meg selv?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Trykk på “Har du ikke bruker? Klikk her!” under
-								påloggingsknappen på innloggingsiden
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvorfor fungerer ingen av funskjonaliteten?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Sjekk at du er logget inn, dersom du er logget
-								inn dobbelt sjekk at du har verfisert brukeren
-								din via email lenken.&nbsp;
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Jeg har ikke fått verfiserings mail?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Klikk på send ny verifiserings mail på
-								profilsiden din
-							</p>
-						</div>
-					</div>
-				</div>
 
-				<br />
-				<br />
-				<p
-					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
-				>
-					Gjenstander:
-				</p>
-				<div class="space-y-4">
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan låner jeg en gjenstand?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Gå til søk-siden, finn gjenstanden du vil låne,
-								trykk deg inn på den og klikk på 'Send melding'.
-							</p>
-							<br />
-							<p class="text-2xl text-slate-700">
-								Nå er du i en samtale med utleier, og du har
-								mulighet til å forespørre et lån. Trykk på
-								'Forespør', fyll ut perioden du ønsker å låne og
-								eventuelt foreslå en ny pris. Trykk på 'avtal
-								lån'.
-							</p>
-							<br />
-							<p class="text-2xl text-slate-700">
-								Da gjenstår det bare å vente på utleiers svar!
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hva skjer når utleier bekrefter et lån?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Da må dere avtale dere i mellom hva som skal
-								gjøres videre i chatten, enten det er relatert
-								til henting/sending av den lånte gjenstanden
-								eller noe helt annet.
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Kan jeg avslyse et lån før det faktisk settes i
-								gang?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Det kan du, men det må senest skje 24t før
-								avtalt leiestart. Dette gjøres ved å si ifra til
-								utleier i den aktuelle chatten.
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan lager jeg en gjenstand?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Klikk på pluss ikonet under dine gjenstander
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hva koster det å annonsere?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Det er helt gratis!!! For nå 😊
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan kan jeg endre på en annonse?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Klikk på “endre” under annonsen det gjelder
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan sletter jeg en annonse/gjenstand?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Klikk på annonsen din og bla ned til slett
-								knappen
-							</p>
-						</div>
-					</div>
-				</div>
-
-				<br />
-				<br />
-				<p
-					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
-				>
-					Community:
-				</p>
-				<div class="space-y-4">
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan legger jeg til venner?
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Klikk på pluss knappen under vennefanen. Søk
-								deretter på brukernavnet til den du vil legge
-								til
-							</p>
-						</div>
-					</div>
-					<div class="border rounded-xl shadow-sm">
-						<div
-							class="focus:outline-none flex w-full items-center pt-4 pr-4 pb-4 pl-4"
-						>
-							<p class="font-medium text-lg">
-								Hvordan kan jeg sende chatter
-							</p>
-						</div>
-						<div class="pr-4 pb-4 pl-4">
-							<p class="text-2xl text-slate-700">
-								Du kan enten opprette chatter med venner. Da er
-								det bare å klikke pluss ikonet under chatter og
-								velge hvem du vil chatte med. Du kan også
-								opprette samtaler med utleiere. Da er det bare å
-								klikke på send melding under en annonse
-							</p>
-						</div>
-					</div>
-				</div>
-
-				<br />
-				<br />
-
-				<p
-					class="font-bold leading-tight mb-2 text-center text-black font-heading text-3xl"
-					@click="counter++"
-				>
-					Kontakt oss:
-				</p>
-				<img v-if="counter > 4" src="/random.png" alt="random" />
-				<div class="border rounded-xl shadow-sm">
+				<div v-for="section in questions" class="grid gap-2 my-5">
+					<h1>{{ section.name }}</h1>
 					<div
-						class="focus:outline-none grid gap-4 w-full items-center pt-4 pr-4 pb-4 pl-4"
+						v-for="question in section.questions"
+						class="border rounded-xl shadow-sm p-4 grid gap-2"
 					>
-						<p class="text-2xl text-slate-700">
-							Dersom du har spørsmål bare ta å sving oss en mail
-							på:
-							<a
-								href="mailto:yourbocobuddy@gmail.com?subject=Henvendelse via nettløsning"
-								>yourbocobuddy@gmail.com</a
-							>
-						</p>
-						<BaseBtn class="w-full" to="/contact"
-							>Kontaktskjema</BaseBtn
-						>
+						<h3>{{ question.header }}</h3>
+						<p>{{ question.paragraph }}</p>
 					</div>
 				</div>
+				<BaseBtn class="w-full" to="/contact">Kontaktskjema</BaseBtn>
 			</div>
 		</div>
 	</div>
