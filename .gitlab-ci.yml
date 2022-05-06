@@ -15,7 +15,7 @@ build-job:
         - apt update
         - apt install rsync -y
         - apt install openssh-client -y
-        - apt install nodejs
+        - apt install nodejs -y
         - mkdir ~/.ssh
         - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         - touch ~/.ssh/id_rsa
