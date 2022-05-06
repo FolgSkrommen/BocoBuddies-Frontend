@@ -1,30 +1,58 @@
-# Vue 3 + TypeScript + Vite
+# Boco - Frontend
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Introduction
+
+BoCo is a web-application for private and public users who want to lend or borrow items.
+Users can log in and publish ads with items they want to rent out, or arrange loans of items published by other users.
+BoCo is initially intended to operate in Norway.
+
+This application was created at NTNU in Trondheim, Norway, for the subject: idatt2106: "Systemutvikling"
+
 
 ## Recommended IDE Setup
 
 -   [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
 
-## Type Support For `.vue` Imports in TS
+## Setup
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+### Required Programs
+- [NPM](https://www.npmjs.com/)
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+### Installation
+```
+npm i
+```
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+### Dev environment
+```
+npm run dev
+```
 
-# Software Engineering Scrum Project, Frontend
-This is the frontend part of the software engineering scrum project. It consits of a vue project that uses vite to compile.
+### Building
+```
+npm run build
+```
 
-## How to run tests
+### Testing
+#### Unit
+```
+npm run test
+```
 
--   clone the project
--   open the project in a terminal
--   run the command 'npm run test'
+#### E2E
+```
+npm run cypress:run
+```
 
-## Group members
+## Major technologies
+- Vite
+- Vue 3
+    - Vuex
+    - Router
+    - Typescript
+- Tailwind 3
+
+## Team
  Anders Heftøy Carlsen, 
  Mats Sollid Eide, 
  Adrian Wist Hakvåg, 
