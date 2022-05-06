@@ -205,7 +205,7 @@ cookie()
 					<input
 						v-show="false"
 						type="file"
-						accept="image/*"
+						accept="image/jpeg"
 						@input="event => uploadImage(event.target)"
 					/>
 				</label>

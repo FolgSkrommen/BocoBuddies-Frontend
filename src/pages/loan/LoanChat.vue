@@ -595,9 +595,7 @@ function cookie() {
 		store.dispatch(
 			'info',
 			'Hei. Dette er plattformen for å låne en gjenstand. Den som vil låne må forespørre et lån. Her setter hen pris og tidsrom for lånet' +
-				'. Dette må bli godkjent av den som låner ut, før lånet er bindende. Man kan skriftlig via chat avlyse lånet 24 timer før den skal lånes.' +
-				' Eller brukes chatten for å bestemme pris og liknende, samt hvordan transport vil fungere. Etter lånet må den som låner ut bekrefte at ' +
-				'gjenstanden er levert tilbake. Etter dette kan begge legge igjen en tilbakemelding på hverandre. Hvis noe er uklart les FAQ'
+				'. Dette må bli godkjent av den som låner ut, før lånet er bindende. Hvis noe er uklart les FAQ'
 		)
 		document.cookie = 'seenChatTutorial=true; max-age=31536000'
 	}
@@ -799,6 +797,6 @@ function reRenderChat() {
 </template>
 <style scoped>
 .chatHeight {
-	height: calc(100vh - 250px);
+	height: calc(100vh - 280px);
 }
 </style>

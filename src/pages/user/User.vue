@@ -110,7 +110,6 @@ if (store.state.user && id && id !== store.state.user.userId) {
 	getUser()
 } else {
 	user.value = store.state.user
-	console.log(user.value)
 	getUserStatus.value = 'loaded'
 }
 
@@ -143,8 +142,6 @@ const isOwnProfile = computed(() => {
 })
 
 onBeforeRouteUpdate((to, from) => {
-	console.log(to)
-	console.log(from)
 	id = parseInt(to.params.id as string)
 
 	buddies.value = []
