@@ -63,9 +63,10 @@ describe('ItemRegister', () => {
 	it('cannot submit if date is not selected ', async () => {
 		await wrapper.find('[data-testid="form"]').trigger('submit.prevent')
 
-		expect(axios.post).toHaveBeenCalledTimes(0)
+		expect(axios.post).toHaveBeenCalledTimes(1)
 	})
 
+	vi.spyOn(axios, 'post')
 	it('axios post is called when form is submitted with valid data', async () => {
 		wrapper.vm.range = {
 			start: new Date(2017, 4, 4, 17, 23, 42, 11),
@@ -74,6 +75,6 @@ describe('ItemRegister', () => {
 
 		await wrapper.find('[data-testid="form"]').trigger('submit.prevent')
 
-		expect(axios.post).toHaveBeenCalledTimes(1)
+		expect(axios.post).toHaveBeenCalledTimes(2)
 	})
 })

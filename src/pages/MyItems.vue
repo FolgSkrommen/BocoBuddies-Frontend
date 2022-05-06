@@ -280,7 +280,9 @@ const showFiltersAndSort = ref(false)
 		:renderLoadButton="renderLoadButton"
 		redirect="my-item"
 		@load-more-items="loadMoreItems"
-		data-testid="item-list"
+		data-bs-toggle="tooltip"
+		data-bs-placement="bottom"
+		title="Til annonse"
 	/>
 
 	<h2 v-else class="text-slate-600 w-fit mx-auto mt-28">

@@ -110,7 +110,11 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 <template>
 	<BasePopup @exit="emit('exit')">
 		<h1>Ny gruppechat med</h1>
-		<BaseInput v-model="groupName" label="Gruppenavn"></BaseInput>
+		<BaseInput
+			v-model="groupName"
+			label="Gruppenavn"
+			data-testid="input"
+		></BaseInput>
 
 		<!--GCPopup component here-->
 		<SearchbarAndButton
@@ -118,9 +122,10 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 			@search="newSearch"
 			:error="errorMessage"
 			label="Finn venner"
+			data-testid="searchbar"
 		></SearchbarAndButton>
 
-		<LoadingIndicator v-if="status === 'loading'" />
+		<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
 
 		<div class="grid gap-4">
 			<UserCardAndBtn
@@ -129,6 +134,7 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 				:btnDsbld="false"
 				btnTxt="Fjern"
 				@button-clicked="removeFromGCList"
+				data-testid="user-btn"
 				class="border-solid bg-gray-200 rounded-xl p-3"
 			></UserCardAndBtn>
 			<UserCardAndBtn
@@ -137,12 +143,18 @@ const notValid = computed(() => !groupName.value || friendInGC.value.length < 2)
 				:btnDsbld="false"
 				btnTxt="Legg til"
 				@button-clicked="addToGCList"
+				data-testid="add-btn"
 			></UserCardAndBtn>
 
-			<BaseBtn @click="loadMoreResults" v-if="loadMoreBool"
+			<BaseBtn
+				@click="loadMoreResults"
+				v-if="loadMoreBool"
+				data-testid="load-btn"
 				>Last inn flere</BaseBtn
 			>
 		</div>
-		<BaseBtn @click="createGC" :disabled="notValid">Lag gruppechat</BaseBtn>
+		<BaseBtn @click="createGC" :disabled="notValid" data-testid="create-btn"
+			>Lag gruppechat</BaseBtn
+		>
 	</BasePopup>
 </template>

@@ -10,7 +10,7 @@ import { ChevronLeftIcon } from '@heroicons/vue/outline'
 import axios from 'axios'
 
 import { computed, Ref, ref } from 'vue'
-import router from '../router'
+import { useRouter } from 'vue-router'
 
 //Form validation
 import { useForm, useField } from 'vee-validate'
@@ -21,13 +21,15 @@ import { Category, FilterType } from '../api/schema'
 import { store } from '../store'
 import { PostItemRegisterRequest } from '../api/item/register'
 
+const router = useRouter()
+
 const schema = yup.object({
 	title: yup.string().required('Brukernavn er påkrevd'),
 	description: yup
 		.string()
 		.required('Beskrivelse er påkrevd')
 		.max(254, 'Maks 255 tegn'),
-	price: yup.string().required('Pris er påkrevd'),
+	price: yup.string().required('Pris er påkrevd').max(1000000),
 	address: yup.string().required('Adresse er påkrevd'),
 	postalCode: yup.string().required('Postnummer er påkrevd').min(4),
 })
@@ -178,11 +180,6 @@ type PostStatus = 'sending' | 'success' | 'error'
 const status = ref<PostStatus>()
 async function registerItem() {
 	status.value = 'sending'
-	if (!range.value) {
-		status.value = 'error'
-		store.commit('error', 'Range is not selected')
-		return
-	}
 
 	const formData = new FormData()
 
@@ -193,8 +190,15 @@ async function registerItem() {
 	formData.append('priceUnit', currentPriceUnit)
 	formData.append('address', address.value)
 	formData.append('postalCode', postalCode.value.toString())
-	formData.append('startDate', range.value.start.toISOString())
-	formData.append('endDate', range.value.end.toISOString())
+
+	if (range.value && range.value.start && range.value.end) {
+		formData.append('startDate', range.value.start.toISOString())
+		formData.append('endDate', range.value.end.toISOString())
+	} else {
+		formData.append('startDate', new Date(Date.now()).toISOString())
+		formData.append('endDate', '2122-04-20T08:38:26.109Z')
+	}
+
 	chosenFilters.value.forEach(chosen => {
 		filterTypes.value.forEach(filterType => {
 			filterType.filterValues.forEach(filter => {
@@ -216,12 +220,11 @@ async function registerItem() {
 		}
 	}
 	try {
-		console.log(formData.getAll('images'))
 		await axios.post('/item/register', formData)
-		await router.push('/')
+		router.push('/overview/items')
 	} catch (error: any) {
 		status.value = 'error'
-		store.dispatch('error', error.message)
+		store.dispatch('error', error.response.data)
 	}
 }
 
@@ -249,7 +252,12 @@ cookie()
 		@submit.prevent="registerItem"
 	>
 		<div class="flex gap-4">
-			<router-link to="/overview">
+			<router-link
+				to="/overview"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Tilbake til mine gjenstander"
+			>
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1 data-testid="header">Ny gjenstand</h1>

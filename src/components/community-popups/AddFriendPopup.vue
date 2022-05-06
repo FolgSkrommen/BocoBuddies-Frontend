@@ -86,11 +86,13 @@ async function addUser(user: User) {
 			v-model="searchString"
 			@search="newSearch"
 			:error="errorMessage"
+			data-testid="searchbar"
 		></SearchbarAndButton>
-		<LoadingIndicator v-if="status === 'loading'" />
+		<LoadingIndicator v-if="status === 'loading'" data-testid="loading" />
 
 		<div class="grid gap-4">
 			<UserCardAndBtn
+				data-testid="usercard"
 				v-for="user in friendResults"
 				:user="user"
 				btnTxt="Forespør"
@@ -98,7 +100,10 @@ async function addUser(user: User) {
 				@button-clicked="addUser"
 				:to="'/user/' + user.userId"
 			></UserCardAndBtn>
-			<BaseBtn @click="loadMoreResults" v-if="loadMoreBool"
+			<BaseBtn
+				@click="loadMoreResults"
+				v-if="loadMoreBool"
+				data-testid="load-more"
 				>Last inn flere</BaseBtn
 			>
 		</div>

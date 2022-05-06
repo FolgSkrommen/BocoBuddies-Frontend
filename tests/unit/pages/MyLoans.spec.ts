@@ -1,12 +1,12 @@
 import { mount, shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
 import { createStore } from 'vuex'
-import MyItems from '../../../src/pages/MyItems.vue'
+import MyLoans from '../../../src/pages/MyLoans.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
 import qs from 'qs'
 import { User } from '../../../src/api/schema'
 
-describe('MyItems', () => {
+describe('MyLoans', () => {
 	describe('when entered', () => {
 		let mockCategoryList = [
 			{
@@ -16,26 +16,10 @@ describe('MyItems', () => {
 			},
 		]
 
-		let mockItemList = [
-			{
-				id: 1,
-				image: 'Image',
-				name: 'Name',
-				price: 100,
-				availableFrom: 'Today',
-				availableTo: 'Tomorrow',
-				priceUnit: 'Unit',
-				address: 'Here',
-				postalCode: 'Code',
-			},
-		]
-
-		vi.spyOn(axios, 'get')
-			.mockResolvedValueOnce(mockCategoryList)
-			.mockResolvedValueOnce(mockItemList)
+		vi.spyOn(axios, 'get').mockResolvedValueOnce(mockCategoryList)
 
 		it('has the required elements, including one tag alternative, initially', async () => {
-			const wrapper = shallowMount(MyItems)
+			const wrapper = shallowMount(MyLoans)
 
 			expect(
 				wrapper.find('[data-testid="searchbar-and-button"]').exists()
@@ -56,17 +40,17 @@ describe('MyItems', () => {
 		})
 
 		it('fetches categories', async () => {
-			mount(MyItems)
+			mount(MyLoans)
 			expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
 		})
 
 		it('has initial sortChosen value equal to 0', async () => {
-			const wrapper = shallowMount(MyItems)
+			const wrapper = shallowMount(MyLoans)
 			expect(wrapper.vm.sortChosen).toBe(0)
 		})
 
 		it('renders sort dropdown and category alternatives when toggle is clicked', async () => {
-			const wrapper = shallowMount(MyItems)
+			const wrapper = shallowMount(MyLoans)
 			console.log(wrapper)
 
 			await wrapper
