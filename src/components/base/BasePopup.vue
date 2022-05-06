@@ -12,11 +12,15 @@ const emit = defineEmits(['exit'])
 		<div class="min-w-[256px] mb-24 mt-8 md:mt-24">
 			<Card>
 				<div class="grid gap-4 overflow-y-auto p-2">
-					<XIcon
-						@click="emit('exit')"
+					<div
 						class="place-self-end w-8 h-8 cursor-pointer"
-						data-testid="xicon"
-					/>
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Lukk vindu"
+					>
+						<XIcon @click="emit('exit')" data-testid="xicon" />
+					</div>
+
 					<slot></slot>
 				</div>
 			</Card>

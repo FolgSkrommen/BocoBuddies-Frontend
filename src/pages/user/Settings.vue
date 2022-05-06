@@ -189,7 +189,12 @@ cookie()
 <template>
 	<div v-if="store.state.user" class="grid gap-4 sm:w-96 mx-auto">
 		<div class="flex gap-4">
-			<router-link :to="`/user/${store.state.user.userId}`">
+			<router-link
+				:to="`/user/${store.state.user.userId}`"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Tilbake til min profil"
+			>
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1>Innstillinger</h1>
@@ -229,6 +234,9 @@ cookie()
 
 				<div class="grid grid-cols-2 w-full justify-items-center">
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Bekreft"
 						v-if="imagePreview[0]"
 						color="green"
 						class="w-fit"
@@ -237,6 +245,9 @@ cookie()
 						><CheckIcon class="w-6 h-6"
 					/></BaseBtn>
 					<BaseBtn
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						title="Avbryt"
 						color="red"
 						class="w-fit"
 						v-if="imagePreview[0]"

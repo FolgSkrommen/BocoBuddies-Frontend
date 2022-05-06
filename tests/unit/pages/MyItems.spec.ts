@@ -4,9 +4,20 @@ import MyItems from '../../../src/pages/MyItems.vue'
 import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
 import qs from 'qs'
+import { User } from '../../../src/api/schema'
 
 describe('MyItems', () => {
 	describe('when entered', () => {
+		let mockUser: User = {
+			firstName: 'navn',
+			lastName: 'forett',
+			rating: 1,
+			trusted: false,
+			userId: 2,
+			username: 'Olav',
+			verified: false,
+		}
+
 		let mockCategoryList = [
 			{
 				categoryId: 1,
@@ -52,6 +63,11 @@ describe('MyItems', () => {
 			expect(wrapper.find('[data-testid="sort-dropdown"]').exists()).toBe(
 				false
 			)
+		})
+
+		it('fetches categories', async () => {
+			mount(MyItems)
+			expect(axios.get).toHaveBeenNthCalledWith(1, '/category/main')
 		})
 
 		it('has initial sortChosen value equal to 0', async () => {
