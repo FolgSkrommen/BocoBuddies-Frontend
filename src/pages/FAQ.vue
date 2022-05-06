@@ -108,8 +108,8 @@ const questions: Section[] = [
 	<div>
 		<div>
 			<div class="max-w-xl mr-auto ml-auto text-slate-700">
-				<div class="flex flex-col mb-16">
-					<div class="mb-6">
+				<div class="flex flex-col mb-5">
+					<div class="mb-2">
 						<p
 							class="items-center justify-center rounded-full flex text-2xl h-28 mr-auto ml-auto w-28 bg-slate-200 text-blue-600"
 						>
@@ -117,7 +117,7 @@ const questions: Section[] = [
 						</p>
 					</div>
 					<div
-						class="max-w-lg font-sans text-slate-900 mr-auto mb-6 ml-auto pb-0"
+						class="max-w-lg font-sans text-slate-900 mr-auto mb-3 ml-auto pb-0"
 					>
 						<div class="">
 							<p class="relative inline-block text-2xl ml-0">
