@@ -36,7 +36,7 @@ const chatName = computed(() => {
 				<div class="flex gap-4 w-full p-2 h-fit place-items-end">
 					<div
 						v-if="friendChat.members.length > 1"
-						class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]"
+						class="grid grid-cols-2 w-16 h-16 gap-4 min-w-[64px]"
 					>
 						<img
 							v-for="user in friendChat.members.slice(0, 4)"
@@ -51,11 +51,11 @@ const chatName = computed(() => {
 						:alt="friendChat.chatName"
 						v-else
 					/>
-					<div class="grid gap-2">
+					<div class="grid gap-4">
 						<p class="font-bold text-lg">
 							{{ chatName }}
 						</p>
-						<div class="flex gap-2 flex-wrap">
+						<div class="flex gap-4 flex-wrap">
 							<p
 								v-for="member in friendChat.members"
 								class="text-slate-600"
@@ -72,7 +72,7 @@ const chatName = computed(() => {
 		<div v-else>
 			<Card>
 				<div class="flex gap-4 w-full p-2">
-					<div class="grid grid-cols-2 w-16 h-16 gap-2 min-w-[64px]">
+					<div class="grid grid-cols-2 w-16 h-16 gap-4 min-w-[64px]">
 						<img
 							v-for="user in friendChat.members.slice(0, 4)"
 							class="rounded-full object-cover"
@@ -80,11 +80,11 @@ const chatName = computed(() => {
 							:alt="user.username"
 						/>
 					</div>
-					<div class="grid gap-2">
+					<div class="grid gap-4">
 						<p class="font-bold text-lg">
 							{{ friendChat.chatName }}
 						</p>
-						<div class="flex gap-2 flex-wrap">
+						<div class="flex gap-4 flex-wrap">
 							<p
 								v-for="member in friendChat.members"
 								class="text-slate-600"

@@ -3,13 +3,13 @@ import { store } from '../../store'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import ImageCarousel from '../../components/ImageCarousel.vue'
-import BasePopup from '../../components/base/BasePopup.vue'
 
 import {
 	CheckCircleIcon,
 	CheckIcon,
 	XIcon,
 	StarIcon,
+	ChevronLeftIcon,
 } from '@heroicons/vue/solid'
 
 import { Ref, ref } from 'vue'
@@ -78,9 +78,12 @@ async function updateUser() {
 		await axios.put('/user', updatedUser)
 		updatedUser.profilePicture = store.state.user.profilePicture
 		store.state.user = updatedUser
+		store.dispatch('successWithTimeout', {
+			message: 'Brukerinformasjon er endret',
+		})
 		store.dispatch('edit', updatedUser)
 	} catch (error: any) {
-		store.dispatch('error', error.message)
+		store.dispatch('error', 'Noe gikk galt')
 	}
 }
 
@@ -91,9 +94,12 @@ async function changePassword() {
 			newPassword: newPassword.value,
 		})
 
+		store.dispatch('successWithTimeout', {
+			message: 'Passord har blitt endret',
+		})
 		showChangePassword.value = false
 	} catch (error: any) {
-		store.dispatch('error', error.message)
+		store.dispatch('error', 'Passordet du skrev inn er ikke korrekt')
 	}
 }
 
@@ -129,6 +135,7 @@ async function uploadPicture() {
 		let user = store.state.user
 		user.profilePicture = picture.data
 		await store.dispatch('edit', user)
+		store.dispatch('successWithTimeout', { message: 'Nytt bilde lagret' })
 		imagePreview.value = []
 		imageFiles.value = []
 	} catch (error: any) {
@@ -139,7 +146,8 @@ async function uploadPicture() {
 
 async function sendVerificationEmail() {
 	try {
-		const res = await axios.post('/verify/sendVerificationEmail')
+		await axios.post('/verify/sendAgain')
+		store.dispatch('successWithTimeout', { message: 'Ny e-post er sendt' })
 	} catch (error) {
 		console.log(error)
 	}
@@ -154,7 +162,7 @@ function resetTips() {
 		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
 		document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
 	}
-	store.dispatch('info', 'Alle tips vil nå vises igjen')
+	store.dispatch('successWithTimeout', { message: 'Tips vises igjen' })
 }
 
 function deleteUser() {
@@ -179,8 +187,13 @@ cookie()
 </script>
 
 <template>
-	<div v-if="store.state.user" class="grid gap-4">
-		<h2>Innstillinger</h2>
+	<div v-if="store.state.user" class="grid gap-4 sm:w-96 mx-auto">
+		<div class="flex gap-4">
+			<router-link :to="`/user/${store.state.user.userId}`">
+				<ChevronLeftIcon class="h-12 w-12" />
+			</router-link>
+			<h1>Innstillinger</h1>
+		</div>
 		<div class="flex gap-4">
 			<div class="h-40 grid">
 				<label class="grid w-fit">
@@ -238,7 +251,7 @@ cookie()
 					/></BaseBtn>
 				</div>
 			</div>
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-4">
 				<h3>
 					{{ store.state.user.firstName }}
 					{{ store.state.user.lastName }}
@@ -309,7 +322,7 @@ cookie()
 		>
 		<form
 			v-if="showChangePassword"
-			class="grid gap-4 border border-slate-400 p-2"
+			class="grid gap-4 border border-slate-400 rounded-xl p-2"
 			@submit.prevent="changePassword"
 		>
 			<BaseInput

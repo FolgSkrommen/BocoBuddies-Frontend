@@ -74,7 +74,7 @@ getChats()
 						:to="'/chat/' + chat.chatId"
 						class="flex justify-between p-2 w-full"
 					>
-						<div class="flex gap-2">
+						<div class="flex gap-4">
 							<img
 								class="h-20 w-20 object-cover rounded-xl"
 								v-if="chat.item"

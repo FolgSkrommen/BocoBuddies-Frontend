@@ -37,4 +37,36 @@ describe('UserCardAndBtn', () => {
 		expect(wrapper.find('[data-testid="button"]').exists()).toBeTruthy()
 		expect(wrapper.find('[data-testid="button"]').text()).toEqual(btnTxt)
 	})
+
+	it('emits user clicked event when user card is clicked', async () => {
+		const wrapper = mount(CategoryList, {
+			props: {
+				user: user,
+				btnTxt: btnTxt,
+				btnDsbld: btnDsbld,
+				to: to,
+			},
+		})
+
+		await wrapper.find('[data-testid="user-card"]').trigger('click')
+
+		expect(wrapper.emitted('user-clicked')).toBeTruthy()
+		expect(wrapper.emitted('user-clicked')[0]).toEqual([user])
+	})
+
+	it('emits button clicked event when button is clicked', async () => {
+		const wrapper = mount(CategoryList, {
+			props: {
+				user: user,
+				btnTxt: btnTxt,
+				btnDsbld: btnDsbld,
+				to: to,
+			},
+		})
+
+		await wrapper.find('[data-testid="button"]').trigger('click')
+
+		expect(wrapper.emitted('user-clicked')).toBeTruthy()
+		expect(wrapper.emitted('user-clicked')[0]).toEqual([user])
+	})
 })
