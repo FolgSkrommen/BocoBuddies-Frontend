@@ -28,7 +28,7 @@ watch(
 <template>
 	<div
 		v-if="type === 'error'"
-		class="container mx-auto rounded-xl p-2 flex gap-2 bg-red-300 text-red-800"
+		class="container mx-auto rounded-xl p-2 flex gap-2 bg-red-200 text-red-800"
 	>
 		<XCircleIcon class="w-8 h-8 min-w-[32px]" />
 		<p>{{ message }}</p>
