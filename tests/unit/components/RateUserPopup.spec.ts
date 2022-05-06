@@ -22,6 +22,7 @@ describe('Tests for Navbar', () => {
 		itemId: 0,
 		loaner: 0,
 		price: 0,
+		loanId: 9,
 		returned: true,
 		start: '',
 	}
@@ -59,7 +60,19 @@ describe('Tests for Navbar', () => {
 			wrapper.find('[data-testid="rating-btn"]').element.textContent
 		).toContain('Ranger')
 	})
-	it('All names under icon loads', () => {
-		const wrapper = mount(RateUserPopup)
+
+	it('Testing function handleRate()', async () => {
+		const wrapper = mount(RateUserPopup, {
+			props: {
+				user: mockUser,
+				loan: mockLoan,
+			},
+		})
+		const spyMock = vi.spyOn(axios, 'post')
+		wrapper.vm.rating = 1
+		await wrapper.vm.$forceUpdate()
+		await wrapper.vm.handleRate()
+		expect(wrapper.vm.rating).toBe(2)
+		expect(spyMock).toHaveBeenCalledTimes(1)
 	})
 })
