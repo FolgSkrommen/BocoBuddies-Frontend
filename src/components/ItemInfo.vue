@@ -85,8 +85,8 @@ const circleOptions = {
 		</div>
 		<div v-if="listOfFilterWithValue.length > 0">
 			<p class="font-bold text-lg">Filtere</p>
-			<div class="grid gap-2">
-				<div v-for="filter in listOfFilterWithValue" class="flex gap-2">
+			<div class="grid gap-4">
+				<div v-for="filter in listOfFilterWithValue" class="flex gap-4">
 					<p class="">{{ filter.name }}:</p>
 					<p>{{ filter.filter }}</p>
 				</div>

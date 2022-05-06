@@ -232,7 +232,7 @@ async function registerItem() {
 		class="grid w-full gap-y-6"
 		@submit.prevent="registerItem"
 	>
-		<div class="flex gap-2">
+		<div class="flex gap-4">
 			<router-link to="/overview">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
