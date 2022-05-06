@@ -1,9 +1,20 @@
 import { mount, shallowMount } from '@vue/test-utils'
 import MessageContainer from '../../../../src/components/chat/MessageContainer.vue'
 import { describe, expect, it } from 'vitest'
+import { User } from '../../../../src/api/schema'
 
 describe('MessageContainerLoan', () => {
 	describe('when loaded', () => {
+		const user: User = {
+			firstName: '',
+			lastName: '',
+			rating: 0,
+			trusted: false,
+			userId: 0,
+			username: '',
+			verified: false,
+		}
+		const users: User[] = [user]
 		const messages = [
 			{
 				senderId: 1,
@@ -19,6 +30,7 @@ describe('MessageContainerLoan', () => {
 			const wrapper = mount(MessageContainer, {
 				props: {
 					messages,
+					users,
 				},
 			})
 			expect(wrapper.exists()).toBe(true)
@@ -27,6 +39,7 @@ describe('MessageContainerLoan', () => {
 			const wrapper = mount(MessageContainer, {
 				props: {
 					messages,
+					users,
 				},
 			})
 			const message = wrapper.findAll('[data-testid="message"]')
@@ -37,6 +50,7 @@ describe('MessageContainerLoan', () => {
 			const wrapper = mount(MessageContainer, {
 				props: {
 					messages,
+					users,
 				},
 			})
 			const messageInfo = wrapper.find('[data-testid="message-info"]')
@@ -48,6 +62,7 @@ describe('MessageContainerLoan', () => {
 			const wrapper = mount(MessageContainer, {
 				props: {
 					messages,
+					users,
 				},
 			})
 			const messageInfo = wrapper.find('[data-testid="chat"]')
@@ -59,6 +74,7 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainer, {
 					props: {
 						messages,
+						users,
 					},
 				})
 				expect(
@@ -75,6 +91,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 					expect(wrapper.vm.messagePlacement(true)).toBe(
@@ -88,6 +105,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 					expect(wrapper.vm.messagePlacement(false)).toBe(
@@ -101,6 +119,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 					expect(wrapper.vm.messagePlacement(undefined)).toBe(
@@ -116,6 +135,7 @@ describe('MessageContainerLoan', () => {
 				const wrapper = mount(MessageContainer, {
 					props: {
 						messages,
+						users,
 					},
 				})
 
@@ -151,6 +171,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 
@@ -168,6 +189,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 
@@ -186,6 +208,7 @@ describe('MessageContainerLoan', () => {
 					const wrapper = mount(MessageContainer, {
 						props: {
 							messages,
+							users,
 						},
 					})
 
