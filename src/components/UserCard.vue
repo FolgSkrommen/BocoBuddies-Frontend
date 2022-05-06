@@ -15,7 +15,13 @@ const { user, color, showRating } = defineProps<Props>()
 <template>
 	<Card :color="color" v-if="to">
 		<div class="flex p-2 h-fit place-items-end">
-			<router-link :to="to" class="flex w-full p-2">
+			<router-link
+				:to="to"
+				class="flex w-full p-2"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				title="Til profil"
+			>
 				<div class="flex gap-4 w-full justify-between">
 					<img
 						class="w-16 h-16 rounded-full object-cover"

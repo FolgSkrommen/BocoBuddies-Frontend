@@ -31,6 +31,9 @@ const { modelValue, error } = defineProps<Props>()
 			@click="search"
 			class="rounded-l-none bg-green-600"
 			data-testid="search-button"
+			data-bs-toggle="tooltip"
+			data-bs-placement="bottom"
+			title="Søk"
 		>
 			<SearchIcon class="w-6" />
 		</button>
