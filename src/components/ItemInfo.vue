@@ -64,7 +64,7 @@ const circleOptions = {
 </script>
 
 <template>
-	<div class="grid gap-4">
+	<div class="grid gap-4 mx-auto">
 		<ImageCarousel :images="item.images" :alt="item.name" />
 		<p>{{ item.description }}</p>
 		<div>
