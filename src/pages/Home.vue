@@ -282,26 +282,6 @@ cookie()
 observer.observe(items[items.length-1])*/
 
 const showFiltersAndSort = ref(false)
-
-function setFiltersAndSort() {
-	if (window.innerWidth < 768) {
-		showFiltersAndSort.value = false
-	} else {
-		showFiltersAndSort.value = true
-	}
-}
-
-setFiltersAndSort()
-
-window.addEventListener('resize', () => {
-	setFiltersAndSort()
-})
-
-onUnmounted(() => {
-	window.removeEventListener('resize', () => {
-		setFiltersAndSort()
-	})
-})
 </script>
 
 <template>
@@ -320,7 +300,7 @@ onUnmounted(() => {
 	<div class="grid gap-4">
 		<div class="flex items-center gap-4">
 			<AdjustmentsIcon
-				class="w-8 h-8 text-slate-600 cursor-pointer md:hidden"
+				class="w-8 h-8 text-slate-600 cursor-pointer"
 				@click="showFiltersAndSort = !showFiltersAndSort"
 				data-testid="filter-and-sort-toggle"
 			/>
