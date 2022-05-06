@@ -56,7 +56,7 @@ import {
 				<UserIcon v-else class="w-8 h-8" data-testid="profile-icon" />
 				<p class="text-slate-300 text-sm">
 					<slot v-if="store.state.user"> Profil </slot>
-					<slot v-else data-testid="profile"> Profil </slot>
+					<slot v-else data-testid="login"> Logg inn </slot>
 				</p>
 			</router-link>
 		</div>

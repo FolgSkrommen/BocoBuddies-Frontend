@@ -14,7 +14,7 @@
 
 <style scoped>
 a {
-	@apply py-2 px-4 rounded-xl bg-slate-300 text-slate-900 hover:bg-blue-800 hover:text-white transition-colors;
+	@apply py-2 px-4 rounded-xl bg-slate-600 text-white hover:bg-blue-800 hover:text-white transition-colors;
 }
 .router-link-active {
 	@apply py-2 px-4 rounded-xl bg-blue-500 text-white hover:bg-blue-800 transition-colors;

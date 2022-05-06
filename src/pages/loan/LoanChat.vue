@@ -656,6 +656,7 @@ function reRenderChat() {
 						class="w-12 h-12 object-cover rounded"
 						v-if="item"
 						:src="item.images[0]"
+						:alt="item.name"
 					/>
 					<div v-if="item">
 						<p class="font-bold">{{ item.name }}</p>
@@ -677,6 +678,11 @@ function reRenderChat() {
 					class="w-12 h-12 object-cover rounded self-center"
 					v-if="item"
 					:src="getUserToReview()?.profilePicture"
+					:alt="
+						getUserToReview()?.firstName +
+						' ' +
+						getUserToReview()?.lastName
+					"
 				/>
 			</router-link>
 		</div>

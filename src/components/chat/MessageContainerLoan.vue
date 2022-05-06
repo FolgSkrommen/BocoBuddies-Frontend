@@ -142,6 +142,7 @@ function messagePlacement(receive: boolean) {
 				</div>
 
 				<h3
+					class="text-white"
 					v-else-if="
 						modelValue === 'RETURNED' ||
 						modelValue === 'REVIEWED' ||
@@ -157,22 +158,24 @@ function messagePlacement(receive: boolean) {
 
 				<!--Tidsintervall-->
 				<div>
-					<h4 v-if="message.start">
+					<h4 v-if="message.start" class="text-white">
 						Fra: {{ getProperDateHour(message.start) }}
 					</h4>
-					<h4 v-if="message.stop">
+					<h4 v-if="message.stop" class="text-white">
 						Til: {{ getProperDateHour(message.stop) }}
 					</h4>
 				</div>
 
 				<!--Adresse-->
 				<div>
-					<h3>{{ item.address }}, {{ item.postalCode }}</h3>
+					<h3 class="text-white">
+						{{ item.address }}, {{ item.postalCode }}
+					</h3>
 				</div>
 
 				<!--Pris-->
 				<div>
-					<h3>
+					<h3 class="text-white">
 						{{ message.price }} kr /
 						{{ getPriceUnit(item.priceUnit) }}
 					</h3>

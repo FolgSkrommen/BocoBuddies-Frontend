@@ -65,7 +65,7 @@ const circleOptions = {
 
 <template>
 	<div class="grid gap-4">
-		<ImageCarousel :images="item.images" />
+		<ImageCarousel :images="item.images" :alt="item.name" />
 		<p>{{ item.description }}</p>
 		<div>
 			<p class="font-bold text-lg">Pris</p>
