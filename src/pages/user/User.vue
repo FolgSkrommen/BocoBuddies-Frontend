@@ -4,7 +4,12 @@ import { computed, ref, watch } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { store } from '../../store'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
-import { CheckCircleIcon, StarIcon, UserAddIcon } from '@heroicons/vue/solid'
+import {
+	CheckCircleIcon,
+	RefreshIcon,
+	StarIcon,
+	UserAddIcon,
+} from '@heroicons/vue/solid'
 import { CogIcon } from '@heroicons/vue/outline'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import { User, Review } from '../../api/schema'
@@ -12,6 +17,7 @@ import { GetUserRequest } from '../../api/user'
 import { PostUserFriendsRequest } from '../../api/user/friends'
 import Card from '../../components/Card.vue'
 import UserCard from '../../components/UserCard.vue'
+import router from '../../router'
 
 const { params } = useRoute()
 let id: number = parseInt(params.id as string)

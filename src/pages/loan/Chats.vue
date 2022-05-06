@@ -22,11 +22,8 @@ async function getChats() {
 
 		for (const chat of chats.value) {
 			if (chat.members) {
-				console.log(status.value)
 				for (const member of chat.members) {
-					console.log('heisann')
 					if (member.userId !== store.state.user?.userId) {
-						console.log('Member: ' + member.username)
 						chat.user = member
 					}
 				}
@@ -35,20 +32,20 @@ async function getChats() {
 
 		for (const chat of chats.value) {
 			try {
-				console.log(chat)
 				const res = await axios.get('/loan/chat?chatId=' + chat.chatId)
-				console.log(res.data)
 				chat.item = res.data.item
 				chat.loan = res.data.loan
-				console.log(chat.user)
 			} catch (err: any) {
-				const res = await axios.get('/item', {
-					params: { itemId: chat.item?.itemId },
-				})
-				chat.item = res.data.item
+				try {
+					const res = await axios.get('/item', {
+						params: { itemId: chat.item?.itemId },
+					})
+					chat.item = res.data.item
+				} catch (error: any) {
+					store.dispatch('error', error.message)
+				}
 			}
 		}
-		console.log(chats.value)
 		status.value = 'loaded'
 	} catch (error: any) {
 		status.value = 'error'

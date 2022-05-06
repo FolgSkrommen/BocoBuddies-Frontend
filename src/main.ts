@@ -7,6 +7,8 @@ import axios from 'axios'
 
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
+document.title = 'Boco Buddies'
+
 if (import.meta.env.VITE_USE_CUSTOM_IP == 'true') {
 	axios.defaults.baseURL = import.meta.env.VITE_IP
 	console.log(axios.defaults.baseURL)

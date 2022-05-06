@@ -128,7 +128,6 @@ async function sendLoanRequestWS() {
 		creationDate: getDateAndTime(),
 	}
 	try {
-		console.log(body)
 		const res = await axios.post('/loan', body)
 		loan.value = res.data as PostLoanResponse
 		body.loanId = loan.value.loanId
@@ -167,14 +166,16 @@ async function sendLoanAccept() {
 		active: true,
 		chatId: loan.value?.chatId,
 		creationDate: getDateAndTime(),
-		end: getDateAndTime(),
-		start: getDateAndTime(),
+		end: loan.value.end,
+		start: loan.value.start,
 		loanId: loan.value.loanId,
 		returned: loanStatus.value === 'RETURNED',
 		price: price.value,
 		loaner: store.state.user.userId,
 		itemId: loan.value.itemId,
 	}
+	console.log('HERE!!!')
+
 	console.log(loanRequest)
 	try {
 		const res = await axios.put('/loan', loanRequest)
@@ -211,8 +212,8 @@ async function sendLoanDecline() {
 			itemId: chat.value.item.itemId,
 			active: false,
 			returned: false,
-			start: getDateAndTime(),
-			end: getDateAndTime(),
+			start: loan.value ? loan.value.start : '',
+			end: loan.value ? loan.value.end : '',
 			price: 0,
 			loaner: store.state.user.userId,
 			creationDate: getDateAndTime(),
