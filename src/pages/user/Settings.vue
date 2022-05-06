@@ -53,6 +53,9 @@ const { value: newPasswordConfirm } = useField<string>('newPasswordConfirm')
 
 const editUser = ref(false)
 const showChangePassword = ref(false)
+const hasNotTypedOldPassword = ref(true)
+const hasNotTypedNewPassword = ref(true)
+const hasNotTypedConfirm = ref(true)
 
 if (store.state.user) {
 	newFirstName.value = store.state.user.firstName as string
@@ -307,6 +310,7 @@ cookie()
 				data-testid="newFirstName-input"
 				v-model="oldPassword"
 				label="Gammelt passord"
+				@input="hasNotTypedOldPassword = false"
 				type="password"
 				:error="errors.oldPassword"
 			/>
@@ -315,11 +319,13 @@ cookie()
 				v-model="newPassword"
 				label="Nytt passord"
 				type="password"
+				@input="hasNotTypedNewPassword = false"
 				:error="errors.newPassword"
 			/>
 			<BaseInput
 				data-testid="newEmail-input"
 				v-model="newPasswordConfirm"
+				@input="hasNotTypedConfirm = false"
 				label="Bekreft passord"
 				type="password"
 				:error="errors.newPasswordConfirm"
@@ -329,9 +335,11 @@ cookie()
 				type="submit"
 				:disabled="
 					!!errors.newPasswordConfirm ||
-					newPasswordConfirm === '' ||
-					newPassword === '' ||
-					oldPassword === ''
+					!!errors.newPassword ||
+					!!errors.oldPassword ||
+					hasNotTypedConfirm ||
+					hasNotTypedNewPassword ||
+					hasNotTypedOldPassword
 				"
 				class="w-fit mx-auto"
 				>Endre</BaseBtn

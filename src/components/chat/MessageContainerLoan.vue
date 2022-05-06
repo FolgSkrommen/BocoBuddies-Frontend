@@ -50,7 +50,7 @@ function getProperDateTime(dateTime: string) {
 	let time = dateTime.substring(11, 16)
 	let date = dateTime.substring(0, 10)
 	if (new Date().toISOString().substring(0, 10) === date) return time
-	return time
+	return date
 }
 
 function getProperDateHour(dateTime: string) {

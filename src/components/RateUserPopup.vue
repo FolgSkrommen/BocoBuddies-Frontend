@@ -27,7 +27,6 @@ function getDateAndTime() {
 
 async function handleRate() {
 	if (rating.value === -1) return
-	//TODO: ADD Method
 	if (!loan) return
 	if (!loan.loanId) return
 	if (!user) return
