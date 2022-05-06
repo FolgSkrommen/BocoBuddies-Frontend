@@ -92,7 +92,7 @@ const showRateUserPopup = ref(false)
 		/>
 		<div class="grid gap-4">
 			<div class="flex gap-2">
-				<router-link class="place-sel" to="/overview">
+				<router-link to="/overview">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<h1>{{ item.name }}</h1>

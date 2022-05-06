@@ -644,7 +644,7 @@ function reRenderChat() {
 
 		<div class="flex justify-between items-center gap-5">
 			<div class="flex gap-2">
-				<router-link class="place-sel" to="/chats">
+				<router-link to="/chats">
 					<ChevronLeftIcon class="h-12 w-12" />
 				</router-link>
 				<router-link

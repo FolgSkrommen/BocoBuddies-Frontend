@@ -233,7 +233,7 @@ async function registerItem() {
 		@submit.prevent="registerItem"
 	>
 		<div class="flex gap-2">
-			<router-link class="place-sel" to="/overview">
+			<router-link to="/overview">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1 data-testid="header">Ny gjenstand</h1>

@@ -176,7 +176,7 @@ const chatName = computed(() => {
 	<!--TODO fix height-->
 	<div class="h-96 flex-col w-full chatHeight" v-else>
 		<div class="flex gap-2">
-			<router-link class="place-sel" to="/community">
+			<router-link to="/community">
 				<ChevronLeftIcon class="h-12 w-12" />
 			</router-link>
 			<h1 v-if="chat && chat.chatName">{{ chatName }}</h1>

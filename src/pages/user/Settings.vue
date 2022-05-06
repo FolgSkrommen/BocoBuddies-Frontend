@@ -3,13 +3,13 @@ import { store } from '../../store'
 import BaseBtn from '../../components/base/BaseBtn.vue'
 import BaseInput from '../../components/base/BaseInput.vue'
 import ImageCarousel from '../../components/ImageCarousel.vue'
-import BasePopup from '../../components/base/BasePopup.vue'
 
 import {
 	CheckCircleIcon,
 	CheckIcon,
 	XIcon,
 	StarIcon,
+	ChevronLeftIcon,
 } from '@heroicons/vue/solid'
 
 import { Ref, ref } from 'vue'
@@ -180,7 +180,12 @@ cookie()
 
 <template>
 	<div v-if="store.state.user" class="grid gap-4">
-		<h2>Innstillinger</h2>
+		<div class="flex gap-2">
+			<router-link :to="`/user/${store.state.user.userId}`">
+				<ChevronLeftIcon class="h-12 w-12" />
+			</router-link>
+			<h1>Innstillinger</h1>
+		</div>
 		<div class="flex gap-4">
 			<div class="h-40 grid">
 				<label class="grid w-fit">
