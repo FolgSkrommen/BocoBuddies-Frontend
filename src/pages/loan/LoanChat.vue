@@ -797,6 +797,6 @@ function reRenderChat() {
 </template>
 <style scoped>
 .chatHeight {
-	height: calc(100vh - 250px);
+	height: calc(100vh - 280px);
 }
 </style>
