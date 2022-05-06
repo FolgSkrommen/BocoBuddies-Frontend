@@ -365,7 +365,7 @@ cookie()
 			>
 		</form>
 
-		<span class="my-2"></span>
+		<hr class="border-slate-400" />
 
 		<BaseBtn to="/faq" color="blue">FAQ</BaseBtn>
 
@@ -377,7 +377,7 @@ cookie()
 		>
 		<BaseBtn @click="resetTips" color="blue">Vis alle tips igjen</BaseBtn>
 
-		<span class="my-2"></span>
+		<hr class="border-slate-400" />
 
 		<BaseBtn @click="logout" color="gray">Logg ut</BaseBtn>
 

@@ -64,8 +64,8 @@ const circleOptions = {
 </script>
 
 <template>
-	<div>
-		<div>
+	<div class="grid gap-4">
+		<div class="grid gap-4">
 			<ImageCarousel :images="item.images" :alt="item.name" />
 			<div>
 				<p class="font-bold text-lg">Pris</p>
