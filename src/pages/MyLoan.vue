@@ -44,9 +44,13 @@ async function getLoan() {
 			params,
 		})
 		const data: GetLoanResponse = res.data
+		console.log(data)
+
 		item.value = data.item
 		lender.value = data.user
 		loan.value = data.loan
+		console.log(loan.value)
+
 		status.value = 'loaded'
 	} catch (error) {
 		status.value = 'error'
@@ -76,8 +80,8 @@ const showRateUserPopup = ref(false)
 				<div>
 					<p class="font-bold text-lg">Låneperiode</p>
 					<p>
-						{{ new Date(item.availableFrom).toLocaleString() }} -
-						{{ new Date(item.availableTo).toLocaleString() }}
+						{{ new Date(loan.start).toLocaleString() }} -
+						{{ new Date(loan.end).toLocaleString() }}
 					</p>
 				</div>
 				<DatePicker
