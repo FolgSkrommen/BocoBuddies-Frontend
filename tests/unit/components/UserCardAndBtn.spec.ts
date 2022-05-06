@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import CategoryList from '../../../src/components/UserCardAndBtn.vue'
+import UserCardAndBtn from '../../../src/components/UserCardAndBtn.vue'
 
 describe('UserCardAndBtn', () => {
 	const user = {
@@ -24,7 +24,7 @@ describe('UserCardAndBtn', () => {
 	const to = 'route'
 
 	it('renders user card and button', () => {
-		const wrapper = mount(CategoryList, {
+		const wrapper = mount(UserCardAndBtn, {
 			props: {
 				user: user,
 				btnTxt: btnTxt,
@@ -39,7 +39,7 @@ describe('UserCardAndBtn', () => {
 	})
 
 	it('emits user clicked event when user card is clicked', async () => {
-		const wrapper = mount(CategoryList, {
+		const wrapper = mount(UserCardAndBtn, {
 			props: {
 				user: user,
 				btnTxt: btnTxt,
@@ -55,7 +55,7 @@ describe('UserCardAndBtn', () => {
 	})
 
 	it('emits button clicked event when button is clicked', async () => {
-		const wrapper = mount(CategoryList, {
+		const wrapper = mount(UserCardAndBtn, {
 			props: {
 				user: user,
 				btnTxt: btnTxt,
